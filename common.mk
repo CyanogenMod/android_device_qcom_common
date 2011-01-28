@@ -50,3 +50,4 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core.mk)
 
 PRODUCT_BRAND := qcom
 PRODUCT_LOCALES := hdpi mdpi
+PRODUCT_LOCALES += en_US es_US de_DE zh_CN
