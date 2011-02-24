@@ -11,6 +11,7 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := log_recovery.c
 LOCAL_C_INCLUDES += bootable/recovery
 LOCAL_MODULE := librecovery_ui_qcom
+LOCAL_MODULE_TAGS := optional
 include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
