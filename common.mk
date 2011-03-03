@@ -1,3 +1,48 @@
+# Below projects/packages with LOCAL_MODULEs will be used by
+# PRODUCT_PACKAGES to build LOCAL_MODULEs that are tagged with
+# optional tag, which will not be available on target unless
+# explicitly list here. Where project corresponds to the vars here
+# in CAPs.
+
+#KERNEL_TESTS
+KERNEL_TESTS := mm-audio-native-test
+
+#MM_AUDIO
+MM_AUDIO := libOmxAacDec
+MM_AUDIO += libOmxAacEnc
+MM_AUDIO += libOmxAmrEnc
+MM_AUDIO += libOmxEvrcEnc
+MM_AUDIO += libOmxMp3Dec
+MM_AUDIO += libOmxQcelp13Enc
+MM_AUDIO += mm-adec-omxaac-test
+MM_AUDIO += mm-adec-omxmp3-test
+MM_AUDIO += mm-aenc-omxaac-test
+MM_AUDIO += mm-aenc-omxamr-test
+MM_AUDIO += mm-aenc-omxevrc-test
+MM_AUDIO += mm-aenc-omxqcelp13-test
+MM_AUDIO += sw-adec-omxaac-test
+MM_AUDIO += sw-adec-omxamr-test
+MM_AUDIO += sw-adec-omxamrwb-test
+MM_AUDIO += sw-adec-omxmp3-test
+
+#MM_CORE
+MM_CORE := libmm-omxcore
+MM_CORE += libOmxCore
+
+#MM_VIDEO
+MM_VIDEO := ast-mm-vdec-omx-test
+MM_VIDEO += libdivxdrmdecrypt
+MM_VIDEO += liblasic
+MM_VIDEO += libOmxVdec
+MM_VIDEO += libOmxVenc
+MM_VIDEO += libOmxVidEnc
+MM_VIDEO += mm-vdec-omx-property-mgr
+MM_VIDEO += mm-vdec-omx-test
+MM_VIDEO += mm-venc-omx-test
+MM_VIDEO += mm-venc-omx-test720p
+MM_VIDEO += mm-video-driver-test
+MM_VIDEO += mm-video-encdrv-test
+
 PRODUCT_PACKAGES := \
     AccountAndSyncSettings \
     DeskClock \
@@ -27,6 +72,11 @@ PRODUCT_PACKAGES := \
     VoiceDialer \
     FM
 
+PRODUCT_PACKAGES += $(KERNEL_TESTS)
+PRODUCT_PACKAGES += $(MM_AUDIO)
+PRODUCT_PACKAGES += $(MM_CORE)
+PRODUCT_PACKAGES += $(MM_VIDEO)
+
 PRODUCT_COPY_FILES := \
     frameworks/base/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
     frameworks/base/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
@@ -47,6 +97,7 @@ PRODUCT_COPY_FILES := \
 include frameworks/base/data/sounds/OriginalAudio.mk
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core.mk)
+$(call inherit-product-if-exists, vendor/qcom/proprietary/common/config/device-vendor.mk)
 
 PRODUCT_BRAND := qcom
 PRODUCT_LOCALES := hdpi mdpi
