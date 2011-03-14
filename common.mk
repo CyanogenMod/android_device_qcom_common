@@ -43,6 +43,10 @@ MM_VIDEO += mm-venc-omx-test720p
 MM_VIDEO += mm-video-driver-test
 MM_VIDEO += mm-video-encdrv-test
 
+#UPDATER
+UPDATER := librecovery_ui_qcom
+UPDATER += librecovery_updater_qcom
+
 PRODUCT_PACKAGES := \
     AccountAndSyncSettings \
     DeskClock \
@@ -76,6 +80,7 @@ PRODUCT_PACKAGES += $(KERNEL_TESTS)
 PRODUCT_PACKAGES += $(MM_AUDIO)
 PRODUCT_PACKAGES += $(MM_CORE)
 PRODUCT_PACKAGES += $(MM_VIDEO)
+PRODUCT_PACKAGES += $(UPDATER)
 
 PRODUCT_COPY_FILES := \
     frameworks/base/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
