@@ -7,6 +7,43 @@
 #KERNEL_TESTS
 KERNEL_TESTS := mm-audio-native-test
 
+#KEYPAD
+KEYPAD := ffa-keypad_qwerty.kcm
+KEYPAD += ffa-keypad_numeric.kcm
+KEYPAD += fluid-keypad_qwerty.kcm
+KEYPAD += fluid-keypad_numeric.kcm
+KEYPAD += surf_keypad_qwerty.kcm
+KEYPAD += surf_keypad_numeric.kcm
+KEYPAD += surf_keypad.kcm
+KEYPAD += 7k_ffa_keypad.kcm
+
+#LIBCAMERA
+LIBCAMERA := libcamera
+
+#LIBCOPYBIT
+LIBCOPYBIT := copybit.msm8660
+LIBCOPYBIT += copybit.msm7k
+LIBCOPYBIT += copybit.qsd8k
+
+#LIBGRALLOC
+LIBGRALLOC := gralloc.default
+LIBGRALLOC += gralloc.msm8660
+LIBGRALLOC += gralloc.msm7k
+
+#LIBLIGHTS
+LIBLIGHTS := lights.msm8660
+LIBLIGHTS += lights.msm7k
+
+#LIBOPENCOREHW
+LIBOPENCOREHW := libopencorehw
+
+#LIBOVERLAY
+LIBOVERLAY := liboverlay
+LIBOVERLAY += overlay.default
+
+#LOC_API
+LOC_API := libloc_api-rpc-qc
+
 #MM_AUDIO
 MM_AUDIO := libOmxAacDec
 MM_AUDIO += libOmxAacEnc
@@ -43,6 +80,13 @@ MM_VIDEO += mm-venc-omx-test720p
 MM_VIDEO += mm-video-driver-test
 MM_VIDEO += mm-video-encdrv-test
 
+#PVOMX
+PVOMX := libqcomm_omx
+
+#SOFTAP
+SOFTAP := libQWiFiSoftApCfg
+SOFTAP += libqsap_sdk
+
 #UPDATER
 UPDATER := librecovery_ui_qcom
 UPDATER += librecovery_updater_qcom
@@ -77,9 +121,19 @@ PRODUCT_PACKAGES := \
     FM
 
 PRODUCT_PACKAGES += $(KERNEL_TESTS)
+PRODUCT_PACKAGES += $(KEYPAD)
+PRODUCT_PACKAGES += $(LIBCAMERA)
+PRODUCT_PACKAGES += $(LIBCOPYBIT)
+PRODUCT_PACKAGES += $(LIBGRALLOC)
+PRODUCT_PACKAGES += $(LIBLIGHTS)
+PRODUCT_PACKAGES += $(LIBOPENCOREHW)
+PRODUCT_PACKAGES += $(LIBOVERLAY)
+PRODUCT_PACKAGES += $(LOC_API)
 PRODUCT_PACKAGES += $(MM_AUDIO)
 PRODUCT_PACKAGES += $(MM_CORE)
 PRODUCT_PACKAGES += $(MM_VIDEO)
+PRODUCT_PACKAGES += $(PVOMX)
+PRODUCT_PACKAGES += $(SOFTAP)
 PRODUCT_PACKAGES += $(UPDATER)
 
 PRODUCT_COPY_FILES := \
