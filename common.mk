@@ -17,6 +17,7 @@ KEYPAD += surf_keypad_numeric.kcm
 KEYPAD += surf_keypad.kcm
 KEYPAD += 7k_ffa_keypad.kcm
 KEYPAD += 7x27a_kp.kcm
+KEYPAD += keypad_8960_qwerty.kcm
 
 #LIBCAMERA
 LIBCAMERA := libcamera
