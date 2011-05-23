@@ -30,6 +30,7 @@ LIBCOPYBIT += copybit.qsd8k
 #LIBGRALLOC
 LIBGRALLOC := gralloc.default
 LIBGRALLOC += gralloc.msm8660
+LIBGRALLOC += gralloc.msm8960
 LIBGRALLOC += gralloc.msm7k
 
 #LIBLIGHTS
