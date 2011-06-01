@@ -1,3 +1,9 @@
+
+# board platforms list for msm7k, to
+# be used for TARGET_BOARD_PLATFORM
+# specific featurization
+MSM7K_BOARD_PLATFORMS := msm7627_surf msm7627a msm7630_fusion msm7630_surf msm7k
+
 # Below projects/packages with LOCAL_MODULEs will be used by
 # PRODUCT_PACKAGES to build LOCAL_MODULEs that are tagged with
 # optional tag, which will not be available on target unless
