@@ -36,16 +36,23 @@ def AddBootloaderAssertion(info, input_zip):
       info.script.AssertSomeBootloader(*bootloaders)
     info.metadata["pre-bootloader"] = m.group(1)
 
+def CheckRadiotarget(info, mount_point):
+    fstab = info.script.info.get("fstab", None)
+    if fstab:
+      p = fstab[mount_point]
+      info.script.AppendExtra('assert(qcom.set_radio("%s"));' %
+                         (p.fs_type))
 
-def InstallRadio(radio_img, api_version, input_zip, info):
-  common.ZipWriteStr(info.output_zip, "radio.img", radio_img)
+def InstallRadio(radio_img, api_version, input_zip, fn, info):
+  fn2 = fn[6:]
+  fn3 = "/sdcard/radio/" + fn2
+  common.ZipWriteStr(info.output_zip, fn2, radio_img)
 
   if api_version >= 3:
 
-    info.script.UnmountAll()
     info.script.AppendExtra(('''
-assert(qcom.install_radio(package_extract_file("radio.img")));
-''' % locals()).lstrip())
+assert(package_extract_file("%s", "%s"));
+''' %(fn2,fn3) % locals()).lstrip())
 
   elif info.input_version >= 2:
     info.script.AppendExtra(
@@ -57,15 +64,18 @@ assert(qcom.install_radio(package_extract_file("radio.img")));
 
 
 def FullOTA_InstallEnd(info):
-  try:
-    radio_img = info.input_zip.read("RADIO/radio.img")
-  except KeyError:
+  if info.files == {}:
     print "warning sha: no radio image in input target_files; not flashing radio"
     return
 
-  info.script.Print("Writing radio image...")
+  info.script.UnmountAll()
+  for f in info.files:
+    info.script.Print("Writing radio image...")
+    radio_img = info.input_zip.read(f)
+    InstallRadio(radio_img, info.input_version, info.input_zip, f, info)
 
-  InstallRadio(radio_img, info.input_version, info.input_zip, info)
+  CheckRadiotarget(info, "/recovery")
+  return
 
 
 def IncrementalOTA_InstallEnd(info):
