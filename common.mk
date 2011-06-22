@@ -1,8 +1,13 @@
 
-# board platforms list for msm7k, to
-# be used for TARGET_BOARD_PLATFORM
-# specific featurization
-MSM7K_BOARD_PLATFORMS := msm7627_surf msm7627a msm7630_fusion msm7630_surf msm7k
+# board platforms list for msm7k and qsd8k
+# to be used for TARGET_BOARD_PLATFORM specific featurization
+MSM7K_BOARD_PLATFORMS := msm7630_surf
+MSM7K_BOARD_PLATFORMS += msm7630_fusion
+MSM7K_BOARD_PLATFORMS += msm7627_surf
+MSM7K_BOARD_PLATFORMS += msm7627a
+MSM7K_BOARD_PLATFORMS += msm7k
+
+QSD8K_BOARD_PLATFORMS := qsd8k
 
 # Below projects/packages with LOCAL_MODULEs will be used by
 # PRODUCT_PACKAGES to build LOCAL_MODULEs that are tagged with
@@ -33,17 +38,29 @@ LIBCOPYBIT := copybit.msm8660
 LIBCOPYBIT := copybit.msm8960
 LIBCOPYBIT += copybit.msm7k
 LIBCOPYBIT += copybit.qsd8k
+LIBCOPYBIT += copybit.msm7630_surf
+LIBCOPYBIT += copybit.msm7630_fusion
+LIBCOPYBIT += copybit.msm7627_surf
+LIBCOPYBIT += copybit.msm7627a
 
 #LIBGRALLOC
 LIBGRALLOC := gralloc.default
 LIBGRALLOC += gralloc.msm8660
 LIBGRALLOC += gralloc.msm8960
 LIBGRALLOC += gralloc.msm7k
+LIBGRALLOC += gralloc.msm7630_surf
+LIBGRALLOC += gralloc.msm7630_fusion
+LIBGRALLOC += gralloc.msm7627_surf
+LIBGRALLOC += gralloc.msm7627a
 
 #LIBLIGHTS
 LIBLIGHTS := lights.msm8660
 LIBLIGHTS := lights.msm8960
 LIBLIGHTS += lights.msm7k
+LIBLIGHTS += lights.msm7630_surf
+LIBLIGHTS += lights.msm7630_fusion
+LIBLIGHTS += lights.msm7627_surf
+LIBLIGHTS += lights.msm7627a
 
 #LIBOPENCOREHW
 LIBOPENCOREHW := libopencorehw
