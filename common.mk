@@ -161,6 +161,9 @@ PRODUCT_COPY_FILES := \
     frameworks/base/data/etc/android.hardware.bluetooth.xml:system/etc/permissions/android.hardware.bluetooth.xml \
 
 
+# include additional build utilities
+include build/core/utils.mk
+
 #Enabling Ring Tones
 include frameworks/base/data/sounds/OriginalAudio.mk
 
