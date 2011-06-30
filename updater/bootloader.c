@@ -42,6 +42,44 @@ static void dump_data(const char *data, int len) {
 }
 #endif
 
+int get_bootloader_message_emmc(struct bootloader_message *out, Volume *v) {
+    FILE* f = fopen(v->device, "rb");
+    if (f == NULL) {
+        LOGE("Can't open %s\n(%s)\n", v->device, strerror(errno));
+        return -1;
+    }
+    struct bootloader_message temp;
+    int count = fread(&temp, sizeof(temp), 1, f);
+    if (count != 1) {
+        LOGE("Failed reading %s\n(%s)\n", v->device, strerror(errno));
+        return -1;
+    }
+    if (fclose(f) != 0) {
+        LOGE("Failed closing %s\n(%s)\n", v->device, strerror(errno));
+        return -1;
+    }
+    memcpy(out, &temp, sizeof(temp));
+    return 0;
+}
+
+int set_bootloader_message_emmc(const struct bootloader_message *in, Volume *v) {
+    FILE* f = fopen(v->device, "wb");
+    if (f == NULL) {
+        LOGE("Can't open %s\n(%s)\n", v->device, strerror(errno));
+        return -1;
+    }
+    int count = fwrite(in, sizeof(*in), 1, f);
+    if (count != 1) {
+        LOGE("Failed writing %s\n(%s)\n", v->device, strerror(errno));
+        return -1;
+    }
+    if (fclose(f) != 0) {
+        LOGE("Failed closing %s\n(%s)\n", v->device, strerror(errno));
+        return -1;
+    }
+    return 0;
+}
+
 int get_bootloader_message(struct bootloader_message *out) {
     size_t write_size;
     const MtdPartition *part = mtd_find_partition_by_name(MISC_NAME);
