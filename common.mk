@@ -30,6 +30,7 @@ LIBCAMERA := libcamera
 
 #LIBCOPYBIT
 LIBCOPYBIT := copybit.msm8660
+LIBCOPYBIT := copybit.msm8960
 LIBCOPYBIT += copybit.msm7k
 LIBCOPYBIT += copybit.qsd8k
 
