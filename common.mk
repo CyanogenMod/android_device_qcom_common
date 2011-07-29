@@ -175,3 +175,7 @@ $(call inherit-product-if-exists, vendor/qcom/proprietary/common/config/device-v
 PRODUCT_BRAND := qcom
 PRODUCT_LOCALES := en_US es_US de_DE zh_CN
 PRODUCT_LOCALES += hdpi mdpi
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.extension_library=/system/lib/libqc-opt.so
+
