@@ -42,6 +42,7 @@ LIBGRALLOC += gralloc.msm7k
 
 #LIBLIGHTS
 LIBLIGHTS := lights.msm8660
+LIBLIGHTS := lights.msm8960
 LIBLIGHTS += lights.msm7k
 
 #LIBOPENCOREHW
