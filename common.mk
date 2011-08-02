@@ -197,3 +197,4 @@ PRODUCT_LOCALES += hdpi mdpi
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.extension_library=/system/lib/libqc-opt.so
 
+PRODUCT_PRIVATE_KEY := device/qcom/common/qcom.key
