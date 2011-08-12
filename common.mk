@@ -1,6 +1,12 @@
+# Board platforms lists to be used for
+# TARGET_BOARD_PLATFORM specific featurization
+QCOM_BOARD_PLATFORMS := msm7627_surf
+QCOM_BOARD_PLATFORMS += msm7627a
+QCOM_BOARD_PLATFORMS += msm7630_surf
+QCOM_BOARD_PLATFORMS += msm7630_fusion
+QCOM_BOARD_PLATFORMS += msm8660
+QCOM_BOARD_PLATFORMS += msm8960
 
-# board platforms list for msm7k and qsd8k
-# to be used for TARGET_BOARD_PLATFORM specific featurization
 MSM7K_BOARD_PLATFORMS := msm7630_surf
 MSM7K_BOARD_PLATFORMS += msm7630_fusion
 MSM7K_BOARD_PLATFORMS += msm7627_surf
