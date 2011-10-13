@@ -1,6 +1,7 @@
 # Board platforms lists to be used for
 # TARGET_BOARD_PLATFORM specific featurization
 QCOM_BOARD_PLATFORMS := msm7627_surf
+QCOM_BOARD_PLATFORMS += msm7627_6x
 QCOM_BOARD_PLATFORMS += msm7627a
 QCOM_BOARD_PLATFORMS += msm7630_surf
 QCOM_BOARD_PLATFORMS += msm7630_fusion
@@ -10,6 +11,7 @@ QCOM_BOARD_PLATFORMS += msm8960
 MSM7K_BOARD_PLATFORMS := msm7630_surf
 MSM7K_BOARD_PLATFORMS += msm7630_fusion
 MSM7K_BOARD_PLATFORMS += msm7627_surf
+MSM7K_BOARD_PLATFORMS += msm7627_6x
 MSM7K_BOARD_PLATFORMS += msm7627a
 MSM7K_BOARD_PLATFORMS += msm7k
 
@@ -47,6 +49,7 @@ LIBCOPYBIT += copybit.qsd8k
 LIBCOPYBIT += copybit.msm7630_surf
 LIBCOPYBIT += copybit.msm7630_fusion
 LIBCOPYBIT += copybit.msm7627_surf
+LIBCOPYBIT += copybit.msm7627_6x
 LIBCOPYBIT += copybit.msm7627a
 
 #LIBGRALLOC
@@ -57,6 +60,7 @@ LIBGRALLOC += gralloc.msm7k
 LIBGRALLOC += gralloc.msm7630_surf
 LIBGRALLOC += gralloc.msm7630_fusion
 LIBGRALLOC += gralloc.msm7627_surf
+LIBGRALLOC += gralloc.msm7627_6x
 LIBGRALLOC += gralloc.msm7627a
 
 #LIBLIGHTS
@@ -66,6 +70,7 @@ LIBLIGHTS += lights.msm7k
 LIBLIGHTS += lights.msm7630_surf
 LIBLIGHTS += lights.msm7630_fusion
 LIBLIGHTS += lights.msm7627_surf
+LIBLIGHTS += lights.msm7627_6x
 LIBLIGHTS += lights.msm7627a
 
 #LIBOPENCOREHW
