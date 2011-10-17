@@ -23,6 +23,54 @@ QSD8K_BOARD_PLATFORMS := qsd8k
 # explicitly list here. Where project corresponds to the vars here
 # in CAPs.
 
+#AMPLOADER
+AMPLOADER := amploader
+
+#APPS
+APPS := QualcommSoftAP
+
+#BSON
+BSON := libbson
+
+#BT
+BT := libattrib_static
+
+#CONNECTIVITY
+CONNECTIVITY := cnd
+CONNECTIVITY += librefcne
+
+#CURL
+CURL := libcurl
+CURL += curl
+
+#E2FSPROGS
+E2FSPROGS := e2fsck
+
+#GPS
+GPS_HARDWARE := gps.default
+GPS_HARDWARE += gps.mahimahi
+GPS_HARDWARE += libloc_adapter
+GPS_HARDWARE += libgps.utils
+
+#HDMID
+HDMID := hdmid
+
+#HOSTAPD
+HOSTAPD := hostapd
+HOSTAPD += hostapd_cli
+HOSTAPD += nt_password_hash
+HOSTAPD += hlr_auc_gw
+HOSTAPD += test-milenage
+
+#IPROUTE2
+IPROUTE2 := ip
+IPROUTE2 += libiprouteutil
+
+#IPTABLES
+IPTABLES := libiptc
+IPTABLES += libext
+IPTABLES += iptables
+
 #KERNEL_TESTS
 KERNEL_TESTS := mm-audio-native-test
 
@@ -83,6 +131,9 @@ LIBOVERLAY += overlay.default
 #LOC_API
 LOC_API := libloc_api-rpc-qc
 
+#MEDIA_PROFILES
+MEDIA_PROFILES := media_profiles.xml
+
 #MM_AUDIO
 MM_AUDIO := libOmxAacDec
 MM_AUDIO += libOmxAacEnc
@@ -119,16 +170,58 @@ MM_VIDEO += mm-venc-omx-test720p
 MM_VIDEO += mm-video-driver-test
 MM_VIDEO += mm-video-encdrv-test
 
+#OPENCORE
+OPENCORE := libomx_aacdec_sharedlibrary
+OPENCORE += libomx_amrdec_sharedlibrary
+OPENCORE += libomx_amrenc_sharedlibrary
+OPENCORE += libomx_avcdec_sharedlibrary
+OPENCORE += libomx_m4vdec_sharedlibrary
+OPENCORE += libomx_mp3dec_sharedlibrary
+OPENCORE += libomx_sharedlibrary
+OPENCORE += libopencore_author
+OPENCORE += libopencore_common
+OPENCORE += libopencore_download
+OPENCORE += libopencore_downloadreg
+OPENCORE += libopencore_mp4local
+OPENCORE += libopencore_mp4localreg
+OPENCORE += libopencore_net_support
+OPENCORE += libopencore_player
+OPENCORE += libopencore_rtsp
+OPENCORE += libopencore_rtspreg
+OPENCORE += libpvdecoder_gsmamr
+OPENCORE += libpvplayer_engine
+OPENCORE += libpvamrwbdecoder
+OPENCORE += libpvauthorengine
+OPENCORE += libomx_amr_component_lib
+OPENCORE += pvplayer
+OPENCORE += pvplayer_engine_test
+
+#PPP
+PPP := ip-up-vpn
+
 #PVOMX
 PVOMX := libqcomm_omx
+PVOMX += 01_qcomm_omx
 
 #SOFTAP
 SOFTAP := libQWiFiSoftApCfg
 SOFTAP += libqsap_sdk
 
+#STK
+STK := Stk
+
+#QRGND
+QRGND := qrngd
+QRGND += qrngtest
+
 #UPDATER
 UPDATER := librecovery_ui_qcom
 UPDATER += librecovery_updater_qcom
+
+#ZLIB
+ZLIB := gzip
+ZLIB += minigzip
+ZLIB += libunz
 
 PRODUCT_PACKAGES := \
     AccountAndSyncSettings \
@@ -159,6 +252,18 @@ PRODUCT_PACKAGES := \
     VoiceDialer \
     FM
 
+PRODUCT_PACKAGES += $(AMPLOADER)
+PRODUCT_PACKAGES += $(APPS)
+PRODUCT_PACKAGES += $(BSON)
+PRODUCT_PACKAGES += $(BT)
+PRODUCT_PACKAGES += $(CONNECTIVITY)
+PRODUCT_PACKAGES += $(CURL)
+PRODUCT_PACKAGES += $(E2FSPROGS)
+PRODUCT_PACKAGES += $(GPS_HARDWARE)
+PRODUCT_PACKAGES += $(HDMID)
+PRODUCT_PACKAGES += $(HOSTAPD)
+PRODUCT_PACKAGES += $(IPROUTE2)
+PRODUCT_PACKAGES += $(IPTABLES)
 PRODUCT_PACKAGES += $(KERNEL_TESTS)
 PRODUCT_PACKAGES += $(KEYPAD)
 PRODUCT_PACKAGES += $(LIBCAMERA)
@@ -168,12 +273,18 @@ PRODUCT_PACKAGES += $(LIBLIGHTS)
 PRODUCT_PACKAGES += $(LIBOPENCOREHW)
 PRODUCT_PACKAGES += $(LIBOVERLAY)
 PRODUCT_PACKAGES += $(LOC_API)
+PRODUCT_PACKAGES += $(MEDIA_PROFILES)
 PRODUCT_PACKAGES += $(MM_AUDIO)
 PRODUCT_PACKAGES += $(MM_CORE)
 PRODUCT_PACKAGES += $(MM_VIDEO)
+PRODUCT_PACKAGES += $(OPENCORE)
+PRODUCT_PACKAGES += $(PPP)
 PRODUCT_PACKAGES += $(PVOMX)
 PRODUCT_PACKAGES += $(SOFTAP)
+PRODUCT_PACKAGES += $(STK)
+PRODUCT_PACKAGES += $(QRGND)
 PRODUCT_PACKAGES += $(UPDATER)
+PRODUCT_PACKAGES += $(ZLIB)
 
 PRODUCT_COPY_FILES := \
     frameworks/base/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
