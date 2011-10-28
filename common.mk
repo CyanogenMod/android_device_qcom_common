@@ -62,6 +62,21 @@ HOSTAPD += nt_password_hash
 HOSTAPD += hlr_auc_gw
 HOSTAPD += test-milenage
 
+#INIT
+INIT := init.qcom.composition_type.sh
+INIT += init.qcom.mdm_links.sh
+INIT += init.qcom.modem_links.sh
+INIT += init.target.rc
+INIT += init.qcom.bt.sh
+INIT += init.qcom.coex.sh
+INIT += init.qcom.fm.sh
+INIT += init.qcom.post_boot.sh
+INIT += init.qcom.rc
+INIT += init.qcom.sdio.sh
+INIT += init.qcom.sh
+INIT += init.qcom.wifi.sh
+INIT += vold.fstab
+
 #IPROUTE2
 IPROUTE2 := ip
 IPROUTE2 += libiprouteutil
@@ -85,6 +100,16 @@ KEYPAD += surf_keypad.kcm
 KEYPAD += 7k_ffa_keypad.kcm
 KEYPAD += 7x27a_kp.kcm
 KEYPAD += keypad_8960_qwerty.kcm
+KEYPAD += 7k_ffa_keypad.kl
+KEYPAD += 7k_handset.kl
+KEYPAD += 7x27a_kp.kl
+KEYPAD += 8660_handset.kl
+KEYPAD += ffa-keypad.kl
+KEYPAD += fluid-keypad.kl
+KEYPAD += keypad_8960.kl
+KEYPAD += msm8960-snd-card_Button_Jack.kl
+KEYPAD += msm_tma300_ts.kl
+KEYPAD += surf_keypad.kl
 
 #LIBCAMERA
 LIBCAMERA := libcamera
@@ -218,6 +243,9 @@ QRGND += qrngtest
 UPDATER := librecovery_ui_qcom
 UPDATER += librecovery_updater_qcom
 
+#WPA
+WPA := wpa_supplicant.conf
+
 #ZLIB
 ZLIB := gzip
 ZLIB += minigzip
@@ -262,6 +290,7 @@ PRODUCT_PACKAGES += $(E2FSPROGS)
 PRODUCT_PACKAGES += $(GPS_HARDWARE)
 PRODUCT_PACKAGES += $(HDMID)
 PRODUCT_PACKAGES += $(HOSTAPD)
+PRODUCT_PACKAGES += $(INIT)
 PRODUCT_PACKAGES += $(IPROUTE2)
 PRODUCT_PACKAGES += $(IPTABLES)
 PRODUCT_PACKAGES += $(KERNEL_TESTS)
@@ -284,6 +313,7 @@ PRODUCT_PACKAGES += $(SOFTAP)
 PRODUCT_PACKAGES += $(STK)
 PRODUCT_PACKAGES += $(QRGND)
 PRODUCT_PACKAGES += $(UPDATER)
+PRODUCT_PACKAGES += $(WPA)
 PRODUCT_PACKAGES += $(ZLIB)
 
 PRODUCT_COPY_FILES := \
