@@ -51,6 +51,7 @@ GPS_HARDWARE := gps.default
 GPS_HARDWARE += gps.mahimahi
 GPS_HARDWARE += libloc_adapter
 GPS_HARDWARE += libgps.utils
+GPS_HARDWARE += libloc_eng
 
 #HDMID
 HDMID := hdmid
