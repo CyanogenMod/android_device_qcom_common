@@ -17,17 +17,22 @@ MSM7K_BOARD_PLATFORMS += msm7k
 
 QSD8K_BOARD_PLATFORMS := qsd8k
 
+
 # Below projects/packages with LOCAL_MODULEs will be used by
 # PRODUCT_PACKAGES to build LOCAL_MODULEs that are tagged with
 # optional tag, which will not be available on target unless
 # explicitly list here. Where project corresponds to the vars here
 # in CAPs.
 
+#ALSA
+ALSA_HARDWARE := alsa.default
+
 #AMPLOADER
 AMPLOADER := amploader
 
 #APPS
 APPS := QualcommSoftAP
+APPS += TSCalibration
 
 #BSON
 BSON := libbson
@@ -52,6 +57,7 @@ GPS_HARDWARE += gps.mahimahi
 GPS_HARDWARE += libloc_adapter
 GPS_HARDWARE += libgps.utils
 GPS_HARDWARE += libloc_eng
+GPS_HARDWARE += libloc_api_v02
 
 #HDMID
 HDMID := hdmid
@@ -89,6 +95,16 @@ IPTABLES += iptables
 
 #KERNEL_TESTS
 KERNEL_TESTS := mm-audio-native-test
+KERNEL_TESTS += HiFi
+KERNEL_TESTS += FM_Digital_Radio
+KERNEL_TESTS += HiFi_Rec
+KERNEL_TESTS += Voice_Call_IP
+KERNEL_TESTS += Voice_Call
+KERNEL_TESTS += FM_REC
+KERNEL_TESTS += HiFi_Low_Power
+KERNEL_TESTS += FM_A2DP_REC
+KERNEL_TESTS += snd_soc_msm
+KERNEL_TESTS += libalsa-intf
 
 #KEYPAD
 KEYPAD := ffa-keypad_qwerty.kcm
@@ -229,12 +245,30 @@ PPP := ip-up-vpn
 PVOMX := libqcomm_omx
 PVOMX += 01_qcomm_omx
 
+#SENSORS_HARDWARE
+SENSORS_HARDWARE := sensors.msm7630_surf
+SENSORS_HARDWARE += sensors.msm7630_fusion
+
 #SOFTAP
 SOFTAP := libQWiFiSoftApCfg
 SOFTAP += libqsap_sdk
 
 #STK
 STK := Stk
+
+#TSLIB_EXTERNAL
+TSLIB_EXTERNAL := corgi
+TSLIB_EXTERNAL += dejitter
+TSLIB_EXTERNAL += inputraw
+TSLIB_EXTERNAL += linear
+TSLIB_EXTERNAL += variance
+TSLIB_EXTERNAL += pthres
+TSLIB_EXTERNAL += libtslib
+TSLIB_EXTERNAL += tsprint
+TSLIB_EXTERNAL += tstest
+TSLIB_EXTERNAL += tsutils
+TSLIB_EXTERNAL += tscalib
+TSLIB_EXTERNAL += ts
 
 #QRGND
 QRGND := qrngd
@@ -281,6 +315,7 @@ PRODUCT_PACKAGES := \
     VoiceDialer \
     FM
 
+PRODUCT_PACKAGES += $(ALSA_HARDWARE)
 PRODUCT_PACKAGES += $(AMPLOADER)
 PRODUCT_PACKAGES += $(APPS)
 PRODUCT_PACKAGES += $(BSON)
@@ -310,8 +345,10 @@ PRODUCT_PACKAGES += $(MM_VIDEO)
 PRODUCT_PACKAGES += $(OPENCORE)
 PRODUCT_PACKAGES += $(PPP)
 PRODUCT_PACKAGES += $(PVOMX)
+PRODUCT_PACKAGES += $(SENSORS_HARDWARE)
 PRODUCT_PACKAGES += $(SOFTAP)
 PRODUCT_PACKAGES += $(STK)
+PRODUCT_PACKAGES += $(TSLIB_EXTERNAL)
 PRODUCT_PACKAGES += $(QRGND)
 PRODUCT_PACKAGES += $(UPDATER)
 PRODUCT_PACKAGES += $(WPA)
