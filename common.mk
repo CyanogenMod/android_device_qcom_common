@@ -274,10 +274,6 @@ TSLIB_EXTERNAL += ts
 QRGND := qrngd
 QRGND += qrngtest
 
-#UPDATER
-UPDATER := librecovery_ui_qcom
-UPDATER += librecovery_updater_qcom
-
 #WPA
 WPA := wpa_supplicant.conf
 
