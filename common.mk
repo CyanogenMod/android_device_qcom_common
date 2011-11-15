@@ -298,6 +298,7 @@ PRODUCT_PACKAGES := \
     Launcher2 \
     Mms \
     Music \
+    Phone \
     Provision \
     Protips \
     QuickSearchBox \
