@@ -397,7 +397,8 @@ PRODUCT_LOCALES := en_US es_US de_DE zh_CN
 PRODUCT_LOCALES += hdpi mdpi
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=/system/lib/libqc-opt.so
+    ro.vendor.extension_library=/system/lib/libqc-opt.so \
+    hwui.render_dirty_regions=false
 
 PRODUCT_PRIVATE_KEY := device/qcom/common/qcom.key
 
