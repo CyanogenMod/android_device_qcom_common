@@ -29,10 +29,14 @@ ALSA_HARDWARE := alsa.msm8960
 
 AUDIO_HARDWARE := audio.primary.msm8960
 AUDIO_HARDWARE += audio.primary.msm8660
+AUDIO_HARDWARE += audio.primary.msm7627a
+AUDIO_HARDWARE += audio.primary.msm7630
 AUDIO_HARDWARE += audio.primary.default
 
 AUDIO_POLICY := audio_policy.msm8960
 AUDIO_POLICY += audio_policy.msm8660
+AUDIO_POLICY += audio_policy.msm7627a
+AUDIO_POLICY += audio_policy.msm7630
 AUDIO_POLICY += audio_policy.default
 
 #AMPLOADER
