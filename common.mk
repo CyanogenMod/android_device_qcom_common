@@ -144,6 +144,8 @@ KEYPAD += surf_keypad.kl
 LIBCAMERA := libcamera
 LIBCAMERA += camera.msm8960
 LIBCAMERA += camera.msm8660
+LIBCAMERA += camera.msm7630_surf
+LIBCAMERA += camera.msm7627a
 
 #LIBCOPYBIT
 LIBCOPYBIT := copybit.msm8660
