@@ -166,6 +166,7 @@ LIBGRALLOC += gralloc.msm7630_fusion
 LIBGRALLOC += gralloc.msm7627_surf
 LIBGRALLOC += gralloc.msm7627_6x
 LIBGRALLOC += gralloc.msm7627a
+LIBGRALLOC += libmemalloc
 
 #LIBLIGHTS
 LIBLIGHTS := lights.msm8660
