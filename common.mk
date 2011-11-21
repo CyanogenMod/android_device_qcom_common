@@ -35,6 +35,8 @@ ALSA_UCM += Voice_Call
 ALSA_UCM += FM_REC
 ALSA_UCM += HiFi_Low_Power
 ALSA_UCM += FM_A2DP_REC
+ALSA_UCM += DL_REC
+ALSA_UCM += UL_DL_REC
 ALSA_UCM += snd_soc_msm
 ALSA_UCM += libalsa-intf
 ALSA_UCM += HiFi_2x
@@ -45,6 +47,8 @@ ALSA_UCM += Voice_Call_2x
 ALSA_UCM += FM_REC_2x
 ALSA_UCM += HiFi_Low_Power_2x
 ALSA_UCM += FM_A2DP_REC_2x
+ALSA_UCM += DL_REC_2x
+ALSA_UCM += UL_DL_REC_2x
 ALSA_UCM += snd_soc_msm_2x
 
 AUDIO_HARDWARE := audio.primary.msm8960
