@@ -32,6 +32,7 @@ AUDIO_HARDWARE += audio.primary.msm8660
 AUDIO_HARDWARE += audio.primary.msm7627a
 AUDIO_HARDWARE += audio.primary.msm7630_surf
 AUDIO_HARDWARE += audio.primary.default
+AUDIO_HARDWARE += audio.a2dp.default
 
 AUDIO_POLICY := audio_policy.msm8960
 AUDIO_POLICY += audio_policy.msm8660
