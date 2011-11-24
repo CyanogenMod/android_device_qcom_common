@@ -413,7 +413,7 @@ include build/core/utils.mk
 #Enabling Ring Tones
 include frameworks/base/data/sounds/OriginalAudio.mk
 
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product-if-exists, vendor/qcom/proprietary/common/config/device-vendor.mk)
 
 PRODUCT_BRAND := qcom
