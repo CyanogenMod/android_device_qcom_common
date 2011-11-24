@@ -99,6 +99,7 @@ INIT += init.qcom.sh
 INIT += init.qcom.wifi.sh
 INIT += vold.fstab
 INIT += init.qcom.ril.path.sh
+INIT += init.qcom.usb.rc
 
 #IPROUTE2
 IPROUTE2 := ip
