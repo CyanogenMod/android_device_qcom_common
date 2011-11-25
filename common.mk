@@ -31,6 +31,7 @@ AUDIO_HARDWARE := audio.primary.msm8960
 AUDIO_HARDWARE += audio.primary.msm8660
 AUDIO_HARDWARE += audio.primary.msm7627a
 AUDIO_HARDWARE += audio.primary.msm7630_surf
+AUDIO_HARDWARE += audio.primary.msm7630_fusion
 AUDIO_HARDWARE += audio.primary.default
 AUDIO_HARDWARE += audio.a2dp.default
 
@@ -38,6 +39,7 @@ AUDIO_POLICY := audio_policy.msm8960
 AUDIO_POLICY += audio_policy.msm8660
 AUDIO_POLICY += audio_policy.msm7627a
 AUDIO_POLICY += audio_policy.msm7630_surf
+AUDIO_POLICY += audio_policy.msm7630_fusion
 AUDIO_POLICY += audio_policy.default
 
 #AMPLOADER
@@ -147,6 +149,7 @@ LIBCAMERA := libcamera
 LIBCAMERA += camera.msm8960
 LIBCAMERA += camera.msm8660
 LIBCAMERA += camera.msm7630_surf
+LIBCAMERA += camera.msm7630_fusion
 LIBCAMERA += camera.msm7627a
 
 #LIBCOPYBIT
