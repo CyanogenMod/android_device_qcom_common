@@ -27,6 +27,26 @@ QSD8K_BOARD_PLATFORMS := qsd8k
 #ALSA
 ALSA_HARDWARE := alsa.msm8960
 
+ALSA_UCM := HiFi
+ALSA_UCM += FM_Digital_Radio
+ALSA_UCM += HiFi_Rec
+ALSA_UCM += Voice_Call_IP
+ALSA_UCM += Voice_Call
+ALSA_UCM += FM_REC
+ALSA_UCM += HiFi_Low_Power
+ALSA_UCM += FM_A2DP_REC
+ALSA_UCM += snd_soc_msm
+ALSA_UCM += libalsa-intf
+ALSA_UCM += HiFi_2x
+ALSA_UCM += FM_Digital_Radio_2x
+ALSA_UCM += HiFi_Rec_2x
+ALSA_UCM += Voice_Call_IP_2x
+ALSA_UCM += Voice_Call_2x
+ALSA_UCM += FM_REC_2x
+ALSA_UCM += HiFi_Low_Power_2x
+ALSA_UCM += FM_A2DP_REC_2x
+ALSA_UCM += snd_soc_msm_2x
+
 AUDIO_HARDWARE := audio.primary.msm8960
 AUDIO_HARDWARE += audio.primary.msm8660
 AUDIO_HARDWARE += audio.primary.msm7627a
@@ -112,16 +132,6 @@ IPTABLES += iptables
 
 #KERNEL_TESTS
 KERNEL_TESTS := mm-audio-native-test
-KERNEL_TESTS += HiFi
-KERNEL_TESTS += FM_Digital_Radio
-KERNEL_TESTS += HiFi_Rec
-KERNEL_TESTS += Voice_Call_IP
-KERNEL_TESTS += Voice_Call
-KERNEL_TESTS += FM_REC
-KERNEL_TESTS += HiFi_Low_Power
-KERNEL_TESTS += FM_A2DP_REC
-KERNEL_TESTS += snd_soc_msm
-KERNEL_TESTS += libalsa-intf
 
 #KEYPAD
 KEYPAD := ffa-keypad_qwerty.kcm
@@ -340,6 +350,7 @@ PRODUCT_PACKAGES := \
     FM
 
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
+PRODUCT_PACKAGES += $(ALSA_UCM)
 PRODUCT_PACKAGES += $(AUDIO_HARDWARE)
 PRODUCT_PACKAGES += $(AUDIO_POLICY)
 PRODUCT_PACKAGES += $(AMPLOADER)
