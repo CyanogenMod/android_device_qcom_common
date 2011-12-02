@@ -347,7 +347,8 @@ PRODUCT_PACKAGES := \
     SyncProvider \
     IM \
     VoiceDialer \
-    FM
+    FM \
+    VideoEditor
 
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
 PRODUCT_PACKAGES += $(ALSA_UCM)
