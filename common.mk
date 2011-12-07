@@ -51,6 +51,8 @@ ALSA_UCM += FM_A2DP_REC_2x
 ALSA_UCM += DL_REC_2x
 ALSA_UCM += UL_DL_REC_2x
 ALSA_UCM += snd_soc_msm_2x
+ALSA_UCM += Voice_Call_2x_Fusion3
+ALSA_UCM += snd_soc_msm_2x_Fusion3
 
 AUDIO_HARDWARE := audio.primary.msm8960
 AUDIO_HARDWARE += audio.primary.msm8660
