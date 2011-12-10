@@ -103,6 +103,10 @@ HOSTAPD += hostapd_cli
 HOSTAPD += nt_password_hash
 HOSTAPD += hlr_auc_gw
 HOSTAPD += test-milenage
+HOSTAPD += hostapd.conf
+HOSTAPD += hostapd_default.conf
+HOSTAPD += hostapd.deny
+HOSTAPD += hostapd.accept
 
 #INIT
 INIT := init.qcom.composition_type.sh
