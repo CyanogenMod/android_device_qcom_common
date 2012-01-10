@@ -166,6 +166,7 @@ KEYPAD += 8660_handset.kl
 KEYPAD += ffa-keypad.kl
 KEYPAD += fluid-keypad.kl
 KEYPAD += keypad_8960.kl
+KEYPAD += keypad_8960_liquid.kl
 KEYPAD += cyttsp-i2c.kl
 KEYPAD += msm8960-snd-card_Button_Jack.kl
 KEYPAD += msm_tma300_ts.kl
