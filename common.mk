@@ -112,6 +112,9 @@ HOSTAPD += hostapd_default.conf
 HOSTAPD += hostapd.deny
 HOSTAPD += hostapd.accept
 
+#I420COLORCONVERT
+I420CC := libI420colorconvert
+
 #INIT
 INIT := init.qcom.composition_type.sh
 INIT += init.qcom.mdm_links.sh
@@ -379,6 +382,7 @@ PRODUCT_PACKAGES += $(E2FSPROGS)
 PRODUCT_PACKAGES += $(GPS_HARDWARE)
 PRODUCT_PACKAGES += $(HDMID)
 PRODUCT_PACKAGES += $(HOSTAPD)
+PRODUCT_PACKAGES += $(I420CC)
 PRODUCT_PACKAGES += $(INIT)
 PRODUCT_PACKAGES += $(IPROUTE2)
 PRODUCT_PACKAGES += $(IPTABLES)
