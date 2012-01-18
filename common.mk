@@ -227,6 +227,9 @@ LIBGENLOCK := libgenlock
 #LIBQCOMUI
 LIBQCOMUI := libQcomUI
 
+#LLVM for RenderScript
+$(call inherit-product, external/llvm/llvm-select.mk)
+
 #LOC_API
 LOC_API := libloc_api-rpc-qc
 
