@@ -487,6 +487,7 @@ PRODUCT_COPY_FILES := \
     frameworks/base/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/base/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/base/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
+    system/bluetooth/data/iop_device_list.conf:system/etc/bluetooth/iop_device_list.conf \
 
 # include additional build utilities
 include build/core/utils.mk
