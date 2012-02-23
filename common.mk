@@ -53,6 +53,17 @@ ALSA_UCM += UL_DL_REC_2x
 ALSA_UCM += snd_soc_msm_2x
 ALSA_UCM += Voice_Call_2x_Fusion3
 ALSA_UCM += snd_soc_msm_2x_Fusion3
+ALSA_UCM += DL_REC_Sitar
+ALSA_UCM += FM_A2DP_REC_Sitar
+ALSA_UCM += FM_Digital_Radio_Sitar
+ALSA_UCM += FM_REC_Sitar
+ALSA_UCM += HiFi_Low_Power_Sitar
+ALSA_UCM += HiFi_Rec_Sitar
+ALSA_UCM += HiFi_Sitar
+ALSA_UCM += UL_DL_REC_Sitar
+ALSA_UCM += Voice_Call_IP_Sitar
+ALSA_UCM += Voice_Call_Sitar
+ALSA_UCM += snd_soc_msm_Sitar
 
 AUDIO_HARDWARE := audio.primary.msm8960
 AUDIO_HARDWARE += audio.primary.msm8660
