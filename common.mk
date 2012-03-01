@@ -75,11 +75,14 @@ ALSA_UCM += UL_DL_REC_Sitar
 ALSA_UCM += Voice_Call_IP_Sitar
 ALSA_UCM += Voice_Call_Sitar
 ALSA_UCM += snd_soc_msm_Sitar
+ALSA_UCM += HiFi2
+ALSA_UCM += HiFi2_2x
 
 #ANGLE
 ANGLE := libangle
 
-AUDIO_HARDWARE := audio.primary.msm8960
+AUDIO_HARDWARE := audio.primary.mpq8064
+AUDIO_HARDWARE += audio.primary.msm8960
 AUDIO_HARDWARE += audio.primary.msm8660
 AUDIO_HARDWARE += audio.primary.msm7627_surf
 AUDIO_HARDWARE += audio.primary.msm7627a
@@ -88,7 +91,8 @@ AUDIO_HARDWARE += audio.primary.msm7630_fusion
 AUDIO_HARDWARE += audio.primary.default
 AUDIO_HARDWARE += audio.a2dp.default
 
-AUDIO_POLICY := audio_policy.msm8960
+AUDIO_POLICY := audio_policy.mpq8064
+AUDIO_POLICY += audio_policy.msm8960
 AUDIO_POLICY += audio_policy.msm8660
 AUDIO_POLICY += audio_policy.msm7627_surf
 AUDIO_POLICY += audio_policy.msm7627a
