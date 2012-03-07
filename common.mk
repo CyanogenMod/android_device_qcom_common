@@ -157,6 +157,7 @@ INIT += vold.fstab
 INIT += init.qcom.ril.path.sh
 INIT += init.qcom.usb.rc
 INIT += init.qcom.usb.sh
+INIT += usf_post_boot.sh
 
 #IPROUTE2
 IPROUTE2 := ip
