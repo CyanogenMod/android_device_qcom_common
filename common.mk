@@ -493,6 +493,9 @@ include build/core/utils.mk
 #Enabling Ring Tones
 include frameworks/base/data/sounds/OriginalAudio.mk
 
+#Enabling video for live effects
+include frameworks/base/data/videos/VideoPackage1.mk
+
 # For PRODUCT_COPY_FILES, the first instance takes precedence.
 # Since we want use QC specific files, we should inherit
 # device-vendor.mk first to make sure QC specific files gets installed.
