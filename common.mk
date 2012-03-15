@@ -379,6 +379,10 @@ ZLIB := gzip
 ZLIB += minigzip
 ZLIB += libunz
 
+#Charger
+CHARGER := charger
+CHARGER += charger_res_images
+
 PRODUCT_PACKAGES := \
     AccountAndSyncSettings \
     DeskClock \
@@ -419,6 +423,7 @@ PRODUCT_PACKAGES += $(APPS)
 PRODUCT_PACKAGES += $(BSON)
 PRODUCT_PACKAGES += $(BT)
 PRODUCT_PACKAGES += $(CONNECTIVITY)
+PRODUCT_PACKAGES += $(CHARGER)
 PRODUCT_PACKAGES += $(CURL)
 PRODUCT_PACKAGES += $(E2FSPROGS)
 PRODUCT_PACKAGES += $(GPS_HARDWARE)
