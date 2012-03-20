@@ -147,6 +147,7 @@ I420CC := libI420colorconvert
 INIT := init.qcom.composition_type.sh
 INIT += init.qcom.mdm_links.sh
 INIT += init.qcom.modem_links.sh
+INIT += init.qcom.thermald_conf.sh
 INIT += init.target.rc
 INIT += init.qcom.bt.sh
 INIT += init.qcom.coex.sh
