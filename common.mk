@@ -147,6 +147,7 @@ I420CC := libI420colorconvert
 
 #INIT
 INIT := init.qcom.composition_type.sh
+INIT += init.qcom.set_dpi.sh
 INIT += init.qcom.mdm_links.sh
 INIT += init.qcom.modem_links.sh
 INIT += init.qcom.thermald_conf.sh
