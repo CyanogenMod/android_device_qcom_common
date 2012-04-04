@@ -204,7 +204,7 @@ KEYPAD += fluid-keypad.kl
 KEYPAD += gpio-keys.kl
 KEYPAD += keypad_8960.kl
 KEYPAD += keypad_8960_liquid.kl
-KEYPAD += msm8960-snd-card_Button_Jack.kl
+KEYPAD += Button_Jack.kl
 KEYPAD += msm_tma300_ts.kl
 KEYPAD += surf_keypad.kl
 
