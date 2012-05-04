@@ -167,6 +167,7 @@ KEYPAD += msm_tma300_ts.kl
 KEYPAD += philips_remote_ir.kl
 KEYPAD += samsung_remote_ir.kl
 KEYPAD += surf_keypad.kl
+KEYPAD += ue_rf4ce_remote.kl
 
 #LIBCAMERA
 LIBCAMERA := libcamera
