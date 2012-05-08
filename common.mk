@@ -165,6 +165,7 @@ KEYPAD += keypad_8960_liquid.kl
 KEYPAD += Button_Jack.kl
 KEYPAD += msm_tma300_ts.kl
 KEYPAD += philips_remote_ir.kl
+KEYPAD += samsung_remote_ir.kl
 KEYPAD += surf_keypad.kl
 
 #LIBCAMERA
