@@ -354,6 +354,9 @@ ZLIB += libunz
 CHARGER := charger
 CHARGER += charger_res_images
 
+#VT_JNI
+VT_JNI := libvt_jni
+
 PRODUCT_PACKAGES := \
     AccountAndSyncSettings \
     DeskClock \
@@ -434,6 +437,7 @@ PRODUCT_PACKAGES += $(QRGND)
 PRODUCT_PACKAGES += $(UPDATER)
 PRODUCT_PACKAGES += $(WPA)
 PRODUCT_PACKAGES += $(ZLIB)
+PRODUCT_PACKAGES += $(VT_JNI)
 
 
 # Live Wallpapers
