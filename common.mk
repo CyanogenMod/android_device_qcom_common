@@ -372,6 +372,7 @@ PRODUCT_PACKAGES := \
     Calculator \
     Calendar \
     Camera \
+    CellBroadcastReceiver \
     CertInstaller \
     DrmProvider \
     Email \
