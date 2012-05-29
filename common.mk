@@ -178,6 +178,7 @@ LIBCAMERA += camera.msm7630_surf
 LIBCAMERA += camera.msm7630_fusion
 LIBCAMERA += camera.msm7627a
 LIBCAMERA += libmmcamera_interface2
+LIBCAMERA += libmmjpeg_interface
 
 #LIBCOPYBIT
 LIBCOPYBIT := copybit.msm8660
