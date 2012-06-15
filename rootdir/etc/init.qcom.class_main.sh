@@ -44,7 +44,7 @@ case "$baseband" in
     "msm" | "csfb" | "svlte2a" | "mdm" | "sglte" | "unknown")
     start qmuxd
     case "$baseband" in
-        "svlte2a" | "csfb")
+        "svlte2a" | "csfb" | "sglte")
         start qmiproxy
     esac
     case "$multirild" in
