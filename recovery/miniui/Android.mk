@@ -1,3 +1,4 @@
+ifeq ($(TARGET_RECOVERY_UI_LIB),librecovery_ui_qcom)
 ifneq ($(TARGET_SIMULATOR),true)
 ifeq ($(TARGET_ARCH),arm)
 
@@ -20,3 +21,4 @@ LOCAL_STATIC_LIBRARIES += libstdc++ libc
 include $(BUILD_STATIC_LIBRARY)
 endif   # TARGET_ARCH == arm
 endif   # !TARGET_SIMULATOR
+endif
