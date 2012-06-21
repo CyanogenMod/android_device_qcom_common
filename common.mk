@@ -490,7 +490,7 @@ PRODUCT_COPY_FILES := \
     system/bluetooth/data/iop_device_list.conf:system/etc/bluetooth/iop_device_list.conf \
 
 # include additional build utilities
-include build/core/utils.mk
+-include vendor/qcom/proprietary/common/build/utils.mk
 
 #Enabling Ring Tones
 include frameworks/base/data/sounds/OriginalAudio.mk
