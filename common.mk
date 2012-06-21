@@ -36,24 +36,24 @@ ALSA_UCM += snd_soc_msm_Sitar
 #ANGLE
 ANGLE := libangle
 
-AUDIO_HARDWARE := audio.primary.mpq8064
-AUDIO_HARDWARE += audio.primary.msm8960
-AUDIO_HARDWARE += audio.primary.msm8660
-AUDIO_HARDWARE += audio.primary.msm7627_surf
-AUDIO_HARDWARE += audio.primary.msm7627a
-AUDIO_HARDWARE += audio.primary.msm7630_surf
-AUDIO_HARDWARE += audio.primary.msm7630_fusion
-AUDIO_HARDWARE += audio.primary.default
-AUDIO_HARDWARE += audio.a2dp.default
-
-AUDIO_POLICY := audio_policy.mpq8064
-AUDIO_POLICY += audio_policy.msm8960
-AUDIO_POLICY += audio_policy.msm8660
-AUDIO_POLICY += audio_policy.msm7627_surf
-AUDIO_POLICY += audio_policy.msm7627a
-AUDIO_POLICY += audio_policy.msm7630_surf
-AUDIO_POLICY += audio_policy.msm7630_fusion
-AUDIO_POLICY += audio_policy.default
+#AUDIO_HARDWARE := audio.primary.mpq8064
+#AUDIO_HARDWARE += audio.primary.msm8960
+#AUDIO_HARDWARE += audio.primary.msm8660
+#AUDIO_HARDWARE += audio.primary.msm7627_surf
+#AUDIO_HARDWARE += audio.primary.msm7627a
+#AUDIO_HARDWARE += audio.primary.msm7630_surf
+#AUDIO_HARDWARE += audio.primary.msm7630_fusion
+#AUDIO_HARDWARE += audio.primary.default
+#AUDIO_HARDWARE += audio.a2dp.default
+#
+#AUDIO_POLICY := audio_policy.mpq8064
+#AUDIO_POLICY += audio_policy.msm8960
+#AUDIO_POLICY += audio_policy.msm8660
+#AUDIO_POLICY += audio_policy.msm7627_surf
+#AUDIO_POLICY += audio_policy.msm7627a
+#AUDIO_POLICY += audio_policy.msm7630_surf
+#AUDIO_POLICY += audio_policy.msm7630_fusion
+#AUDIO_POLICY += audio_policy.default
 
 #AMPLOADER
 AMPLOADER := amploader
@@ -251,7 +251,8 @@ LIBGENLOCK := libgenlock
 LIBQCOMUI := libQcomUI
 
 #LLVM for RenderScript
-$(call inherit-product, external/llvm/llvm-select.mk)
+#use stock LLVM
+#$(call inherit-product, external/llvm/llvm-select.mk)
 
 #LOC_API
 LOC_API := libloc_api-rpc-qc
@@ -471,32 +472,32 @@ PRODUCT_PACKAGES += \
     setup_fs
 
 PRODUCT_COPY_FILES := \
-    frameworks/base/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
-    frameworks/base/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
-    frameworks/base/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-    frameworks/base/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
-    frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
-    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
-    frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-    frameworks/base/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
-    packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml \
-    frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
-    frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-    frameworks/base/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
-    frameworks/base/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
-    frameworks/base/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
-    frameworks/base/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
-    system/bluetooth/data/iop_device_list.conf:system/etc/bluetooth/iop_device_list.conf \
+    frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
+    frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
+    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
+    frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
+    frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
+    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
+    frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+    frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
+    frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
+    frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
+    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
+    frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
+    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
+#    system/bluetooth/data/iop_device_list.conf:system/etc/bluetooth/iop_device_list.conf \
+#    packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml \
 
 # include additional build utilities
 -include vendor/qcom/proprietary/common/build/utils.mk
 
 #Enabling Ring Tones
-include frameworks/base/data/sounds/OriginalAudio.mk
+#include frameworks/base/data/sounds/OriginalAudio.mk
 
 #Enabling video for live effects
-include frameworks/base/data/videos/VideoPackage1.mk
+#include frameworks/base/data/videos/VideoPackage1.mk
 
 # For PRODUCT_COPY_FILES, the first instance takes precedence.
 # Since we want use QC specific files, we should inherit
@@ -513,6 +514,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PRIVATE_KEY := device/qcom/common/qcom.key
 
-$(call inherit-product, frameworks/base/build/phone-xhdpi-1024-dalvik-heap.mk)
-$(call inherit-product, frameworks/base/data/fonts/fonts.mk)
-$(call inherit-product, frameworks/base/data/keyboards/keyboards.mk)
+$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+#$(call inherit-product, frameworks/base/data/fonts/fonts.mk)
+#$(call inherit-product, frameworks/base/data/keyboards/keyboards.mk)
