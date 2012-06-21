@@ -129,6 +129,7 @@ INIT += init.qcom.usb.rc
 INIT += init.qcom.usb.sh
 INIT += usf_post_boot.sh
 INIT += init.qcom.efs.sync.sh
+INIT += ueventd.qcom.rc
 
 #IPROUTE2
 IPROUTE2 := ip
