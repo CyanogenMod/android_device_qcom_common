@@ -50,8 +50,8 @@
 /dev/v4l-subdev*          0660   system     camera
 /dev/msm_camera/*         0660   system     camera
 /dev/gemini/              0660   system     camera
-#permissions for video
 /dev/msm_vidc_reg         0660   system     audio
 /dev/msm_vidc_dec         0660   system     audio
 /dev/msm_vidc_dec_sec     0660   system     audio
 /dev/msm_vidc_enc         0660   system     audio
+/dev/msm_rotator          0664   system     system
