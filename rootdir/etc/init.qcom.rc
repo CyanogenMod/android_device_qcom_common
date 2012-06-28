@@ -32,6 +32,15 @@ on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
 
+on early-init
+    # for backwards compatibility
+    export EXTERNAL_STORAGE /storage/sdcard0
+    mkdir /storage 0050 system sdcard_r
+    mkdir /storage/sdcard0 0000 system system
+    symlink /storage/sdcard0 /sdcard
+    symlink /storage/sdcard0 /mnt/sdcard
+
+
 on boot
     exec system/bin/btnvtool -O
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
@@ -130,6 +139,9 @@ on post-fs
 
 # msm specific files that need to be created on /data
 on post-fs-data
+    # we will remap this as /mnt/sdcard with the sdcard fuse tool
+    mkdir /data/media 0775 media_rw media_rw
+    chown media_rw media_rw /data/media
 
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
 
@@ -530,8 +542,15 @@ service sdcard /system/bin/sdcard /data/media 1023 1023
     class late_start
     disabled
 
-on property:persist.fuse_sdcard=true
+on property:ro.fuse_sdcard=true
     start sdcard
+
+# This will make sure that sdcard service starts as late_start.
+on nonencrypted
+    setprop ro.fuse_sdcard ${persist.fuse_sdcard}
+
+on property:vold.decrypt=trigger_restart_framework
+    setprop ro.fuse_sdcard ${persist.fuse_sdcard}
 
 service hcidump /system/bin/sh /system/etc/hcidump.sh
     user bluetooth
