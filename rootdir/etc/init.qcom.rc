@@ -252,7 +252,7 @@ service rmt_storage /system/bin/rmt_storage
     user root
     disabled
 
-on property:ro.emmc=1
+on property:ro.boot.emmc=true
     start rmt_storage
 
 service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh

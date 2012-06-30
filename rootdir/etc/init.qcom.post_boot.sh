@@ -161,9 +161,9 @@ chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
 chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
 chown system /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
 
-emmc_boot=`getprop ro.emmc`
+emmc_boot=`getprop ro.boot.emmc`
 case "$emmc_boot"
-    in "1")
+    in "true")
         chown system /sys/devices/platform/rs300000a7.65536/force_sync
         chown system /sys/devices/platform/rs300000a7.65536/sync_sts
         chown system /sys/devices/platform/rs300100a7.65536/force_sync
