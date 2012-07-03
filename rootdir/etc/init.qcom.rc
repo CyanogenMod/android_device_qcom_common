@@ -88,8 +88,8 @@ on boot
     chown system system /dev/smd0
 
     #BT DUN port-bridge
-    chmod 0660 /dev/smd7
-    chown bluetooth bluetooth /dev/smd7
+#    chmod 0660 /dev/smd7
+#    chown bluetooth bluetooth /dev/smd7
 
     chmod 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
 
