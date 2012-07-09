@@ -38,7 +38,7 @@ ANGLE := libangle
 
 #AUDIO_HARDWARE := audio.primary.mpq8064
 AUDIO_HARDWARE += audio.primary.msm8960
-#AUDIO_HARDWARE += audio.primary.msm8660
+AUDIO_HARDWARE += audio.primary.msm8660
 #AUDIO_HARDWARE += audio.primary.msm7627_surf
 AUDIO_HARDWARE += audio.primary.msm7627a
 #AUDIO_HARDWARE += audio.primary.msm7630_surf
