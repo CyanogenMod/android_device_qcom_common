@@ -497,7 +497,7 @@ PRODUCT_COPY_FILES := \
 #    packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml \
 
 # include additional build utilities
--include vendor/qcom/proprietary/common/build/utils.mk
+-include device/qcom/common/utils.mk
 
 #Enabling Ring Tones
 #include frameworks/base/data/sounds/OriginalAudio.mk
