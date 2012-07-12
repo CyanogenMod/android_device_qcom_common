@@ -62,3 +62,7 @@
 /dev/msm_evrc             0660   system     audio
 /dev/msm_wma              0660   system     audio
 /dev/msm_wmapro           0660   system     audio
+/dev/smd3                 0660   bluetooth  bluetooth
+/dev/smd2                 0660   bluetooth  bluetooth
+/dev/smd7                 0640   radio      radio
+/dev/rfcomm0              0660   bluetooth  bluetooth

@@ -77,9 +77,6 @@ on boot
 
     setprop wifi.interface wlan0
 
-    # Enable Bluetooth 802.11 PAL when Bluetooth is turned on
-    setprop ro.config.bt.amp no
-
     #Set SUID bit for usbhub
     chmod 4755 /system/bin/usbhub
     chmod 755 /system/bin/usbhub_init
@@ -228,11 +225,7 @@ on property:init.svc.wpa_supplicant=stopped
 
 on property:bluetooth.isEnabled=true
     start btwlancoex
-    start amp_load
     write /sys/class/bluetooth/hci0/idle_timeout 7000
-
-on property:bluetooth.isEnabled=false
-    start amp_unload
 
 service qcom-c_core-sh /system/bin/sh /init.qcom.class_core.sh
     class core

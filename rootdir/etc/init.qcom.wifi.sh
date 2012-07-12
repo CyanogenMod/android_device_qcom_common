@@ -167,43 +167,12 @@ case "$target" in
             echo "*******    WI-FI may not work    ***********************************"
             ;;
         esac
-        case "$wifishd" in
-            "ok")
-             ;;
-            "loading")
-            ;;
-           *)
-               case "$wlanchip" in
-                   "WCN1314")
-                    ;;
-
-                   "WCN1312")
-                        /system/bin/amploader -i
-                        ;;
-                   *)
-	                ;;
-               esac
-        esac
     ;;
     msm7627*)
         mount -t vfat -o remount,rw,barrier=0 /dev/block/mtdblock1 /system
         ln -s /data/hostapd/qcom_cfg.ini /etc/firmware/wlan/qcom_cfg.ini
         ln -s /persist/qcom_wlan_nv.bin /etc/firmware/wlan/qcom_wlan_nv.bin
         mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
-        wifishd=`getprop wlan.driver.status`
-        case "$wifishd" in
-            "ok")
-             ;;
-            "loading")
-             ;;
-            *)
-# For the new .38 kernel for 1312, there was an FFA panic
-# when no 1312/1314 chip was present. Hence this is commented out
-# Will need to reenable this code for 1312.
-#
-#                /system/bin/amploader -i
-            ;;
-        esac
     ;;
 
     *)
