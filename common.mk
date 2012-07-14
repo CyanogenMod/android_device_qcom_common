@@ -501,6 +501,10 @@ PRODUCT_COPY_FILES := \
 PRODUCT_COPY_FILES += device/qcom/common/media/media_profiles.xml:system/etc/media_profiles.xml \
                       device/qcom/common/media/media_codecs.xml:system/etc/media_codecs.xml
 
+# enable overlays to use our version of
+# source/resources etc.
+PRODUCT_PACKAGE_OVERLAYS := device/qcom/common/overlay
+
 # include additional build utilities
 -include device/qcom/common/utils.mk
 
