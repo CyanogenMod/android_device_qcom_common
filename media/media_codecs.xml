@@ -79,6 +79,9 @@
             <Quirk name="requires-global-flush" />
             <Quirk name="requires-wma-pro-component" />
         </MediaCodec>
+        <MediaCodec name="OMX.qcom.audio.decoder.mp3" type="audio/mpeg" >
+            <Quirk name="requires-global-flush" />
+        </MediaCodec>
         <!-- Audio Software  -->
         <MediaCodec name="OMX.google.vorbis.decoder" type="audio/vorbis" />
         <MediaCodec name="OMX.google.mp3.decoder" type="audio/mpeg" />
