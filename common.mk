@@ -137,6 +137,7 @@ INIT += init.qcom.usb.sh
 INIT += usf_post_boot.sh
 INIT += init.qcom.efs.sync.sh
 INIT += ueventd.qcom.rc
+INIT += init.ath3k.bt.sh
 
 #IPROUTE2
 IPROUTE2 := ip
