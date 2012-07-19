@@ -476,6 +476,13 @@ service qcom-wifi /system/bin/sh /system/etc/init.qcom.wifi.sh
     class late_start
     oneshot
 
+service wifi-sdio-on /system/bin/sh /system/etc/init.qcom.sdio.sh
+    class late_start
+    group wifi inet
+    disabled
+    oneshot
+
+
 on property:sys.boot_completed=1
     start qcom-post-boot
 
