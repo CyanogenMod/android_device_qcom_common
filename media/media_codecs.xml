@@ -21,6 +21,7 @@
 <CodecList>
     <Encoders>
         <!-- Audio Hardware  -->
+        <MediaCodec name="OMX.google.aac.encoder" type="audio/mp4a-latm" />
         <MediaCodec name="OMX.qcom.audio.encoder.aac" type="audio/mp4a-latm" />
         <MediaCodec name="OMX.qcom.audio.encoder.evrc" type="audio/evrc" >
             <Quirk name="requires-allocate-on-input-ports" />
