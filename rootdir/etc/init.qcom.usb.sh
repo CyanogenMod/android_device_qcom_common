@@ -124,3 +124,22 @@ case "$usb_config" in
     * ) ;; #USB persist config exists, do nothing
 esac
 
+#
+# Add support for exposing lun0 as cdrom in mass-storage
+#
+target=`getprop ro.product.device`
+cdromname="/system/etc/cdrom_install.iso"
+cdromenable=`getprop persist.service.cdrom.enable`
+case "$target" in
+        "msm7627a")
+                case "$cdromenable" in
+                        0)
+                                echo "" > /sys/class/android_usb/android0/f_mass_storage/lun0/file
+                                ;;
+                        1)
+                                echo "mounting usbcdrom lun"
+                                echo $cdromname > /sys/class/android_usb/android0/f_mass_storage/lun0/file
+                                ;;
+                esac
+                ;;
+esac
