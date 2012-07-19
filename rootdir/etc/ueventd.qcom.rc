@@ -62,6 +62,7 @@
 /dev/video*               0660   system     camera
 /dev/media*               0660   system     camera
 /dev/v4l-subdev*          0660   system     camera
+/dev/gemini0              0660   system     camera
 /dev/msm_camera/*         0660   system     camera
 /dev/gemini/              0660   system     camera
 /dev/msm_vidc_reg         0660   system     audio
