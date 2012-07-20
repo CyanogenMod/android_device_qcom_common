@@ -50,6 +50,10 @@ failed ()
 start_coex ()
 {
   case "$ath_wlan_supported" in
+      "2")
+       echo "ATH WLAN Chip ID AR6004 is enabled"
+       /system/bin/abtfilt -d -z -n -m -a -w wlan0 &
+      ;;
       "1")
        echo "ATH WLAN Chip ID is enabled"
        # Must have -d -z -n -v -s -w wlan0 parameters for atheros btfilter.
@@ -61,7 +65,7 @@ start_coex ()
        /system/bin/btwlancoex -o $opt_flags &
       ;;
       *)
-       echo "NO WLAN Chip ID is enabled, so enabling WCN as default"
+       echo "NO WLAN Chip ID is enabled, so enabling ATH as default"
        # Must have -d -z -n -v -s -w wlan0 parameters for atheros btfilter.
        /system/bin/abtfilt -d -z -n -v -q -s -w wlan0 &
       ;;
@@ -94,21 +98,17 @@ trap "kill_coex" TERM INT
 #Selectively start coex module
 target=`getprop ro.board.platform`
 
-case "$target" in
-    "msm8960")
-    logi "btwlancoex/abtfilt is not needed"
-    ;;
-    *)
-    # Build settings may not produce the coex executable
-    if ls /system/bin/btwlancoex | ls /system/bin/abtfilt
-    then
-        start_coex
-        wait $coex_pid
-        logi "Coex stopped"
-    else
-        logi "btwlancoex/abtfilt not available"
-    fi
-    ;;
-esac
-
+if [ "$target" == "msm8960" ] && [ "$ath_wlan_supported" != "2" ]; then
+     logi "btwlancoex/abtfilt is not needed"
+else
+     # Build settings may not produce the coex executable
+     if ls /system/bin/btwlancoex || ls /system/bin/abtfilt
+     then
+         start_coex
+         wait $coex_pid
+         logi "Coex stopped"
+     else
+         logi "btwlancoex/abtfilt not available"
+     fi
+fi
 exit 0
