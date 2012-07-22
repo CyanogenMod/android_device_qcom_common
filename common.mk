@@ -44,7 +44,7 @@ AUDIO_HARDWARE += audio.primary.msm7627a
 #AUDIO_HARDWARE += audio.primary.msm7630_surf
 #AUDIO_HARDWARE += audio.primary.msm7630_fusion
 #AUDIO_HARDWARE += audio.primary.default
-#AUDIO_HARDWARE += audio.a2dp.default
+AUDIO_HARDWARE += audio.a2dp.default
 #
 #AUDIO_POLICY := audio_policy.mpq8064
 #AUDIO_POLICY += audio_policy.msm8960
@@ -493,7 +493,7 @@ PRODUCT_COPY_FILES := \
     frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
-#    system/bluetooth/data/iop_device_list.conf:system/etc/bluetooth/iop_device_list.conf \
+    system/bluetooth/data/iop_device_list.conf:system/etc/bluetooth/iop_device_list.conf \
 #    packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml \
 
 PRODUCT_COPY_FILES += device/qcom/common/media/media_profiles.xml:system/etc/media_profiles.xml \
