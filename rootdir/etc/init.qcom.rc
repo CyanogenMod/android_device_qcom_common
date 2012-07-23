@@ -77,6 +77,8 @@ on boot
 
     setprop wifi.interface wlan0
 
+    setprop ro.telephony.call_ring.multiple false
+
     #Set SUID bit for usbhub
     chmod 4755 /system/bin/usbhub
     chmod 755 /system/bin/usbhub_init
