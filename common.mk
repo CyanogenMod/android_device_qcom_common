@@ -27,6 +27,7 @@ QSD8K_BOARD_PLATFORMS := qsd8k
 
 #ALSA
 ALSA_HARDWARE := alsa.msm8960
+ALSA_HARDWARE += alsa.msm8974
 
 ALSA_UCM := snd_soc_msm
 ALSA_UCM += snd_soc_msm_2x
@@ -38,6 +39,7 @@ ANGLE := libangle
 
 #AUDIO_HARDWARE := audio.primary.mpq8064
 AUDIO_HARDWARE += audio.primary.msm8960
+AUDIO_HARDWARE += audio.primary.msm8974
 AUDIO_HARDWARE += audio.primary.msm8660
 #AUDIO_HARDWARE += audio.primary.msm7627_surf
 AUDIO_HARDWARE += audio.primary.msm7627a
@@ -48,6 +50,7 @@ AUDIO_HARDWARE += audio.a2dp.default
 #
 #AUDIO_POLICY := audio_policy.mpq8064
 AUDIO_POLICY += audio_policy.msm8960
+AUDIO_POLICY += audio_policy.msm8974
 #AUDIO_POLICY += audio_policy.msm8660
 #AUDIO_POLICY += audio_policy.msm7627_surf
 #AUDIO_POLICY += audio_policy.msm7627a
