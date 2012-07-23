@@ -118,6 +118,7 @@ INIT += init.qcom.bt.sh
 INIT += init.qcom.coex.sh
 INIT += init.qcom.fm.sh
 INIT += init.qcom.post_boot.sh
+INIT += init.qcom.post_fs.sh
 INIT += init.qcom.rc
 INIT += init.qcom.sdio.sh
 INIT += init.qcom.sh

@@ -42,23 +42,19 @@ case "$target" in
       case "$wlanchip" in
       "AR6004-USB")
         setprop wlan.driver.ath 2
-        mount -t vfat -o remount,rw,barrier=0 /dev/block/mtdblock1 /system
         rm  /system/lib/modules/wlan.ko
         rm  /system/lib/modules/cfg80211.ko
         ln -s /system/lib/modules/ath6kl-3.5/ath6kl_usb.ko /system/lib/modules/wlan.ko
         ln -s /system/lib/modules/ath6kl-3.5/cfg80211.ko /system/lib/modules/cfg80211.ko
-        mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
         ;;
       *)
         echo "*** WI-FI chip ID is not specified in /persist/wlan_chip_id **"
         echo "*** Use the default WCN driver.                             **"
         setprop wlan.driver.ath 0 
-        mount -t vfat -o remount,rw,barrier=0 /dev/block/mtdblock1 /system
         rm  /system/lib/modules/wlan.ko
         rm  /system/lib/modules/cfg80211.ko
         ln -s /system/lib/modules/prima/prima_wlan.ko /system/lib/modules/wlan.ko
         ln -s /system/lib/modules/prima/cfg80211.ko /system/lib/modules/cfg80211.ko
-        mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
 
         # The property below is used in Qcom SDK for softap to determine
         # the wifi driver config file
@@ -114,30 +110,24 @@ case "$target" in
         case "$wlanchip" in
             "ATH6KL")
              setprop wlan.driver.ath 1
-             mount -t vfat -o remount,rw,barrier=0 /dev/block/mtdblock1 /system
              rm  /system/lib/modules/wlan.ko
              rm  /system/lib/modules/cfg80211.ko
              ln -s /system/lib/modules/ath6kl/ath6kl_sdio.ko /system/lib/modules/wlan.ko
              ln -s /system/lib/modules/ath6kl/cfg80211.ko /system/lib/modules/cfg80211.ko
-             mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
              ;;
             "WCN1314")
              setprop wlan.driver.ath 0
-             mount -t vfat -o remount,rw,barrier=0 /dev/block/mtdblock1 /system
              rm  /system/lib/modules/wlan.ko
              rm  /system/lib/modules/cfg80211.ko
              ln -s /system/lib/modules/volans/WCN1314_rf.ko /system/lib/modules/wlan.ko
              ln -s /system/lib/modules/volans/cfg80211.ko /system/lib/modules/cfg80211.ko
-             mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
              ;;
             *)
              setprop wlan.driver.ath 1
-             mount -t vfat -o remount,rw,barrier=0 /dev/block/mtdblock1 /system
              rm  /system/lib/modules/wlan.ko
              rm  /system/lib/modules/cfg80211.ko
              ln -s /system/lib/modules/ath6kl/ath6kl_sdio.ko /system/lib/modules/wlan.ko
              ln -s /system/lib/modules/ath6kl/cfg80211.ko /system/lib/modules/cfg80211.ko
-             mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
              echo "********************************************************************"
               echo "*** Error:WI-FI chip ID is not specified in /persist/wlan_chip_id **"
              echo "*******    WI-FI may not work    ***********************************"
@@ -150,16 +140,12 @@ case "$target" in
         echo "The WLAN Chip ID is $wlanchip"
         case "$wlanchip" in
             "WCN1314")
-             mount -t vfat -o remount,rw,barrier=0 /dev/block/mtdblock1 /system
              ln -s /system/lib/modules/volans/WCN1314_rf.ko /system/lib/modules/wlan.ko
-             mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
              ;;
             "WCN1312")
-             mount -t vfat -o remount,rw,barrier=0 /dev/block/mtdblock1 /system
              ln -s /system/lib/modules/libra/libra.ko /system/lib/modules/wlan.ko
 	      ln -s /data/hostapd/qcom_cfg.ini /etc/firmware/wlan/qcom_cfg.ini
              ln -s /persist/qcom_wlan_nv.bin /etc/firmware/wlan/qcom_wlan_nv.bin
-             mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
 	      ;;
            *)
             echo "********************************************************************"
@@ -169,10 +155,8 @@ case "$target" in
         esac
     ;;
     msm7627*)
-        mount -t vfat -o remount,rw,barrier=0 /dev/block/mtdblock1 /system
         ln -s /data/hostapd/qcom_cfg.ini /etc/firmware/wlan/qcom_cfg.ini
         ln -s /persist/qcom_wlan_nv.bin /etc/firmware/wlan/qcom_wlan_nv.bin
-        mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
     ;;
 
     *)
