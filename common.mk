@@ -499,9 +499,6 @@ PRODUCT_COPY_FILES := \
     system/bluetooth/data/iop_device_list.conf:system/etc/bluetooth/iop_device_list.conf \
 #    packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml \
 
-PRODUCT_COPY_FILES += device/qcom/common/media/media_profiles.xml:system/etc/media_profiles.xml \
-                      device/qcom/common/media/media_codecs.xml:system/etc/media_codecs.xml
-
 # enable overlays to use our version of
 # source/resources etc.
 PRODUCT_PACKAGE_OVERLAYS := device/qcom/common/overlay
