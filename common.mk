@@ -67,7 +67,8 @@ APPS += TSCalibration
 BSON := libbson
 
 #BT
-BT := libattrib_static
+BT := javax.btobex
+BT += libattrib_static
 
 #C2DColorConvert
 C2DCC := libc2dcolorconvert
