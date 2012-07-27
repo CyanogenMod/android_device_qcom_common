@@ -410,7 +410,8 @@ PRODUCT_PACKAGES := \
     IM \
     VoiceDialer \
     FM \
-    VideoEditor
+    VideoEditor \
+    tcpdump
 
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
 PRODUCT_PACKAGES += $(ALSA_UCM)
