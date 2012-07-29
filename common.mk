@@ -37,7 +37,7 @@ ALSA_UCM += snd_soc_msm_Sitar
 #ANGLE
 ANGLE := libangle
 
-#AUDIO_HARDWARE := audio.primary.mpq8064
+AUDIO_HARDWARE := audio.primary.mpq8064
 AUDIO_HARDWARE += audio.primary.msm8960
 AUDIO_HARDWARE += audio.primary.msm8974
 AUDIO_HARDWARE += audio.primary.msm8660
@@ -58,6 +58,7 @@ AUDIO_POLICY += audio_policy.msm8660
 #AUDIO_POLICY += audio_policy.msm7630_fusion
 #AUDIO_POLICY += audio_policy.default
 AUDIO_POLICY += audio_policy.conf
+AUDIO_POLICY += audio_policy_8064.conf
 
 #AMPLOADER
 AMPLOADER := amploader
