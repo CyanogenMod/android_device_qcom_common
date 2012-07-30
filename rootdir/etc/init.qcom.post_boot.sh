@@ -172,6 +172,15 @@ case "$emmc_boot"
     ;;
 esac
 
+case "$target" in
+    "msm8960" | "msm8660" | "msm7630_surf")
+        echo 10 > /sys/devices/platform/msm_sdcc.3/idle_timeout
+        ;;
+    "msm7627a")
+        echo 10 > /sys/devices/platform/msm_sdcc.1/idle_timeout
+        ;;
+esac
+
 # Post-setup services
 case "$target" in
     "msm8660" | "msm8960")
