@@ -86,10 +86,6 @@ on boot
     #Remove SUID bit for iproute2 ip tool
     chmod 0755 /system/bin/ip
 
-    #port-bridge
-    chmod 0660 /dev/smd0
-    chown system system /dev/smd0
-
     #BT DUN port-bridge
 #    chmod 0660 /dev/smd7
 #    chown bluetooth bluetooth /dev/smd7
