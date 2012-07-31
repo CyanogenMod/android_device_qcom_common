@@ -1,6 +1,9 @@
 # This makefile is used to generate extra images for QCOM targets
-# persist & NAND images required for different QCOM targets.
+# persist, device tree & NAND images required for different QCOM targets.
 
+#----------------------------------------------------------------------
+# Generate persist image (persist.img)
+#----------------------------------------------------------------------
 TARGET_OUT_PERSIST := $(PRODUCT_OUT)/persist
 
 INTERNAL_PERSISTIMAGE_FILES := \
@@ -22,6 +25,32 @@ $(INSTALLED_PERSISTIMAGE_TARGET): $(MKEXTUSERIMG) $(MAKE_EXT4FS) $(INTERNAL_PERS
 ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_PERSISTIMAGE_TARGET)
 ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_PERSISTIMAGE_TARGET)
 
+
+#----------------------------------------------------------------------
+# Generate device tree image (dt.img)
+#----------------------------------------------------------------------
+ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
+DTBTOOL := $(HOST_OUT_EXECUTABLES)/dtbTool$(HOST_EXECUTABLE_SUFFIX)
+
+INSTALLED_DTIMAGE_TARGET := $(PRODUCT_OUT)/dt.img
+
+define build-dtimage-target
+    $(call pretty,"Target dt image: $(INSTALLED_DTIMAGE_TARGET)")
+    $(hide) $(DTBTOOL) -o $@ -s $(BOARD_KERNEL_PAGESIZE) -p $(KERNEL_OUT)/scripts/dtc/ $(KERNEL_OUT)/arch/arm/boot/
+    $(hide) chmod a+r $@
+endef
+
+$(INSTALLED_DTIMAGE_TARGET): $(DTBTOOL) $(INSTALLED_KERNEL_TARGET)
+	$(build-dtimage-target)
+
+ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_DTIMAGE_TARGET)
+ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_DTIMAGE_TARGET)
+endif
+
+
+#----------------------------------------------------------------------
+# Generate NAND images
+#----------------------------------------------------------------------
 ifeq ($(call is-board-platform-in-list,msm7627a msm7630_surf),true)
 
 2K_NAND_OUT := $(PRODUCT_OUT)/2k_nand_images
