@@ -47,7 +47,7 @@ AUDIO_HARDWARE += audio.primary.msm7627a
 AUDIO_HARDWARE += audio.a2dp.default
 #
 #AUDIO_POLICY := audio_policy.mpq8064
-#AUDIO_POLICY += audio_policy.msm8960
+AUDIO_POLICY += audio_policy.msm8960
 #AUDIO_POLICY += audio_policy.msm8660
 #AUDIO_POLICY += audio_policy.msm7627_surf
 #AUDIO_POLICY += audio_policy.msm7627a
