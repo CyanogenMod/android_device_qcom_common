@@ -35,6 +35,7 @@
 /dev/kgsl-2d1             0666   root       root
 /dev/ion                  0664   system     system
 /dev/rtc0                 0600   system     system
+/dev/smd0                 0660   system     system
 /dev/smd4                 0660   system     system
 /dev/smd7                 0640   radio      radio
 /dev/smdcntl0             0640   radio      radio
@@ -88,8 +89,8 @@
 /dev/smd2                 0660   bluetooth  bluetooth
 /dev/rfcomm0              0660   bluetooth  bluetooth
 /dev/ttyHSL1              0660   system     system
-/dev/smd0                 0640   radio      radio
 /dev/mdm                  0660   system     system
 /sys/devices/virtual/smdpkt/smdcntl*       open_timeout   0664 radio radio
 /dev/sdio_tty_ciq_00      0660   system     system
 /dev/tty_sdio_00          0660   system     system
+/dev/ttyGS0               0660   system     system
