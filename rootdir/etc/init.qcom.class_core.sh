@@ -252,9 +252,6 @@ case "$target" in
                 setprop debug.composition.type gpu
                 ;;
             *)
-                #8960
-                setprop debug.composition.type dyn
-                ;;
         esac
 
         init_DMM
