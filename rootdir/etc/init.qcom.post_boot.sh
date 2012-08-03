@@ -112,7 +112,6 @@ case "$target" in
          echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
          echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
          echo 90 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
-         echo 50000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
          echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
          echo 4 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
          echo 10 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential
