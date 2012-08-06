@@ -187,14 +187,16 @@ KS += qcks
 KS += efsks
 
 #LIBCAMERA
-LIBCAMERA := libcamera
-LIBCAMERA += camera.msm8960
+LIBCAMERA := camera.msm8960
 LIBCAMERA += camera.msm8660
 LIBCAMERA += camera.msm7630_surf
 LIBCAMERA += camera.msm7630_fusion
 LIBCAMERA += camera.msm7627a
+LIBCAMERA += libcamera
+LIBCAMERA += libmmcamera_interface
 LIBCAMERA += libmmcamera_interface2
 LIBCAMERA += libmmjpeg_interface
+LIBCAMERA += mm-qcamera-app
 
 #LIBCOPYBIT
 LIBCOPYBIT := copybit.msm8660
