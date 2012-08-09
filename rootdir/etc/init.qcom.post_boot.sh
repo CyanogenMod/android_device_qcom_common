@@ -168,6 +168,8 @@ case "$target" in
                  chown media /sys/class/gpio/gpio257/direction
                  chown media /sys/class/gpio/gpio258/direction
                  chown media /sys/class/gpio/gpio259/direction
+                 echo 0 > /sys/module/rpm_resources/enable_low_power/vdd_dig
+                 echo 0 > /sys/module/rpm_resources/enable_low_power/vdd_mem
                  ;;
          esac
          ;;
