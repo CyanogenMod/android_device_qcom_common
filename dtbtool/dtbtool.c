@@ -43,7 +43,7 @@
 #define QCDT_MAGIC     "QCDT"  /* Master DTB magic */
 #define QCDT_VERSION   1       /* QCDT version */
 
-#define QCDT_DT_TAG    "qcom,msm-id"
+#define QCDT_DT_TAG    "qcom,msm-id = <"
 
 #define PAGE_SIZE_DEF  2048
 #define PAGE_SIZE_MAX  (1024*1024)
@@ -65,6 +65,10 @@ struct chipInfo_t {
   char     *dtb_file;
   struct chipInfo_t *prev;
   struct chipInfo_t *next;
+  struct chipInfo_t *master;
+  int      wroteDtb;
+  uint32_t master_offset;
+  struct chipInfo_t *t_next;
 };
 
 struct chipInfo_t *chip_list;
@@ -162,13 +166,15 @@ int chip_add(struct chipInfo_t *c)
               ((c->platform == x->platform) &&
                (c->revNum < x->revNum))))) {
             if (!x->prev) {
-                c->next = chip_list;
+                c->next = x;
                 c->prev = NULL;
+                x->prev = c;
                 chip_list = c;
                 break;
             } else {
                 c->next = x;
                 c->prev = x->prev;
+                x->prev->next = c;
                 x->prev = c;
                 break;
             }
@@ -196,7 +202,8 @@ void chip_deleteall()
     while (c) {
         t = c;
         c = c->next;
-        free(t->dtb_file);
+        if (t->dtb_file)
+            free(t->dtb_file);
         free(t);
     }
 }
@@ -204,7 +211,7 @@ void chip_deleteall()
 /* Extract 'qcom,msm-id' parameter triplet from DTB
       qcom,msm-id = <x y z>;
  */
-struct chipInfo_t *getChipInfo(const char *filename)
+struct chipInfo_t *getChipInfo(const char *filename, int *num)
 {
     const char str1[] = "dtc -I dtb -O dts \"";
     const char str2[] = "\" 2>&1";
@@ -213,9 +220,10 @@ struct chipInfo_t *getChipInfo(const char *filename)
     size_t line_size;
     FILE *pfile;
     int llen;
-    struct chipInfo_t *chip = NULL;
-    int rc = 0;
+    struct chipInfo_t *chip = NULL, *tmp;
     uint32_t data[3] = {0, 0, 0};
+    char *tok, *sptr = NULL;
+    int i, count = 0, entryValid, entryEnded;
 
     line_size = 1024;
     line = (char *)malloc(line_size);
@@ -251,33 +259,57 @@ struct chipInfo_t *getChipInfo(const char *filename)
             if ((pos = strstr(line, QCDT_DT_TAG)) != NULL) {
                 pos += strlen(QCDT_DT_TAG);
 
-                for (; *pos; pos++) {
-                    if (*pos == '<') {
-                        /* Start convertion of triplet */
-                        pos++;
-                        rc = sscanf(pos, " %x %x %x >",
-                                    &data[0], &data[1], &data[2]);
-                        if (rc == 3) {
-                            chip = (struct chipInfo_t *)
-                                       malloc(sizeof(struct chipInfo_t));
-                            if (!chip) {
-                                log_err("Out of memory\n");
+                entryEnded = 0;
+                while (1) {
+                    entryValid = 1;
+                    for (i = 0; i < 3; i++) {
+                        tok = strtok_r(pos, " \t", &sptr);
+                        pos = NULL;
+                        if (tok != NULL) {
+                            if (*tok == '>') {
+                                entryEnded = 1;
+                                entryValid = 0;
                                 break;
                             }
-                            chip->chipset  = data[0];
-                            chip->platform = data[1];
-                            chip->revNum   = data[2];
-                            chip->dtb_size = 0;
-                            chip->dtb_file = NULL;
-
-                            free(line);
-                            pclose(pfile);
-                            return chip;
+                            data[i] = strtoul(tok, NULL, 0);
                         } else {
-                            break;
+                            data[i] = 0;
+                            entryValid = 0;
+                            entryEnded = 1;
                         }
                     }
+                    if (entryEnded) {
+                        free(line);
+                        pclose(pfile);
+                        *num = count;
+                        return chip;
+                    }
+                    if (entryValid) {
+                        tmp = (struct chipInfo_t *)
+                                  malloc(sizeof(struct chipInfo_t));
+                        if (!tmp) {
+                            log_err("Out of memory\n");
+                            break;
+                        }
+                        if (!chip) {
+                            chip = tmp;
+                            chip->t_next = NULL;
+                        } else {
+                            tmp->t_next = chip->t_next;
+                            chip->t_next = tmp;
+                        }
+                        tmp->chipset  = data[0];
+                        tmp->platform = data[1];
+                        tmp->revNum   = data[2];
+                        tmp->dtb_size = 0;
+                        tmp->dtb_file = NULL;
+                        tmp->master   = chip;
+                        tmp->wroteDtb = 0;
+                        tmp->master_offset = 0;
+                        count++;
+                    }
                 }
+
                 log_err("... skip, incorrect '%s' format\n", QCDT_DT_TAG);
                 break;
             }
@@ -293,7 +325,7 @@ struct chipInfo_t *getChipInfo(const char *filename)
 int main(int argc, char **argv)
 {
     char buf[COPY_BLK];
-    struct chipInfo_t *chip;
+    struct chipInfo_t *chip, *t_chip;
     struct dirent *dp;
     FILE *pInputFile;
     char *filename;
@@ -308,6 +340,8 @@ int main(int argc, char **argv)
     size_t wrote = 0, expected = 0;
     struct stat st;
     uint32_t version = QCDT_VERSION;
+    int num;
+    uint32_t dtb_size;
 
     log_info("DTB combiner:\n");
 
@@ -353,7 +387,8 @@ int main(int argc, char **argv)
                 strncpy(filename, input_dir, flen);
                 strncat(filename, dp->d_name, flen);
 
-                chip = getChipInfo(filename);
+                num = 1;
+                chip = getChipInfo(filename, &num);
                 if (!chip) {
                     log_err("skip, failed to scan for '%s' tag\n",
                             QCDT_DT_TAG);
@@ -371,6 +406,11 @@ int main(int argc, char **argv)
                 log_info("chipset: %u, platform: %u, rev: %u\n",
                          chip->chipset, chip->platform, chip->revNum);
 
+                for (t_chip = chip->t_next; t_chip; t_chip = t_chip->t_next) {
+                    log_info("   additional chipset: %u, platform: %u, rev: %u\n",
+                             t_chip->chipset, t_chip->platform, t_chip->revNum);
+                }
+
                 rc = chip_add(chip);
                 if (rc != RC_SUCCESS) {
                     log_err("... duplicate info, skipped\n");
@@ -383,6 +423,16 @@ int main(int argc, char **argv)
                 chip->dtb_size = st.st_size +
                                    (page_size - (st.st_size % page_size));
                 chip->dtb_file = filename;
+
+                for (t_chip = chip->t_next; t_chip; t_chip = t_chip->t_next) {
+                    rc = chip_add(t_chip);
+                    if (rc != RC_SUCCESS) {
+                        log_err("... duplicate info, skipped (chipset %u, platform: %u, rev: %u\n",
+                             t_chip->chipset, t_chip->platform, t_chip->revNum);
+                        continue;
+                    }
+                    dtb_count++;
+                }
             }
         }
     }
@@ -434,9 +484,14 @@ int main(int argc, char **argv)
         wrote += write(out_fd, &chip->chipset, sizeof(uint32_t));
         wrote += write(out_fd, &chip->platform, sizeof(uint32_t));
         wrote += write(out_fd, &chip->revNum, sizeof(uint32_t));
-        wrote += write(out_fd, &expected, sizeof(uint32_t));
-        wrote += write(out_fd, &chip->dtb_size, sizeof(uint32_t));
-        expected += chip->dtb_size;
+        if (chip->master->master_offset != 0) {
+            wrote += write(out_fd, &chip->master->master_offset, sizeof(uint32_t));
+        } else {
+            wrote += write(out_fd, &expected, sizeof(uint32_t));
+            chip->master->master_offset = expected;
+            expected += chip->master->dtb_size;
+        }
+        wrote += write(out_fd, &chip->master->dtb_size, sizeof(uint32_t));
     }
 
     rc = RC_SUCCESS;
@@ -446,8 +501,16 @@ int main(int argc, char **argv)
 
     /* Write DTB's */
     for (chip = chip_list; chip; chip = chip->next) {
-        log_dbg("\n (writing '%s' (%u bytes) ", chip->dtb_file, chip->dtb_size);
-        pInputFile = fopen(chip->dtb_file, "r");
+        if (chip->master->wroteDtb) {
+            continue;
+        }
+
+        chip->master->wroteDtb = 1;
+        filename = chip->master->dtb_file;
+        dtb_size = chip->master->dtb_size;
+
+        log_dbg("\n (writing '%s' - %u bytes) ", filename, dtb_size);
+        pInputFile = fopen(filename, "r");
         if (pInputFile != NULL) {
             totBytesRead = 0;
             while ((numBytesRead = fread(buf, 1, COPY_BLK, pInputFile)) > 0) {
@@ -456,17 +519,17 @@ int main(int argc, char **argv)
             }
             fclose(pInputFile);
             padding = page_size - (totBytesRead % page_size);
-            if ((uint32_t)(totBytesRead + padding) != chip->dtb_size) {
+            if ((uint32_t)(totBytesRead + padding) != dtb_size) {
                 log_err("DTB size mismatch, please re-run: expected %d vs actual %d (%s)\n",
-                        chip->dtb_size, totBytesRead + padding,
-                        chip->dtb_file);
+                        dtb_size, totBytesRead + padding,
+                        filename);
                 rc = RC_ERROR;
                 break;
             }
             if (padding > 0)
                 wrote += write(out_fd, filler, padding);
         } else {
-            log_err("failed to open DTB '%s'\n", chip->dtb_file);
+            log_err("failed to open DTB '%s'\n", filename);
             rc = RC_ERROR;
             break;
         }
