@@ -199,7 +199,6 @@ LIBCAMERA += libmmjpeg_interface
 #LIBCOPYBIT
 LIBCOPYBIT := copybit.msm8660
 LIBCOPYBIT += copybit.msm8960
-LIBCOPYBIT += copybit.msm8974
 LIBCOPYBIT += copybit.msm7k
 LIBCOPYBIT += copybit.qsd8k
 LIBCOPYBIT += copybit.msm7630_surf
@@ -216,7 +215,6 @@ LIBGESTURES += gestures.msm8960
 LIBGRALLOC := gralloc.default
 LIBGRALLOC += gralloc.msm8660
 LIBGRALLOC += gralloc.msm8960
-LIBGRALLOC += gralloc.msm8974
 LIBGRALLOC += gralloc.msm7k
 LIBGRALLOC += gralloc.msm7630_surf
 LIBGRALLOC += gralloc.msm7630_fusion
@@ -228,7 +226,6 @@ LIBGRALLOC += libmemalloc
 #LIBLIGHTS
 LIBLIGHTS := lights.msm8660
 LIBLIGHTS += lights.msm8960
-LIBLIGHTS += lights.msm8974
 LIBLIGHTS += lights.msm7k
 LIBLIGHTS += lights.msm7630_surf
 LIBLIGHTS += lights.msm7630_fusion
@@ -239,7 +236,6 @@ LIBLIGHTS += lights.msm7627a
 #LIBHWCOMPOSER
 LIBHWCOMPOSER := hwcomposer.msm8660
 LIBHWCOMPOSER += hwcomposer.msm8960
-LIBHWCOMPOSER += hwcomposer.msm8974
 LIBHWCOMPOSER += hwcomposer.msm7k
 LIBHWCOMPOSER += hwcomposer.msm7630_surf
 LIBHWCOMPOSER += hwcomposer.msm7630_fusion
