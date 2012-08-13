@@ -120,12 +120,10 @@ case "$target" in
 		/system/etc/firmware/ath6k/AR6004/hw1.3/fw.ram.bin
         ln -s /system/etc/firmware/ath6k/AR6004/hw1.3/bdata.bin_usb \
 		/system/etc/firmware/ath6k/AR6004/hw1.3/bdata.bin
-        mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
         ;;
       "AR6004-SDIO")
         setprop wlan.driver.ath 2
         setprop qcom.bluetooth.soc ath3k
-        mount -t vfat -o remount,rw,barrier=0 /dev/block/mtdblock1 /system
         rm  /system/lib/modules/wlan.ko
         rm  /system/lib/modules/cfg80211.ko
         ln -s /system/lib/modules/ath6kl-3.5/ath6kl_sdio.ko \
@@ -138,7 +136,6 @@ case "$target" in
 		/system/etc/firmware/ath6k/AR6004/hw1.3/fw.ram.bin
         ln -s /system/etc/firmware/ath6k/AR6004/hw1.3/bdata.bin_sdio \
 		/system/etc/firmware/ath6k/AR6004/hw1.3/bdata.bin
-        mount -t vfat -o remount,ro,barrier=0 /dev/block/mtdblock1 /system
         ;;
       *)
         echo "*** WI-FI chip ID is not specified in /persist/wlan_chip_id **"
