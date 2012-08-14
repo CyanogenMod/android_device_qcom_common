@@ -159,12 +159,31 @@ INTERNAL_2K_RECOVERYIMAGE_ARGS := $(NAND_RECOVERYIMAGE_ARGS)
 INTERNAL_2K_RECOVERYIMAGE_ARGS += --pagesize $(BOARD_KERNEL_2KPAGESIZE)
 
 # Generate boot image for NAND
+ifeq ($(TARGET_BOOTIMG_SIGNED),true)
+
+ifndef TARGET_SHA_TYPE
+  TARGET_SHA_TYPE := sha256
+endif
+
 define build-nand-bootimage
-  @echo "target NAND boot image: $(3)"
-  $(hide) mkdir -p $(1)
-  $(hide) $(MKBOOTIMG) $(2) --output $(3)
-  $(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
+	@echo "target NAND boot image: $(3)"
+	$(hide) mkdir -p $(1)
+	$(hide) $(MKBOOTIMG) $(2) --output $(3).nonsecure
+	$(hide) openssl dgst -$(TARGET_SHA_TYPE)  -binary $(3).nonsecure > $(3).$(TARGET_SHA_TYPE)
+	$(hide) openssl rsautl -sign -in $(3).$(TARGET_SHA_TYPE) -inkey $(PRODUCT_PRIVATE_KEY) -out $(3).sig
+	$(hide) dd if=/dev/zero of=$(3).sig.padded bs=$(BOARD_KERNEL_PAGESIZE) count=1
+	$(hide) dd if=$(3).sig of=$(3).sig.padded conv=notrunc
+	$(hide) cat $(3).nonsecure $(3).sig.padded > $(3)
+	$(hide) rm -rf $(3).$(TARGET_SHA_TYPE) $(3).sig $(3).sig.padded
 endef
+else
+define build-nand-bootimage
+	@echo "target NAND boot image: $(3)"
+	$(hide) mkdir -p $(1)
+	$(hide) $(MKBOOTIMG) $(2) --output $(3)
+endef
+	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
+endif
 
 # Generate system image for NAND
 define build-nand-systemimage
