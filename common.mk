@@ -539,7 +539,7 @@ PRODUCT_PACKAGE_OVERLAYS := device/qcom/common/overlay
 #include frameworks/base/data/sounds/OriginalAudio.mk
 
 #Enabling video for live effects
-#include frameworks/base/data/videos/VideoPackage1.mk
+include frameworks/base/data/videos/VideoPackage1.mk
 
 # For PRODUCT_COPY_FILES, the first instance takes precedence.
 # Since we want use QC specific files, we should inherit
