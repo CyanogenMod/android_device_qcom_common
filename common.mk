@@ -285,6 +285,7 @@ MM_AUDIO += libOmxAmrEnc
 MM_AUDIO += libOmxEvrcEnc
 MM_AUDIO += libOmxMp3Dec
 MM_AUDIO += libOmxQcelp13Enc
+MM_AUDIO += libOmxAc3HwDec
 MM_AUDIO += mm-adec-omxaac-test
 MM_AUDIO += mm-adec-omxmp3-test
 MM_AUDIO += mm-aenc-omxaac-test
