@@ -253,3 +253,10 @@ case "$target" in
 	echo 5120 > /proc/sys/vm/min_free_kbytes
      ;;
 esac
+
+# Install AdrenoTest.apk if not already installed
+if [ -f /data/prebuilt/AdrenoTest.apk ]; then
+    if [ ! -d /data/data/com.qualcomm.adrenotest ]; then
+        pm install /data/prebuilt/AdrenoTest.apk
+    fi
+fi
