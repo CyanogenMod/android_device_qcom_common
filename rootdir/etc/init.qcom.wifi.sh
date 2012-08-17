@@ -36,6 +36,58 @@
 # This script will get called after post bootup.
 target=`getprop ro.board.platform`
 case "$target" in
+   msm8974*)
+       # link pronto modules
+       rm /system/lib/modules/wlan.ko
+       rm /system/lib/modules/cfg80211.ko
+       ln -s /system/lib/modules/pronto/pronto_wlan.ko /system/lib/modules/wlan.ko
+       ln -s /system/lib/modules/pronto/cfg80211.ko /system/lib/modules/cfg80211.ko
+
+       # The property below is used in Qcom SDK for softap to determine
+       # the wifi driver config file
+       setprop wlan.driver.config /data/misc/wifi/WCNSS_qcom_cfg.ini
+       # We need to make sure the WCNSS platform driver is running.
+       # The WCNSS platform driver can either be built as a loadable
+       # module or it can be built-in to the kernel.  If it is built
+       # as a loadable module it can have one of several names.  So
+       # look to see if an appropriately named kernel module is
+       # present
+       wcnssmod=`ls /system/lib/modules/wcnss*.ko`
+       case "$wcnssmod" in
+            *wcnss*)
+                # A kernel module is present, so load it
+                insmod $wcnssmod
+               ;;
+           *)
+               # A kernel module is not present so we assume the
+               # driver is built-in to the kernel.  If that is the
+               # case then the driver will export a file which we
+               # must touch so that the driver knows that userspace
+               # is ready to handle firmware download requests.  See
+               # if an appropriately named device file is present
+               wcnssnode=`ls /dev/wcnss*`
+               case "$wcnssnode" in
+                   *wcnss*)
+                       # There is a device file.  Write to the file
+                       # so that the driver knows userspace is
+                       # available for firmware download requests
+                       echo 1 > $wcnssnode
+                      ;;
+                  *)
+                      # There is not a kernel module present and
+                      # there is not a device file present, so
+                      # the driver must not be available
+                       echo "No WCNSS module or device node detected"
+                       ;;
+               esac
+               ;;
+       esac
+       # Plumb down the device serial number
+       serialno=`getprop ro.serialno`
+       echo $serialno > /sys/devices/platform/wcnss_wlan.0/serial_number
+       ;;
+     esac
+     ;;
     msm8960*)
 
 # auto detect ar6004-sdio card
