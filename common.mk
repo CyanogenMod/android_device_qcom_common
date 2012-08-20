@@ -37,6 +37,7 @@ ALSA_UCM += snd_soc_msm_auxpcm
 ALSA_UCM += snd_soc_msm_2x_auxpcm
 ALSA_UCM += snd_soc_msm_2x_Fusion3_auxpcm
 ALSA_UCM += snd_soc_msm_Sitar_auxpcm
+ALSA_UCM += snd_soc_msm_Taiko
 
 #ANGLE
 ANGLE := libangle
