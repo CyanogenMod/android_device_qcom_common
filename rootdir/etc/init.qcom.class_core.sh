@@ -257,3 +257,20 @@ case "$target" in
         init_DMM
         ;;
 esac
+
+#Enable Bluetooth Profiles Dynamically
+btsoc=`getprop qcom.bluetooth.soc`
+case $target in
+  "msm8960")
+      case $btsoc in
+        "ath3k")
+            setprop ro.bluetooth.hfp.ver 1.5
+            ;;
+        *)
+            setprop ro.bluetooth.hfp.ver 1.6
+            ;;
+        esac
+        ;;
+  *)
+     ;;
+esac
