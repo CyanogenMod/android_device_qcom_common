@@ -1,12 +1,24 @@
 # This makefile is used to generate extra images for QCOM targets
 # persist, device tree & NAND images required for different QCOM targets.
 
+# These variables are required to make sure that the required
+# files/targets are available before generating NAND images.
+# This file is included from device/qcom/<TARGET>/AndroidBoard.mk
+# and gets parsed before build/core/Makefile, which has these
+# variables defined. build/core/Makefile will overwrite these
+# variables again.
+INSTALLED_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/boot.img
+INSTALLED_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
+INSTALLED_SYSTEMIMAGE := $(PRODUCT_OUT)/system.img
+INSTALLED_USERDATAIMAGE_TARGET := $(PRODUCT_OUT)/userdata.img
+INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
+recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
+
 #----------------------------------------------------------------------
 # Generate secure boot image
 #----------------------------------------------------------------------
 ifeq ($(TARGET_BOOTIMG_SIGNED),true)
 INSTALLED_SEC_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/boot.img.secure
-INSTALLED_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/boot.img
 
 ifneq ($(BUILD_TINY_ANDROID),true)
 intermediates := $(call intermediates-dir-for,PACKAGING,recovery_patch)
@@ -113,16 +125,6 @@ INSTALLED_BCHECC_USERDATAIMAGE_TARGET := $(BCHECC_OUT)/userdata.img
 INSTALLED_BCHECC_PERSISTIMAGE_TARGET := $(BCHECC_OUT)/persist.img
 INSTALLED_BCHECC_RECOVERYIMAGE_TARGET := $(BCHECC_OUT)/recovery.img
 
-# These variables are required to make sure that the required
-# files/targets are available before generating NAND images.
-# As these are not available while parsing this makefile,
-# defining here. These variables will be overwritten by
-# Build System again.
-INSTALLED_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
-INSTALLED_SYSTEMIMAGE := $(PRODUCT_OUT)/system.img
-INSTALLED_USERDATAIMAGE_TARGET := $(PRODUCT_OUT)/userdata.img
-INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
-recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 recovery_nand_fstab := $(TARGET_DEVICE_DIR)/recovery_nand.fstab
 
 NAND_BOOTIMAGE_ARGS := \
@@ -212,7 +214,7 @@ define build-nand-persistimage
   $(hide) $(call assert-max-image-size,$@,$(BOARD_PERSISTIMAGE_PARTITION_SIZE),yaffs)
 endef
 
-$(INSTALLED_4K_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INSTALLED_KERNEL_TARGET) $(INSTALLED_RAMDISK_TARGET)
+$(INSTALLED_4K_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INSTALLED_BOOTIMAGE_TARGET)
 	$(hide) $(call build-nand-bootimage,$(4K_NAND_OUT),$(INTERNAL_4K_BOOTIMAGE_ARGS),$(INSTALLED_4K_BOOTIMAGE_TARGET))
 ifeq ($(call is-board-platform,msm7627a),true)
 	$(hide) $(call build-nand-bootimage,$(2K_NAND_OUT),$(INTERNAL_2K_BOOTIMAGE_ARGS),$(INSTALLED_2K_BOOTIMAGE_TARGET))
@@ -240,7 +242,7 @@ ifeq ($(call is-board-platform,msm7627a),true)
 	$(hide) $(call build-nand-persistimage,$(BCHECC_OUT),$(INTERNAL_BCHECC_MKYAFFS2_FLAGS),$(INSTALLED_BCHECC_PERSISTIMAGE_TARGET))
 endif # is-board-platform
 
-$(INSTALLED_4K_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(INSTALLED_KERNEL_TARGET) $(INSTALLED_RECOVERYIMAGE_TARGET) $(recovery_nand_fstab)
+$(INSTALLED_4K_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(INSTALLED_RECOVERYIMAGE_TARGET) $(recovery_nand_fstab)
 	$(hide) cp -f $(recovery_nand_fstab) $(TARGET_RECOVERY_ROOT_OUT)/etc
 	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
 	$(hide) $(call build-nand-bootimage,$(4K_NAND_OUT),$(INTERNAL_4K_RECOVERYIMAGE_ARGS),$(INSTALLED_4K_RECOVERYIMAGE_TARGET))
@@ -255,10 +257,6 @@ ALL_DEFAULT_INSTALLED_MODULES += \
 	$(INSTALLED_4K_USERDATAIMAGE_TARGET) \
 	$(INSTALLED_4K_PERSISTIMAGE_TARGET)
 
-ifneq ($(BUILD_TINY_ANDROID),true)
-ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_4K_RECOVERYIMAGE_TARGET)
-endif # !BUILD_TINY_ANDROID
-
 ALL_MODULES.$(LOCAL_MODULE).INSTALLED += \
 	$(INSTALLED_4K_BOOTIMAGE_TARGET) \
 	$(INSTALLED_4K_SYSTEMIMAGE_TARGET) \
@@ -266,6 +264,7 @@ ALL_MODULES.$(LOCAL_MODULE).INSTALLED += \
 	$(INSTALLED_4K_PERSISTIMAGE_TARGET)
 
 ifneq ($(BUILD_TINY_ANDROID),true)
+ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_4K_RECOVERYIMAGE_TARGET)
 ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_4K_RECOVERYIMAGE_TARGET)
 endif # !BUILD_TINY_ANDROID
 
@@ -274,5 +273,5 @@ endif # is-board-platform-in-list
 .PHONY: aboot
 aboot: $(INSTALLED_BOOTLOADER_MODULE)
 
-.PHONY: kernelimage
-kernelimage: $(INSTALLED_SEC_BOOTIMAGE_TARGET) $(INSTALLED_4K_BOOTIMAGE_TARGET)
+.PHONY: kernel
+kernel: $(INSTALLED_BOOTIMAGE_TARGET) $(INSTALLED_SEC_BOOTIMAGE_TARGET) $(INSTALLED_4K_BOOTIMAGE_TARGET)
