@@ -42,6 +42,9 @@ mount -o rw,remount,barrier=1 /system
 # Run wifi script
 /system/bin/sh /system/etc/init.qcom.wifi.sh
 
+# Run audio script
+/system/bin/sh /system/etc/init.qcom.audio.sh
+
 # This should be the last command
 # remount system as read-only.
 mount -o ro,remount,barrier=1 /system

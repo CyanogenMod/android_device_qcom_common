@@ -33,6 +33,10 @@ ALSA_UCM := snd_soc_msm
 ALSA_UCM += snd_soc_msm_2x
 ALSA_UCM += snd_soc_msm_2x_Fusion3
 ALSA_UCM += snd_soc_msm_Sitar
+ALSA_UCM += snd_soc_msm_auxpcm
+ALSA_UCM += snd_soc_msm_2x_auxpcm
+ALSA_UCM += snd_soc_msm_2x_Fusion3_auxpcm
+ALSA_UCM += snd_soc_msm_Sitar_auxpcm
 
 #ANGLE
 ANGLE := libangle
@@ -138,6 +142,7 @@ INIT += usf_post_boot.sh
 INIT += init.qcom.efs.sync.sh
 INIT += ueventd.qcom.rc
 INIT += init.ath3k.bt.sh
+INIT += init.qcom.audio.sh
 
 #IPROUTE2
 IPROUTE2 := ip
