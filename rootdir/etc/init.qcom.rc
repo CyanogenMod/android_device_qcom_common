@@ -35,6 +35,7 @@ on init
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
+    exec /system/bin/sh /init.qcom.early_boot.sh ${ro.board.platform}
 
 on early-init
     # for backwards compatibility
