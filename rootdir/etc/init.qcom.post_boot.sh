@@ -260,3 +260,11 @@ if [ -f /data/prebuilt/AdrenoTest.apk ]; then
         pm install /data/prebuilt/AdrenoTest.apk
     fi
 fi
+
+# Change adj level and min_free_kbytes setting for lowmemory killer to kick in
+case "$target" in
+     "msm8660")
+        echo 0,1,2,4,9,12 > /sys/module/lowmemorykiller/parameters/adj
+        echo 5120 > /proc/sys/vm/min_free_kbytes
+     ;;
+esac
