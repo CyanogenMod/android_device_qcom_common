@@ -606,6 +606,11 @@ on property:service.adb.root=1
     restart adbd
     write /sys/class/android_usb/android0/enable 1
 
+service ssr_diag /system/bin/ssr_diag
+    class late_start
+    user system
+    group system
+
 # Limit to SoC reset (1) and independent SSR (3)
 on property:persist.sys.ssr.restart_level=1
     write /sys/module/subsystem_restart/parameters/restart_level 1
