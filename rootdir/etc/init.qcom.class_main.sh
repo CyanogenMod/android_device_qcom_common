@@ -63,6 +63,7 @@ esac
 #
 # enable bluetooth profiles dynamically
 #
+btsoc=`getprop qcom.bluetooth.soc`
 case $baseband in
   "apq")
       setprop ro.qualcomm.bluetooth.opp true
@@ -92,10 +93,17 @@ case $baseband in
       setprop ro.qualcomm.bluetooth.hsp true
       setprop ro.qualcomm.bluetooth.pbap true
       setprop ro.qualcomm.bluetooth.ftp true
-      setprop ro.qualcomm.bluetooth.map true
       setprop ro.qualcomm.bluetooth.nap true
       setprop ro.qualcomm.bluetooth.sap true
       setprop ro.qualcomm.bluetooth.dun true
+      case $btsoc in
+        "ath3k")
+            setprop ro.qualcomm.bluetooth.map false
+            ;;
+        *)
+            setprop ro.qualcomm.bluetooth.map true
+            ;;
+      esac
       ;;
   "mpq")
       setprop ro.qualcomm.bluetooth.opp false
