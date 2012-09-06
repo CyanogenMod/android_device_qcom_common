@@ -235,6 +235,9 @@ on property:bluetooth.isEnabled=true
     start btwlancoex
     write /sys/class/bluetooth/hci0/idle_timeout 7000
 
+on property:ro.bluetooth.ftm_enabled=true
+    start ftmd
+
 service qcom-c_core-sh /system/bin/sh /init.qcom.class_core.sh
     class core
     user root
@@ -291,6 +294,13 @@ service bt-sap /system/bin/sapd 15
     user bluetooth
     group bluetooth net_bt_admin
     class late_start
+    disabled
+    oneshot
+
+service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
+    class late_start
+    user root
+    group bluetooth net_bt_admin qcom_diag
     disabled
     oneshot
 
