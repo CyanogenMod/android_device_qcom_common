@@ -78,6 +78,7 @@ BSON := libbson
 #BT
 BT := javax.btobex
 BT += libattrib_static
+BT += hcidump.sh
 
 #C2DColorConvert
 C2DCC := libc2dcolorconvert
