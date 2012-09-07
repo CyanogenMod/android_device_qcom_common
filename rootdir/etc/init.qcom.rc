@@ -553,7 +553,6 @@ on property:persist.data.ds_fmc_app.mode=1
 
 service ims_regmanager /system/bin/exe-ims-regmanagerprocessnative
     class late_start
-    user system
     group qcom_oncrpc net_bt_admin inet radio wifi
     disabled
 
