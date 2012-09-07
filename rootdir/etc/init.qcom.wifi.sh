@@ -34,100 +34,91 @@
 # the script won't do anything. Otherwise (GUI is not going to Turn On
 # the Wifi) the script will load/unload the driver
 # This script will get called after post bootup.
-target=`getprop ro.board.platform`
+
+target="$1"
+serialno="$2"
+
+btsoc=""
+
+# No path is set up at this point so we have to do it here.
+PATH=/sbin:/system/sbin:/system/bin:/system/xbin
+export PATH
+
+# Load wifi kernel module
+load_wifiKM()
+{
+    # We need to make sure the WCNSS platform driver is running.
+    # The WCNSS platform driver can either be built as a loadable
+    # module or it can be built-in to the kernel.  If it is built
+    # as a loadable module it can have one of several names.  So
+    # look to see if an appropriately named kernel module is
+    # present
+    wcnssmod=`ls /system/lib/modules/wcnss*.ko` 2> /dev/null
+    case "$wcnssmod" in
+        *wcnss*)
+            # A kernel module is present, so load it
+            insmod $wcnssmod
+            ;;
+        *)
+            # A kernel module is not present so we assume the
+            # driver is built-in to the kernel.  If that is the
+            # case then the driver will export a file which we
+            # must touch so that the driver knows that userspace
+            # is ready to handle firmware download requests.  See
+            # if an appropriately named device file is present
+            wcnssnode=`ls /dev/wcnss*`
+            case "$wcnssnode" in
+                *wcnss*)
+                    # There is a device file.  Write to the file
+                    # so that the driver knows userspace is
+                    # available for firmware download requests
+                    echo 1 > $wcnssnode
+                    ;;
+                *)
+                    # There is not a kernel module present and
+                    # there is not a device file present, so
+                    # the driver must not be available
+                    echo "No WCNSS module or device node detected"
+                    ;;
+            esac
+            ;;
+    esac
+
+    # Plumb down the device serial number
+    if [ -f /sys/devices/*wcnss-wlan/serial_number ]; then
+        cd /sys/devices/*wcnss-wlan
+        echo $serialno > serial_number
+        cd /
+    elif [ -f /sys/devices/platform/wcnss_wlan.0/serial_number ]; then
+        echo $serialno > /sys/devices/platform/wcnss_wlan.0/serial_number
+    fi
+}
+
+
 case "$target" in
-   msm8974*)
-       # link pronto modules
-       rm /system/lib/modules/wlan.ko
-       rm /system/lib/modules/cfg80211.ko
-       ln -s /system/lib/modules/pronto/pronto_wlan.ko /system/lib/modules/wlan.ko
-       ln -s /system/lib/modules/pronto/cfg80211.ko /system/lib/modules/cfg80211.ko
+    msm8974*)
+      # link pronto modules
+      rm /system/lib/modules/wlan.ko
+      rm /system/lib/modules/cfg80211.ko
+      ln -s /system/lib/modules/pronto/pronto_wlan.ko /system/lib/modules/wlan.ko
+      ln -s /system/lib/modules/pronto/cfg80211.ko /system/lib/modules/cfg80211.ko
 
-       # The property below is used in Qcom SDK for softap to determine
-       # the wifi driver config file
-       setprop wlan.driver.config /data/misc/wifi/WCNSS_qcom_cfg.ini
-       # We need to make sure the WCNSS platform driver is running.
-       # The WCNSS platform driver can either be built as a loadable
-       # module or it can be built-in to the kernel.  If it is built
-       # as a loadable module it can have one of several names.  So
-       # look to see if an appropriately named kernel module is
-       # present
-       wcnssmod=`ls /system/lib/modules/wcnss*.ko`
-       case "$wcnssmod" in
-            *wcnss*)
-                # A kernel module is present, so load it
-                insmod $wcnssmod
-               ;;
-           *)
-               # A kernel module is not present so we assume the
-               # driver is built-in to the kernel.  If that is the
-               # case then the driver will export a file which we
-               # must touch so that the driver knows that userspace
-               # is ready to handle firmware download requests.  See
-               # if an appropriately named device file is present
-               wcnssnode=`ls /dev/wcnss*`
-               case "$wcnssnode" in
-                   *wcnss*)
-                       # There is a device file.  Write to the file
-                       # so that the driver knows userspace is
-                       # available for firmware download requests
-                       echo 1 > $wcnssnode
-                      ;;
-                  *)
-                      # There is not a kernel module present and
-                      # there is not a device file present, so
-                      # the driver must not be available
-                       echo "No WCNSS module or device node detected"
-                       ;;
-               esac
-               ;;
-       esac
-       # Plumb down the device serial number
-       serialno=`getprop ro.serialno`
-       echo $serialno > /sys/devices/platform/wcnss_wlan.0/serial_number
-       ;;
-     esac
-     ;;
+      # The property below is used in Qcom SDK for softap to determine
+      # the wifi driver config file
+      setprop wlan.driver.config /data/misc/wifi/WCNSS_qcom_cfg.ini
+
+      # Load kernel module in a separate process
+      load_wifiKM &
+      ;;
+
     msm8960*)
+      wlanchip=""
 
-# auto detect ar6004-sdio card
-# for ar6004-sdio card, the vendor id and device id is as the following
-# vendor id  device id
-#    0x0271     0x0400
-#    0x0271     0x0401
-      sdio_vendors=`echo \`cat /sys/bus/mmc/devices/*/*/vendor\``
-      sdio_devices=`echo \`cat /sys/bus/mmc/devices/*/*/device\``
-      ven_idx=0
-
-      for vendor in $sdio_vendors; do
-          case "$vendor" in
-          "0x0271")
-              dev_idx=0
-              for device in $sdio_devices; do
-                  if [ $ven_idx -eq $dev_idx ]; then
-                      case "$device" in
-                      "0x0400" | "0x0401")
-                          wlanchip="AR6004-SDIO"
-                          ;;
-                      *)
-                          ;;
-                      esac
-                  fi
-                  dev_idx=$(( $dev_idx + 1))
-              done
-              ;;
-          *)
-              ;;
-          esac
-          ven_idx=$(( $ven_idx + 1))
-      done
-# auto detect ar6004-sdio card end
-
-# auto detect ar6004-usb card
-# for ar6004-usb card, the vendor id and device id is as the following
-# vendor id  product id
-#    0x0cf3     0x9374
-#    0x0cf3     0x9372
+      # auto detect ar6004-usb card
+      # for ar6004-usb card, the vendor id and device id is as the following
+      # vendor id  product id
+      #    0x0cf3     0x9374
+      #    0x0cf3     0x9372
       usb_vendors=`echo \`cat /sys/bus/usb/devices/*/*/idVendor\``
       usb_products=`echo \`cat /sys/bus/usb/devices/*/*/idProduct\``
       ven_idx=0
@@ -154,7 +145,42 @@ case "$target" in
           esac
           ven_idx=$(( $ven_idx + 1))
       done
-# auto detect ar6004-usb card end
+      # auto detect ar6004-usb card end
+
+      if [ "$wlanchip" == "" ]; then
+          # auto detect ar6004-sdio card
+          # for ar6004-sdio card, the vendor id and device id is as the following
+          # vendor id  device id
+          #    0x0271     0x0400
+          #    0x0271     0x0401
+          sdio_vendors=`echo \`cat /sys/bus/mmc/devices/*/*/vendor\``
+          sdio_devices=`echo \`cat /sys/bus/mmc/devices/*/*/device\``
+          ven_idx=0
+
+          for vendor in $sdio_vendors; do
+              case "$vendor" in
+              "0x0271")
+                  dev_idx=0
+                  for device in $sdio_devices; do
+                      if [ $ven_idx -eq $dev_idx ]; then
+                          case "$device" in
+                          "0x0400" | "0x0401")
+                              wlanchip="AR6004-SDIO"
+                              ;;
+                          *)
+                              ;;
+                          esac
+                      fi
+                      dev_idx=$(( $dev_idx + 1))
+                  done
+                  ;;
+              *)
+                  ;;
+              esac
+              ven_idx=$(( $ven_idx + 1))
+          done
+          # auto detect ar6004-sdio card end
+      fi
 
       echo "The WLAN Chip ID is $wlanchip"
       case "$wlanchip" in
@@ -176,6 +202,7 @@ case "$target" in
       "AR6004-SDIO")
         setprop wlan.driver.ath 2
         setprop qcom.bluetooth.soc ath3k
+        btsoc="ath3k"
         rm  /system/lib/modules/wlan.ko
         rm  /system/lib/modules/cfg80211.ko
         ln -s /system/lib/modules/ath6kl-3.5/ath6kl_sdio.ko \
@@ -201,51 +228,13 @@ case "$target" in
         # The property below is used in Qcom SDK for softap to determine
         # the wifi driver config file
         setprop wlan.driver.config /data/misc/wifi/WCNSS_qcom_cfg.ini
-        # We need to make sure the WCNSS platform driver is running.
-        # The WCNSS platform driver can either be built as a loadable
-        # module or it can be built-in to the kernel.  If it is built
-        # as a loadable module it can have one of several names.  So
-        # look to see if an appropriately named kernel module is
-        # present
-        wcnssmod=`ls /system/lib/modules/wcnss*.ko`
-        case "$wcnssmod" in
-            *wcnss*)
-                # A kernel module is present, so load it
-                insmod $wcnssmod
-                ;;
-            *)
-                # A kernel module is not present so we assume the
-                # driver is built-in to the kernel.  If that is the
-                # case then the driver will export a file which we
-                # must touch so that the driver knows that userspace
-                # is ready to handle firmware download requests.  See
-                # if an appropriately named device file is present
-                wcnssnode=`ls /dev/wcnss*`
-                case "$wcnssnode" in
-                    *wcnss*)
-                        # There is a device file.  Write to the file
-                        # so that the driver knows userspace is
-                        # available for firmware download requests
-                        echo 1 > $wcnssnode
-                        ;;
-                    *)
-                        # There is not a kernel module present and
-                        # there is not a device file present, so
-                        # the driver must not be available
-                        echo "No WCNSS module or device node detected"
-                        ;;
-                esac
-                ;;
-        esac
-        # Plumb down the device serial number
-        serialno=`getprop ro.serialno`
-        echo $serialno > /sys/devices/platform/wcnss_wlan.0/serial_number
+
+        # Load kernel module in a separate process
+        load_wifiKM &
         ;;
       esac
       ;;
-    msm8660*)
-    exit 0
-    ;;
+
     msm7627a*)
         wlanchip=`cat /persist/wlan_chip_id`
         echo "The WLAN Chip ID is $wlanchip"
@@ -271,20 +260,26 @@ case "$target" in
              ln -s /system/lib/modules/ath6kl/ath6kl_sdio.ko /system/lib/modules/wlan.ko
              ln -s /system/lib/modules/ath6kl/cfg80211.ko /system/lib/modules/cfg80211.ko
              echo "********************************************************************"
-              echo "*** Error:WI-FI chip ID is not specified in /persist/wlan_chip_id **"
+             echo "*** Error:WI-FI chip ID is not specified in /persist/wlan_chip_id **"
              echo "*******    WI-FI may not work    ***********************************"
              ;;
         esac
     ;;
-    msm7630*)
-    exit 0
-    ;;
+
     msm7627*)
         ln -s /data/hostapd/qcom_cfg.ini /etc/firmware/wlan/qcom_cfg.ini
         ln -s /persist/qcom_wlan_nv.bin /etc/firmware/wlan/qcom_wlan_nv.bin
     ;;
 
+    msm8660*)
+    ;;
+
+    msm7630*)
+    ;;
+
     *)
       ;;
 esac
-exit 0
+
+# Run audio init script
+/system/bin/sh /system/etc/init.qcom.audio.sh "$target" "$btsoc"
