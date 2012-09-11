@@ -26,24 +26,44 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+target="$1"
+serial="$2"
+
+# No path is set up at this point so we have to do it here.
+PATH=/sbin:/system/sbin:/system/bin:/system/xbin
+export PATH
+
 # This should be the first command
 # remount system as read-write.
 mount -o rw,remount,barrier=1 /system
 
+# **** WARNING *****
+# This runs in a single-threaded, critical path portion
+# of the Android bootup sequence.  This is to guarantee
+# all necessary system partition fixups are done before
+# the rest of the system starts up.  Run any non-
+# timing critical tasks in a separate process to
+# prevent slowdown at boot.
+
 # Run modem link script
-/system/bin/sh /system/etc/init.qcom.modem_links.sh
+if [ -f /system/etc/init.qcom.modem_links.sh ]; then
+  /system/bin/sh /system/etc/init.qcom.modem_links.sh
+fi
 
 # Run mdm link script
-/system/bin/sh /system/etc/init.qcom.mdm_links.sh
+if [ -f /system/etc/init.qcom.mdm_links.sh ]; then
+  /system/bin/sh /system/etc/init.qcom.mdm_links.sh
+fi
 
 # Run thermal script
-/system/bin/sh /system/etc/init.qcom.thermald_conf.sh
+if [ -f /system/etc/init.qcom.thermald_conf.sh ]; then
+  /system/bin/sh /system/etc/init.qcom.thermald_conf.sh
+fi
 
 # Run wifi script
-/system/bin/sh /system/etc/init.qcom.wifi.sh
-
-# Run audio script
-/system/bin/sh /system/etc/init.qcom.audio.sh
+if [ -f /system/etc/init.qcom.wifi.sh ]; then
+  /system/bin/sh /system/etc/init.qcom.wifi.sh "$target" "$serial"
+fi
 
 # This should be the last command
 # remount system as read-only.

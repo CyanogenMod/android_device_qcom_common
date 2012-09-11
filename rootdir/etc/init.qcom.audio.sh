@@ -29,14 +29,24 @@
 # This script will check the type of the bluetooth device and set the
 # symbolic links to UCM files accordingly
 
-# Some previous scripts could have mounted system as read only.
-# remount system as read-write.
-mount -o rw,remount,barrier=1 /system
+target="$1"
+btsoc="$2"
 
-btsoc=`getprop qcom.bluetooth.soc`
+# No path is set up at this point so we have to do it here.
+PATH=/sbin:/system/sbin:/system/bin:/system/xbin
+export PATH
+
+case "$target" in
+    msm8974*)
+        insmod /system/lib/modules/adsp-loader.ko
+        ;;
+    *)
+        ;;
+esac
+
 echo "The BTSOC ID is $btsoc"
 case "$btsoc" in
-        "ath3k")
+    "ath3k")
         echo "Setting soft links for auxpcm files"
         rm /etc/snd_soc_msm/snd_soc_msm 2>/dev/null
         rm /etc/snd_soc_msm/snd_soc_msm_2x 2>/dev/null
@@ -47,7 +57,7 @@ case "$btsoc" in
         ln -s /etc/snd_soc_msm/snd_soc_msm_2x_Fusion3_auxpcm  /etc/snd_soc_msm/snd_soc_msm_2x_Fusion3 2>/dev/null
         ln -s /etc/snd_soc_msm/snd_soc_msm_Sitar_auxpcm       /etc/snd_soc_msm/snd_soc_msm_Sitar 2>/dev/null
         ;;
-        *)
+    *)
         echo "Not setting soft links, remove Auxpcm UCM files"
         rm /etc/snd_soc_msm/snd_soc_msm_auxpcm 2>/dev/null
         rm /etc/snd_soc_msm/snd_soc_msm_2x_auxpcm 2>/dev/null
