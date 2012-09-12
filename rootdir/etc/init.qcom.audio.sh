@@ -50,10 +50,12 @@ case "$btsoc" in
         echo "Setting soft links for auxpcm files"
         rm /etc/snd_soc_msm/snd_soc_msm 2>/dev/null
         rm /etc/snd_soc_msm/snd_soc_msm_2x 2>/dev/null
+        rm /etc/snd_soc_msm/snd_soc_msm_2x_mpq 2>/dev/null
         rm /etc/snd_soc_msm/snd_soc_msm_2x_Fusion3 2>/dev/null
         rm /etc/snd_soc_msm/snd_soc_msm_Sitar 2>/dev/null
         ln -s /etc/snd_soc_msm/snd_soc_msm_auxpcm             /etc/snd_soc_msm/snd_soc_msm 2>/dev/null
         ln -s /etc/snd_soc_msm/snd_soc_msm_2x_auxpcm          /etc/snd_soc_msm/snd_soc_msm_2x 2>/dev/null
+        ln -s /etc/snd_soc_msm/snd_soc_msm_2x_mpq_auxpcm      /etc/snd_soc_msm/snd_soc_msm_2x_mpq 2>/dev/null
         ln -s /etc/snd_soc_msm/snd_soc_msm_2x_Fusion3_auxpcm  /etc/snd_soc_msm/snd_soc_msm_2x_Fusion3 2>/dev/null
         ln -s /etc/snd_soc_msm/snd_soc_msm_Sitar_auxpcm       /etc/snd_soc_msm/snd_soc_msm_Sitar 2>/dev/null
         ;;
@@ -61,6 +63,7 @@ case "$btsoc" in
         echo "Not setting soft links, remove Auxpcm UCM files"
         rm /etc/snd_soc_msm/snd_soc_msm_auxpcm 2>/dev/null
         rm /etc/snd_soc_msm/snd_soc_msm_2x_auxpcm 2>/dev/null
+        rm /etc/snd_soc_msm/snd_soc_msm_2x_mpq_auxpcm 2>/dev/null
         rm /etc/snd_soc_msm/snd_soc_msm_2x_Fusion3_auxpcm 2>/dev/null
         rm /etc/snd_soc_msm/snd_soc_msm_Sitar_auxpcm 2>/dev/null
         ;;
