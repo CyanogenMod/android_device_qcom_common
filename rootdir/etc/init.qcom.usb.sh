@@ -143,3 +143,13 @@ case "$target" in
                 esac
                 ;;
 esac
+
+#
+# Select USB BAM - 2.0 or 3.0
+#
+case "$target" in
+    "msm8974")
+        echo hsusb > /sys/bus/platform/devices/usb_bam/enable
+    ;;
+esac
+
