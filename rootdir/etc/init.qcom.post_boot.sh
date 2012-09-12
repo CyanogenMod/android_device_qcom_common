@@ -94,6 +94,7 @@ case "$target" in
          echo 1 > /sys/module/rpm_resources/enable_low_power/pxo
          echo 1 > /sys/module/rpm_resources/enable_low_power/vdd_dig
          echo 1 > /sys/module/rpm_resources/enable_low_power/vdd_mem
+         echo 1 > /sys/module/pm_8x60/modes/cpu0/retention/idle_enabled
          echo 1 > /sys/module/pm_8x60/modes/cpu0/power_collapse/suspend_enabled
          echo 1 > /sys/module/pm_8x60/modes/cpu1/power_collapse/suspend_enabled
          echo 1 > /sys/module/pm_8x60/modes/cpu2/power_collapse/suspend_enabled
