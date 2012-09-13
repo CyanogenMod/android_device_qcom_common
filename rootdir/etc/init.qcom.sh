@@ -129,5 +129,7 @@ case "$target" in
                  start profiler_daemon;;
         esac
         ;;
-
+    "msm8974")
+        start_sensors
+        ;;
 esac
