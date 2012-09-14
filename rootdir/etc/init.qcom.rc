@@ -557,16 +557,6 @@ on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  1
 
-service time_daemon /system/bin/time_daemon
-    class late_start
-    user root
-    group root
-    oneshot
-    disabled
-
-on property:persist.timed.enable=true
-    start time_daemon
-
 service battery_monitor /system/bin/battery_monitor
     user system
     group system
