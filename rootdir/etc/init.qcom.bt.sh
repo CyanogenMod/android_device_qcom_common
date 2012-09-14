@@ -26,6 +26,9 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+#Read the arguments passed to the script
+config="$1"
+
 BLUETOOTH_SLEEP_PATH=/proc/bluetooth/sleep/proto
 LOG_TAG="qcom-bluetooth"
 LOG_NAME="${0}:"
@@ -48,6 +51,102 @@ failed ()
   exit $2
 }
 
+program_bdaddr ()
+{
+  /system/bin/btnvtool -O
+  logi "Bluetooth Address programmed successfully"
+}
+
+#
+# enable bluetooth profiles dynamically
+#
+config_bt ()
+{
+  baseband=`getprop ro.baseband`
+  target=`getprop ro.board.platform`
+  soc_hwid=`cat /sys/devices/system/soc/soc0/id`
+  btsoc=`getprop qcom.bluetooth.soc`
+
+  case $baseband in
+    "apq")
+        setprop ro.qualcomm.bluetooth.opp true
+        setprop ro.qualcomm.bluetooth.ftp true
+        setprop ro.qualcomm.bluetooth.nap false
+        setprop ro.qualcomm.bluetooth.sap false
+        setprop ro.qualcomm.bluetooth.dun false
+        # For MPQ as baseband is same for both
+        case $soc_hwid in
+          "130")
+              setprop ro.qualcomm.bluetooth.hsp true
+              setprop ro.qualcomm.bluetooth.hfp true
+              setprop ro.qualcomm.bluetooth.pbap false
+              setprop ro.qualcomm.bluetooth.map false
+              ;;
+          *)
+              setprop ro.qualcomm.bluetooth.hsp false
+              setprop ro.qualcomm.bluetooth.hfp false
+              setprop ro.qualcomm.bluetooth.pbap true
+              setprop ro.qualcomm.bluetooth.map true
+              ;;
+        esac
+        ;;
+    "mdm" | "svlte2a" | "svlte1" | "csfb")
+        setprop ro.qualcomm.bluetooth.opp true
+        setprop ro.qualcomm.bluetooth.hfp true
+        setprop ro.qualcomm.bluetooth.hsp true
+        setprop ro.qualcomm.bluetooth.pbap true
+        setprop ro.qualcomm.bluetooth.ftp true
+        setprop ro.qualcomm.bluetooth.map true
+        setprop ro.qualcomm.bluetooth.nap true
+        setprop ro.qualcomm.bluetooth.sap true
+        setprop ro.qualcomm.bluetooth.dun false
+        ;;
+    "msm")
+        setprop ro.qualcomm.bluetooth.opp true
+        setprop ro.qualcomm.bluetooth.hfp true
+        setprop ro.qualcomm.bluetooth.hsp true
+        setprop ro.qualcomm.bluetooth.pbap true
+        setprop ro.qualcomm.bluetooth.ftp true
+        setprop ro.qualcomm.bluetooth.nap true
+        setprop ro.qualcomm.bluetooth.sap true
+        setprop ro.qualcomm.bluetooth.dun true
+        case $btsoc in
+          "ath3k")
+              setprop ro.qualcomm.bluetooth.map false
+              ;;
+          *)
+              setprop ro.qualcomm.bluetooth.map true
+              ;;
+        esac
+        ;;
+    *)
+        setprop ro.qualcomm.bluetooth.opp true
+        setprop ro.qualcomm.bluetooth.hfp true
+        setprop ro.qualcomm.bluetooth.hsp true
+        setprop ro.qualcomm.bluetooth.pbap true
+        setprop ro.qualcomm.bluetooth.ftp true
+        setprop ro.qualcomm.bluetooth.map true
+        setprop ro.qualcomm.bluetooth.nap true
+        setprop ro.qualcomm.bluetooth.sap true
+        setprop ro.qualcomm.bluetooth.dun true
+        ;;
+  esac
+
+  #Enable Bluetooth Profiles specific to target Dynamically
+  case $target in
+    "msm8960")
+       if [ "$btsoc" -ne ath3k ] && [ "$socid" -ne 130 ]
+       then
+           setprop ro.bluetooth.hfp.ver 1.6
+           setprop ro.qualcomm.bt.hci_transport smd
+       fi
+       ;;
+    *)
+       ;;
+  esac
+
+}
+
 start_hciattach ()
 {
   /system/bin/hciattach -n $BTS_DEVICE $BTS_TYPE $BTS_BAUD &
@@ -64,6 +163,17 @@ kill_hciattach ()
   kill -TERM $hciattach_pid
   # this shell doesn't exit now -- wait returns for normal exit
 }
+
+logi "init.qcom.bt.sh config = $config"
+case "$config" in
+    "onboot")
+        program_bdaddr
+        config_bt
+        exit 0
+        ;;
+    *)
+        ;;
+esac
 
 # mimic hciattach options parsing -- maybe a waste of effort
 USAGE="hciattach [-n] [-p] [-b] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]"
