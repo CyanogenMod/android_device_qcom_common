@@ -65,6 +65,11 @@ if [ -f /system/etc/init.qcom.wifi.sh ]; then
   /system/bin/sh /system/etc/init.qcom.wifi.sh "$target" "$serial"
 fi
 
+# Run the sensor script
+if [ -f /system/etc/init.qcom.sensor.sh ]; then
+  /system/bin/sh /system/etc/init.qcom.sensor.sh
+fi
+
 # This should be the last command
 # remount system as read-only.
 mount -o ro,remount,barrier=1 /system
