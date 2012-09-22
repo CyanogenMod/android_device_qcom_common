@@ -83,7 +83,6 @@ esac
 #
 # Allow USB enumeration with default PID/VID
 #
-setprop sys.usb.config.extra diag
 baseband=`getprop ro.baseband`
 echo 1  > /sys/class/android_usb/f_mass_storage/lun/nofua
 usb_config=`getprop persist.sys.usb.config`
