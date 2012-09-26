@@ -102,8 +102,6 @@
 /dev/tty_sdio_00          0660   system     system
 /dev/ttyGS0               0660   system     system
 /dev/i2c-5                0660   media       media
-/dev/smd7                 0640   radio      radio
-/dev/rfcomm0              0660   bluetooth  bluetooth
 
 # DVB devices
 /dev/dvb/adapter0/demux*  0444   media       media
