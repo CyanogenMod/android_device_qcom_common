@@ -99,4 +99,15 @@ case "$1" in
             *)
         esac
         ;;
+
+    "msm8974")
+        case "$soc_hwplatform" in
+            "Liquid")
+                setprop ro.sf.lcd_density 160
+                ;;
+            *)
+                setprop ro.sf.lcd_density 340
+                ;;
+        esac
+        ;;
 esac
