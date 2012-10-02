@@ -66,7 +66,7 @@ int parse_metadata(char *metadata, char **metadata_saveptr,
     return METADATA_PARSING_CONTINUE;
 }
 
-int parse_video_metadata(char *metadata,
+int parse_video_encode_metadata(char *metadata,
     struct video_encode_metadata_t *video_encode_metadata)
 {
     char attribute[1024], value[1024], *saveptr;
@@ -75,6 +75,13 @@ int parse_video_metadata(char *metadata,
 
     while ((parsing_status = parse_metadata(temp_metadata, &saveptr,
             attribute, sizeof(attribute), value, sizeof(value))) == METADATA_PARSING_CONTINUE) {
+        if (strlen(attribute) == strlen("hint_id") &&
+            (strncmp(attribute, "hint_id", strlen("hint_id")) == 0)) {
+            if (strlen(value) > 0) {
+                video_encode_metadata->hint_id = atoi(value);
+            }
+        }
+
         if (strlen(attribute) == strlen("state") &&
             (strncmp(attribute, "state", strlen("state")) == 0)) {
             if (strlen(value) > 0) {
@@ -91,3 +98,34 @@ int parse_video_metadata(char *metadata,
     return 0;
 }
 
+int parse_video_decode_metadata(char *metadata,
+    struct video_decode_metadata_t *video_decode_metadata)
+{
+    char attribute[1024], value[1024], *saveptr;
+    char *temp_metadata = metadata;
+    int parsing_status;
+
+    while ((parsing_status = parse_metadata(temp_metadata, &saveptr,
+            attribute, sizeof(attribute), value, sizeof(value))) == METADATA_PARSING_CONTINUE) {
+        if (strlen(attribute) == strlen("hint_id") &&
+            (strncmp(attribute, "hint_id", strlen("hint_id")) == 0)) {
+            if (strlen(value) > 0) {
+                video_decode_metadata->hint_id = atoi(value);
+            }
+        }
+
+        if (strlen(attribute) == strlen("state") &&
+            (strncmp(attribute, "state", strlen("state")) == 0)) {
+            if (strlen(value) > 0) {
+                video_decode_metadata->state = atoi(value);
+            }
+        }
+
+        temp_metadata = NULL;
+    }
+
+    if (parsing_status == METADATA_PARSING_ERR)
+        return -1;
+
+    return 0;
+}

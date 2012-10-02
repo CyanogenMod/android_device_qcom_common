@@ -1,9 +1,10 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/*
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
- *     * Redistributions of source code must retain the above copyright
+ * *    * Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above
  *       copyright notice, this list of conditions and the following
@@ -24,31 +25,17 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
  */
 
-#define ATTRIBUTE_VALUE_DELIM ('=')
-#define ATTRIBUTE_STRING_DELIM (";")
-
-#define METADATA_PARSING_ERR (-1)
-#define METADATA_PARSING_CONTINUE (0)
-#define METADATA_PARSING_DONE (1)
-
-#define MIN(x,y) (((x)>(y))?(y):(x))
-
-struct video_encode_metadata_t {
-    int hint_id;
-    int state;
+struct list_node {
+    struct list_node *next;
+    void *data;
+    int (*compare)(void *data1, void *data2);
+    void (*dump)(void *data);
 };
 
-struct video_decode_metadata_t {
-    int hint_id;
-    int state;
-};
-
-int parse_metadata(char *metadata, char **metadata_saveptr,
-    char *attribute, int attribute_size, char *value, int value_size);
-int parse_video_encode_metadata(char *metadata,
-    struct video_encode_metadata_t *video_encode_metadata);
-int parse_video_decode_metadata(char *metadata,
-    struct video_decode_metadata_t *video_decode_metadata);
+int init_list_head(struct list_node *head);
+struct list_node * add_list_node(struct list_node *head, void *data);
+int remove_list_node(struct list_node *head, struct list_node *del_node);
+void dump_list(struct list_node *head);
+struct list_node *find_node(struct list_node *head, void *comparison_data);
