@@ -1,4 +1,4 @@
-# Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+# Copyright (c) 2012, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -96,7 +96,7 @@
 /dev/smd3                 0660   bluetooth  bluetooth
 /dev/smd2                 0660   bluetooth  bluetooth
 /dev/ttyHSL1              0660   system     system
-/dev/mdm                  0660   system     system
+/dev/mdm                  0660   system     radio
 /sys/devices/virtual/smdpkt/smdcntl*       open_timeout   0664 radio radio
 /dev/sdio_tty_ciq_00      0660   system     system
 /dev/tty_sdio_00          0660   system     system
