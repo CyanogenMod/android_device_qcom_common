@@ -135,7 +135,7 @@ config_bt ()
   #Enable Bluetooth Profiles specific to target Dynamically
   case $target in
     "msm8960")
-       if [ "$btsoc" != "ath3k" ] && [ "$socid" != "130" ]
+       if [ "$btsoc" != "ath3k" ] && [ "$soc_hwid" != "130" ]
        then
            setprop ro.bluetooth.hfp.ver 1.6
            setprop ro.qualcomm.bt.hci_transport smd
