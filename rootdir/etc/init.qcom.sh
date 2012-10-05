@@ -60,6 +60,7 @@ start_battery_monitor()
 }
 
 baseband=`getprop ro.baseband`
+izat_premium_enablement=`getprop ro.qc.sdk.izat.premium_enabled`
 
 #
 # Suppress default route installation during RA for IPV6; user space will take
@@ -92,10 +93,12 @@ case "$target" in
 esac
 
 case "$target" in
-        "msm8960")
-        start location_mq
-        start xtwifi_inet
-        start xtwifi_client
+        "msm8960" | "msm8974")
+        if [ "$izat_premium_enablement" -eq 1 ]; then
+            start location_mq
+            start xtwifi_inet
+            start xtwifi_client
+        fi
 esac
 
 case "$target" in
