@@ -111,3 +111,15 @@ case "$1" in
         esac
         ;;
 esac
+
+#Set up C2D composition type based on the target
+case "$soc_hwid" in
+    109 | 138 | 116 | 126 | 130)
+        #8064| 8960 pro | 8930 | 8974 | MPQ8064
+        setprop c2d.api.supported 0
+    ;;
+    *)
+        #8960 and others
+        setprop c2d.api.supported 1
+    ;;
+esac
