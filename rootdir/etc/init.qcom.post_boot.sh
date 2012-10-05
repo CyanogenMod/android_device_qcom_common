@@ -137,6 +137,47 @@ case "$target" in
          chmod 664 /sys/devices/system/cpu/cpu2/online
          chmod 664 /sys/devices/system/cpu/cpu3/online
          start qosmgrd
+		 # set DCVS parameters for CPU
+		 echo 40000 > /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
+		 echo 40000 > /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
+		 echo 100000 > /sys/module/msm_dcvs/cores/cpu0/em_win_size_min_us
+		 echo 500000 > /sys/module/msm_dcvs/cores/cpu0/em_win_size_max_us
+		 echo 0 > /sys/module/msm_dcvs/cores/cpu0/slack_mode_dynamic
+		 echo 1000000 > /sys/module/msm_dcvs/cores/cpu0/disable_pc_threshold
+		 echo 25000 > /sys/module/msm_dcvs/cores/cpu1/slack_time_max_us
+		 echo 25000 > /sys/module/msm_dcvs/cores/cpu1/slack_time_min_us
+		 echo 100000 > /sys/module/msm_dcvs/cores/cpu1/em_win_size_min_us
+		 echo 500000 > /sys/module/msm_dcvs/cores/cpu1/em_win_size_max_us
+		 echo 0 > /sys/module/msm_dcvs/cores/cpu1/slack_mode_dynamic
+		 echo 1000000 > /sys/module/msm_dcvs/cores/cpu1/disable_pc_threshold
+		 echo 25000 > /sys/module/msm_dcvs/cores/cpu2/slack_time_max_us
+		 echo 25000 > /sys/module/msm_dcvs/cores/cpu2/slack_time_min_us
+		 echo 100000 > /sys/module/msm_dcvs/cores/cpu2/em_win_size_min_us
+		 echo 500000 > /sys/module/msm_dcvs/cores/cpu2/em_win_size_max_us
+		 echo 0 > /sys/module/msm_dcvs/cores/cpu2/slack_mode_dynamic
+		 echo 1000000 > /sys/module/msm_dcvs/cores/cpu2/disable_pc_threshold
+		 echo 25000 > /sys/module/msm_dcvs/cores/cpu3/slack_time_max_us
+		 echo 25000 > /sys/module/msm_dcvs/cores/cpu3/slack_time_min_us
+		 echo 100000 > /sys/module/msm_dcvs/cores/cpu3/em_win_size_min_us
+		 echo 500000 > /sys/module/msm_dcvs/cores/cpu3/em_win_size_max_us
+		 echo 0 > /sys/module/msm_dcvs/cores/cpu3/slack_mode_dynamic
+		 echo 1000000 > /sys/module/msm_dcvs/cores/cpu3/disable_pc_threshold
+		 # set DCVS parameters for GPU
+		 echo 20000 > /sys/module/msm_dcvs/cores/gpu0/slack_time_max_us
+		 echo 20000 > /sys/module/msm_dcvs/cores/gpu0/slack_time_min_us
+		 echo 0 > /sys/module/msm_dcvs/cores/gpu0/slack_mode_dynamic
+		 # set msm_mpdecision parameters
+		 echo 45000 > /sys/module/msm_mpdecision/slack_time_max_us
+		 echo 15000 > /sys/module/msm_mpdecision/slack_time_min_us
+		 echo 100000 > /sys/module/msm_mpdecision/em_win_size_min_us
+		 echo 1000000 > /sys/module/msm_mpdecision/em_win_size_max_us
+		 echo 3 > /sys/module/msm_mpdecision/online_util_pct_min
+		 echo 25 > /sys/module/msm_mpdecision/online_util_pct_max
+		 echo 97 > /sys/module/msm_mpdecision/em_max_util_pct
+		 echo 2 > /sys/module/msm_mpdecision/rq_avg_poll_ms
+		 echo 10 > /sys/module/msm_mpdecision/mp_em_rounding_point_min
+		 echo 85 > /sys/module/msm_mpdecision/mp_em_rounding_point_max
+		 echo 50 > /sys/module/msm_mpdecision/iowait_threshold_pct
          soc_id=`cat /sys/devices/system/soc/soc0/id`
          case "$soc_id" in
              "130")
