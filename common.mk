@@ -51,8 +51,8 @@ AUDIO_HARDWARE += audio.primary.msm8974
 AUDIO_HARDWARE += audio.primary.msm8660
 #AUDIO_HARDWARE += audio.primary.msm7627_surf
 AUDIO_HARDWARE += audio.primary.msm7627a
-#AUDIO_HARDWARE += audio.primary.msm7630_surf
-#AUDIO_HARDWARE += audio.primary.msm7630_fusion
+AUDIO_HARDWARE += audio.primary.msm7630_surf
+AUDIO_HARDWARE += audio.primary.msm7630_fusion
 #AUDIO_HARDWARE += audio.primary.default
 AUDIO_HARDWARE += audio.a2dp.default
 #
