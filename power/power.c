@@ -45,10 +45,16 @@
 
 #include "metadata-defs.h"
 
+#define NODE_MAX (64)
+
 #define SCALING_GOVERNOR_PATH "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
 #define ONDEMAND_PATH "/sys/devices/system/cpu/cpufreq/ondemand/"
 #define ONDEMAND_IO_BUSY_PATH "/sys/devices/system/cpu/cpufreq/ondemand/io_is_busy"
 #define ONDEMAND_SAMPLING_DOWN_PATH "/sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor"
+#define DCVS_CPU0_SLACK_MAX_NODE "/sys/module/msm_dcvs/cores/cpu0/slack_time_max_us"
+#define DCVS_CPU0_SLACK_MIN_NODE "/sys/module/msm_dcvs/cores/cpu0/slack_time_min_us"
+#define MPDECISION_SLACK_MAX_NODE "/sys/module/msm_mpdecision/slack_time_max_us"
+#define MPDECISION_SLACK_MIN_NODE "/sys/module/msm_mpdecision/slack_time_min_us"
 
 static int (*perf_vote_turnoff_ondemand_io_busy)(int vote);
 static int perf_vote_ondemand_io_busy_unavailable;
@@ -58,6 +64,12 @@ static void *qcopt_handle;
 static int qcopt_handle_unavailable;
 static int saved_ondemand_sampling_down_factor = 4;
 static int saved_ondemand_io_is_busy_status = 1;
+static int saved_dcvs_cpu0_slack_max = -1;
+static int saved_dcvs_cpu0_slack_min = -1;
+static int saved_mpdecision_slack_max = -1;
+static int saved_mpdecision_slack_min = -1;
+static int saved_interactive_mode = -1;
+static int slack_node_rw_failed = 0;
 
 static void *get_qcopt_handle()
 {
@@ -280,8 +292,168 @@ static void power_hint(struct power_module *module, power_hint_t hint,
     }
 }
 
-void set_interactive(struct power_module *module, int on)
+static void set_interactive(struct power_module *module, int on)
 {
+    char governor[80];
+    char tmp_str[NODE_MAX];
+    int rc = 0;
+
+    if (get_scaling_governor(governor, sizeof(governor)) == -1) {
+        if (!slack_node_rw_failed) {
+            ALOGE("Can't obtain scaling governor.");
+            slack_node_rw_failed = 1;
+        }
+
+        return;
+    }
+
+    if ((strlen(governor) == strlen("msm-dcvs")) &&
+            (strncmp(governor, "msm-dcvs", strlen("msm-dcvs")) == 0)) {
+        if (on && (saved_interactive_mode == -1 || saved_interactive_mode == 0)) {
+            /* Display turned on. Restore if possible. */
+            if (saved_dcvs_cpu0_slack_max != -1) {
+                snprintf(tmp_str, NODE_MAX, "%d", saved_dcvs_cpu0_slack_max);
+
+                if (sysfs_write(DCVS_CPU0_SLACK_MAX_NODE, tmp_str) != 0) {
+                    if (!slack_node_rw_failed) {
+                        ALOGE("Failed to write to %s", DCVS_CPU0_SLACK_MAX_NODE);
+                    }
+
+                    rc = 1;
+                }
+            }
+
+            if (saved_dcvs_cpu0_slack_max != -1) {
+                snprintf(tmp_str, NODE_MAX, "%d", saved_dcvs_cpu0_slack_min);
+
+                if (sysfs_write(DCVS_CPU0_SLACK_MIN_NODE, tmp_str) != 0) {
+                    if (!slack_node_rw_failed) {
+                        ALOGE("Failed to write to %s", DCVS_CPU0_SLACK_MIN_NODE);
+                    }
+
+                    rc = 1;
+                }
+            }
+
+            if (saved_mpdecision_slack_max != -1) {
+                snprintf(tmp_str, NODE_MAX, "%d", saved_mpdecision_slack_max);
+
+                if (sysfs_write(MPDECISION_SLACK_MAX_NODE, tmp_str) != 0) {
+                    if (!slack_node_rw_failed) {
+                        ALOGE("Failed to write to %s", MPDECISION_SLACK_MAX_NODE);
+                    }
+
+                    rc = 1;
+                }
+            }
+
+            if (saved_mpdecision_slack_min != -1) {
+                snprintf(tmp_str, NODE_MAX, "%d", saved_mpdecision_slack_min);
+
+                if (sysfs_write(MPDECISION_SLACK_MIN_NODE, tmp_str) != 0) {
+                    if (!slack_node_rw_failed) {
+                        ALOGE("Failed to write to %s", MPDECISION_SLACK_MIN_NODE);
+                    }
+
+                    rc = 1;
+                }
+            }
+        } else if (!on && saved_interactive_mode == 1){
+            /* Display turned off. */
+            if (sysfs_read(DCVS_CPU0_SLACK_MAX_NODE, tmp_str, NODE_MAX - 1)) {
+                if (!slack_node_rw_failed) {
+                    ALOGE("Failed to read from %s", DCVS_CPU0_SLACK_MAX_NODE);
+                }
+
+                rc = 1;
+            } else {
+                saved_dcvs_cpu0_slack_max = atoi(tmp_str);
+            }
+
+            if (sysfs_read(DCVS_CPU0_SLACK_MIN_NODE, tmp_str, NODE_MAX - 1)) {
+                if (!slack_node_rw_failed) {
+                    ALOGE("Failed to read from %s", DCVS_CPU0_SLACK_MIN_NODE);
+                }
+
+                rc = 1;
+            } else {
+                saved_dcvs_cpu0_slack_min = atoi(tmp_str);
+            }
+
+            if (sysfs_read(MPDECISION_SLACK_MAX_NODE, tmp_str, NODE_MAX - 1)) {
+                if (!slack_node_rw_failed) {
+                    ALOGE("Failed to read from %s", MPDECISION_SLACK_MAX_NODE);
+                }
+
+                rc = 1;
+            } else {
+                saved_mpdecision_slack_max = atoi(tmp_str);
+            }
+
+            if (sysfs_read(MPDECISION_SLACK_MIN_NODE, tmp_str, NODE_MAX - 1)) {
+                if(!slack_node_rw_failed) {
+                    ALOGE("Failed to read from %s", MPDECISION_SLACK_MIN_NODE);
+                }
+
+                rc = 1;
+            } else {
+                saved_mpdecision_slack_min = atoi(tmp_str);
+            }
+
+            /* Write new values. */
+            if (saved_dcvs_cpu0_slack_max != -1) {
+                snprintf(tmp_str, NODE_MAX, "%d", 10 * saved_dcvs_cpu0_slack_max);
+
+                if (sysfs_write(DCVS_CPU0_SLACK_MAX_NODE, tmp_str) != 0) {
+                    if (!slack_node_rw_failed) {
+                        ALOGE("Failed to write to %s", DCVS_CPU0_SLACK_MAX_NODE);
+                    }
+
+                    rc = 1;
+                }
+            }
+
+            if (saved_dcvs_cpu0_slack_max != -1) {
+                snprintf(tmp_str, NODE_MAX, "%d", 10 * saved_dcvs_cpu0_slack_min);
+
+                if (sysfs_write(DCVS_CPU0_SLACK_MIN_NODE, tmp_str) != 0) {
+                    if(!slack_node_rw_failed) {
+                        ALOGE("Failed to write to %s", DCVS_CPU0_SLACK_MIN_NODE);
+                    }
+
+                    rc = 1;
+                }
+            }
+
+            if (saved_mpdecision_slack_max != -1) {
+                snprintf(tmp_str, NODE_MAX, "%d", 10 * saved_mpdecision_slack_max);
+
+                if (sysfs_write(MPDECISION_SLACK_MAX_NODE, tmp_str) != 0) {
+                    if(!slack_node_rw_failed) {
+                        ALOGE("Failed to write to %s", MPDECISION_SLACK_MAX_NODE);
+                    }
+
+                    rc = 1;
+                }
+            }
+
+            if (saved_mpdecision_slack_min != -1) {
+                snprintf(tmp_str, NODE_MAX, "%d", 10 * saved_mpdecision_slack_min);
+
+                if (sysfs_write(MPDECISION_SLACK_MIN_NODE, tmp_str) != 0) {
+                    if(!slack_node_rw_failed) {
+                        ALOGE("Failed to write to %s", MPDECISION_SLACK_MIN_NODE);
+                    }
+
+                    rc = 1;
+                }
+            }
+        }
+
+        slack_node_rw_failed = rc;
+    }
+
+    saved_interactive_mode = !!on;
 }
 
 struct power_module HAL_MODULE_INFO_SYM = {
