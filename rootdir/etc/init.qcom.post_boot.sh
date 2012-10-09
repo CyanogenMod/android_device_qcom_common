@@ -178,6 +178,15 @@ case "$target" in
 		 echo 10 > /sys/module/msm_mpdecision/mp_em_rounding_point_min
 		 echo 85 > /sys/module/msm_mpdecision/mp_em_rounding_point_max
 		 echo 50 > /sys/module/msm_mpdecision/iowait_threshold_pct
+		 #set permissions for the nodes needed by display on/off hook
+		 chown system /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
+		 chown system /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
+		 chown system /sys/module/msm_mpdecision/slack_time_max_us
+		 chown system /sys/module/msm_mpdecision/slack_time_min_us
+		 chmod 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
+		 chmod 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
+		 chmod 664 /sys/module/msm_mpdecision/slack_time_max_us
+		 chmod 664 /sys/module/msm_mpdecision/slack_time_min_us
          soc_id=`cat /sys/devices/system/soc/soc0/id`
          case "$soc_id" in
              "130")
