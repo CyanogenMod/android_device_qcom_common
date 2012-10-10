@@ -219,7 +219,7 @@ esac
 
 case "$target" in
     "msm8974")
-        echo 1 > /sys/module/lpm_resources/enable_low_power/l2
+        echo 2 > /sys/module/lpm_resources/enable_low_power/l2
         echo 1 > /sys/module/lpm_resources/enable_low_power/pxo
         echo 1 > /sys/module/lpm_resources/enable_low_power/vdd_dig
         echo 1 > /sys/module/lpm_resources/enable_low_power/vdd_mem
