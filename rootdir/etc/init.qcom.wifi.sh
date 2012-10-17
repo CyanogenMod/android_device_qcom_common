@@ -114,38 +114,44 @@ case "$target" in
     msm8960*)
       wlanchip=""
 
-      # auto detect ar6004-usb card
-      # for ar6004-usb card, the vendor id and device id is as the following
-      # vendor id  product id
-      #    0x0cf3     0x9374
-      #    0x0cf3     0x9372
-      usb_vendors=`echo \`cat /sys/bus/usb/devices/*/*/idVendor\``
-      usb_products=`echo \`cat /sys/bus/usb/devices/*/*/idProduct\``
-      ven_idx=0
+      if [ -f /system/etc/firmware/ath6k/AR6004/ar6004_wlan.conf ]; then
+          wlanchip=`cat /system/etc/firmware/ath6k/AR6004/ar6004_wlan.conf`
+      fi
 
-      for vendor in $usb_vendors; do
-          case "$vendor" in
-          "0cf3")
-              dev_idx=0
-              for product in $usb_products; do
-                  if [ $ven_idx -eq $dev_idx ]; then
-                      case "$product" in
-                      "9374" | "9372")
-                          wlanchip="AR6004-USB"
-                          ;;
-                      *)
-                          ;;
-                      esac
-                  fi
-                  dev_idx=$(( $dev_idx + 1))
-              done
-              ;;
-          *)
-              ;;
-          esac
-          ven_idx=$(( $ven_idx + 1))
-      done
-      # auto detect ar6004-usb card end
+      if [ "$wlanchip" == "" ]; then
+          # auto detect ar6004-usb card
+          # for ar6004-usb card, the vendor id and device id is as the following
+          # vendor id  product id
+          #    0x0cf3     0x9374
+          #    0x0cf3     0x9372
+          usb_vendors=`echo \`cat /sys/bus/usb/devices/*/*/idVendor\``
+          usb_products=`echo \`cat /sys/bus/usb/devices/*/*/idProduct\``
+          ven_idx=0
+
+          for vendor in $usb_vendors; do
+              case "$vendor" in
+              "0cf3")
+                  dev_idx=0
+                  for product in $usb_products; do
+                      if [ $ven_idx -eq $dev_idx ]; then
+                          case "$product" in
+                          "9374" | "9372")
+                              wlanchip="AR6004-USB"
+                              ;;
+                          *)
+                              ;;
+                          esac
+                      fi
+                      dev_idx=$(( $dev_idx + 1))
+                  done
+                  ;;
+              *)
+                  ;;
+              esac
+              ven_idx=$(( $ven_idx + 1))
+          done
+          # auto detect ar6004-usb card end
+      fi
 
       if [ "$wlanchip" == "" ]; then
           # auto detect ar6004-sdio card
