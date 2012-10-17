@@ -1,9 +1,10 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/*
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
- *     * Redistributions of source code must retain the above copyright
+ * *    * Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above
  *       copyright notice, this list of conditions and the following
@@ -24,31 +25,23 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
  */
 
-#define ATTRIBUTE_VALUE_DELIM ('=')
-#define ATTRIBUTE_STRING_DELIM (";")
+#include <cutils/properties.h>
 
-#define METADATA_PARSING_ERR (-1)
-#define METADATA_PARSING_CONTINUE (0)
-#define METADATA_PARSING_DONE (1)
+#define SCALING_GOVERNOR_PATH "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
+#define ONDEMAND_PATH "/sys/devices/system/cpu/cpufreq/ondemand/"
+#define ONDEMAND_IO_BUSY_PATH "/sys/devices/system/cpu/cpufreq/ondemand/io_is_busy"
+#define ONDEMAND_SAMPLING_DOWN_PATH "/sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor"
 
-#define MIN(x,y) (((x)>(y))?(y):(x))
+int sysfs_read(char *path, char *s, int num_bytes);
+int sysfs_write(char *path, char *s);
+int get_scaling_governor(char governor[], int size);
 
-struct video_encode_metadata_t {
-    int hint_id;
-    int state;
-};
-
-struct video_decode_metadata_t {
-    int hint_id;
-    int state;
-};
-
-int parse_metadata(char *metadata, char **metadata_saveptr,
-    char *attribute, int attribute_size, char *value, int value_size);
-int parse_video_encode_metadata(char *metadata,
-    struct video_encode_metadata_t *video_encode_metadata);
-int parse_video_decode_metadata(char *metadata,
-    struct video_decode_metadata_t *video_decode_metadata);
+void vote_ondemand_io_busy_off();
+void unvote_ondemand_io_busy_off();
+void vote_ondemand_sdf_low();
+void unvote_ondemand_sdf_low();
+void perform_hint_action(int hint_id, int resource_values[],
+    int num_resources);
+void undo_hint_action(int hint_id);

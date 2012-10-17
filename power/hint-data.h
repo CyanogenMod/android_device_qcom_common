@@ -1,9 +1,10 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/*
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
- *     * Redistributions of source code must retain the above copyright
+ * *    * Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above
  *       copyright notice, this list of conditions and the following
@@ -24,31 +25,18 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
  */
 
-#define ATTRIBUTE_VALUE_DELIM ('=')
-#define ATTRIBUTE_STRING_DELIM (";")
+/* Default use-case hint IDs */
+#define DEFAULT_VIDEO_ENCODE_HINT_ID    (0x0A00)
+#define DEFAULT_VIDEO_DECODE_HINT_ID    (0x0B00)
+#define DISPLAY_STATE_HINT_ID           (0x0C00)
 
-#define METADATA_PARSING_ERR (-1)
-#define METADATA_PARSING_CONTINUE (0)
-#define METADATA_PARSING_DONE (1)
-
-#define MIN(x,y) (((x)>(y))?(y):(x))
-
-struct video_encode_metadata_t {
-    int hint_id;
-    int state;
+struct hint_data {
+    unsigned long hint_id; /* This is our key. */
+    unsigned long perflock_handle;
 };
 
-struct video_decode_metadata_t {
-    int hint_id;
-    int state;
-};
-
-int parse_metadata(char *metadata, char **metadata_saveptr,
-    char *attribute, int attribute_size, char *value, int value_size);
-int parse_video_encode_metadata(char *metadata,
-    struct video_encode_metadata_t *video_encode_metadata);
-int parse_video_decode_metadata(char *metadata,
-    struct video_decode_metadata_t *video_decode_metadata);
+int hint_compare(struct hint_data *first_hint,
+        struct hint_data *other_hint);
+void hint_dump(struct hint_data *hint);
