@@ -40,6 +40,8 @@ ALSA_UCM += snd_soc_msm_2x_mpq_auxpcm
 ALSA_UCM += snd_soc_msm_2x_Fusion3_auxpcm
 ALSA_UCM += snd_soc_msm_Sitar_auxpcm
 ALSA_UCM += snd_soc_msm_Taiko
+ALSA_UCM += snd_soc_msm_Taiko_CDP
+ALSA_UCM += snd_soc_msm_Taiko_Fluid
 ALSA_UCM += snd_soc_msm_I2SFusion
 
 #ANGLE
