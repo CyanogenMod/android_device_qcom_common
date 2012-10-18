@@ -116,6 +116,9 @@ case "$target" in
          echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
          echo 4 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
          echo 10 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential
+         chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
+         chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+         chown system /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
          echo 384000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
          echo 384000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
          echo 384000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
@@ -136,7 +139,6 @@ case "$target" in
          chmod 664 /sys/devices/system/cpu/cpu1/online
          chmod 664 /sys/devices/system/cpu/cpu2/online
          chmod 664 /sys/devices/system/cpu/cpu3/online
-         start qosmgrd
 		 # set DCVS parameters for CPU
 		 echo 40000 > /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
 		 echo 40000 > /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
@@ -187,6 +189,7 @@ case "$target" in
 		 chmod 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
 		 chmod 664 /sys/module/msm_mpdecision/slack_time_max_us
 		 chmod 664 /sys/module/msm_mpdecision/slack_time_min_us
+         start qosmgrd
          soc_id=`cat /sys/devices/system/soc/soc0/id`
          case "$soc_id" in
              "130")
