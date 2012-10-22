@@ -97,6 +97,13 @@ load_wifiKM()
 
 case "$target" in
     msm8974*)
+
+      # At first boot move cfg80211.ko module to pronto location;
+      # the default cfg80211.ko is for wcnss solution
+      if [ ! -L /system/lib/modules/cfg80211.ko ]; then
+          mv /system/lib/modules/cfg80211.ko /system/lib/modules/pronto/
+      fi
+
       # link pronto modules
       rm /system/lib/modules/wlan.ko
       rm /system/lib/modules/cfg80211.ko
@@ -112,6 +119,13 @@ case "$target" in
       ;;
 
     msm8960*)
+
+      # Move cfg80211.ko to prima directory, the default cfg80211.ko is
+      # for wcnss solution
+      if [ ! -L /system/lib/modules/cfg80211.ko ]; then
+          mv /system/lib/modules/cfg80211.ko /system/lib/modules/prima/
+      fi
+
       wlanchip=""
 
       if [ -f /system/etc/firmware/ath6k/AR6004/ar6004_wlan.conf ]; then
@@ -242,6 +256,12 @@ case "$target" in
       ;;
 
     msm7627a*)
+
+        # The default cfg80211 module is for volans
+        if [ ! -L /system/lib/modules/cfg80211.ko ]; then
+            mv /system/lib/modules/cfg80211.ko /system/lib/modules/volans/
+        fi
+
         wlanchip=`cat /persist/wlan_chip_id`
         echo "The WLAN Chip ID is $wlanchip"
         case "$wlanchip" in
