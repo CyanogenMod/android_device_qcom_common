@@ -250,7 +250,7 @@ on property:vold.decrypt=trigger_restart_framework
 
 service cnd /system/bin/cnd
     class late_start
-    socket cnd stream 666 root radio
+    socket cnd stream 660 root inet
 
 service rmt_storage /system/bin/rmt_storage
     class core
