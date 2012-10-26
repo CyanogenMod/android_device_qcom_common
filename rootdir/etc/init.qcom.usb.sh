@@ -148,7 +148,7 @@ esac
 #
 case "$target" in
     "msm8974")
-        echo hsusb > /sys/bus/platform/devices/usb_bam/enable
+        echo ssusb > /sys/bus/platform/devices/usb_bam/enable
     ;;
 esac
 
