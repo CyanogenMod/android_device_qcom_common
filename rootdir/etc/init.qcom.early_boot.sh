@@ -91,10 +91,13 @@ case "$1" in
 
         #Set up composition type based on the target
         case "$soc_hwid" in
-            109| 116 | 117 | 118 | 120 | 121| 130)
-                #APQ8064, MSM8930, MSM8630, MSM8230,
-                # MSM8627, MSM8227, MPQ8064
-                setprop debug.composition.type gpu
+            87)
+                #8960
+                setprop debug.composition.type dyn
+                ;;
+            153)
+                #8064 V2 PRIME
+                setprop debug.composition.type c2d
                 ;;
             *)
         esac
@@ -110,16 +113,4 @@ case "$1" in
                 ;;
         esac
         ;;
-esac
-
-#Set up C2D composition type based on the target
-case "$soc_hwid" in
-    109 | 138 | 116 | 126 | 130)
-        #8064| 8960 pro | 8930 | 8974 | MPQ8064
-        setprop c2d.api.supported 0
-    ;;
-    *)
-        #8960 and others
-        setprop c2d.api.supported 1
-    ;;
 esac
