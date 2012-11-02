@@ -33,3 +33,4 @@ add_lunch_combo msm7630_surf-userdebug
 add_lunch_combo msm8660_surf-userdebug
 add_lunch_combo msm8960-userdebug
 add_lunch_combo msm8974-userdebug
+add_lunch_combo msm8910-userdebug
