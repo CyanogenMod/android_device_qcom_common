@@ -324,12 +324,12 @@ on property:sys.usb.config=diag,diag_mdm,diag_qsc,serial_hsic,serial_hsuart,rmne
     write /sys/class/android_usb/android0/enable 1
     setprop sys.usb.state ${sys.usb.config}
 
-# Fusion 2.2 composition with diag_mdm and adb
-on property:sys.usb.config=diag,diag_mdm,serial_smd,serial_tty,serial_hsuart,rmnet_hsuart,mass_storage,adb
+# Fusion 2.2 composition with diag_qsc and adb
+on property:sys.usb.config=diag,diag_qsc,serial_smd,serial_tty,serial_hsuart,rmnet_hsuart,mass_storage,adb
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor 05C6
     write /sys/class/android_usb/android0/idProduct 9053
-    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_qsc
     write /sys/class/android_usb/android0/f_serial/transports smd,tty,hsuart
     write /sys/class/android_usb/android0/f_rmnet/transports smd,bam,hsuart,hsuart
     write /sys/class/android_usb/android0/functions diag,adb,serial,rmnet,mass_storage
@@ -337,12 +337,12 @@ on property:sys.usb.config=diag,diag_mdm,serial_smd,serial_tty,serial_hsuart,rmn
     start adbd
     setprop sys.usb.state ${sys.usb.config}
 
-# Fusion 2.2 composition with diag_mdm
-on property:sys.usb.config=diag,diag_mdm,serial_smd,serial_tty,serial_hsuart,rmnet_hsuart,mass_storage
+# Fusion 2.2 composition with diag_qsc
+on property:sys.usb.config=diag,diag_qsc,serial_smd,serial_tty,serial_hsuart,rmnet_hsuart,mass_storage
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor 05C6
     write /sys/class/android_usb/android0/idProduct 9054
-    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_qsc
     write /sys/class/android_usb/android0/f_serial/transports smd,tty,hsuart
     write /sys/class/android_usb/android0/f_rmnet/transports smd,bam,hsuart,hsuart
     write /sys/class/android_usb/android0/functions diag,serial,rmnet,mass_storage
