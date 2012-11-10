@@ -95,8 +95,8 @@ case "$1" in
                 #8960
                 setprop debug.composition.type dyn
                 ;;
-            153)
-                #8064 V2 PRIME
+            153|154|155|156|157|138)
+                #8064 V2 PRIME | 8930AB | 8630AB | 8230AB | 8030AB | 8960AB
                 setprop debug.composition.type c2d
                 ;;
             *)
