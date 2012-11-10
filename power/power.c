@@ -230,6 +230,10 @@ void set_interactive(struct power_module *module, int on)
         /* Display off. */
         if ((strlen(governor) == strlen("ondemand")) &&
                 (strncmp(governor, "ondemand", strlen("ondemand")) == 0)) {
+            int resource_values[] = {MS_500};
+
+            perform_hint_action(DISPLAY_STATE_HINT_ID,
+                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         } else if ((strlen(governor) == strlen("interactive")) &&
                 (strncmp(governor, "interactive", strlen("interactive")) == 0)) {
             int resource_values[] = {TR_MS_500};
@@ -336,6 +340,7 @@ void set_interactive(struct power_module *module, int on)
         /* Display on. */
         if ((strlen(governor) == strlen("ondemand")) &&
                 (strncmp(governor, "ondemand", strlen("ondemand")) == 0)) {
+            undo_hint_action(DISPLAY_STATE_HINT_ID);
         } else if ((strlen(governor) == strlen("interactive")) &&
                 (strncmp(governor, "interactive", strlen("interactive")) == 0)) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
