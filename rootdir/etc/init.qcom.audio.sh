@@ -31,6 +31,7 @@
 
 target="$1"
 btsoc="$2"
+soc_hwid=`cat /sys/devices/system/soc/soc0/id`
 
 # No path is set up at this point so we have to do it here.
 PATH=/sbin:/system/sbin:/system/bin:/system/xbin
@@ -42,6 +43,34 @@ case "$target" in
         ;;
     *)
         ;;
+esac
+
+case "$target" in
+    msm8960*)
+        echo "The TARGET ID is $target"
+    case $soc_hwid in
+         "130")
+            echo "The BTSOC ID is $btsoc"
+            echo "Setting soft links for auxpcm files"
+            rm /etc/snd_soc_msm/snd_soc_msm 2>/dev/null
+            rm /etc/snd_soc_msm/snd_soc_msm_2x 2>/dev/null
+            rm /etc/snd_soc_msm/snd_soc_msm_2x_mpq 2>/dev/null
+            rm /etc/snd_soc_msm/snd_soc_msm_2x_Fusion3 2>/dev/null
+            rm /etc/snd_soc_msm/snd_soc_msm_Sitar 2>/dev/null
+            ln -s /etc/snd_soc_msm/snd_soc_msm_auxpcm             /etc/snd_soc_msm/snd_soc_msm 2>/dev/null
+            ln -s /etc/snd_soc_msm/snd_soc_msm_2x_auxpcm          /etc/snd_soc_msm/snd_soc_msm_2x 2>/dev/null
+            ln -s /etc/snd_soc_msm/snd_soc_msm_2x_mpq_auxpcm      /etc/snd_soc_msm/snd_soc_msm_2x_mpq 2>/dev/null
+            ln -s /etc/snd_soc_msm/snd_soc_msm_2x_Fusion3_auxpcm  /etc/snd_soc_msm/snd_soc_msm_2x_Fusion3 2>/dev/null
+            ln -s /etc/snd_soc_msm/snd_soc_msm_Sitar_auxpcm       /etc/snd_soc_msm/snd_soc_msm_Sitar 2>/dev/null
+            setprop qcom.audio.init complete
+            exit 0
+        ;;
+    *)
+        ;;
+    esac
+    ;;
+*)
+    ;;
 esac
 
 echo "The BTSOC ID is $btsoc"
