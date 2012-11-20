@@ -93,6 +93,7 @@
         <MediaCodec name="OMX.google.amrnb.decoder" type="audio/3gpp" />
         <MediaCodec name="OMX.google.amrwb.decoder" type="audio/amr-wb" />
         <MediaCodec name="OMX.google.aac.decoder" type="audio/mp4a-latm" />
+        <MediaCodec name="AACDecoder" type="audio/mp4a-latm" />
         <MediaCodec name="OMX.google.g711.alaw.decoder" type="audio/g711-alaw" />
         <MediaCodec name="OMX.google.g711.mlaw.decoder" type="audio/g711-mlaw" />
         <MediaCodec name="OMX.qcom.audio.decoder.Qcelp13" type="audio/qcelp" >
