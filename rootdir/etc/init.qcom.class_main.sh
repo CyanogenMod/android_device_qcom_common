@@ -33,6 +33,7 @@ baseband=`getprop ro.baseband`
 multirild=`getprop ro.multi.rild`
 dsds=`getprop persist.dsds.enabled`
 netmgr=`getprop ro.use_data_netmgrd`
+sgltecsfb=`getprop persist.radio.sglte_csfb`
 
 case "$baseband" in
     "apq")
@@ -44,8 +45,15 @@ case "$baseband" in
     "msm" | "csfb" | "svlte2a" | "mdm" | "sglte" | "unknown")
     start qmuxd
     case "$baseband" in
-        "svlte2a" | "csfb" | "sglte")
+        "svlte2a" | "csfb")
         start qmiproxy
+        ;;
+        "sglte")
+        if [ "x$sgltecsfb" != "xtrue" ]; then
+          start qmiproxy
+        else
+          setprop persist.radio.voice.modem.index 0
+        fi
     esac
     case "$multirild" in
         "true")
