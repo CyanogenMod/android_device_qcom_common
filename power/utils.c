@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -40,43 +40,62 @@
 #define LOG_TAG "QCOM PowerHAL"
 #include <utils/Log.h>
 
-static int qcopt_handle_unavailable;
 static void *qcopt_handle;
-static int (*perf_vote_turnoff_ondemand_io_busy)(int vote);
-static int perf_vote_ondemand_io_busy_unavailable;
-static int (*perf_vote_lower_ondemand_sdf)(int vote);
-static int perf_vote_ondemand_sdf_unavailable;
 static int (*perf_lock_acq)(unsigned long handle, int duration,
     int list[], int numArgs);
-static int perf_lock_acq_unavailable;
 static int (*perf_lock_rel)(unsigned long handle);
-static int perf_lock_rel_unavailable;
 static struct list_node active_hint_list_head;
 
 static void *get_qcopt_handle()
 {
-    if (qcopt_handle_unavailable) {
-        return NULL;
-    }
+    char qcopt_lib_path[PATH_MAX] = {0};
+    void *handle = NULL;
 
-    if (!qcopt_handle) {
-        char qcopt_lib_path[PATH_MAX] = {0};
-        dlerror();
+    dlerror();
 
-        if (property_get("ro.vendor.extension_library", qcopt_lib_path,
-                    NULL) != 0) {
-            if((qcopt_handle = dlopen(qcopt_lib_path, RTLD_NOW)) == NULL) {
-                qcopt_handle_unavailable = 1;
-                ALOGE("Unable to open %s: %s\n", qcopt_lib_path,
-                        dlerror());
-            }
-        } else {
-            qcopt_handle_unavailable = 1;
-            ALOGE("Property ro.vendor.extension_library does not exist.");
+    if (property_get("ro.vendor.extension_library", qcopt_lib_path,
+                NULL)) {
+        handle = dlopen(qcopt_lib_path, RTLD_NOW);
+        if (!handle) {
+            ALOGE("Unable to open %s: %s\n", qcopt_lib_path,
+                    dlerror());
         }
     }
 
-    return qcopt_handle;
+    return handle;
+}
+
+static void __attribute__ ((constructor)) initialize(void)
+{
+    qcopt_handle = get_qcopt_handle();
+
+    if (!qcopt_handle) {
+        ALOGE("Failed to get qcopt handle.\n");
+    } else {
+        /*
+         * qc-opt handle obtained. Get the perflock acquire/release
+         * function pointers.
+         */
+        perf_lock_acq = dlsym(qcopt_handle, "perf_lock_acq");
+
+        if (!perf_lock_acq) {
+            ALOGE("Unable to get perf_lock_acq function handle.\n");
+        }
+
+        perf_lock_rel = dlsym(qcopt_handle, "perf_lock_rel");
+
+        if (!perf_lock_rel) {
+            ALOGE("Unable to get perf_lock_rel function handle.\n");
+        }
+    }
+}
+
+static void __attribute__ ((destructor)) cleanup(void)
+{
+    if (qcopt_handle) {
+        if (dlclose(qcopt_handle))
+            ALOGE("Error occurred while closing qc-opt library.");
+    }
 }
 
 int sysfs_read(char *path, char *s, int num_bytes)
@@ -154,49 +173,44 @@ int get_scaling_governor(char governor[], int size)
 
 void perform_hint_action(int hint_id, int resource_values[], int num_resources)
 {
-    void *handle;
-
-    if ((handle = get_qcopt_handle())) {
-        if (!perf_lock_acq_unavailable && !perf_lock_rel_unavailable) {
-            perf_lock_acq = dlsym(handle, "perf_lock_acq");
-
-            if (perf_lock_acq) {
-                /* Acquire an indefinite lock for the requested resources. */
-                int lock_handle = perf_lock_acq(0, 0, resource_values,
+    if (qcopt_handle) {
+        if (perf_lock_acq) {
+            /* Acquire an indefinite lock for the requested resources. */
+            int lock_handle = perf_lock_acq(0, 0, resource_values,
                     num_resources);
 
-                if (lock_handle == -1) {
-                    ALOGE("Failed to acquire lock.");
-                } else {
-                    /* Add this handle to our internal hint-list. */
-                    struct hint_data *new_hint =
-                        (struct hint_data *)malloc(sizeof(struct hint_data));
+            if (lock_handle == -1) {
+                ALOGE("Failed to acquire lock.");
+            } else {
+                /* Add this handle to our internal hint-list. */
+                struct hint_data *new_hint =
+                    (struct hint_data *)malloc(sizeof(struct hint_data));
 
-                    if (new_hint) {
-                        if (!active_hint_list_head.compare) {
-                            active_hint_list_head.compare =
-                                (int (*)(void *, void *))hint_compare;
-                            active_hint_list_head.dump = (void (*)(void *))hint_dump;
-                        }
+                if (new_hint) {
+                    if (!active_hint_list_head.compare) {
+                        active_hint_list_head.compare =
+                            (int (*)(void *, void *))hint_compare;
+                        active_hint_list_head.dump = (void (*)(void *))hint_dump;
+                    }
 
-                        new_hint->hint_id = hint_id;
-                        new_hint->perflock_handle = lock_handle;
+                    new_hint->hint_id = hint_id;
+                    new_hint->perflock_handle = lock_handle;
 
-                        if (add_list_node(&active_hint_list_head, new_hint) == NULL) {
-                            free(new_hint);
-                            /* Can't keep track of this lock. Release it. */
-                            perf_lock_rel(lock_handle);
-                            ALOGE("Failed to process hint.");
-                        }
-                    } else {
+                    if (add_list_node(&active_hint_list_head, new_hint) == NULL) {
+                        free(new_hint);
                         /* Can't keep track of this lock. Release it. */
-                        perf_lock_rel(lock_handle);
+                        if (perf_lock_rel)
+                            perf_lock_rel(lock_handle);
+
                         ALOGE("Failed to process hint.");
                     }
+                } else {
+                    /* Can't keep track of this lock. Release it. */
+                    if (perf_lock_rel)
+                        perf_lock_rel(lock_handle);
+
+                    ALOGE("Failed to process hint.");
                 }
-            } else {
-                perf_lock_acq_unavailable = 1;
-                ALOGE("Can't commit hint action. Lock acquire function is not available.");
             }
         }
     }
@@ -204,122 +218,35 @@ void perform_hint_action(int hint_id, int resource_values[], int num_resources)
 
 void undo_hint_action(int hint_id)
 {
-    void *handle;
+    if (qcopt_handle) {
+        if (perf_lock_rel) {
+            /* Get hint-data associated with this hint-id */
+            struct list_node *found_node;
+            struct hint_data temp_hint_data = {
+                .hint_id = hint_id
+            };
 
-    if ((handle = get_qcopt_handle())) {
-        if (!perf_lock_acq_unavailable && !perf_lock_rel_unavailable) {
-            perf_lock_rel = dlsym(handle, "perf_lock_rel");
+            found_node = find_node(&active_hint_list_head,
+                    &temp_hint_data);
 
-            if (perf_lock_rel) {
-                /* Get hint-data associated with this hint-id */
-                struct list_node *found_node;
-                struct hint_data temp_hint_data = {
-                    .hint_id = hint_id
-                };
+            if (found_node) {
+                /* Release this lock. */
+                struct hint_data *found_hint_data =
+                    (struct hint_data *)(found_node->data);
 
-                if ((found_node = find_node(&active_hint_list_head,
-                    &temp_hint_data)) != NULL) {
-                    /* Release this lock. */
-                    struct hint_data *found_hint_data =
-                        (struct hint_data *)(found_node->data);
-
-                    if (found_hint_data &&
-                        (perf_lock_rel(found_hint_data->perflock_handle) == -1)) {
+                if (found_hint_data) {
+                    if (perf_lock_rel(found_hint_data->perflock_handle) == -1)
                         ALOGE("Perflock release failed.");
-                    } else {
-                        ALOGI("Perflock released.");
-                    }
-
-                    if (found_node->data) {
-                        /* We can free the hint-data for this node. */
-                        free(found_node->data);
-                    }
-
-                    remove_list_node(&active_hint_list_head, found_node);
-                } else {
-                    ALOGE("Invalid hint ID.");
                 }
+
+                if (found_node->data) {
+                    /* We can free the hint-data for this node. */
+                    free(found_node->data);
+                }
+
+                remove_list_node(&active_hint_list_head, found_node);
             } else {
-                perf_lock_rel_unavailable = 1;
-                ALOGE("Can't undo hint action. Lock release function is not available.");
-            }
-        }
-    }
-}
-
-void vote_ondemand_io_busy_off()
-{
-    void *handle;
-
-    if ((handle = get_qcopt_handle())) {
-        if (!perf_vote_ondemand_io_busy_unavailable) {
-            perf_vote_turnoff_ondemand_io_busy = dlsym(handle,
-                    "perf_vote_turnoff_ondemand_io_busy");
-
-            if (perf_vote_turnoff_ondemand_io_busy) {
-                /* Vote to turn io_is_busy off */
-                perf_vote_turnoff_ondemand_io_busy(1);
-            } else {
-                perf_vote_ondemand_io_busy_unavailable = 1;
-                ALOGE("Can't set io_busy_status.");
-            }
-        }
-    }
-}
-
-void unvote_ondemand_io_busy_off()
-{
-    void *handle;
-
-    if ((handle = get_qcopt_handle())) {
-        if (!perf_vote_ondemand_io_busy_unavailable) {
-            perf_vote_turnoff_ondemand_io_busy = dlsym(handle,
-                    "perf_vote_turnoff_ondemand_io_busy");
-
-            if (perf_vote_turnoff_ondemand_io_busy) {
-                /* Remove vote to turn io_busy off. */
-                perf_vote_turnoff_ondemand_io_busy(0);
-            } else {
-                perf_vote_ondemand_io_busy_unavailable = 1;
-                ALOGE("Can't set io_busy_status.");
-            }
-        }
-    }
-}
-
-void vote_ondemand_sdf_low()
-{
-    void *handle;
-
-    if ((handle = get_qcopt_handle())) {
-        if (!perf_vote_ondemand_sdf_unavailable) {
-            perf_vote_lower_ondemand_sdf = dlsym(handle,
-                    "perf_vote_lower_ondemand_sdf");
-
-            if (perf_vote_lower_ondemand_sdf) {
-                perf_vote_lower_ondemand_sdf(1);
-            } else {
-                perf_vote_ondemand_sdf_unavailable = 1;
-                ALOGE("Can't set sampling_down_factor.");
-            }
-        }
-    }
-}
-
-void unvote_ondemand_sdf_low() {
-    void *handle;
-
-    if ((handle = get_qcopt_handle())) {
-        if (!perf_vote_ondemand_sdf_unavailable) {
-            perf_vote_lower_ondemand_sdf = dlsym(handle,
-                    "perf_vote_lower_ondemand_sdf");
-
-            if (perf_vote_lower_ondemand_sdf) {
-                /* Remove vote to lower sampling down factor. */
-                perf_vote_lower_ondemand_sdf(0);
-            } else {
-                perf_vote_ondemand_sdf_unavailable = 1;
-                ALOGE("Can't set sampling_down_factor.");
+                ALOGE("Invalid hint ID.");
             }
         }
     }
