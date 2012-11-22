@@ -311,16 +311,6 @@ MM_AUDIO += libOmxEvrcEnc
 MM_AUDIO += libOmxMp3Dec
 MM_AUDIO += libOmxQcelp13Enc
 MM_AUDIO += libOmxAc3HwDec
-MM_AUDIO += mm-adec-omxaac-test
-MM_AUDIO += mm-adec-omxmp3-test
-MM_AUDIO += mm-aenc-omxaac-test
-MM_AUDIO += mm-aenc-omxamr-test
-MM_AUDIO += mm-aenc-omxevrc-test
-MM_AUDIO += mm-aenc-omxqcelp13-test
-MM_AUDIO += sw-adec-omxaac-test
-MM_AUDIO += sw-adec-omxamr-test
-MM_AUDIO += sw-adec-omxamrwb-test
-MM_AUDIO += sw-adec-omxmp3-test
 
 #MM_CORE
 MM_CORE := libmm-omxcore
