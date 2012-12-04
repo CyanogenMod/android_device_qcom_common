@@ -119,7 +119,7 @@ case "$target" in
         esac
         ;;
     "msm8960")
-        if[ "$platformid" != "116" && "$platformid" != "142"]; then
+        if [ "$platformid" != "116" ] && [ "$platformid" != "142" ]; then
             start_sensors
         fi
         case "$baseband" in
