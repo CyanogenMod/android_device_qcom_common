@@ -98,21 +98,27 @@ load_wifiKM()
 case "$target" in
     msm8974*)
 
-      # At first boot move cfg80211.ko module to pronto location;
-      # the default cfg80211.ko is for wcnss solution
-      if [ ! -L /system/lib/modules/cfg80211.ko ]; then
-          mv /system/lib/modules/cfg80211.ko /system/lib/modules/pronto/
+      # Populate the writable driver configuration file
+      if [ ! -e /data/misc/wifi/WCNSS_qcom_cfg.ini ]; then
+          cp /system/etc/wifi/WCNSS_qcom_cfg.ini /data/misc/wifi/WCNSS_qcom_cfg.ini
+          chown system:wifi /data/misc/wifi/WCNSS_qcom_cfg.ini
+          chmod 660 /data/misc/wifi/WCNSS_qcom_cfg.ini
       fi
-
-      # link pronto modules
-      rm /system/lib/modules/wlan.ko
-      rm /system/lib/modules/cfg80211.ko
-      ln -s /system/lib/modules/pronto/pronto_wlan.ko /system/lib/modules/wlan.ko
-      ln -s /system/lib/modules/pronto/cfg80211.ko /system/lib/modules/cfg80211.ko
 
       # The property below is used in Qcom SDK for softap to determine
       # the wifi driver config file
       setprop wlan.driver.config /data/misc/wifi/WCNSS_qcom_cfg.ini
+
+      # Populate the NV configuration file
+      #  from factory file in /persist if it exists
+      #  from template file if factory file does not exist
+      if [ ! -e /data/misc/wifi/WCNSS_qcom_wlan_nv.bin ]; then
+          if [ -f /persist/WCNSS_qcom_wlan_nv.bin ]; then
+              cp /persist/WCNSS_qcom_wlan_nv.bin /data/misc/wifi/WCNSS_qcom_wlan_nv.bin
+          else
+              cp /system/etc/wifi/WCNSS_qcom_wlan_nv.bin /data/misc/wifi/WCNSS_qcom_wlan_nv.bin
+          fi
+      fi
 
       # Load kernel module in a separate process
       load_wifiKM &
