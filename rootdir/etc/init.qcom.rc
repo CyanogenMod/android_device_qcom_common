@@ -263,6 +263,11 @@ service cnd /system/bin/cnd
     class late_start
     socket cnd stream 660 root inet
 
+service irsc_util /system/bin/logwrapper /system/bin/irsc_util "/etc/sec_config"
+    class main
+    user root
+    oneshot
+
 service rmt_storage /system/bin/rmt_storage
     class core
     user root
