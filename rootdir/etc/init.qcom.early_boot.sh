@@ -109,7 +109,7 @@ case "$1" in
                 setprop ro.sf.lcd_density 160
                 ;;
             *)
-                setprop ro.sf.lcd_density 340
+                setprop ro.sf.lcd_density 320
                 ;;
         esac
         ;;
@@ -117,7 +117,7 @@ case "$1" in
     "msm8610" | "msm8226")
         case "$soc_hwplatform" in
             *)
-                setprop ro.sf.lcd_density 340
+                setprop ro.sf.lcd_density 320
                 ;;
         esac
         ;;
