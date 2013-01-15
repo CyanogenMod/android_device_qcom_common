@@ -147,7 +147,7 @@ on boot
 
 # import cne init file
 on post-fs
-    export_rc /persist/init.cne.rc
+    export LD_PRELOAD /system/lib/libNimsWrap.so
 
 # msm specific files that need to be created on /data
 on post-fs-data
