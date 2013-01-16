@@ -220,6 +220,7 @@ LIBCAMERA += libcamera
 LIBCAMERA += libmmcamera_interface
 LIBCAMERA += libmmcamera_interface2
 LIBCAMERA += libmmjpeg_interface
+LIBCAMERA += libqomx_core
 LIBCAMERA += mm-qcamera-app
 
 #LIBCOPYBIT
