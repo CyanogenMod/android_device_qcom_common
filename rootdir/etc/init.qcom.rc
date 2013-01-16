@@ -295,7 +295,7 @@ service bluetoothd /system/bin/logwrapper /system/bin/bluetoothd -n
     socket dbus_bluetooth stream 660 bluetooth bluetooth
     # init.rc does not yet support applying capabilities, so run as root and
     # let bluetoothd drop uid to bluetooth with the right linux capabilities
-    group bluetooth net_bt_admin misc
+    group bluetooth net_bt_admin misc net_bt_stack
     disabled
 
 service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh
