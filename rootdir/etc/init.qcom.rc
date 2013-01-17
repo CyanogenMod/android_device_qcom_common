@@ -316,7 +316,7 @@ service bt-sap /system/bin/sapd 15
 service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
     class late_start
     user root
-    group bluetooth net_bt_admin qcom_diag
+    group bluetooth net_bt_admin misc net_bt_stack qcom_diag
     disabled
     oneshot
 
