@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -55,6 +55,10 @@
 #define MPDECISION_SLACK_MAX_NODE "/sys/module/msm_mpdecision/slack_time_max_us"
 #define MPDECISION_SLACK_MIN_NODE "/sys/module/msm_mpdecision/slack_time_min_us"
 
+#define ONDEMAND_GOVERNOR "ondemand"
+#define INTERACTIVE_GOVERNOR "interactive"
+#define MSMDCVS_GOVERNOR "msm-dcvs"
+
 static int saved_ondemand_sampling_down_factor = 4;
 static int saved_ondemand_io_is_busy_status = 1;
 static int saved_dcvs_cpu0_slack_max = -1;
@@ -104,20 +108,20 @@ static void process_video_decode_hint(void *metadata)
     }
 
     if (video_decode_metadata.state == 1) {
-        if ((strlen(governor) == strlen("ondemand")) &&
-                (strncmp(governor, "ondemand", strlen("ondemand")) == 0)) {
-        } else if ((strlen(governor) == strlen("interactive")) &&
-                (strncmp(governor, "interactive", strlen("interactive")) == 0)) {
+        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
+        } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             int resource_values[] = {TR_MS_30, HISPEED_LOAD_90, HS_FREQ_1026};
 
             perform_hint_action(video_decode_metadata.hint_id,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         }
     } else if (video_decode_metadata.state == 0) {
-        if ((strlen(governor) == strlen("ondemand")) &&
-                (strncmp(governor, "ondemand", strlen("ondemand")) == 0)) {
-        } else if ((strlen(governor) == strlen("interactive")) &&
-                (strncmp(governor, "interactive", strlen("interactive")) == 0)) {
+        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
+        } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(video_decode_metadata.hint_id);
         }
     }
@@ -150,25 +154,25 @@ static void process_video_encode_hint(void *metadata)
     }
 
     if (video_encode_metadata.state == 1) {
-        if ((strlen(governor) == strlen("ondemand")) &&
-                (strncmp(governor, "ondemand", strlen("ondemand")) == 0)) {
+        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
             int resource_values[] = {IO_BUSY_OFF, SAMPLING_DOWN_FACTOR_1};
 
             perform_hint_action(video_encode_metadata.hint_id,
                 resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
-        } else if ((strlen(governor) == strlen("interactive")) &&
-                (strncmp(governor, "interactive", strlen("interactive")) == 0)) {
+        } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             int resource_values[] = {TR_MS_30, HISPEED_LOAD_90, HS_FREQ_1026};
 
             perform_hint_action(video_encode_metadata.hint_id,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         }
     } else if (video_encode_metadata.state == 0) {
-        if ((strlen(governor) == strlen("ondemand")) &&
-                (strncmp(governor, "ondemand", strlen("ondemand")) == 0)) {
+        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
             undo_hint_action(video_encode_metadata.hint_id);
-        } else if ((strlen(governor) == strlen("interactive")) &&
-                (strncmp(governor, "interactive", strlen("interactive")) == 0)) {
+        } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(video_encode_metadata.hint_id);
         }
     }
@@ -228,20 +232,20 @@ void set_interactive(struct power_module *module, int on)
 
     if (!on) {
         /* Display off. */
-        if ((strlen(governor) == strlen("ondemand")) &&
-                (strncmp(governor, "ondemand", strlen("ondemand")) == 0)) {
+        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
             int resource_values[] = {MS_500};
 
             perform_hint_action(DISPLAY_STATE_HINT_ID,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
-        } else if ((strlen(governor) == strlen("interactive")) &&
-                (strncmp(governor, "interactive", strlen("interactive")) == 0)) {
+        } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             int resource_values[] = {TR_MS_500};
 
             perform_hint_action(DISPLAY_STATE_HINT_ID,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
-        } else if ((strlen(governor) == strlen("msm-dcvs")) &&
-                (strncmp(governor, "msm-dcvs", strlen("msm-dcvs")) == 0)) {
+        } else if ((strncmp(governor, MSMDCVS_GOVERNOR, strlen(MSMDCVS_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(MSMDCVS_GOVERNOR))) {
             if (saved_interactive_mode == 1){
                 /* Display turned off. */
                 if (sysfs_read(DCVS_CPU0_SLACK_MAX_NODE, tmp_str, NODE_MAX - 1)) {
@@ -297,7 +301,7 @@ void set_interactive(struct power_module *module, int on)
                     }
                 }
 
-                if (saved_dcvs_cpu0_slack_max != -1) {
+                if (saved_dcvs_cpu0_slack_min != -1) {
                     snprintf(tmp_str, NODE_MAX, "%d", 10 * saved_dcvs_cpu0_slack_min);
 
                     if (sysfs_write(DCVS_CPU0_SLACK_MIN_NODE, tmp_str) != 0) {
@@ -338,14 +342,14 @@ void set_interactive(struct power_module *module, int on)
         }
     } else {
         /* Display on. */
-        if ((strlen(governor) == strlen("ondemand")) &&
-                (strncmp(governor, "ondemand", strlen("ondemand")) == 0)) {
+        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
-        } else if ((strlen(governor) == strlen("interactive")) &&
-                (strncmp(governor, "interactive", strlen("interactive")) == 0)) {
+        } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
-        } else if ((strlen(governor) == strlen("msm-dcvs")) &&
-                (strncmp(governor, "mms-dcvs", strlen("msm-dcvs")) == 0)) {
+        } else if ((strncmp(governor, MSMDCVS_GOVERNOR, strlen(MSMDCVS_GOVERNOR)) == 0) && 
+                (strlen(governor) == strlen(MSMDCVS_GOVERNOR))) {
             if (saved_interactive_mode == -1 || saved_interactive_mode == 0) {
                 /* Display turned on. Restore if possible. */
                 if (saved_dcvs_cpu0_slack_max != -1) {
@@ -360,7 +364,7 @@ void set_interactive(struct power_module *module, int on)
                     }
                 }
 
-                if (saved_dcvs_cpu0_slack_max != -1) {
+                if (saved_dcvs_cpu0_slack_min != -1) {
                     snprintf(tmp_str, NODE_MAX, "%d", saved_dcvs_cpu0_slack_min);
 
                     if (sysfs_write(DCVS_CPU0_SLACK_MIN_NODE, tmp_str) != 0) {
