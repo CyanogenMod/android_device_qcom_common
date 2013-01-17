@@ -554,6 +554,11 @@ PRODUCT_COPY_FILES += \
     system/bluetooth/data/input.conf:system/etc/bluetooth/input.conf \
     system/bluetooth/data/network.conf:system/etc/bluetooth/network.conf \
 
+ifeq ($(BOARD_HAVE_BLUETOOTH_BLUEZ),true)
+PRODUCT_COPY_FILES += \
+    system/bluetooth/data/stack.conf:system/etc/bluetooth/stack.conf
+endif # BOARD_HAVE_BLUETOOTH_BLUEZ
+
 PRODUCT_COPY_FILES += device/qcom/common/media/media_profiles.xml:system/etc/media_profiles.xml \
                       device/qcom/common/media/media_codecs.xml:system/etc/media_codecs.xml
 
