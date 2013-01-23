@@ -96,8 +96,7 @@ C2DCC := libc2dcolorconvert
 CIMAX := libcimax_spi
 
 #CONNECTIVITY
-CONNECTIVITY := cnd
-CONNECTIVITY += librefcne
+CONNECTIVITY := libcnefeatureconfig
 
 #CURL
 CURL := libcurl
