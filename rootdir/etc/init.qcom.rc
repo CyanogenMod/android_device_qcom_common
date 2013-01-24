@@ -499,7 +499,7 @@ service xtwifi_client /system/bin/xtwifi-client
 service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     class late_start
     user root
-    group system qcom_oncrpc
+    group system fm_radio
     disabled
     oneshot
 
