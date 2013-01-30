@@ -34,7 +34,8 @@ on init
     # See storage config details at http://source.android.com/tech/storage/
     mkdir /mnt/shell/emulated 0700 shell shell
     mkdir /storage 0550 system sdcard_r
-    mkdir /storage/emulated 0000 root root
+    mkdir /storage/emulated 0555 root root
+    mkdir /storage/emulated/legacy 0555 root root
     mkdir /storage/sdcard1 0000 system system
 
     export EXTERNAL_STORAGE /storage/emulated/legacy
@@ -46,7 +47,6 @@ on init
     symlink /storage/emulated/legacy /sdcard
     symlink /storage/emulated/legacy /mnt/sdcard
     symlink /storage/emulated/legacy /storage/sdcard0
-    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -644,6 +644,11 @@ service sdcard /system/bin/sdcard /data/media /mnt/shell/emulated 1023 1023
 
 on property:ro.fuse_sdcard=true
     start sdcard
+
+# Binding fuse mount point to /storage/emulated/legacy
+on property:init.svc.sdcard=running
+    wait /mnt/shell/emulated/0
+    mount none /mnt/shell/emulated/0 /storage/emulated/legacy bind
 
 # This will make sure that sdcard service starts as late_start.
 on nonencrypted
