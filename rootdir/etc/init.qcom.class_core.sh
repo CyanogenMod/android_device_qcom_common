@@ -182,6 +182,14 @@ case "$fake_batt_capacity" in
 	"msm8974")
         echo "$fake_batt_capacity" > /sys/module/qpnp_bms/parameters/bms_fake_battery
         ;;
+
+	"msm8226")
+        echo "$fake_batt_capacity" > /sys/module/qpnp_bms/parameters/bms_fake_battery
+        ;;
+
+	"msm8610")
+        echo "$fake_batt_capacity" > /sys/module/qpnp_bms/parameters/bms_fake_battery
+        ;;
     esac
 esac
 
