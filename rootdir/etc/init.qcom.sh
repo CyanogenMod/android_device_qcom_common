@@ -98,8 +98,8 @@ esac
 
 case "$target" in
         "msm8960" | "msm8974")
+        start location_mq
         if [ "$izat_premium_enablement" -eq 1 ]; then
-            start location_mq
             start xtwifi_inet
             start xtwifi_client
         fi
