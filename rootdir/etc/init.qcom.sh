@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2013, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -33,21 +33,23 @@ platformid=`cat /sys/devices/system/soc/soc0/id`
 #
 start_sensors()
 {
-    mkdir -p /data/system/sensors
-    touch /data/system/sensors/settings
-    chmod 775 /data/system/sensors
-    chmod 664 /data/system/sensors/settings
-    chown system /data/system/sensors/settings
+    if [ -c /dev/msm_dsps -o -c /dev/sensors ]; then
+        mkdir -p /data/system/sensors
+        touch /data/system/sensors/settings
+        chmod 775 /data/system/sensors
+        chmod 664 /data/system/sensors/settings
+        chown system /data/system/sensors/settings
 
-    mkdir -p /data/misc/sensors
-    chmod 775 /data/misc/sensors
+        mkdir -p /data/misc/sensors
+        chmod 775 /data/misc/sensors
 
-    if [ ! -s /data/system/sensors/settings ]; then
-        # If the settings file is empty, enable sensors HAL
-        # Otherwise leave the file with it's current contents
-        echo 1 > /data/system/sensors/settings
+        if [ ! -s /data/system/sensors/settings ]; then
+            # If the settings file is empty, enable sensors HAL
+            # Otherwise leave the file with it's current contents
+            echo 1 > /data/system/sensors/settings
+        fi
+        start sensors
     fi
-    start sensors
 }
 
 start_battery_monitor()
@@ -102,6 +104,8 @@ case "$target" in
         fi
 esac
 
+start_sensors
+
 case "$target" in
     "msm7630_surf" | "msm7630_1x" | "msm7630_fusion")
         value=`cat /sys/devices/system/soc/soc0/hw_platform`
@@ -114,17 +118,13 @@ case "$target" in
         platformvalue=`cat /sys/devices/system/soc/soc0/hw_platform`
         case "$platformvalue" in
             "Fluid")
-                start_sensors
                 start profiler_daemon;;
         esac
         ;;
     "msm8960")
-        if [ "$platformid" != "116" ] && [ "$platformid" != "142" ]; then
-            start_sensors
-        fi
         case "$baseband" in
             "msm")
-		start_battery_monitor;;
+                start_battery_monitor;;
         esac
 
         platformvalue=`cat /sys/devices/system/soc/soc0/hw_platform`
@@ -134,8 +134,5 @@ case "$target" in
              "Liquid")
                  start profiler_daemon;;
         esac
-        ;;
-    "msm8974")
-        start_sensors
         ;;
 esac
