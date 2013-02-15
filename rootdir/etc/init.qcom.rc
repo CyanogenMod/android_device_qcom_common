@@ -145,10 +145,6 @@ on boot
     # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
-# import cne init file
-on post-fs
-    export LD_PRELOAD /system/lib/libNimsWrap.so
-
 # msm specific files that need to be created on /data
 on post-fs-data
     # we will remap this as /mnt/sdcard with the sdcard fuse tool
