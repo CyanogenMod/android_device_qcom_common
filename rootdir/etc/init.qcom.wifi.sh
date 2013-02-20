@@ -97,7 +97,110 @@ load_wifiKM()
 
 case "$target" in
     msm8974*)
+# auto detect ar6004-sdio card
+# for ar6004-sdio card, the vendor id and device id is as the following
+# vendor id  device id
+#    0x0271     0x0400
+#    0x0271     0x0401
+      sdio_vendors=`echo \`cat /sys/bus/mmc/devices/*/*/vendor\``
+      sdio_devices=`echo \`cat /sys/bus/mmc/devices/*/*/device\``
+      ven_idx=0
 
+      for vendor in $sdio_vendors; do
+          case "$vendor" in
+          "0x0271")
+              dev_idx=0
+              for device in $sdio_devices; do
+                  if [ $ven_idx -eq $dev_idx ]; then
+                      case "$device" in
+                      "0x0400" | "0x0401")
+                          wlanchip="AR6004-SDIO"
+                          ;;
+                      *)
+                          ;;
+                      esac
+                  fi
+                  dev_idx=$(( $dev_idx + 1))
+              done
+              ;;
+          *)
+              ;;
+          esac
+          ven_idx=$(( $ven_idx + 1))
+      done
+# auto detect ar6004-sdio card end
+
+# for ar6004-usb card, the vendor id and device id is as the following
+# vendor id  product id
+#    0x0cf3     0x9374
+#    0x0cf3     0x9372
+      usb_vendors=`echo \`cat /sys/bus/usb/devices/*/*/idVendor\``
+      usb_products=`echo \`cat /sys/bus/usb/devices/*/*/idProduct\``
+      ven_idx=0
+
+      for vendor in $usb_vendors; do
+          case "$vendor" in
+          "0cf3")
+              dev_idx=0
+              for product in $usb_products; do
+                  if [ $ven_idx -eq $dev_idx ]; then
+                      case "$product" in
+                      "9374" | "9372")
+                          wlanchip="AR6004-USB"
+                          ;;
+                      *)
+                          ;;
+                      esac
+                  fi
+                  dev_idx=$(( $dev_idx + 1))
+              done
+              ;;
+          *)
+              ;;
+          esac
+          ven_idx=$(( $ven_idx + 1))
+      done
+# auto detect ar6004-usb card end
+
+      echo "The WLAN Chip ID is $wlanchip"
+      case "$wlanchip" in
+      "AR6004-USB")
+      setprop wlan.driver.ath 2
+      rm  /system/lib/modules/wlan.ko
+      ln -s /system/lib/modules/ath6kl-3.5/ath6kl_usb.ko \
+		/system/lib/modules/wlan.ko
+      rm /system/etc/firmware/ath6k/AR6004/hw1.3/fw.ram.bin
+      rm /system/etc/firmware/ath6k/AR6004/hw1.3/bdata.bin
+      ln -s /system/etc/firmware/ath6k/AR6004/hw1.3/fw.ram.bin_usb \
+		/system/etc/firmware/ath6k/AR6004/hw1.3/fw.ram.bin
+      ln -s /system/etc/firmware/ath6k/AR6004/hw1.3/bdata.bin_usb \
+		/system/etc/firmware/ath6k/AR6004/hw1.3/bdata.bin
+      rm /system/etc/firmware/ath6k/AR6004/hw3.0/bdata.bin
+      ln -s /system/etc/firmware/ath6k/AR6004/hw3.0/bdata.bin_usb \
+                /system/etc/firmware/ath6k/AR6004/hw3.0/bdata.bin
+      ;;
+
+      "AR6004-SDIO")
+      setprop wlan.driver.ath 2
+      rm  /system/lib/modules/wlan.ko
+      ln -s /system/lib/modules/ath6kl-3.5/ath6kl_sdio.ko \
+		/system/lib/modules/wlan.ko
+      rm /system/etc/firmware/ath6k/AR6004/hw1.3/fw.ram.bin
+      rm /system/etc/firmware/ath6k/AR6004/hw1.3/bdata.bin
+      ln -s /system/etc/firmware/ath6k/AR6004/hw1.3/fw.ram.bin_sdio \
+		/system/etc/firmware/ath6k/AR6004/hw1.3/fw.ram.bin
+      ln -s /system/etc/firmware/ath6k/AR6004/hw1.3/bdata.bin_sdio \
+		/system/etc/firmware/ath6k/AR6004/hw1.3/bdata.bin
+      ln -s /system/etc/firmware/ath6k/AR6004/hw3.0/bdata.bin_sdio \
+                /system/etc/firmware/ath6k/AR6004/hw3.0/bdata.bin
+      ;;
+
+      *)
+      echo "*** WI-FI chip ID is not specified in /persist/wlan_chip_id **"
+      echo "*** Use the default WCN driver.                             **"
+      setprop wlan.driver.ath 0
+      rm  /system/lib/modules/wlan.ko
+      ln -s /system/lib/modules/pronto/pronto_wlan.ko /system/lib/modules/wlan.ko
       # Populate the writable driver configuration file
       if [ ! -e /data/misc/wifi/WCNSS_qcom_cfg.ini ]; then
           cp /system/etc/wifi/WCNSS_qcom_cfg.ini /data/misc/wifi/WCNSS_qcom_cfg.ini
@@ -122,6 +225,8 @@ case "$target" in
 
       # Load kernel module in a separate process
       load_wifiKM &
+      ;;
+      esac
       ;;
 
     msm8960*)
