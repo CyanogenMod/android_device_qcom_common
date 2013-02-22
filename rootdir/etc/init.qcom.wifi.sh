@@ -97,6 +97,16 @@ load_wifiKM()
 
 case "$target" in
     msm8974*)
+
+# Check whether device is plugged on the HSIC bus
+# Currently HSIC bus will be the first index
+
+    if [ -e /sys/bus/platform/drivers/msm_hsic_host ]; then
+       if [ ! -L /sys/bus/usb/devices/1-1 ]; then
+           echo msm_hsic_host > /sys/bus/platform/drivers/msm_hsic_host/unbind
+       fi
+    fi
+
 # auto detect ar6004-sdio card
 # for ar6004-sdio card, the vendor id and device id is as the following
 # vendor id  device id
