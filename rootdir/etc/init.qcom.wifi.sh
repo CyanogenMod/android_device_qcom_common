@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
+# Copyright (c) 2010-2013, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -12,7 +12,7 @@
 #       with the distribution.
 #     * Neither the name of The Linux Foundation nor the names of its
 #       contributors may be used to endorse or promote products derived
-#      from this software without specific prior written permission.
+#       from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
 # WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -221,17 +221,6 @@ case "$target" in
       # The property below is used in Qcom SDK for softap to determine
       # the wifi driver config file
       setprop wlan.driver.config /data/misc/wifi/WCNSS_qcom_cfg.ini
-
-      # Populate the NV configuration file
-      #  from factory file in /persist if it exists
-      #  from template file if factory file does not exist
-      if [ ! -e /data/misc/wifi/WCNSS_qcom_wlan_nv.bin ]; then
-          if [ -f /persist/WCNSS_qcom_wlan_nv.bin ]; then
-              cp /persist/WCNSS_qcom_wlan_nv.bin /data/misc/wifi/WCNSS_qcom_wlan_nv.bin
-          else
-              cp /system/etc/wifi/WCNSS_qcom_wlan_nv.bin /data/misc/wifi/WCNSS_qcom_wlan_nv.bin
-          fi
-      fi
 
       # Load kernel module in a separate process
       load_wifiKM &
