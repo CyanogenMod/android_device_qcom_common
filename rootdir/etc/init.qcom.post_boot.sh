@@ -108,6 +108,7 @@ case "$target" in
          echo 1 > /sys/module/pm_8x60/modes/cpu2/standalone_power_collapse/idle_enabled
          echo 1 > /sys/module/pm_8x60/modes/cpu3/standalone_power_collapse/idle_enabled
          echo 1 > /sys/module/pm_8x60/modes/cpu0/power_collapse/idle_enabled
+	 echo 0 > /sys/module/msm_thermal/core_control/enabled
          echo 1 > /sys/devices/system/cpu/cpu1/online
          echo 1 > /sys/devices/system/cpu/cpu2/online
          echo 1 > /sys/devices/system/cpu/cpu3/online
@@ -140,6 +141,7 @@ case "$target" in
          chown system /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
          chown system /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
          chown system /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+	 echo 1 > /sys/module/msm_thermal/core_control/enabled
          chown root.system /sys/devices/system/cpu/mfreq
          chmod 220 /sys/devices/system/cpu/mfreq
          chown root.system /sys/devices/system/cpu/cpu1/online
@@ -265,6 +267,7 @@ case "$target" in
                 echo 1 > /sys/module/pm_8x60/modes/cpu3/retention/idle_enabled
             ;;
         esac
+        echo 0 > /sys/module/msm_thermal/core_control/enabled
         echo 1 > /sys/devices/system/cpu/cpu1/online
         echo 1 > /sys/devices/system/cpu/cpu2/online
         echo 1 > /sys/devices/system/cpu/cpu3/online
@@ -288,6 +291,7 @@ case "$target" in
         echo 300000 > /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
         chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
         chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        echo 1 > /sys/module/msm_thermal/core_control/enabled
         chown root.system /sys/devices/system/cpu/mfreq
         chmod 220 /sys/devices/system/cpu/mfreq
         chown root.system /sys/devices/system/cpu/cpu1/online
