@@ -123,7 +123,7 @@ case "$target" in
          echo 70 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core
          echo 3 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core
          echo 918000 > /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq
-         echo 918000 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
+         echo 1026000 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
          echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
          chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
          chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
@@ -271,7 +271,7 @@ case "$target" in
         echo 70 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core
         echo 3 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core
         echo 918000 > /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq
-        echo 918000 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
+        echo 1026000 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
         echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
         echo 300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
         echo 300000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
