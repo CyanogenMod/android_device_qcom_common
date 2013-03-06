@@ -498,13 +498,13 @@ service gpsone_daemon /system/bin/gpsone_daemon
 service quipc_igsn /system/bin/quipc_igsn
     class late_start
     user gps
-    group inet gps
+    group inet gps qcom_diag
     disabled
 
 service quipc_main /system/bin/quipc_main
     class late_start
     user gps
-    group gps net_admin wifi inet
+    group gps net_admin wifi inet qcom_diag
     disabled
 
 service location_mq /system/bin/location-mq
@@ -528,7 +528,7 @@ service xtwifi_client /system/bin/xtwifi-client
 service lowi-server /system/bin/lowi-server
     class late_start
     user gps
-    group gps net_admin wifi inet
+    group gps net_admin wifi inet qcom_diag
     disabled
 
 service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
