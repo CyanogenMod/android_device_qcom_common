@@ -680,3 +680,18 @@ on property:persist.sys.ssr.restart_level=1
     write /sys/module/subsystem_restart/parameters/restart_level 1
 on property:persist.sys.ssr.restart_level=3
     write /sys/module/subsystem_restart/parameters/restart_level 3
+
+# Define fastmmi
+service fastmmi /system/bin/mmi
+    user root
+    group root
+    disabled
+    oneshot
+
+service fastmmisrv /system/bin/sh /init.qcom.factory.sh
+    user root
+    disabled
+    oneshot
+
+on ffbm
+    start fastmmisrv
