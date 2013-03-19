@@ -33,9 +33,14 @@ serial="$2"
 PATH=/sbin:/system/sbin:/system/bin:/system/xbin
 export PATH
 
+mount_needed=false;
+
+if [ ! -f /system/etc/boot_fixup ];then
 # This should be the first command
 # remount system as read-write.
-mount -o rw,remount,barrier=1 /system
+  mount -o rw,remount,barrier=1 /system
+  mount_needed=true;
+fi
 
 # **** WARNING *****
 # This runs in a single-threaded, critical path portion
@@ -75,7 +80,10 @@ if [ -f /system/etc/usf_settings.sh ]; then
   /system/bin/sh /system/etc/usf_settings.sh
 fi
 
+touch /system/etc/boot_fixup
+
+if $mount_needed ;then
 # This should be the last command
 # remount system as read-only.
-mount -o ro,remount,barrier=1 /system
-
+  mount -o ro,remount,barrier=1 /system
+fi
