@@ -30,6 +30,7 @@ QSD8K_BOARD_PLATFORMS := qsd8k
 #ALSA
 ALSA_HARDWARE := alsa.msm8960
 ALSA_HARDWARE += alsa.msm8974
+ALSA_HARDWARE += alsa.msm8226
 
 ALSA_UCM := snd_soc_msm
 ALSA_UCM += snd_soc_msm_2x
@@ -46,6 +47,7 @@ ALSA_UCM += snd_soc_msm_Taiko_CDP
 ALSA_UCM += snd_soc_msm_Taiko_Fluid
 ALSA_UCM += snd_soc_msm_Taiko_liquid
 ALSA_UCM += snd_soc_msm_I2SFusion
+ALSA_UCM += snd_soc_msm_Tapan
 
 #ANGLE
 ANGLE := libangle
@@ -53,6 +55,7 @@ ANGLE := libangle
 AUDIO_HARDWARE := audio.primary.mpq8064
 AUDIO_HARDWARE += audio.primary.msm8960
 AUDIO_HARDWARE += audio.primary.msm8974
+AUDIO_HARDWARE += audio.primary.msm8226
 AUDIO_HARDWARE += audio.primary.msm8660
 #AUDIO_HARDWARE += audio.primary.msm7627_surf
 AUDIO_HARDWARE += audio.primary.msm7627a
@@ -65,6 +68,7 @@ AUDIO_HARDWARE += audio.usb.default
 AUDIO_POLICY := audio_policy.mpq8064
 AUDIO_POLICY += audio_policy.msm8960
 AUDIO_POLICY += audio_policy.msm8974
+AUDIO_POLICY += audio_policy.msm8226
 AUDIO_POLICY += audio_policy.msm8660
 #AUDIO_POLICY += audio_policy.msm7627_surf
 AUDIO_POLICY += audio_policy.msm7627a

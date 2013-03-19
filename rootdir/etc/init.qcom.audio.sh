@@ -41,6 +41,9 @@ case "$target" in
     msm8974*)
         insmod /system/lib/modules/adsp-loader.ko
         ;;
+    msm8226*)
+        insmod /system/lib/modules/adsp-loader.ko
+        ;;
     *)
         ;;
 esac
