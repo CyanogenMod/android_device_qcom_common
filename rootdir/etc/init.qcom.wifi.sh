@@ -96,7 +96,7 @@ load_wifiKM()
 
 
 case "$target" in
-    msm8974*)
+    msm8974* | msm8226*)
 
 # Check whether device is plugged on the HSIC bus
 # Currently HSIC bus will be the first index
@@ -210,10 +210,12 @@ case "$target" in
       echo "*** Use the default WCN driver.                             **"
       setprop wlan.driver.ath 0
       rm  /system/lib/modules/wlan.ko
-      ln -s /system/lib/modules/pronto/pronto_wlan.ko /system/lib/modules/wlan.ko
+      ln -s /system/lib/modules/pronto/pronto_wlan.ko \
+		/system/lib/modules/wlan.ko
       # Populate the writable driver configuration file
       if [ ! -e /data/misc/wifi/WCNSS_qcom_cfg.ini ]; then
-          cp /system/etc/wifi/WCNSS_qcom_cfg.ini /data/misc/wifi/WCNSS_qcom_cfg.ini
+          cp /system/etc/wifi/WCNSS_qcom_cfg.ini \
+		/data/misc/wifi/WCNSS_qcom_cfg.ini
           chown system:wifi /data/misc/wifi/WCNSS_qcom_cfg.ini
           chmod 660 /data/misc/wifi/WCNSS_qcom_cfg.ini
       fi
@@ -279,7 +281,8 @@ case "$target" in
 
       if [ "$wlanchip" == "" ]; then
           # auto detect ar6004-sdio card
-          # for ar6004-sdio card, the vendor id and device id is as the following
+          # for ar6004-sdio card, the vendor id and device id is
+          # as the following
           # vendor id  device id
           #    0x0271     0x0400
           #    0x0271     0x0401
@@ -349,11 +352,13 @@ case "$target" in
       *)
         echo "*** WI-FI chip ID is not specified in /persist/wlan_chip_id **"
         echo "*** Use the default WCN driver.                             **"
-        setprop wlan.driver.ath 0 
+        setprop wlan.driver.ath 0
         rm  /system/lib/modules/wlan.ko
         rm  /system/lib/modules/cfg80211.ko
-        ln -s /system/lib/modules/prima/prima_wlan.ko /system/lib/modules/wlan.ko
-        ln -s /system/lib/modules/prima/cfg80211.ko /system/lib/modules/cfg80211.ko
+        ln -s /system/lib/modules/prima/prima_wlan.ko \
+		/system/lib/modules/wlan.ko
+        ln -s /system/lib/modules/prima/cfg80211.ko \
+		/system/lib/modules/cfg80211.ko
 
         # The property below is used in Qcom SDK for softap to determine
         # the wifi driver config file
@@ -379,25 +384,32 @@ case "$target" in
              setprop wlan.driver.ath 1
              rm  /system/lib/modules/wlan.ko
              rm  /system/lib/modules/cfg80211.ko
-             ln -s /system/lib/modules/ath6kl/ath6kl_sdio.ko /system/lib/modules/wlan.ko
-             ln -s /system/lib/modules/ath6kl/cfg80211.ko /system/lib/modules/cfg80211.ko
+             ln -s /system/lib/modules/ath6kl/ath6kl_sdio.ko \
+		/system/lib/modules/wlan.ko
+             ln -s /system/lib/modules/ath6kl/cfg80211.ko \
+		/system/lib/modules/cfg80211.ko
              ;;
             "WCN1314")
              setprop wlan.driver.ath 0
              rm  /system/lib/modules/wlan.ko
              rm  /system/lib/modules/cfg80211.ko
-             ln -s /system/lib/modules/volans/WCN1314_rf.ko /system/lib/modules/wlan.ko
-             ln -s /system/lib/modules/volans/cfg80211.ko /system/lib/modules/cfg80211.ko
+             ln -s /system/lib/modules/volans/WCN1314_rf.ko \
+		/system/lib/modules/wlan.ko
+             ln -s /system/lib/modules/volans/cfg80211.ko \
+		/system/lib/modules/cfg80211.ko
              ;;
             *)
              setprop wlan.driver.ath 1
              rm  /system/lib/modules/wlan.ko
              rm  /system/lib/modules/cfg80211.ko
-             ln -s /system/lib/modules/ath6kl/ath6kl_sdio.ko /system/lib/modules/wlan.ko
-             ln -s /system/lib/modules/ath6kl/cfg80211.ko /system/lib/modules/cfg80211.ko
-             echo "********************************************************************"
-             echo "*** Error:WI-FI chip ID is not specified in /persist/wlan_chip_id **"
-             echo "*******    WI-FI may not work    ***********************************"
+             ln -s /system/lib/modules/ath6kl/ath6kl_sdio.ko \
+		/system/lib/modules/wlan.ko
+             ln -s /system/lib/modules/ath6kl/cfg80211.ko \
+		/system/lib/modules/cfg80211.ko
+             echo "************************************************************"
+             echo "*** Error:WI-FI chip ID is not specified in"
+             echo "/persist/wlan_chip_id"
+             echo "*******    WI-FI may not work    ***************************"
              ;;
         esac
     ;;
