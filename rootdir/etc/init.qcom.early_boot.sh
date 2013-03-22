@@ -125,3 +125,23 @@ case "$1" in
         esac
         ;;
 esac
+
+# Setup HDMI related nodes & permissions
+# HDMI can be fb1 or fb2
+# Loop through the sysfs nodes and determine
+# the HDMI(dtv panel)
+for file in /sys/class/graphics/fb*
+do
+    value=`cat $file/msm_fb_type`
+    case "$value" in
+            "dtv panel")
+        chown system.graphics $file/hpd
+        chmod 0664 $file/hpd
+        chmod 0664 $file/video_mode
+        chmod 0664 $file/format_3d
+        # create symbolic link
+        ln -s $file /dev/graphics/hdmi
+        # Change owner and group for media server and surface flinger
+        chown system.system $file/format_3d;;
+    esac
+done
