@@ -279,6 +279,7 @@ LIBGRALLOC += libmemalloc
 LIBLIGHTS := lights.msm8660
 LIBLIGHTS += lights.msm8960
 LIBLIGHTS += lights.msm8974
+LIBLIGHTS += lights.msm8226
 LIBLIGHTS += lights.msm7k
 LIBLIGHTS += lights.msm7630_surf
 LIBLIGHTS += lights.msm7630_fusion
