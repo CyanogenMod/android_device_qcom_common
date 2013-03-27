@@ -136,4 +136,13 @@ case "$target" in
                  start profiler_daemon;;
         esac
         ;;
+    "msm8974")
+        platformvalue=`cat /sys/devices/soc0/hw_platform`
+        case "$platformvalue" in
+             "Fluid")
+                 start profiler_daemon;;
+             "Liquid")
+                 start profiler_daemon;;
+        esac
+        ;;
 esac
