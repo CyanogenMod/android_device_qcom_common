@@ -224,6 +224,8 @@ void set_interactive(struct power_module *module, int on)
         return;
     }
 
+	ALOGI("Got set_interactive hint");
+
     if (get_scaling_governor(governor, sizeof(governor)) == -1) {
         ALOGE("Can't obtain scaling governor.");
 
