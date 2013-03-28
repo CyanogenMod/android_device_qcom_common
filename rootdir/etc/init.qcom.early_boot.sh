@@ -136,7 +136,11 @@ do
     case "$value" in
             "dtv panel")
         chown system.graphics $file/hpd
+        chown system.graphics $file/vendor_name
+        chown system.graphics $file/product_description
         chmod 0664 $file/hpd
+        chmod 0664 $file/vendor_name
+        chmod 0664 $file/product_description
         chmod 0664 $file/video_mode
         chmod 0664 $file/format_3d
         # create symbolic link
