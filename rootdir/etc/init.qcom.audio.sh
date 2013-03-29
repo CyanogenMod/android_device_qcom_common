@@ -109,6 +109,7 @@ case "$target" in
         mkdir -p /system/etc/firmware/wcd9320
         ln -s /data/misc/audio/wcd9320_anc.bin /system/etc/firmware/wcd9320/wcd9320_anc.bin
         ln -s /data/misc/audio/mbhc.bin /system/etc/firmware/wcd9320/wcd9320_mbhc.bin
+        ln -s /data/misc/audio/wcd9320_mad_audio.bin /system/etc/firmware/wcd9320/wcd9320_mad_audio.bin
         ;;
 
     msm8960*)
