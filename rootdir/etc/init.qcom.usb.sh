@@ -172,12 +172,11 @@ case "$baseband" in
                     echo 1 > /sys/module/rmnet_usb/parameters/mux_enabled
                     echo 8 > /sys/module/rmnet_usb/parameters/no_fwd_rmnet_links
                     echo 17 > /sys/module/rmnet_usb/parameters/no_rmnet_insts_per_dev
-                    echo 1 > /sys/module/rmnet_usb/parameters/rmnet_data_init
-            ;;
-            *)
-                    echo 1 > /sys/module/rmnet_usb/parameters/rmnet_data_init
             ;;
         esac
+        echo 1 > /sys/module/rmnet_usb/parameters/rmnet_data_init
+        # Allow QMUX daemon to assign port open wait time
+        chown radio.radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
     ;;
     "dsda2")
           echo 2 > /sys/module/rmnet_usb/parameters/no_rmnet_devs
@@ -187,23 +186,20 @@ case "$baseband" in
                       echo 3 > /sys/module/rmnet_usb/parameters/mux_enabled
                       echo 8 > /sys/module/rmnet_usb/parameters/no_fwd_rmnet_links
                       echo 17 > write /sys/module/rmnet_usb/parameters/no_rmnet_insts_per_dev
-                      echo 1 > /sys/module/rmnet_usb/parameters/rmnet_data_init
                ;;
                "enabled_hsic") #mux is enabled on hsic mdm
                       echo 1 > /sys/module/rmnet_usb/parameters/mux_enabled
                       echo 8 > /sys/module/rmnet_usb/parameters/no_fwd_rmnet_links
                       echo 17 > /sys/module/rmnet_usb/parameters/no_rmnet_insts_per_dev
-                      echo 1 > /sys/module/rmnet_usb/parameters/rmnet_data_init
                ;;
                "enabled_hsusb") #mux is enabled on hsusb mdm
                       echo 2 > /sys/module/rmnet_usb/parameters/mux_enabled
                       echo 8 > /sys/module/rmnet_usb/parameters/no_fwd_rmnet_links
                       echo 17 > /sys/module/rmnet_usb/parameters/no_rmnet_insts_per_dev
-                      echo 1 > /sys/module/rmnet_usb/parameters/rmnet_data_init
-               ;;
-               *)
-                      echo 1 > /sys/module/rmnet_usb/parameters/rmnet_data_init
                ;;
           esac
+          echo 1 > /sys/module/rmnet_usb/parameters/rmnet_data_init
+          # Allow QMUX daemon to assign port open wait time
+          chown radio.radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
     ;;
 esac
