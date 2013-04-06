@@ -99,6 +99,7 @@ esac
 case "$target" in
         "msm8960" | "msm8974")
         start location_mq
+        start lowi-server
         if [ "$izat_premium_enablement" -eq 1 ]; then
             start xtwifi_inet
             start xtwifi_client
