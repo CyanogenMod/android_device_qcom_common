@@ -255,6 +255,7 @@ service ril-qmi /system/bin/sh /init.qcom.ril.sh
     oneshot
 
 on property:vold.decrypt=trigger_restart_framework
+    setprop ro.fuse_sdcard ${persist.fuse_sdcard}
     start qcom-c_main-sh
     start config_bluetooth
 
@@ -648,9 +649,6 @@ on property:init.svc.sdcard=running
 
 # This will make sure that sdcard service starts as late_start.
 on nonencrypted
-    setprop ro.fuse_sdcard ${persist.fuse_sdcard}
-
-on property:vold.decrypt=trigger_restart_framework
     setprop ro.fuse_sdcard ${persist.fuse_sdcard}
 
 service hcidump /system/bin/sh /system/etc/hcidump.sh
