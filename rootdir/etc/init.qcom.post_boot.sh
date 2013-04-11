@@ -342,8 +342,12 @@ esac
 
 # Post-setup services
 case "$target" in
-    "msm8660" | "msm8960" | "msm8974")
+    "msm8660" | "msm8960")
         start mpdecision
+    ;;
+    "msm8974")
+        start mpdecision
+        echo 512 > /sys/block/mmcblk0/bdi/read_ahead_kb
     ;;
     "msm7627a")
         soc_id=`cat /sys/devices/system/soc/soc0/id`
