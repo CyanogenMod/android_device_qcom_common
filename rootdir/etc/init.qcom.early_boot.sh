@@ -117,10 +117,18 @@ case "$1" in
         esac
         ;;
 
-    "msm8610" | "msm8226")
+    "msm8226")
         case "$soc_hwplatform" in
             *)
                 setprop ro.sf.lcd_density 320
+                ;;
+        esac
+        ;;
+
+    "msm8610")
+        case "$soc_hwplatform" in
+            *)
+                setprop ro.sf.lcd_density 240
                 ;;
         esac
         ;;
