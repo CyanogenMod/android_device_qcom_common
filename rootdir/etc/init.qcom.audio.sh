@@ -136,6 +136,15 @@ case "$target" in
         ln -s /data/misc/audio/wcd9320_mad_audio.bin /system/etc/firmware/wcd9320/wcd9320_mad_audio.bin
         ;;
 
+    msm8226*)
+
+        rm -rf /system/etc/firmware/wcd9310/wcd9310_anc.bin
+        rm -rf /system/etc/firmware/wcd9310/wcd9310_mbhc.bin
+        mkdir -p /system/etc/firmware/wcd9310
+        ln -s /data/misc/audio/wcd9320_anc.bin /system/etc/firmware/wcd9310/wcd9310_anc.bin
+        ln -s /data/misc/audio/mbhc.bin /system/etc/firmware/wcd9320/wcd9310_mbhc.bin
+        ;;
+
     msm8960*)
     ;&
     msm8660*)
