@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -26,17 +26,57 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+#define LOG_NIDEBUG 0
 
-#include <cutils/properties.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <dlfcn.h>
+#include <stdlib.h>
 
-int sysfs_read(char *path, char *s, int num_bytes);
-int sysfs_write(char *path, char *s);
-int get_scaling_governor(char governor[], int size);
+#define LOG_TAG "QCOM PowerHAL"
+#include <utils/Log.h>
+#include <hardware/hardware.h>
+#include <hardware/power.h>
 
-void vote_ondemand_io_busy_off();
-void unvote_ondemand_io_busy_off();
-void vote_ondemand_sdf_low();
-void unvote_ondemand_sdf_low();
-void perform_hint_action(int hint_id, int resource_values[],
-    int num_resources);
-void undo_hint_action(int hint_id);
+#include "utils.h"
+#include "metadata-defs.h"
+#include "hint-data.h"
+#include "performance.h"
+#include "power-common.h"
+
+int set_interactive_override(struct power_module *module, int on)
+{
+    char governor[80];
+
+    if (get_scaling_governor(governor, sizeof(governor)) == -1) {
+        ALOGE("Can't obtain scaling governor.");
+
+        return HINT_NONE;
+    }
+
+    if (!on) {
+        /* Display off. */
+        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
+            int resource_values[] = {MS_500, SYNC_FREQ_300, OPTIMAL_FREQ_300};
+
+            perform_hint_action(DISPLAY_STATE_HINT_ID,
+                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+
+            return HINT_HANDLED;
+        }
+    } else {
+        /* Display on */
+        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
+            undo_hint_action(DISPLAY_STATE_HINT_ID);
+
+            return HINT_HANDLED;
+        }
+    }
+
+    return HINT_NONE;
+}
