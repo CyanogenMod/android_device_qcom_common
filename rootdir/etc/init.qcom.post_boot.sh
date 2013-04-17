@@ -301,6 +301,21 @@ esac
 
 case "$target" in
     "msm8226")
+        echo 2 > /sys/module/lpm_resources/enable_low_power/l2
+        echo 1 > /sys/module/lpm_resources/enable_low_power/pxo
+        echo 1 > /sys/module/pm_8x60/modes/cpu0/power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu1/power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu2/power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu3/power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu0/standalone_power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu1/standalone_power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu2/standalone_power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu3/standalone_power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu0/standalone_power_collapse/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu1/standalone_power_collapse/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu2/standalone_power_collapse/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu3/standalone_power_collapse/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu0/power_collapse/idle_enabled
         echo 1 > /sys/devices/system/cpu/cpu1/online
         echo 1 > /sys/devices/system/cpu/cpu2/online
         echo 1 > /sys/devices/system/cpu/cpu3/online
