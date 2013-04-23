@@ -39,24 +39,41 @@ enum PWR_CLSP_TYPE {
     ALL_CPUS_PWR_CLPS_DIS = 0x100,
 };
 
+/* For CPUx min freq, the leftmost byte
+ * represents the CPU and the
+ * rightmost byte represents the frequency
+ * All intermediate frequencies on the
+ * device are supported. The hex value
+ * passed into PerfLock will be multiplied
+ * by 10^5. This frequency or the next
+ * highest frequency available will be set
+ *
+ * For example, if 1.4 Ghz is required on
+ * CPU0, use 0x20E
+ *
+ * If the highest available frequency
+ * on the device is required, use
+ * CPUx_MIN_FREQ_TURBO_MAX
+ * where x represents the CPU
+ */
 enum CPU0_MIN_FREQ_LVL {
     CPU0_MIN_FREQ_NONTURBO_MAX = 0x20A,
-    CPU0_MIN_FREQ_TURBO = 0x20F,
+    CPU0_MIN_FREQ_TURBO_MAX = 0x2FE,
 };
 
 enum CPU1_MIN_FREQ_LVL {
     CPU1_MIN_FREQ_NONTURBO_MAX = 0x30A,
-    CPU1_MIN_FREQ_TURBO = 0x30F,
+    CPU1_MIN_FREQ_TURBO_MAX = 0x3FE,
 };
 
 enum CPU2_MIN_FREQ_LVL {
     CPU2_MIN_FREQ_NONTURBO_MAX = 0x40A,
-    CPU2_MIN_FREQ_TURBO = 0x40F,
+    CPU2_MIN_FREQ_TURBO_MAX = 0x4FE,
 };
 
 enum CPU3_MIN_FREQ_LVL {
     CPU3_MIN_FREQ_NONTURBO_MAX = 0x50A,
-    CPU3_MIN_FREQ_TURBO = 0x50F,
+    CPU3_MIN_FREQ_TURBO_MAX = 0x5FE,
 };
 
 enum CPUS_ONLINE_LVL {
@@ -73,7 +90,7 @@ enum CPUS_ONLINE_LVL {
 
 enum ALL_CPUS_FREQBOOST_LVL {
     ALL_CPUS_FREQ_NONTURBO_MAX = 0x90A,
-    ALL_CPUS_FREQ_TURBO = 0x90F,
+    ALL_CPUS_FREQ_TURBO = 0x9FE,
 };
 
 enum SAMPLING_RATE_LVL {
