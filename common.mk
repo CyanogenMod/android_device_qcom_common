@@ -499,6 +499,7 @@ PRODUCT_PACKAGES := \
     IM \
     VoiceDialer \
     FM \
+    FM2 \
     VideoEditor
 
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
