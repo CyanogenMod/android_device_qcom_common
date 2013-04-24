@@ -46,21 +46,8 @@
 #include "metadata-defs.h"
 #include "hint-data.h"
 #include "performance.h"
+#include "power-common.h"
 
-#define NODE_MAX (64)
-
-#define SCALING_GOVERNOR_PATH "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
-#define DCVS_CPU0_SLACK_MAX_NODE "/sys/module/msm_dcvs/cores/cpu0/slack_time_max_us"
-#define DCVS_CPU0_SLACK_MIN_NODE "/sys/module/msm_dcvs/cores/cpu0/slack_time_min_us"
-#define MPDECISION_SLACK_MAX_NODE "/sys/module/msm_mpdecision/slack_time_max_us"
-#define MPDECISION_SLACK_MIN_NODE "/sys/module/msm_mpdecision/slack_time_min_us"
-
-#define ONDEMAND_GOVERNOR "ondemand"
-#define INTERACTIVE_GOVERNOR "interactive"
-#define MSMDCVS_GOVERNOR "msm-dcvs"
-
-static int saved_ondemand_sampling_down_factor = 4;
-static int saved_ondemand_io_is_busy_status = 1;
 static int saved_dcvs_cpu0_slack_max = -1;
 static int saved_dcvs_cpu0_slack_min = -1;
 static int saved_mpdecision_slack_max = -1;
@@ -181,14 +168,14 @@ static void process_video_encode_hint(void *metadata)
 int __attribute__ ((weak)) power_hint_override(struct power_module *module, power_hint_t hint,
         void *data)
 {
-    return -1;
+    return HINT_NONE;
 }
 
 static void power_hint(struct power_module *module, power_hint_t hint,
         void *data)
 {
     /* Check if this hint has been overridden. */
-    if (power_hint_override(module, hint, data) == 0) {
+    if (power_hint_override(module, hint, data) == HINT_HANDLED) {
         /* The power_hint has been handled. We can skip the rest. */
         return;
     }
@@ -204,13 +191,12 @@ static void power_hint(struct power_module *module, power_hint_t hint,
         case POWER_HINT_VIDEO_DECODE:
             process_video_decode_hint(data);
         break;
-
     }
 }
 
 int __attribute__ ((weak)) set_interactive_override(struct power_module *module, int on)
 {
-    return -1;
+    return HINT_NONE;
 }
 
 void set_interactive(struct power_module *module, int on)
@@ -220,7 +206,7 @@ void set_interactive(struct power_module *module, int on)
     struct video_encode_metadata_t video_encode_metadata;
     int rc;
 
-    if (set_interactive_override(module, on) == 0) {
+    if (set_interactive_override(module, on) == HINT_HANDLED) {
         return;
     }
 
