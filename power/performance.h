@@ -35,6 +35,10 @@ extern "C" {
 #define SUCCESS                 0
 #define INDEFINITE_DURATION     0
 
+enum SCREEN_DISPLAY_TYPE {
+    DISPLAY_OFF = 0x00FF,
+};
+
 enum PWR_CLSP_TYPE {
     ALL_CPUS_PWR_CLPS_DIS = 0x100,
 };
@@ -111,6 +115,11 @@ enum OPTIMAL_FREQ_LVL {
     OPTIMAL_FREQ_384 = 0x1203,
     OPTIMAL_FREQ_NONTURBO_MAX = 0x120A,
     OPTIMAL_FREQ_TURBO = 0x120F,
+};
+
+enum SCREEN_PWR_CLPS_LVL {
+    PWR_CLPS_DIS = 0x1300,
+    PWR_CLPS_ENA = 0x1301,
 };
 
 #ifdef __cplusplus
