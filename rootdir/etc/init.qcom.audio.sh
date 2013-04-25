@@ -101,6 +101,7 @@ case "$btsoc" in
 	    *)
 		;;
 	esac
+        ;;
     *)
 	case "$target" in
 	    msm8974*)
