@@ -35,3 +35,4 @@ add_lunch_combo msm8960-userdebug
 add_lunch_combo msm8974-userdebug
 add_lunch_combo msm8610-userdebug
 add_lunch_combo msm8226-userdebug
+add_lunch_combo apq8084-userdebug
