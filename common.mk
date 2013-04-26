@@ -281,6 +281,7 @@ LIBGRALLOC += gralloc.msm8660
 LIBGRALLOC += gralloc.msm8960
 LIBGRALLOC += gralloc.msm8974
 LIBGRALLOC += gralloc.msm8226
+LIBGRALLOC += gralloc.msm8610
 LIBGRALLOC += gralloc.msm7k
 LIBGRALLOC += gralloc.msm7630_surf
 LIBGRALLOC += gralloc.msm7630_fusion
