@@ -266,6 +266,7 @@ LIBCOPYBIT := copybit.msm8660
 LIBCOPYBIT += copybit.msm8960
 LIBCOPYBIT += copybit.msm8974
 LIBCOPYBIT += copybit.msm8226
+LIBCOPYBIT += copybit.msm8610
 LIBCOPYBIT += copybit.msm7k
 LIBCOPYBIT += copybit.qsd8k
 LIBCOPYBIT += copybit.msm7630_surf
