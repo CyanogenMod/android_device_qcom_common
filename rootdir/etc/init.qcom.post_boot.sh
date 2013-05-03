@@ -437,6 +437,13 @@ if [ -f /data/prebuilt/AdrenoTest.apk ]; then
     fi
 fi
 
+# Install SWE_Browser.apk if not already installed
+if [ -f /data/prebuilt/SWE_Browser.apk ]; then
+    if [ ! -d /data/data/org.codeaurora.swe.browser ]; then
+        pm install /data/prebuilt/SWE_Browser.apk
+    fi
+fi
+
 # Change adj level and min_free_kbytes setting for lowmemory killer to kick in
 case "$target" in
      "msm8660")
