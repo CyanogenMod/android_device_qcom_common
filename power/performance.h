@@ -148,6 +148,9 @@ enum SCREEN_PWR_CLPS_LVL {
     PWR_CLPS_ENA = 0x1301,
 };
 
+enum THREAD_MIGRATION_LVL {
+    THREAD_MIGRATION_SYNC_OFF = 0x1400,
+};
 #ifdef __cplusplus
 }
 #endif

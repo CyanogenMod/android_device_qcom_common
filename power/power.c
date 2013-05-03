@@ -97,9 +97,13 @@ static void process_video_decode_hint(void *metadata)
     if (video_decode_metadata.state == 1) {
         if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
+            int resource_values[] = {THREAD_MIGRATION_SYNC_OFF};
+
+            perform_hint_action(video_decode_metadata.hint_id,
+                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {TR_MS_30, HISPEED_LOAD_90, HS_FREQ_1026};
+            int resource_values[] = {TR_MS_30, HISPEED_LOAD_90, HS_FREQ_1026, THREAD_MIGRATION_SYNC_OFF};
 
             perform_hint_action(video_decode_metadata.hint_id,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
@@ -143,13 +147,13 @@ static void process_video_encode_hint(void *metadata)
     if (video_encode_metadata.state == 1) {
         if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
-            int resource_values[] = {IO_BUSY_OFF, SAMPLING_DOWN_FACTOR_1};
+            int resource_values[] = {IO_BUSY_OFF, SAMPLING_DOWN_FACTOR_1, THREAD_MIGRATION_SYNC_OFF};
 
             perform_hint_action(video_encode_metadata.hint_id,
                 resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {TR_MS_30, HISPEED_LOAD_90, HS_FREQ_1026};
+            int resource_values[] = {TR_MS_30, HISPEED_LOAD_90, HS_FREQ_1026, THREAD_MIGRATION_SYNC_OFF};
 
             perform_hint_action(video_encode_metadata.hint_id,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
@@ -222,13 +226,13 @@ void set_interactive(struct power_module *module, int on)
         /* Display off. */
         if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
-            int resource_values[] = {DISPLAY_OFF, MS_500};
+            int resource_values[] = {DISPLAY_OFF, MS_500, THREAD_MIGRATION_SYNC_OFF};
 
             perform_hint_action(DISPLAY_STATE_HINT_ID,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {DISPLAY_OFF, TR_MS_500};
+            int resource_values[] = {DISPLAY_OFF, TR_MS_500, THREAD_MIGRATION_SYNC_OFF};
 
             perform_hint_action(DISPLAY_STATE_HINT_ID,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
