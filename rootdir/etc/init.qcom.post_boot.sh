@@ -734,9 +734,9 @@ if [ -f /data/prebuilt/AdrenoTest.apk ]; then
 fi
 
 # Install SWE_Browser.apk if not already installed
-if [ -f /data/prebuilt/SWE_Browser.apk ]; then
-    if [ ! -d /data/data/org.codeaurora.swe.browser ]; then
-        pm install /data/prebuilt/SWE_Browser.apk
+if [ -f /data/prebuilt/SWE_AndroidBrowser.apk ]; then
+    if [ ! -d /data/data/com.android.swe.browser ]; then
+        pm install /data/prebuilt/SWE_AndroidBrowser.apk
     fi
 fi
 
