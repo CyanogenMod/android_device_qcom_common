@@ -643,7 +643,7 @@ include frameworks/base/data/videos/VideoPackage1.mk
 # For PRODUCT_COPY_FILES, the first instance takes precedence.
 # Since we want use QC specific files, we should inherit
 # device-vendor.mk first to make sure QC specific files gets installed.
-$(call inherit-product-if-exists, vendor/qcom/proprietary/common/config/device-vendor.mk)
+$(call inherit-product-if-exists, $(QCPATH)/common/config/device-vendor.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 PRODUCT_BRAND := qcom
