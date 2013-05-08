@@ -311,6 +311,7 @@ LIBHWCOMPOSER := hwcomposer.msm8660
 LIBHWCOMPOSER += hwcomposer.msm8960
 LIBHWCOMPOSER += hwcomposer.msm8974
 LIBHWCOMPOSER += hwcomposer.msm8226
+LIBHWCOMPOSER += hwcomposer.msm8610
 LIBHWCOMPOSER += hwcomposer.msm7k
 LIBHWCOMPOSER += hwcomposer.msm7630_surf
 LIBHWCOMPOSER += hwcomposer.msm7630_fusion
