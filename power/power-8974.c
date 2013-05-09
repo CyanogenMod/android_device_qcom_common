@@ -61,7 +61,7 @@ int set_interactive_override(struct power_module *module, int on)
         /* Display off. */
         if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
-            int resource_values[] = {MS_500, SYNC_FREQ_300, OPTIMAL_FREQ_300};
+            int resource_values[] = {DISPLAY_OFF, MS_500, SYNC_FREQ_600, OPTIMAL_FREQ_600, PWR_CLPS_ENA};
 
             perform_hint_action(DISPLAY_STATE_HINT_ID,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
