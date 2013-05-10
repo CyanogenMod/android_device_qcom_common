@@ -136,7 +136,7 @@ target=`getprop ro.product.device`
 cdromname="/system/etc/cdrom_install.iso"
 cdromenable=`getprop persist.service.cdrom.enable`
 case "$target" in
-        "msm7627a")
+        "msm7627a" | "msm8226")
                 case "$cdromenable" in
                         0)
                                 echo "" > /sys/class/android_usb/android0/f_mass_storage/lun0/file
