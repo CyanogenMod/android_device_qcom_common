@@ -87,7 +87,7 @@ case "$baseband" in
         start gpsone_daemon
         start bridgemgrd
         ;;
-        "sglte")
+        "sglte" | "sglte2")
         start gpsone_daemon
         ;;
 esac
