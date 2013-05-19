@@ -97,7 +97,12 @@ case "$target" in
     if [ -e /sys/bus/platform/drivers/msm_hsic_host ]; then
        if [ ! -L /sys/bus/usb/devices/1-1 ]; then
            echo msm_hsic_host > /sys/bus/platform/drivers/msm_hsic_host/unbind
+       else
+           echo auto > /sys/bus/usb/devices/1-1/power/control
        fi
+
+       chmod 0222 /sys/bus/platform/drivers/msm_hsic_host/bind
+       chmod 0222 /sys/bus/platform/drivers/msm_hsic_host/unbind
     fi
 
     wlanchip=""
@@ -179,7 +184,9 @@ case "$target" in
       echo "The WLAN Chip ID is $wlanchip"
       case "$wlanchip" in
       "AR6004-USB")
+      echo msm_hsic_host > /sys/bus/platform/drivers/msm_hsic_host/unbind
       setprop wlan.driver.ath 2
+      setprop qcom.bluetooth.soc ath3k
       rm  /system/lib/modules/wlan.ko
       ln -s /system/lib/modules/ath6kl-3.5/ath6kl_usb.ko \
 		/system/lib/modules/wlan.ko
@@ -202,6 +209,18 @@ case "$target" in
 
       "AR6004-SDIO")
       setprop wlan.driver.ath 2
+      setprop qcom.bluetooth.soc ath3k
+      # Chown polling nodes as needed from UI running on system server
+      chmod 0664 /sys/devices/msm_sdcc.1/polling
+      chmod 0664 /sys/devices/msm_sdcc.2/polling
+      chmod 0664 /sys/devices/msm_sdcc.3/polling
+      chmod 0664 /sys/devices/msm_sdcc.4/polling
+
+      chown system system /sys/devices/msm_sdcc.1/polling
+      chown system system /sys/devices/msm_sdcc.2/polling
+      chown system system /sys/devices/msm_sdcc.3/polling
+      chown system system /sys/devices/msm_sdcc.4/polling
+
       rm  /system/lib/modules/wlan.ko
       ln -s /system/lib/modules/ath6kl-3.5/ath6kl_sdio.ko \
 		/system/lib/modules/wlan.ko
