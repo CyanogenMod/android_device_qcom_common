@@ -282,7 +282,7 @@ case "$target" in
         echo 70 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core
         echo 3 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core
         echo 960000 > /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq
-        echo 1190400 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
+        echo 960000 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
         echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
         echo 300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
         echo 300000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
@@ -299,6 +299,7 @@ case "$target" in
         chmod 664 /sys/devices/system/cpu/cpu1/online
         chmod 664 /sys/devices/system/cpu/cpu2/online
         chmod 664 /sys/devices/system/cpu/cpu3/online
+        echo 1 > /dev/cpuctl/apps/cpu.notify_on_migrate
     ;;
 esac
 
