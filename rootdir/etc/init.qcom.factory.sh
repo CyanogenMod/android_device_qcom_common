@@ -232,6 +232,7 @@
     setprop system_init.startsurfaceflinger 0
 
 # Start the following services needed for fftm
+    start config_bluetooth
     start media
     start fastmmi
     start adbd
@@ -240,3 +241,4 @@
     start qcom-c_main-sh
     start irsc_util
     start qcamerasvr
+    start qcom-usb-sh
