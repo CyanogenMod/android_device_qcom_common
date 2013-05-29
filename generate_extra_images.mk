@@ -278,3 +278,17 @@ kernel: $(INSTALLED_BOOTIMAGE_TARGET) $(INSTALLED_SEC_BOOTIMAGE_TARGET) $(INSTAL
 
 .PHONY: recoveryimage
 recoveryimage: $(INSTALLED_RECOVERYIMAGE_TARGET) $(INSTALLED_4K_RECOVERYIMAGE_TARGET)
+
+.PHONY: kernelclean
+kernelclean:
+	$(hide) make -C kernel O=../$(PRODUCT_OUT)/obj/KERNEL_OBJ/ ARCH=$(TARGET_ARCH) CROSS_COMPILE=arm-eabi-  clean
+	$(hide) make -C kernel O=../$(PRODUCT_OUT)/obj/KERNEL_OBJ/ ARCH=$(TARGET_ARCH) CROSS_COMPILE=arm-eabi-  mrproper
+	$(hide) make -C kernel O=../$(PRODUCT_OUT)/obj/KERNEL_OBJ/ ARCH=$(TARGET_ARCH) CROSS_COMPILE=arm-eabi-  distclean
+	$(hide) if [ -f "$(INSTALLED_BOOTIMAGE_TARGET)" ]; then  rm $(INSTALLED_BOOTIMAGE_TARGET); fi
+	$(hide) if [ -f "$(INSTALLED_SEC_BOOTIMAGE_TARGET)" ]; then rm $(INSTALLED_SEC_BOOTIMAGE_TARGET); fi
+	$(hide) if [ -f "$(INSTALLED_BOOTIMAGE_TARGET).nonsecure" ]; then  rm $(INSTALLED_BOOTIMAGE_TARGET).nonsecure; fi
+	$(hide) if [ -f "$(PRODUCT_OUT)/kernel" ]; then  rm $(PRODUCT_OUT)/kernel; fi
+	$(hide) if [ -f "$(INSTALLED_4K_BOOTIMAGE_TARGET)" ]; then rm  $(INSTALLED_4K_BOOTIMAGE_TARGET); fi
+	$(hide) if [ -f "$(INSTALLED_2K_BOOTIMAGE_TARGET)" ]; then rm  $(INSTALLED_2K_BOOTIMAGE_TARGET); fi
+	$(hide) if [ -f "$(INSTALLED_BCHECC_BOOTIMAGE_TARGET)" ]; then rm  $(INSTALLED_BCHECC_BOOTIMAGE_TARGET); fi
+	@echo "kernel cleanup done"
