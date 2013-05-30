@@ -1,4 +1,4 @@
-Copyright (c) 2012, The Linux Foundation. All rights reserved.
+Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source form and compiled forms (SGML, HTML,
 PDF, PostScript, RTF and so forth) with or without modification, are
@@ -33,6 +33,7 @@ Android - Table of Device Tree
 
 0) Document revision
    v1.0 - Initial version (dng)
+   v1.1 - Add v2 format to allow subtype (dng)
 
 1) Android boot image:
 ----------------------
@@ -72,13 +73,15 @@ Android - Table of Device Tree
    x      +------------------+
    |      | MAGIC ("QCDT")   |   4B
    |      +------------------+
- header   | VERSION          |   uint32 (initial version 1)
+ header   | VERSION          |   uint32 (version 2)
    |      +------------------+
    |      | num of DTBs      |   uint32 (number of DTB entries)
    x      +------------------+
    |      | platform id #1   |   uint32 (e.g. ID for MSM8974)
    |      +------------------+
    |      | variant id #1    |   uint32 (e.g. ID for CDP, MTP)
+   |      +------------------+
+   |      | subtype id #1    |   uint32 (e.g. ID for subtype) (QCDT v2)
  device   +------------------+
   #1      | soc rev #1       |   uint32 (e.g. MSM8974 v2)
  entry    +------------------+
@@ -95,8 +98,10 @@ Android - Table of Device Tree
    |      +------------------+
   device  | variant id #Z    |   uint32 (e.g. ID for CDP, MTP)
   #Z      +------------------+
-  entry   | soc rev #Z       |   uint32 (e.g. MSM8974 v2)
+  entry   | variant id #Z    |   uint32 (e.g. ID for subtype) (QCDT v2)
   (last)  +------------------+
+   |      | soc rev #Z       |   uint32 (e.g. MSM8974 v2)
+   |      +------------------+
    |      | offset #Z        |   uint32 (byte offset from start/before MAGIC
    x      +------------------+           to DTB entry)
           | 0 ("zero")       |   uint32 (end of list delimiter)
@@ -122,25 +127,34 @@ Android - Table of Device Tree
 3) Operations
 -------------
 3.1) Build-time:
-  1) Each DTS per device will add a "qcom,msm-id" triplet
+  1) Each DTS per device will add a "qcom,msm-id" entry
      e.g. for msm8974-sim.dts, add
-          qcom,msm-id = <x y z>;
-     x = ID for msm8974
-     y = ID for CDP, MTP, etc.
-     z = ID for soc revision
-     The triplet can optionally be an array of triplets:
-         qcom,msm-id = <x1, y1, z1>, <x2, y2, z2>, ...;
+            qcom,msm-id = <x y z>;
+          or
+            qcom,msm-id = <x z>;
+            qcom,board-id = <y y'>;
+     x  = ID for msm8974
+     y  = ID for CDP, MTP, etc.
+     y' = ID for subtype (assumed zero if absent)
+     z  = ID for soc revision
+     The entry can optionally be an array:
+         qcom,msm-id = <x1 y1 z1>, <x2 y2 z2>, ...;
+       or
+         qcom,msm-id = <x1 z1>, <x2 z2>, ...;
+         qcom,board-id = <y1 y1'>, ...;
+     Note that qcom,msm-id and qcom,board-id are not matched
+     pairs.
   2) Kernel compile will generate the DTB
   3) Android build will run a new tool (dtbTool)
      a) scan the DTB output directory for all compiled DTB
-     b) decompile the DTB for "qcom,msm-id"
+     b) decompile the DTB for "qcom,msm-id"/"qcom,board-id"
      c) generate the QC table of device tree in sorted
-        order (platform, variant, soc rev)
+        order (platform, variant, subtype, soc rev)
      d) modified mkbootimg will merge new table of DT
 
 3.2) Run-time:
-  1) LK bootloader will obtain MSM id/variant/soc rev info
-     either from early bootloaders or via other means
+  1) LK bootloader will obtain MSM id/variant/subtype/soc rev
+     info either from early bootloaders or via other means
   2) LK bootloader will check entries #10 for non-zero
      value (set to zero for standard boot.img).  If the
      value is non-zero, refer to page section after
@@ -152,7 +166,8 @@ Android - Table of Device Tree
      entry.  Search order is:
      1) platform ID exact match
      2) variant ID exact match
-     3) select the highest soc rev in QCDT that is
+     3) subtype ID exact match
+     4) select the highest soc rev in QCDT that is
         equal to or lower than the runtime detected soc rev
   6) Load the matching DTB blob to the tags addr
   7) LK pass the correct DTB to the kernel
