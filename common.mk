@@ -102,6 +102,7 @@ BSON := libbson
 BT := javax.btobex
 BT += libattrib_static
 BT += hcidump.sh
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/common
 
 #C2DColorConvert
 C2DCC := libc2dcolorconvert
