@@ -54,12 +54,19 @@ start_sensors()
 
 start_battery_monitor()
 {
-	chown root.system /sys/module/pm8921_bms/parameters/*
-	chmod 0660 /sys/module/pm8921_bms/parameters/*
-	mkdir -p /data/bms
-	chown root.system /data/bms
-	chmod 0770 /data/bms
-	start battery_monitor
+	if ls /sys/bus/spmi/devices/qpnp-bms-*/fcc_data ; then
+		chown root.system /sys/module/pm8921_bms/parameters/*
+		chown root.system /sys/module/qpnp_bms/parameters/*
+		chown root.system /sys/bus/spmi/devices/qpnp-bms-*/fcc_data
+		chown root.system /sys/bus/spmi/devices/qpnp-bms-*/fcc_temp
+		chown root.system /sys/bus/spmi/devices/qpnp-bms-*/fcc_chgcyl
+		chmod 0660 /sys/module/qpnp_bms/parameters/*
+		chmod 0660 /sys/module/pm8921_bms/parameters/*
+		mkdir -p /data/bms
+		chown root.system /data/bms
+		chmod 0770 /data/bms
+		start battery_monitor
+	fi
 }
 
 baseband=`getprop ro.baseband`
@@ -168,6 +175,10 @@ case "$target" in
                  start profiler_daemon;;
              "Liquid")
                  start profiler_daemon;;
+        esac
+        case "$baseband" in
+            "msm")
+                start_battery_monitor;;
         esac
         ;;
 esac
