@@ -140,6 +140,27 @@ $(CDROM_ISO_TAREGT): $(CDROM_RES_FILE)
 ALL_DEFAULT_INSTALLED_MODULES += $(CDROM_ISO_TARGET)
 ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(CDROM_ISO_TARGET)
 endif
+#---------------------------------------------------------------------
+#Generate the SingleImage.bin / MMC_FLASHMEM1.dat
+#---------------------------------------------------------------------
+ifeq ($(strip $(BOARD_DISK_ANDROID_IMG)),true)
+DISK_IMG_TOOL := $(HOST_OUT_EXECUTABLES)/singleimage.py
+$(call pretty,"Android Disk Image for simulator: $(DISK_IMG_TOOL)")
+
+INSTALLED_DISK_IMG_TARGET := $(PRODUCT_OUT)/MMC_FLASHMEM1.dat
+$(call pretty,"Android Disk Image for simulator: $(INSTALLED_DISK_IMG_TARGET)")
+
+define build-disk-img-target
+	$(call pretty,"Android Disk Image for simulator: $(INSTALLED_DISK_IMG_TARGET)")
+	$(hide) $(DISK_IMG_TOOL) $(PRODUCT_OUT)
+	$(hide) mv $(PRODUCT_OUT)/singleimage.bin $(PRODUCT_OUT)/MMC_FLASHMEM1.dat
+endef
+
+$(INSTALLED_DISK_IMG_TARGET): $(INSTALLED_BOOTIMAGE_TARGET) $(INSTALLED_RAMDISK_TARGET) $(INSTALLED_SYSTEMIMAGE) $(INSTALLED_USERDATAIMAGE_TARGET) $(INSTALLED_RECOVERYIMAGE_TARGET) $(BUILT_CACHEIMAGE_TARGET) $(DISK_IMG_TOOL)
+	$(build-disk-img-target)
+ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_DISK_IMG_TARGET)
+ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_DISK_IMG_TARGET)
+endif
 
 #----------------------------------------------------------------------
 # Generate NAND images
