@@ -131,6 +131,10 @@
 
 # sensors
 /sys/devices/i2c-12/12-*  pollrate_ms 0664 system system
+/sys/devices/f9925000.i2c/i2c-0/0-000f/enable          0660     input     system
+/sys/devices/f9925000.i2c/i2c-0/0-000f/poll_delay      0660     input     system
+/sys/devices/f9925000.i2c/i2c-0/0-0019/enable          0660     input     system
+/sys/devices/f9925000.i2c/i2c-0/0-0019/poll_delay      0660     input     system
 
 # wlan
 /dev/wcnss_wlan           0660   system     system
