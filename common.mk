@@ -487,7 +487,7 @@ PRODUCT_PACKAGES := \
     DeskClock \
     AlarmProvider \
     Bluetooth \
-    BluetoothQcom \
+    BluetoothExt \
     Calculator \
     Calendar \
     Camera \
