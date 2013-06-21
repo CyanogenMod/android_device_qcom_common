@@ -139,4 +139,4 @@
 # wlan
 /dev/wcnss_wlan           0660   system     system
 #nfc permissions
-/dev/nfc_nci_driver       0660    nfc         nfc
+/dev/nfc-nci              0660    nfc         nfc
