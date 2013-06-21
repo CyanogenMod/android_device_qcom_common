@@ -54,6 +54,7 @@ static int saved_mpdecision_slack_max = -1;
 static int saved_mpdecision_slack_min = -1;
 static int saved_interactive_mode = -1;
 static int slack_node_rw_failed = 0;
+static int display_hint_sent;
 
 static struct hw_module_methods_t power_module_methods = {
     .open = NULL,
@@ -214,7 +215,7 @@ void set_interactive(struct power_module *module, int on)
         return;
     }
 
-	ALOGI("Got set_interactive hint");
+    ALOGI("Got set_interactive hint");
 
     if (get_scaling_governor(governor, sizeof(governor)) == -1) {
         ALOGE("Can't obtain scaling governor.");
@@ -228,14 +229,20 @@ void set_interactive(struct power_module *module, int on)
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
             int resource_values[] = {DISPLAY_OFF, MS_500, THREAD_MIGRATION_SYNC_OFF};
 
-            perform_hint_action(DISPLAY_STATE_HINT_ID,
-                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            if (!display_hint_sent) {
+                perform_hint_action(DISPLAY_STATE_HINT_ID,
+                        resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+                display_hint_sent = 1;
+            }
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             int resource_values[] = {DISPLAY_OFF, TR_MS_500, THREAD_MIGRATION_SYNC_OFF};
 
-            perform_hint_action(DISPLAY_STATE_HINT_ID,
-                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            if (!display_hint_sent) {
+                perform_hint_action(DISPLAY_STATE_HINT_ID,
+                        resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+                display_hint_sent = 1;
+            }
         } else if ((strncmp(governor, MSMDCVS_GOVERNOR, strlen(MSMDCVS_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(MSMDCVS_GOVERNOR))) {
             if (saved_interactive_mode == 1){
@@ -337,9 +344,11 @@ void set_interactive(struct power_module *module, int on)
         if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
+            display_hint_sent = 0;
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
+            display_hint_sent = 0;
         } else if ((strncmp(governor, MSMDCVS_GOVERNOR, strlen(MSMDCVS_GOVERNOR)) == 0) && 
                 (strlen(governor) == strlen(MSMDCVS_GOVERNOR))) {
             if (saved_interactive_mode == -1 || saved_interactive_mode == 0) {

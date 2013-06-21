@@ -47,6 +47,8 @@
 #include "performance.h"
 #include "power-common.h"
 
+static int display_hint_sent;
+
 int set_interactive_override(struct power_module *module, int on)
 {
     char governor[80];
@@ -63,8 +65,11 @@ int set_interactive_override(struct power_module *module, int on)
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
             int resource_values[] = {DISPLAY_OFF, MS_500, SYNC_FREQ_600, OPTIMAL_FREQ_600, PWR_CLPS_ENA, THREAD_MIGRATION_SYNC_OFF};
 
-            perform_hint_action(DISPLAY_STATE_HINT_ID,
-                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            if (!display_hint_sent) {
+                perform_hint_action(DISPLAY_STATE_HINT_ID,
+                        resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+                display_hint_sent = 1;
+            }
 
             return HINT_HANDLED;
         }
@@ -73,6 +78,7 @@ int set_interactive_override(struct power_module *module, int on)
         if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
+            display_hint_sent = 0;
 
             return HINT_HANDLED;
         }
