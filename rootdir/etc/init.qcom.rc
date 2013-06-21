@@ -678,23 +678,9 @@ service ssr_diag /system/bin/ssr_diag
     user system
     group system
 
-# Disable SSR to SoC restart
-on property:persist.sys.ssr.restart_level=1
-    write /sys/module/subsystem_restart/parameters/restart_level 1
-    write /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr 0
-    write /sys/bus/msm_subsys/devices/subsys0/restart_level system
-    write /sys/bus/msm_subsys/devices/subsys1/restart_level system
-    write /sys/bus/msm_subsys/devices/subsys2/restart_level system
-    write /sys/bus/msm_subsys/devices/subsys3/restart_level system
-
-# Enable SSR
-on property:persist.sys.ssr.restart_level=3
-    write /sys/module/subsystem_restart/parameters/restart_level 3
-    write /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr 1
-    write /sys/bus/msm_subsys/devices/subsys0/restart_level related
-    write /sys/bus/msm_subsys/devices/subsys1/restart_level related
-    write /sys/bus/msm_subsys/devices/subsys2/restart_level related
-    write /sys/bus/msm_subsys/devices/subsys3/restart_level related
+# SSR setting
+on property:persist.sys.ssr=*
+    exec /system/bin/sh /init.qcom.ssr.sh ${persist.sys.ssr}
 
 # Define fastmmi
 service fastmmi /system/bin/mmi
