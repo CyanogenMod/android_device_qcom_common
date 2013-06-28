@@ -675,6 +675,7 @@ on property:sys.usb.config=diag,qdss,rmnet_bam,adb
     write /sys/class/android_usb/android0/f_diag/clients diag
     write /sys/class/android_usb/android0/f_rmnet/transports smd,bam
     write /sys/class/android_usb/android0/functions diag,qdss,adb,rmnet
+    write /sys/module/dwc3/parameters/tx_fifo_resize_enable 1
     write /sys/class/android_usb/android0/enable 1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
@@ -694,6 +695,7 @@ on property:sys.usb.config=rndis,diag,qdss,adb
     write /sys/class/android_usb/android0/idProduct 9082
     write /sys/class/android_usb/android0/f_diag/clients diag
     write /sys/class/android_usb/android0/functions rndis,diag,qdss,adb
+    write /sys/module/dwc3/parameters/tx_fifo_resize_enable 1
     write /sys/class/android_usb/android0/enable 1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
