@@ -129,7 +129,7 @@ case "$target" in
                 for device in $sdio_devices; do
                     if [ $ven_idx -eq $dev_idx ]; then
                         case "$device" in
-                        "0x0400" | "0x0401")
+                        "0x0400" | "0x0401" | "0x0402")
                             wlanchip="AR6004-SDIO"
                             ;;
                         *)
