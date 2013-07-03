@@ -111,6 +111,9 @@ case "$1" in
                 # Android sw navigation bar
                 setprop ro.hw.nav_keys 0
                 ;;
+            "Dragon")
+                setprop ro.sf.lcd_density 240
+                ;;
             *)
                 setprop ro.sf.lcd_density 320
                 ;;
