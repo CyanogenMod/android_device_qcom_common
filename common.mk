@@ -631,6 +631,10 @@ PRODUCT_COPY_FILES += \
     system/bluetooth/data/stack.conf:system/etc/bluetooth/stack.conf
 endif # BOARD_HAVE_BLUETOOTH_BLUEZ
 
+# gps/location secuity configuration file
+PRODUCT_COPY_FILES += \
+    device/qcom/common/sec_config:system/etc/sec_config
+
 PRODUCT_COPY_FILES += device/qcom/common/media/media_profiles.xml:system/etc/media_profiles.xml \
                       device/qcom/common/media/media_codecs.xml:system/etc/media_codecs.xml
 
