@@ -101,8 +101,10 @@ case "$target" in
            echo auto > /sys/bus/usb/devices/1-1/power/control
        fi
 
-       chmod 0222 /sys/bus/platform/drivers/msm_hsic_host/bind
-       chmod 0222 /sys/bus/platform/drivers/msm_hsic_host/unbind
+       chown system.system /sys/bus/platform/drivers/msm_hsic_host/bind
+       chown system.system /sys/bus/platform/drivers/msm_hsic_host/unbind
+       chmod 0200 /sys/bus/platform/drivers/msm_hsic_host/bind
+       chmod 0200 /sys/bus/platform/drivers/msm_hsic_host/unbind
     fi
 
     wlanchip=""
@@ -211,15 +213,15 @@ case "$target" in
       setprop wlan.driver.ath 2
       setprop qcom.bluetooth.soc ath3k
       # Chown polling nodes as needed from UI running on system server
-      chmod 0664 /sys/devices/msm_sdcc.1/polling
-      chmod 0664 /sys/devices/msm_sdcc.2/polling
-      chmod 0664 /sys/devices/msm_sdcc.3/polling
-      chmod 0664 /sys/devices/msm_sdcc.4/polling
+      chmod 0200 /sys/devices/msm_sdcc.1/polling
+      chmod 0200 /sys/devices/msm_sdcc.2/polling
+      chmod 0200 /sys/devices/msm_sdcc.3/polling
+      chmod 0200 /sys/devices/msm_sdcc.4/polling
 
-      chown system system /sys/devices/msm_sdcc.1/polling
-      chown system system /sys/devices/msm_sdcc.2/polling
-      chown system system /sys/devices/msm_sdcc.3/polling
-      chown system system /sys/devices/msm_sdcc.4/polling
+      chown system.system /sys/devices/msm_sdcc.1/polling
+      chown system.system /sys/devices/msm_sdcc.2/polling
+      chown system.system /sys/devices/msm_sdcc.3/polling
+      chown system.system /sys/devices/msm_sdcc.4/polling
 
       rm  /system/lib/modules/wlan.ko
       ln -s /system/lib/modules/ath6kl-3.5/ath6kl_sdio.ko \
