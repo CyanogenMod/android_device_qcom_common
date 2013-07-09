@@ -19,7 +19,7 @@
 import common
 import re
 
-def LoadFilesMap(zip, type):
+def LoadFilesMap(zip, type=None):
   try:
     data = zip.read("RADIO/filesmap")
   except KeyError:
@@ -90,7 +90,73 @@ def FullOTA_InstallEnd(info):
   if info.type == 'MMC':
     FULLOTA_InstallEnd_MMC(info)
 
+def WriteRadioFirmware(info, filename, target_radio_img, source_radio_img=None):
+  fn = filename[6:]
+  filesmap = LoadFilesMap(info.target_zip)
+  if filesmap == {}:
+    print "warning radio-update: no or invalid filesmap file found. Not flashing %s" % (fn)
+    return
+
+  tf = common.File(filename, target_radio_img)
+
+  if source_radio_img is None:
+    tf.AddToZip(info.output_zip)
+    info.script.Print("Writing radio...")
+    InstallRawImage(target_radio_img, info.target_version, info.target_zip, filename, info, filesmap)
+  else:
+    sf = common.File(filename, source_radio_img);
+    if tf.sha1 == sf.sha1:
+      print "%s image unchanged; skipping" % (fn)
+    else:
+      diff = common.Difference(tf, sf)
+      common.ComputeDifferences([diff])
+      _, _, d = diff.GetPatch()
+      if d is None or len(d) > tf.size * common.OPTIONS.patch_threshold:
+        # compute difference failed or the difference is bigger than
+        # target file - write the whole target file.
+        tf.AddToZip(info.output_zip)
+        info.script.Print("Writing radio ...")
+        InstallRawImage(target_radio_img, info.target_version, info.target_zip, filename, info, filesmap)
+      else:
+        PatchName = fn + ".p"
+        common.ZipWriteStr(info.output_zip, "patch/" + PatchName, d)
+        info.script.Print("Patching Radio...")
+        if info.type == 'MMC':
+          print "-------- EMMC device given -------"
+          radio_device = filesmap[fn]
+          info.script.ApplyPatch("%s:%s:%d:%s:%d:%s" %
+                               ("EMMC", radio_device, sf.size, sf.sha1, tf.size, tf.sha1),
+                               "-", tf.size, tf.sha1, sf.sha1, "patch/" + PatchName)
+        else:
+          print "-------- MTD device given - not supported --------"
+
+  return
+
 def IncrementalOTA_InstallEnd(info):
-  #TODO: Implement device specific asserstions.
-  print "warning radio-update: no real implementation of IncrementalOTA_InstallEnd."
+  files = GetRadioFiles(info.target_zip)
+  if files == {}:
+    print "warning radio-update: no radio images in input target_files; not flashing radio"
+    return
+
+  filesmap = LoadFilesMap(info.target_zip)
+  if filesmap == {}:
+    print "warning radio-update: no or invalid filesmap file found. not flashing radio"
+    return
+
+  info.script.Print("Applying incremental radio image...")
+
+  for f in files:
+    try:
+      if f == "RADIO/filesmap": continue
+      target_radio_img = info.target_zip.read(f)
+      try:
+        source_radio_img = info.source_zip.read(f)
+      except KeyError:
+        print "source radio image = None"
+        source_radio_img = None
+
+      WriteRadioFirmware(info, f, target_radio_img, source_radio_img)
+    except KeyError:
+      print "no %s in target target_files; skipping install" % (f)
+
   return
