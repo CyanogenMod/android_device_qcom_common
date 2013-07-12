@@ -31,8 +31,12 @@
 #
 multisim=`getprop persist.multisim.config`
 if [ "$multisim" = "dsds" ] || [ "$multisim" = "dsda" ]; then
-    setprop ro.multi.rild true
-    stop ril-daemon
-    start ril-daemon
-    start ril-daemon1
+        stop ril-daemon
+        start ril-daemon
+        start ril-daemon1
+elif [ "$multisim" = "tsts" ]; then
+        stop ril-daemon
+        start ril-daemon
+        start ril-daemon1
+        start ril-daemon2
 fi
