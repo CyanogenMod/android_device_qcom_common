@@ -175,6 +175,7 @@ INIT += init.qcom.thermal_conf.sh
 INIT += init.qcom.sensor.sh
 INIT += init.target.rc
 INIT += init.qcom.bt.sh
+INIT += hsic.control.bt.sh
 INIT += init.qcom.coex.sh
 INIT += init.qcom.fm.sh
 INIT += init.qcom.early_boot.sh
