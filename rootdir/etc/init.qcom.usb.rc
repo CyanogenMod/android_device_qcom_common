@@ -28,6 +28,9 @@
 on init
     write /sys/class/android_usb/android0/f_rndis/wceis 1
 
+on charger
+    setprop sys.usb.config mass_storage
+
 service qcom-usb-sh /system/bin/sh /init.qcom.usb.sh
     class core
     user root
