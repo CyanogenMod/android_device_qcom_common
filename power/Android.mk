@@ -15,6 +15,10 @@ ifeq ($(call is-board-platform-in-list, msm8974), true)
 LOCAL_SRC_FILES += power-8974.c
 endif
 
+ifeq ($(TARGET_USES_INTERACTION_BOOST),true)
+    LOCAL_CFLAGS += -DINTERACTION_BOOST
+endif
+
 LOCAL_MODULE := power.qcom
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_SHARED_LIBRARY)
