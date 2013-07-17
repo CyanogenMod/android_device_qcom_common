@@ -242,3 +242,4 @@
     start irsc_util
     start qcamerasvr
     start qcom-usb-sh
+    start qcomsysd
