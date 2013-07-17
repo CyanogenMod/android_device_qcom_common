@@ -688,8 +688,8 @@ service ssr_diag /system/bin/ssr_diag
     group system
 
 # SSR setting
-on property:persist.sys.ssr=*
-    exec /system/bin/sh /init.qcom.ssr.sh ${persist.sys.ssr}
+on property:persist.sys.ssr.restart_level=*
+    exec /system/bin/sh /init.qcom.ssr.sh ${persist.sys.ssr.restart_level}
 
 # Define fastmmi
 service fastmmi /system/bin/mmi
