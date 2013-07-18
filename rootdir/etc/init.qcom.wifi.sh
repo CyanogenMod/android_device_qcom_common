@@ -97,8 +97,6 @@ case "$target" in
     if [ -e /sys/bus/platform/drivers/msm_hsic_host ]; then
        if [ ! -L /sys/bus/usb/devices/1-1 ]; then
            echo msm_hsic_host > /sys/bus/platform/drivers/msm_hsic_host/unbind
-       else
-           echo auto > /sys/bus/usb/devices/1-1/power/control
        fi
 
        chown system.system /sys/bus/platform/drivers/msm_hsic_host/bind
