@@ -189,6 +189,7 @@ static void power_hint(struct power_module *module, power_hint_t hint,
         case POWER_HINT_VSYNC:
         break;
         case POWER_HINT_INTERACTION:
+            interaction();
         break;
         case POWER_HINT_VIDEO_ENCODE:
             process_video_encode_hint(data);

@@ -171,6 +171,21 @@ int get_scaling_governor(char governor[], int size)
     return 0;
 }
 
+void interaction()
+{
+#ifdef INTERACTION_BOOST
+    static int lock_handle = 0;
+    int resources[3] = {0x702, 0x20F, 0x30F};
+    if (qcopt_handle) {
+        if (perf_lock_acq) {
+            lock_handle = perf_lock_acq(lock_handle, 3000, resources, sizeof(resources)/sizeof(resources[0]));
+            if (lock_handle == -1)
+                ALOGE("Failed to acquire lock.");
+        }
+    }
+#endif
+}
+
 void perform_hint_action(int hint_id, int resource_values[], int num_resources)
 {
     if (qcopt_handle) {
