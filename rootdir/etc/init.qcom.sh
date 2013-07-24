@@ -69,6 +69,17 @@ start_battery_monitor()
 	fi
 }
 
+start_charger_monitor()
+{
+	if ls /sys/module/qpnp_charger/parameters/charger_monitor; then
+		chown root.system /sys/module/qpnp_charger/parameters/*
+		chown root.system /sys/class/power_supply/battery/input_current_max
+		chmod 0664 /sys/class/power_supply/battery/input_current_max
+		chmod 0664 /sys/module/qpnp_charger/parameters/charger_monitor
+		start charger_monitor
+	fi
+}
+
 baseband=`getprop ro.baseband`
 izat_premium_enablement=`getprop ro.qc.sdk.izat.premium_enabled`
 izat_service_mask=`getprop ro.qc.sdk.izat.service_mask`
@@ -178,7 +189,9 @@ case "$target" in
         esac
         case "$baseband" in
             "msm")
-                start_battery_monitor;;
+                start_battery_monitor
+                start_charger_monitor
+                ;;
         esac
         ;;
 esac
