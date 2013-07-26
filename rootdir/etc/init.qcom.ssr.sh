@@ -29,64 +29,109 @@
 ssr_str="$1"
 IFS=,
 ssr_array=($ssr_str)
-declare -i ssr_status=0
+declare -i subsys_mask=0
 
+# check user input subsystem with system device
+ssr_check_subsystem_name()
+{
+    declare -i i=0
+    subsys=`cat /sys/bus/msm_subsys/devices/subsys$i/name`
+    while [ "$subsys" != "" ]
+    do
+        if [ "$subsys" == "$ssr_name" ]; then
+            return 1
+        fi
+        i=$i+1
+        subsys=`cat /sys/bus/msm_subsys/devices/subsys$i/name`
+    done
+    return 0
+}
+
+# set subsystem mask to indicate which subsystem needs to be enabled
 for num in "${!ssr_array[@]}"
 do
     case "${ssr_array[$num]}" in
-        "subsys0")
-            ssr_status=$ssr_status+1
-        ;;
-        "subsys1")
-            ssr_status=$ssr_status+2
-        ;;
-        "subsys2")
-            ssr_status=$ssr_status+4
-        ;;
-        "subsys3")
-            ssr_status=$ssr_status+8
-        ;;
-        "3")
-            ssr_status=$ssr_status+16
+        "1")
+            subsys_mask=0
         ;;
         "riva")
-            ssr_status=$ssr_status+32
+            subsys_mask=$subsys_mask+1
+        ;;
+        "3")
+            subsys_mask=63
+        ;;
+        "adsp")
+            ssr_name=adsp
+            if ( ssr_check_subsystem_name ); then
+                subsys_mask=$subsys_mask+2
+            fi
+        ;;
+        "modem")
+            ssr_name=modem
+            if ( ssr_check_subsystem_name ); then
+                subsys_mask=$subsys_mask+4
+            fi
+        ;;
+        "wcnss")
+            ssr_name=wcnss
+            if ( ssr_check_subsystem_name ); then
+                subsys_mask=$subsys_mask+8
+            fi
+        ;;
+        "venus")
+            ssr_name=venus
+            if ( ssr_check_subsystem_name ); then
+                subsys_mask=$subsys_mask+16
+            fi
+        ;;
+        "external_modem")
+            ssr_name=external_modem
+            if ( ssr_check_subsystem_name ); then
+                subsys_mask=$subsys_mask+32
+            fi
         ;;
     esac
 done
 
-if [ $((ssr_status & 1)) == 1 ]; then
+# enable selected subsystem restart
+if [ $((subsys_mask & 1)) == 1 ]; then
+    echo 1 > /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr
+else
+    echo 0 > /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr
+fi
+
+if [ $((subsys_mask & 2)) == 2 ]; then
     echo "related" > /sys/bus/msm_subsys/devices/subsys0/restart_level
 else
     echo "system" > /sys/bus/msm_subsys/devices/subsys0/restart_level
 fi
 
-if [ $((ssr_status & 2)) == 2 ]; then
+if [ $((subsys_mask & 4)) == 4 ]; then
     echo "related" > /sys/bus/msm_subsys/devices/subsys1/restart_level
 else
     echo "system" > /sys/bus/msm_subsys/devices/subsys1/restart_level
 fi
 
-if [ $((ssr_status & 4)) == 4 ]; then
+if [ $((subsys_mask & 8)) == 8 ]; then
     echo "related" > /sys/bus/msm_subsys/devices/subsys2/restart_level
 else
     echo "system" > /sys/bus/msm_subsys/devices/subsys2/restart_level
 fi
 
-if [ $((ssr_status & 8)) == 8 ]; then
+if [ $((subsys_mask & 16)) == 16 ]; then
     echo "related" > /sys/bus/msm_subsys/devices/subsys3/restart_level
 else
     echo "system" > /sys/bus/msm_subsys/devices/subsys3/restart_level
 fi
 
-if [ $((ssr_status & 16)) == 16 ]; then
+if [ $((subsys_mask & 32)) == 32 ]; then
+    echo "related" > /sys/bus/msm_subsys/devices/subsys4/restart_level
+else
+    echo "system" > /sys/bus/msm_subsys/devices/subsys4/restart_level
+fi
+
+if [ $((subsys_mask & 63)) == 63 ]; then
     echo 3 > /sys/module/subsystem_restart/parameters/restart_level
 else
     echo 1 > /sys/module/subsystem_restart/parameters/restart_level
-fi
-
-if [ $((ssr_status & 32)) == 32 ]; then
-    echo 1 > /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr
-else
-    echo 0 > /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr
 fi
