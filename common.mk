@@ -528,6 +528,7 @@ PRODUCT_PACKAGES := \
     VoiceDialer \
     FM \
     FM2 \
+    FMRecord \
     VideoEditor
 
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
