@@ -237,7 +237,6 @@ KEYPAD += gpio-keys.kl
 KEYPAD += keypad_8960.kl
 KEYPAD += keypad_8960_liquid.kl
 KEYPAD += synaptics_rmi4_i2c.kl
-KEYPAD += Button_Jack.kl
 KEYPAD += msm_tma300_ts.kl
 KEYPAD += philips_remote_ir.kl
 KEYPAD += samsung_remote_ir.kl
