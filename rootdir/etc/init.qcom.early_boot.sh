@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2012, The Linux Foundation. All rights reserved.
+# Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -147,9 +147,11 @@ do
     case "$value" in
             "dtv panel")
         chown system.graphics $file/hpd
+        chown system.system $file/hdcp/tp
         chown system.graphics $file/vendor_name
         chown system.graphics $file/product_description
         chmod 0664 $file/hpd
+        chmod 0664 $file/hdcp/tp
         chmod 0664 $file/vendor_name
         chmod 0664 $file/product_description
         chmod 0664 $file/video_mode

@@ -77,7 +77,9 @@
 
     # setup permissions for fb1 related nodes
     chown system.graphics /sys/class/graphics/fb1/hpd
+    chown system.system /sys/class/graphics/fb1/hdcp/tp
     chmod 0664 /sys/devices/virtual/graphics/fb1/hpd
+    chmod 0664 /sys/devices/virtual/graphics/fb1/hdcp/tp
     chmod 0664 /sys/devices/virtual/graphics/fb1/video_mode
     chmod 0664 /sys/devices/virtual/graphics/fb1/format_3d
 
