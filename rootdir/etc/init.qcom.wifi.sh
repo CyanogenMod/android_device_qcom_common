@@ -60,7 +60,7 @@ trigger_wcnss()
             # caldata is available at userspace.
             if [ -e /data/misc/wifi/WCNSS_qcom_wlan_cal.bin ]; then
                 calparm=`ls /sys/module/wcnsscore/parameters/has_calibrated_data`
-                if [ -e $calparm ]; then
+                if [ -e $calparm ] && [ ! -e /data/misc/wifi/WCN_FACTORY ]; then
                     echo 1 > $calparm
                 fi
             fi
