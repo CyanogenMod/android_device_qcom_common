@@ -92,17 +92,22 @@
 /dev/hsicctl14            0640   radio      radio
 /dev/hsicctl15            0640   radio      radio
 /dev/hsicctl16            0640   radio      radio
-/dev/video*               0660   system     camera
-/dev/media*               0660   system     camera
-/dev/v4l-subdev*          0660   system     camera
 /dev/qseecom              0660   system     drmrpc
-/dev/gemini0              0660   system     camera
-/dev/jpeg0                0660   system     camera
-/dev/jpeg1                0660   system     camera
-/dev/jpeg2                0660   system     camera
-/dev/msm_camera/*         0660   system     camera
-/dev/gemini/              0660   system     camera
-/dev/mercury0             0660   system     camera
+
+# camera
+/dev/video*               0660   system     media
+/dev/media*               0660   media      media
+/dev/v4l-subdev*          0660   media      media
+/dev/msm_camera/*         0660   media      media
+
+# jpeg
+/dev/gemini0              0660   media      media
+/dev/jpeg0                0660   media      media
+/dev/jpeg1                0660   media      media
+/dev/jpeg2                0660   media      media
+/dev/gemini/              0660   media      media
+/dev/mercury0             0660   media      media
+
 /dev/msm_vidc_reg         0660   system     audio
 /dev/msm_vidc_dec         0660   system     audio
 /dev/msm_vidc_dec_sec     0660   system     audio
