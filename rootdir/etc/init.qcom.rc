@@ -185,10 +185,6 @@ on post-fs-data
     mkdir /data/system 0775 system system
     #symlink /data/misc/wifi/wpa_supplicant /data/system/wpa_supplicant
 
-    #Create directories for wiper services
-    mkdir /data/wpstiles/ 0755 shell
-    mkdir /data/wiper 0755 gps qcom_oncrpc
-
     #Create directories for gpsone_daemon services
     mkdir /data/misc/gpsone_d 0770 system gps
 
@@ -497,12 +493,6 @@ service dhcpcd_bnep3 /system/bin/dhcpcd -BKLG
 
 service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
     disabled
-    oneshot
-
-service wiperiface /system/bin/wiperiface
-    class late_start
-    user gps
-    group gps qcom_oncrpc net_raw
     oneshot
 
 service gpsone_daemon /system/bin/gpsone_daemon
