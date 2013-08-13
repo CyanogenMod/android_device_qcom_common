@@ -283,6 +283,7 @@ case "$target" in
         echo 3 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core
         echo 960000 > /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq
         echo 960000 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
+        echo 1190400 > /sys/devices/system/cpu/cpufreq/ondemand/input_boost
         echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
         echo 300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
         echo 300000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
