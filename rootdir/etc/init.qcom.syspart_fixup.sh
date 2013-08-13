@@ -60,11 +60,6 @@ if [ -f /system/etc/init.qcom.mdm_links.sh ]; then
   /system/bin/sh /system/etc/init.qcom.mdm_links.sh
 fi
 
-# Run thermal script
-if [ -f /system/etc/init.qcom.thermal_conf.sh ]; then
-  /system/bin/sh /system/etc/init.qcom.thermal_conf.sh
-fi
-
 # Run wifi script
 if [ -f /system/etc/init.qcom.wifi.sh ]; then
   /system/bin/sh /system/etc/init.qcom.wifi.sh "$target" "$serial"
