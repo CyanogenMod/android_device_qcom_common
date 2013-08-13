@@ -74,7 +74,9 @@ start_charger_monitor()
 	if ls /sys/module/qpnp_charger/parameters/charger_monitor; then
 		chown root.system /sys/module/qpnp_charger/parameters/*
 		chown root.system /sys/class/power_supply/battery/input_current_max
+		chown root.system /sys/class/power_supply/battery/voltage_min
 		chmod 0664 /sys/class/power_supply/battery/input_current_max
+		chmod 0664 /sys/class/power_supply/battery/voltage_min
 		chmod 0664 /sys/module/qpnp_charger/parameters/charger_monitor
 		start charger_monitor
 	fi
