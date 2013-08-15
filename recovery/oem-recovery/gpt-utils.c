@@ -219,7 +219,7 @@ static uint8_t *gpt_pentry_seek(const char *ptn_name,
  *  \param [in] pentries_end    Partition entries array end
  *  \param [in] pentry_size     Single partition entry size
  *
- *  \return  0 on success
+ *  \return  0 on success, 1 if no backup partitions found
  *
  *  ==========================================================================
  */
@@ -229,6 +229,7 @@ static int gpt_boot_chain_swap(const uint8_t *pentries_start,
 {
     const char ptn_swap_list[][MAX_GPT_NAME_SIZE] = { PTN_SWAP_LIST };
 
+    int backup_not_found = 1;
     unsigned i;
 
     for (i = 0; i < ARRAY_SIZE(ptn_swap_list); i++) {
@@ -239,27 +240,25 @@ static int gpt_boot_chain_swap(const uint8_t *pentries_start,
         ptn_entry = gpt_pentry_seek(ptn_swap_list[i], pentries_start,
                         pentries_end, pentry_size);
         if (ptn_entry == NULL)
-            break;
+            continue;
+
         ptn_bak_entry = gpt_pentry_seek(ptn_swap_list[i],
                         ptn_entry + pentry_size, pentries_end, pentry_size);
-        if (ptn_bak_entry == NULL)
-            break;
+        if (ptn_bak_entry == NULL) {
+            fprintf(stderr, "'%s' partition not backup - skip safe update\n",
+                    ptn_swap_list[i]);
+            continue;
+        }
 
         /* swap primary <-> backup partition entries */
         memcpy(ptn_swap, ptn_entry + TYPE_GUID_OFFSET, TYPE_GUID_SIZE);
         memcpy(ptn_entry + TYPE_GUID_OFFSET,
                 ptn_bak_entry + TYPE_GUID_OFFSET, TYPE_GUID_SIZE);
         memcpy(ptn_bak_entry + TYPE_GUID_OFFSET, ptn_swap, TYPE_GUID_SIZE);
+        backup_not_found = 0;
     }
 
-    if (i != ARRAY_SIZE(ptn_swap_list)) {
-        fprintf(stderr,
-                "Partition '%s' not found in GPT partition entries array\n",
-                ptn_swap_list[i]);
-        return -1;
-    }
-
-    return 0;
+    return backup_not_found;
 }
 
 
@@ -535,11 +534,14 @@ int prepare_boot_update(enum boot_update_stage stage)
 
     switch (stage) {
     case UPDATE_MAIN:
-        fprintf(stdout, "Preparing main boot partitions update\n");
-
         r = gpt2_set_boot_chain(fd, BACKUP_BOOT);
         if (r) {
-            fprintf(stderr, "Setting secondary GPT to backup boot failed\n");
+            if (r < 0)
+                fprintf(stderr,
+                        "Setting secondary GPT to backup boot failed\n");
+            /* No backup partitions - do not corrupt GPT, do not flag error */
+            else
+                r = 0;
             goto EXIT;
         }
 
@@ -551,8 +553,6 @@ int prepare_boot_update(enum boot_update_stage stage)
 
         break;
     case UPDATE_BACKUP:
-        fprintf(stdout, "Preparing backup boot partitions update\n");
-
         r = gpt_set_state(fd, PRIMARY_GPT, GPT_OK);
         if (r) {
             fprintf(stderr, "Fixing primary GPT header failed\n");
@@ -567,10 +567,8 @@ int prepare_boot_update(enum boot_update_stage stage)
 
         break;
     case UPDATE_FINALIZE:
-        fprintf(stdout, "Finalizing boot partitions update\n");
-
         r = gpt2_set_boot_chain(fd, NORMAL_BOOT);
-        if (r) {
+        if (r < 0) {
             fprintf(stderr, "Setting secondary GPT to normal boot failed\n");
             goto EXIT;
         }
