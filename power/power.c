@@ -189,7 +189,12 @@ static void power_hint(struct power_module *module, power_hint_t hint,
         case POWER_HINT_VSYNC:
         break;
         case POWER_HINT_INTERACTION:
-            interaction();
+        {
+            int resources[] = {0x702, 0x20F, 0x30F};
+            int duration = 3000;
+
+            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+        }
         break;
         case POWER_HINT_VIDEO_ENCODE:
             process_video_encode_hint(data);
