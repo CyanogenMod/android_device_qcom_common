@@ -31,7 +31,11 @@
 
 target="$1"
 btsoc="$2"
-soc_hwid=`cat /sys/devices/system/soc/soc0/id`
+if [ -f /sys/devices/soc0/soc_id ]; then
+    soc_hwid=`cat /sys/devices/soc0/soc_id`
+else
+    soc_hwid=`cat /sys/devices/system/soc/soc0/id`
+fi
 
 # No path is set up at this point so we have to do it here.
 PATH=/sbin:/system/sbin:/system/bin:/system/xbin

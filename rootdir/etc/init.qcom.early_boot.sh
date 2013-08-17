@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2012, The Linux Foundation. All rights reserved.
+# Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -29,9 +29,21 @@
 export PATH=/system/bin
 
 # Set platform variables
-soc_hwplatform=`cat /sys/devices/system/soc/soc0/hw_platform` 2> /dev/null
-soc_hwid=`cat /sys/devices/system/soc/soc0/id` 2> /dev/null
-soc_hwver=`cat /sys/devices/system/soc/soc0/platform_version` 2> /dev/null
+if [ -f /sys/devices/soc0/hw_platform ]; then
+    soc_hwplatform=`cat /sys/devices/soc0/hw_platform` 2> /dev/null
+else
+    soc_hwplatform=`cat /sys/devices/system/soc/soc0/hw_platform` 2> /dev/null
+fi
+if [ -f /sys/devices/soc0/soc_id ]; then
+    soc_hwid=`cat /sys/devices/soc0/soc_id` 2> /dev/null
+else
+    soc_hwid=`cat /sys/devices/system/soc/soc0/id` 2> /dev/null
+fi
+if [ -f /sys/devices/soc0/platform_version ]; then
+    soc_hwver=`cat /sys/devices/soc0/platform_version` 2> /dev/null
+else
+    soc_hwver=`cat /sys/devices/system/soc/soc0/platform_version` 2> /dev/null
+fi
 
 log -t BOOT -p i "MSM target '$1', SoC '$soc_hwplatform', HwID '$soc_hwid', SoC ver '$soc_hwver'"
 
