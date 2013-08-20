@@ -19,6 +19,13 @@
 import common
 import re
 
+
+bootImages = {}
+binImages = {}
+fwImages = {}
+
+
+# Parse filesmap file containing firmware residing places
 def LoadFilesMap(zip, name="RADIO/filesmap"):
   try:
     data = zip.read(name)
@@ -36,252 +43,323 @@ def LoadFilesMap(zip, name="RADIO/filesmap"):
     d[pieces[0]] = pieces[1]
   return d
 
+
+# Read firmware images from target files zip
 def GetRadioFiles(z):
   out = {}
   for info in z.infolist():
-    if info.filename.startswith("RADIO/") and (info.filename.__len__() > len("RADIO/")):
-      fn = info.filename[6:]
+    f = info.filename
+    if f.startswith("RADIO/") and (f.__len__() > len("RADIO/")):
+      fn = f[6:]
       if fn.startswith("filesmap"):
         continue
-      out[fn] = info.filename
+      data = z.read(f)
+      out[fn] = common.File(f, data)
   return out
 
-def GetImageData(fpath, in_zip, base_zip=None):
-  try:
-    in_img = in_zip.read(fpath)
-  except KeyError:
-    print "Warning: could not read '%s' from '%s'." % (fpath, in_zip)
-    in_img = ""
 
-  base_img = ""
-  if base_zip is not None:
-    try:
-      base_img = base_zip.read(fpath)
-    except KeyError:
-      base_img = ""
-  return in_img, base_img
+# Get firmware residing place from filesmap
+def GetFileDestination(fn, filesmap):
+  # if file is encoded disregard the .enc extention
+  if fn.endswith('.enc'):
+    fn = fn[:-4]
+
+  # get backup destination as well if present
+  backup = None
+  if fn + ".bak" in filesmap:
+    backup = filesmap[fn + ".bak"]
+
+  # If full filename is not specified in filesmap get only the name part
+  # and look for this token
+  if fn not in filesmap:
+    fn = fn.split(".")[0] + ".*"
+    if fn not in filesmap:
+      print "warning radio-update: '%s' not found in filesmap" % (fn)
+      return None, backup
+  return filesmap[fn], backup
+
+
+# Separate image types as each type needs different handling
+def SplitFwTypes(files):
+  boot = {}
+  bin = {}
+  fw = {}
+
+  for f in files:
+    extIdx = -1
+    dotSeparated = f.split(".")
+    while True:
+      if dotSeparated[extIdx] != 'p' and dotSeparated[extIdx] != 'enc':
+        break
+      extIdx -= 1
+
+    if dotSeparated[extIdx] == 'mbn':
+      boot[f] = files[f]
+    elif dotSeparated[extIdx] == 'bin':
+      bin[f] = files[f]
+    else:
+      fw[f] = files[f]
+  return boot, bin, fw
+
+
+# Prepare radio-update files and verify them
+def OTA_VerifyEnd(info, api_version, target_zip, source_zip=None):
+  if api_version < 3:
+    print "warning radio-update: no support for api_version less than 3"
+    return False
+
+  print "Loading radio filesmap..."
+  filesmap = LoadFilesMap(target_zip)
+  if filesmap == {}:
+    print "warning radio-update: no or invalid filesmap file found"
+    return False
+
+  print "Loading radio target..."
+  tgt_files = GetRadioFiles(target_zip)
+  if tgt_files == {}:
+    print "warning radio-update: no radio images in input target_files"
+    return False
+
+  src_files = None
+  if source_zip is not None:
+    print "Loading radio source..."
+    src_files = GetRadioFiles(source_zip)
+
+  update_list = {}
+  largest_source_size = 0
+
+  print "Preparing radio-update files..."
+  for fn in tgt_files:
+    dest, destBak = GetFileDestination(fn, filesmap)
+    if dest is None:
+      continue
+
+    tf = tgt_files[fn]
+    sf = None
+    if src_files is not None:
+      sf = src_files.get(fn, None)
+
+    full = sf is None or fn.endswith('.enc') or tf.sha1 == sf.sha1
+    if not full:
+      d = common.Difference(tf, sf)
+      _, _, d = d.ComputePatch()
+      # if patch is almost as big as the file - don't bother patching
+      full = d is None or len(d) > tf.size * common.OPTIONS.patch_threshold
+      if not full:
+        f = "patch/firmware-update/" + fn + ".p"
+        common.ZipWriteStr(info.output_zip, f, d)
+        update_list[f] = (dest, destBak, tf, sf)
+        largest_source_size = max(largest_source_size, sf.size)
+    if full:
+      f = "firmware-update/" + fn
+      common.ZipWriteStr(info.output_zip, f, tf.data)
+      update_list[f] = (dest, destBak, None, None)
+
+  global bootImages
+  global binImages
+  global fwImages
+  bootImages, binImages, fwImages = SplitFwTypes(update_list)
+
+  # If there are incremental patches verify them
+  if largest_source_size != 0:
+    info.script.Comment("---- radio update verification ----")
+    info.script.Print("Verifying radio-update...")
+
+    for f in bootImages:
+      dest, destBak, tf, sf = bootImages[f]
+      # Not incremental
+      if sf is None:
+        continue
+      info.script.PatchCheck("EMMC:%s:%d:%s:%d:%s" %
+              (dest, sf.size, sf.sha1, tf.size, tf.sha1))
+      if destBak is not None:
+        info.script.PatchCheck("EMMC:%s:%d:%s:%d:%s" %
+                (destBak, sf.size, sf.sha1, tf.size, tf.sha1))
+    for f in binImages:
+      dest, destBak, tf, sf = binImages[f]
+      # Not incremental
+      if sf is None:
+        continue
+      info.script.PatchCheck("EMMC:%s:%d:%s:%d:%s" %
+              (dest, sf.size, sf.sha1, tf.size, tf.sha1))
+
+    last_mounted = ""
+    for f in fwImages:
+      dest, destBak, tf, sf = fwImages[f]
+      # Not incremental
+      if sf is None:
+        continue
+      # Get the filename without the path and the patch (.p) extention
+      f = f.split("/")[-1][:-2]
+      # Parse filesmap destination paths for "/dev/" pattern in the beginng.
+      # This would mean that the file must be written to block device -
+      # fs mount needed
+      if dest.startswith("/dev/"):
+        if last_mounted != dest:
+          info.script.AppendExtra('unmount("/firmware");')
+          info.script.AppendExtra('mount("vfat", "EMMC", "%s", "/firmware");' %
+                                    (dest))
+          last_mounted = dest
+        dest = "/firmware/image/" + f
+      else:
+        dest = dest + "/" + f
+      info.script.PatchCheck(dest, tf.sha1, sf.sha1)
+
+    info.script.CacheFreeSpaceCheck(largest_source_size)
+  return True
+
 
 def FullOTA_Assertions(info):
   #TODO: Implement device specific asserstions.
   return
 
+
 def IncrementalOTA_Assertions(info):
   #TODO: Implement device specific asserstions.
   return
 
-# This function checks if fw image is to be handled incrementally and if
-# this is the case it creates and adds the diff patch to the update zip and
-# adds the appropriate applypatch command to the update script
-def HandleIncrementally(info, f, fpath, img_dest, in_img, base_img):
-  in_f = common.File(fpath, in_img)
-  base_f = common.File(fpath, base_img)
-  if in_f.sha1 == base_f.sha1:
-    return False
 
-  diff = common.Difference(in_f, base_f)
-  common.ComputeDifferences([diff])
-  _, _, d = diff.GetPatch()
-  if d is None or len(d) > in_f.size * common.OPTIONS.patch_threshold:
-    # compute difference failed or the difference is bigger than the
-    # target file * predefined threshold - do full update
-    return False
-
-  patch = "patch/firmware-update/" + f + ".p"
-  common.ZipWriteStr(info.output_zip, patch, d)
-  info.script.ApplyPatch("EMMC:%s:%d:%s:%d:%s" %
-          (img_dest, base_f.size, base_f.sha1, in_f.size, in_f.sha1),
-          "-", in_f.size, in_f.sha1, base_f.sha1, patch)
-  return True
-
-# This function handles only non-HLOS whole partition images - files list
-# must contain only such images
-def InstallRawImages(info, files, filesmap, in_zip, base_zip=None):
-  for f in files:
-    in_img, base_img = GetImageData(files[f], in_zip, base_zip)
-    if in_img == "":
-      continue
-
-    fn = f
-    # is the file encoded?
-    enc = f.endswith('.enc')
-    if enc:
-      # disregard the .enc extention
-      fn = f[:-4]
-
-    if fn not in filesmap:
-      print "warning radio-update: '%s' not found in filesmap" % (fn)
-      continue
-
-    # handle incrementally?
-    if base_img != "" and not enc:
-      if HandleIncrementally(info, fn, files[f], filesmap[fn], in_img, base_img):
-        continue
-
-    filepath = "firmware-update/" + f
-    common.ZipWriteStr(info.output_zip, filepath, in_img)
-
-    if enc:
-      info.script.AppendExtra('package_extract_file("%s", "/tmp/%s");' % (filepath, f))
-      info.script.AppendExtra('msm.decrypt("/tmp/%s", "%s");' % (f, filesmap[fn]))
-    else:
-      info.script.AppendExtra('package_extract_file("%s", "%s");' % (filepath, filesmap[fn]))
+def IncrementalOTA_VerifyEnd(info):
+  if info.type == 'MMC':
+    OTA_VerifyEnd(info, info.target_version, info.target_zip, info.source_zip)
   return
+
+
+# This function handles only non-HLOS whole partition images
+def InstallRawImage(script, f, dest, tf, sf):
+  if f.endswith('.p'):
+    script.ApplyPatch("EMMC:%s:%d:%s:%d:%s" %
+                        (dest, sf.size, sf.sha1, tf.size, tf.sha1),
+                        "-", tf.size, tf.sha1, sf.sha1, f)
+  elif f.endswith('.enc'):
+    # Get the filename without the path
+    fn = f.split("/")[-1]
+    script.AppendExtra('package_extract_file("%s", "/tmp/%s");' % (f, fn))
+    script.AppendExtra('msm.decrypt("/tmp/%s", "%s");' % (fn, dest))
+  else:
+    script.AppendExtra('package_extract_file("%s", "%s");' % (f, dest))
+  return
+
 
 # This function handles only non-HLOS boot images - files list must contain
 # only such images (aboot, tz, etc)
-def InstallBootImages(info, files, filesmap, in_zip, base_zip=None):
-  filesmapBak = {}
-  for f in filesmap:
-    if f.endswith('.bak'):
-      filesmapBak[f[:-4]] = filesmap[f]
-
+def InstallBootImages(script, files):
+  bakExists = False
   # update main partitions
-  info.script.AppendExtra('ifelse(msm.boot_update("main"), (')
-  InstallRawImages(info, files, filesmap, in_zip, base_zip)
-  info.script.AppendExtra('ui_print("Main boot images updated") ), "");')
+  script.AppendExtra('ifelse(msm.boot_update("main"), (')
+  for f in files:
+    dest, destBak, tf, sf = files[f]
+    if destBak is not None:
+      bakExists = True
+    InstallRawImage(script, f, dest, tf, sf)
+  script.AppendExtra('), "");')
 
-  if filesmapBak != {}:
-    # update backup partitions
-    info.script.AppendExtra('ifelse(msm.boot_update("backup"), (')
-    InstallRawImages(info, files, filesmapBak, in_zip, base_zip)
-    info.script.AppendExtra('ui_print("Backup boot images updated") ), "");')
+  # update backup partitions
+  if bakExists:
+    script.AppendExtra('ifelse(msm.boot_update("backup"), (')
+    for f in files:
+      dest, destBak, tf, sf = files[f]
+      if destBak is not None:
+        InstallRawImage(script, f, destBak, tf, sf)
+    script.AppendExtra('), "");')
+  # just finalize primary update stage
   else:
-    info.script.AppendExtra('msm.boot_update("backup");')
+    script.AppendExtra('msm.boot_update("backup");')
 
   # finalize partitions update
-  info.script.AppendExtra('msm.boot_update("finalize");')
+  script.AppendExtra('msm.boot_update("finalize");')
   return
 
-# This function handles only non-HLOS firmware images different from boot
-# images - files list must contain only such images (modem, dsp, etc)
-def InstallFwImages(info, files, filesmap, in_zip, base_zip=None):
+
+# This function handles only non-HLOS bin images
+def InstallBinImages(script, files):
+  for f in files:
+    dest, _, tf, sf = files[f]
+    InstallRawImage(script, f, dest, tf, sf)
+  return
+
+
+# This function handles only non-HLOS firmware files that are not whole
+# partition images (modem, dsp, etc)
+def InstallFwImages(script, files):
   last_mounted = ""
 
   for f in files:
-    in_img, base_img = GetImageData(files[f], in_zip, base_zip)
-    if in_img == "":
-      continue
-
-    fn = f
-    # is the file encoded?
-    enc = f.endswith('.enc')
-    if enc:
-      # disregard the .enc extention
-      fn = f[:-4]
-
-    filetoken = fn
-    # If full file name is not specified in filesmap get only the name part
-    # and look for this token
-    if fn not in filesmap:
-      filetoken = fn.split(".")[0] + ".*"
-      if filetoken not in filesmap:
-        print "warning radio-update: '%s' not found in filesmap" % (filetoken)
-        continue
-
-    dest = ""
-    # Parse filesmap destination paths for "/dev/" pattern at the beginng.
+    dest, _, tf, sf = files[f]
+    # Get the filename without the path
+    fn = f.split("/")[-1]
+    # Parse filesmap destination paths for "/dev/" pattern in the beginng.
     # This would mean that the file must be written to block device -
     # fs mount needed
-    mount = filesmap[filetoken].startswith("/dev/")
-    if mount:
-      if last_mounted != filesmap[filetoken]:
-        info.script.AppendExtra('unmount("/firmware");')
-        info.script.AppendExtra('mount("vfat", "EMMC", "%s", "/firmware");' % (filesmap[filetoken]))
-        last_mounted = filesmap[filetoken]
+    if dest.startswith("/dev/"):
+      if last_mounted != dest:
+        script.AppendExtra('unmount("/firmware");')
+        script.AppendExtra('mount("vfat", "EMMC", "%s", "/firmware");' %
+                            (dest))
+        last_mounted = dest
       dest = "/firmware/image/" + fn
     else:
-      dest = filesmap[filetoken] + "/" + fn
+      dest = dest + "/" + fn
 
-    # handle incrementally?
-    if base_img != "" and not enc:
-      if HandleIncrementally(info, fn, files[f], dest, in_img, base_img):
-        continue
-
-    filepath = "firmware-update/" + f
-    common.ZipWriteStr(info.output_zip, filepath, in_img)
-
-    if enc:
-      info.script.AppendExtra('package_extract_file("%s", "/tmp/%s");' % (filepath, f))
-      info.script.AppendExtra('msm.decrypt("/tmp/%s", "%s");' % (f, dest))
+    if f.endswith('.p'):
+      script.ApplyPatch(dest[:-2], "-", tf.size, tf.sha1, sf.sha1, f)
+    elif f.endswith('.enc'):
+      script.AppendExtra('package_extract_file("%s", "/tmp/%s");' % (f, fn))
+      script.AppendExtra('msm.decrypt("/tmp/%s", "%s");' % (fn, dest[:-4]))
     else:
-      info.script.AppendExtra('package_extract_file("%s", "%s");' % (filepath, dest))
+      script.AppendExtra('package_extract_file("%s", "%s");' % (f, dest))
 
   if last_mounted != "":
-    info.script.AppendExtra('unmount("/firmware");')
+    script.AppendExtra('unmount("/firmware");')
   return
 
-def OTA_InstallEnd_MMC(info, in_zip, base_zip=None):
-  files = GetRadioFiles(in_zip)
-  if files == {}:
-    print "warning radio-update: no radio images in input target_files"
-    return
 
-  filesmap = LoadFilesMap(in_zip)
-  if filesmap == {}:
-    print "warning radio-update: no or invalid filesmap file found"
-    return
+def OTA_InstallEnd(info):
+  print "Applying radio-update script modifications..."
+  info.script.Comment("---- radio update tasks ----")
+  info.script.Print("Patching firmware images...")
 
-  info.script.Print("Updating firmware images...")
-
-  fwFiles = {}
-  bootFiles = {}
-  binFiles = {}
-
-  # Separate image types as each type needs different handling
-  for f in files:
-    dotSeparatedFname = f.split(".")
-    if dotSeparatedFname[-1] == 'enc':
-      if dotSeparatedFname[-2] == 'mbn':
-        bootFiles[f] = files[f]
-      else:
-        fwFiles[f] = files[f]
-    elif dotSeparatedFname[-1] == 'mbn':
-      bootFiles[f] = files[f]
-    elif dotSeparatedFname[-1] == 'bin':
-      binFiles[f] = files[f]
-    else:
-      fwFiles[f] = files[f]
-
-  if bootFiles != {}:
-    InstallBootImages(info, bootFiles, filesmap, in_zip, base_zip)
-  if binFiles != {}:
-    InstallRawImages(info, binFiles, filesmap, in_zip, base_zip)
-  if fwFiles != {}:
-    InstallFwImages(info, fwFiles, filesmap, in_zip, base_zip)
+  if bootImages != {}:
+    InstallBootImages(info.script, bootImages)
+  if binImages != {}:
+    InstallBinImages(info.script, binImages)
+  if fwImages != {}:
+    InstallFwImages(info.script, fwImages)
   return
+
 
 def FullOTA_InstallEnd_MMC(info):
-  OTA_InstallEnd_MMC(info, info.input_zip)
+  if OTA_VerifyEnd(info, info.input_version, info.input_zip):
+    OTA_InstallEnd(info)
   return
+
 
 def FullOTA_InstallEnd_MTD(info):
   print "warning radio-update: radio update for NAND devices not supported"
   return
 
+
 def FullOTA_InstallEnd(info):
-  if info.input_version < 3:
-    print "warning radio-update: no support for api_version less than 3"
-  else:
-    if info.type == 'MMC':
-      FullOTA_InstallEnd_MMC(info)
-    elif info.type == 'MTD':
-      FullOTA_InstallEnd_MTD(info)
+  if info.type == 'MMC':
+    FullOTA_InstallEnd_MMC(info)
+  elif info.type == 'MTD':
+    FullOTA_InstallEnd_MTD(info)
   return
 
+
 def IncrementalOTA_InstallEnd_MMC(info):
-  OTA_InstallEnd_MMC(info, info.target_zip, info.source_zip)
+  OTA_InstallEnd(info)
   return
+
 
 def IncrementalOTA_InstallEnd_MTD(info):
   print "warning radio-update: radio update for NAND devices not supported"
   return
 
+
 def IncrementalOTA_InstallEnd(info):
-  if info.target_version < 3:
-    print "warning radio-update: no support for api_version less than 3"
-  else:
-    if info.type == 'MMC':
-      IncrementalOTA_InstallEnd_MMC(info)
-    elif info.type == 'MTD':
-      IncrementalOTA_InstallEnd_MTD(info)
+  if info.type == 'MMC':
+    IncrementalOTA_InstallEnd_MMC(info)
+  elif info.type == 'MTD':
+    IncrementalOTA_InstallEnd_MTD(info)
   return
