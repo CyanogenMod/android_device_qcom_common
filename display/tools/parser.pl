@@ -496,6 +496,17 @@ if(uc($ARGV[1]) eq "PANEL")
 					"qcom,mdss-dsi-bl-pmic-control-type");
 		}
 
+		@attrs = ("PanPhysicalWidthDimension",
+			"PanPhysicalHeightDimension");
+		foreach(@attrs)
+		{
+			push(my @tmp, $_);
+			my $lower = $_;
+			$lower = convertLower($lower);
+			printArray($PANELDTSI, \@tmp, $property,
+					"qcom,mdss-" . $lower);
+		}
+
 		my @attr = ("FBCbpp", "FBCPacking",
 		"FBCBias",
 		"FBCHLineBudget", "FBCBlockBudget",
