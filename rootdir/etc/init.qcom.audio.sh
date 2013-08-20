@@ -38,20 +38,6 @@ PATH=/sbin:/system/sbin:/system/bin:/system/xbin
 export PATH
 
 case "$target" in
-    msm8974*)
-        insmod /system/lib/modules/adsp-loader.ko
-        ;;
-    msm8610*)
-        insmod /system/lib/modules/adsp-loader.ko
-        ;;
-    msm8226*)
-        insmod /system/lib/modules/adsp-loader.ko
-        ;;
-    *)
-        ;;
-esac
-
-case "$target" in
     msm8960*)
         echo "The TARGET ID is $target"
     case $soc_hwid in
