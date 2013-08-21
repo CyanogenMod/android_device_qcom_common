@@ -469,6 +469,12 @@ service iprenew_p2p /system/bin/dhcpcd -n
     disabled
     oneshot
 
+service ptt_socket_app /system/bin/ptt_socket_app
+    class main
+    user system
+    group system
+    oneshot
+
 service dhcpcd_bt-pan /system/bin/dhcpcd -BKLG
     class late_start
     disabled
