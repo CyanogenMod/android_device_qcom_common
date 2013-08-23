@@ -251,7 +251,7 @@ case "$target" in
       ln -s /system/lib/modules/pronto/pronto_wlan.ko \
 		/system/lib/modules/wlan.ko
       # Populate the writable driver configuration file
-      if [ ! -e /data/misc/wifi/WCNSS_qcom_cfg.ini ]; then
+      if [ ! -s /data/misc/wifi/WCNSS_qcom_cfg.ini ]; then
           cp /system/etc/wifi/WCNSS_qcom_cfg.ini \
 		/data/misc/wifi/WCNSS_qcom_cfg.ini
           chown -h system:wifi /data/misc/wifi/WCNSS_qcom_cfg.ini
