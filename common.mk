@@ -470,6 +470,7 @@ TSLIB_EXTERNAL += ts
 
 #QRGND
 QRGND := qrngd
+QRGND += qrngp
 QRGND += qrngtest
 
 #WPA
