@@ -341,7 +341,7 @@ int decrypt_image(const char *src_file, const char *dst_file)
     fsize = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    ret = ion_memalloc(&ionbuf, fsize, ION_QSECOM_HEAP_ID);
+    ret = ion_memalloc(&ionbuf, fsize, ION_PIL1_HEAP_ID);
     if (ret)
         goto exit;
 
