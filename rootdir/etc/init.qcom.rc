@@ -230,6 +230,9 @@ service usbhub_init /system/bin/usbhub_init
    disabled
    oneshot
 
+on property:persist.radio.atfwd.start=false
+    stop atfwd
+
 on property:init.svc.surfaceflinger=stopped
     stop ppd
     stop hdmid
