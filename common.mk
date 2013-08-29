@@ -52,6 +52,7 @@ ALSA_UCM += snd_soc_msm_Taiko_liquid
 ALSA_UCM += snd_soc_apq_Taiko_DB
 ALSA_UCM += snd_soc_msm_I2SFusion
 ALSA_UCM += snd_soc_msm_Tapan
+ALSA_UCM += snd_soc_msm_TapanLite
 ALSA_UCM += snd_soc_msm_Tapan_SKUF
 ALSA_UCM += snd_soc_msm_8x10_wcd
 ALSA_UCM += snd_soc_msm_8x10_wcd_skuab
