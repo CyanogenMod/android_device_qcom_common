@@ -1346,8 +1346,6 @@ sub printdtsheader
 	print $fh " * VERSION = " . $Version . "\n";
 	print $fh " *---------------------------------------------------------------------------*/\n";
 
-	print $fh "&soc {\n";
-	print $fh "\tqcom,mdss_dsi_" . lc($name) . " {\n";
-	print $fh "\t\tcompatible = \"qcom,mdss-dsi-panel\";\n";
-	print $fh "\t\tstatus = \"disable\";\n";
+	print $fh "&mdss_mdp {\n";
+	print $fh "\tdsi_" . lc($name) . ": qcom,mdss_dsi_" . lc($name) . " {\n";
 }
