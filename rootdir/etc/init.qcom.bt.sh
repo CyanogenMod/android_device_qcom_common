@@ -152,6 +152,12 @@ config_bt ()
            setprop ro.qualcomm.bt.hci_transport smd
        fi
        ;;
+    "apq8084")
+       if ["$btsoc" != "rome"]
+       then
+           setprop ro.qualcomm.bt.hci_transport smd
+       fi
+       ;;
     *)
        ;;
   esac
