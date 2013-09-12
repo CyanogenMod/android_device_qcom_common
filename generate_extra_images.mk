@@ -100,6 +100,23 @@ ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_DTIMAGE_TARGET)
 ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_DTIMAGE_TARGET)
 endif
 
+#----------------------------------------------------------------------
+# Generate CDROM image
+#----------------------------------------------------------------------
+ifneq ($(wildcard $(CDROM_RES_FILE)),)
+CDROM_ISO_TARGET := $(PRODUCT_OUT)/system/etc/cdrom_install.iso
+CDROM_RES_FILE = $(TARGET_DEVICE_DIR)/cdrom_res
+
+define build-cdrom-target
+    $(hide) mkisofs -o $(CDROM_ISO_TARGET)  $(CDROM_RES_FILE)
+endef
+
+$(CDROM_ISO_TAREGT): $(CDROM_RES_FILE)
+	$(build-cdrom-target)
+
+ALL_DEFAULT_INSTALLED_MODULES += $(CDROM_ISO_TARGET)
+ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(CDROM_ISO_TARGET)
+endif
 
 #----------------------------------------------------------------------
 # Generate NAND images
