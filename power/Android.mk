@@ -15,6 +15,14 @@ ifeq ($(call is-board-platform-in-list, msm8974), true)
 LOCAL_SRC_FILES += power-8974.c
 endif
 
+ifeq ($(call is-board-platform-in-list, msm8226), true)
+LOCAL_SRC_FILES += power-8226.c
+endif
+
+ifeq ($(call is-board-platform-in-list, msm8610), true)
+LOCAL_SRC_FILES += power-8610.c
+endif
+
 ifeq ($(TARGET_USES_INTERACTION_BOOST),true)
     LOCAL_CFLAGS += -DINTERACTION_BOOST
 endif
