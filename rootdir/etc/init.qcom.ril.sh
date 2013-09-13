@@ -40,3 +40,36 @@ elif [ "$multisim" = "tsts" ]; then
         start ril-daemon1
         start ril-daemon2
 fi
+
+carrier=`getprop persist.env.spec`
+if [ "$carrier" = "ChinaTelecom" ]; then
+    # Update the props.
+    setprop persist.env.phone.global true
+    setprop persist.env.plmn.update true
+
+    # Remount /system with read-write permission for copy action.
+    `mount -o remount,rw /system`
+
+    # Copy the modules to system app.
+    `cp /system/vendor/ChinaTelecom/system/app/RoamingSettings.apk /system/app/RoamingSettings.apk`
+    `cp /system/vendor/ChinaTelecom/system/app/UniversalDownload.apk /system/app/UniversalDownload.apk`
+    `chmod 644 /system/app/RoamingSettings.apk`
+    `chmod 644 /system/app/UniversalDownload.apk`
+
+    # Remount /system with read-only
+    `mount -o remount,ro /system`
+else
+    # Update the props.
+    setprop persist.env.phone.global false
+    setprop persist.env.plmn.update false
+
+    # Remount /system with read-write permission for remove action.
+    `mount -o remount,rw /system`
+
+    # Remove the modules from the system app.
+    `rm /system/app/RoamingSettings.apk`
+    `rm /system/app/UniversalDownload.apk`
+
+    # Remount /system with read-only
+    `mount -o remount,ro /system`
+fi
