@@ -210,8 +210,11 @@ case "$target" in
         case "$baseband" in
             "msm")
                 start_battery_monitor
-                start_charger_monitor
                 ;;
         esac
+        start_charger_monitor
+        ;;
+    "msm8226")
+        start_charger_monitor
         ;;
 esac
