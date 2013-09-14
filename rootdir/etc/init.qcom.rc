@@ -279,6 +279,9 @@ on property:vold.decrypt=trigger_restart_framework
     start qcom-c_main-sh
     start config_bluetooth
 
+on property:persist.env.fastdorm.enabled=true
+    setprop persist.radio.data_no_toggle 1
+
 service cnd /system/bin/cnd
     class late_start
     socket cnd stream 660 root inet
