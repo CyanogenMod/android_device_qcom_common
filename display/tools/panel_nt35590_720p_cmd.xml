@@ -593,6 +593,17 @@
 	<BLPMICModel>"PMIC_8941"</BLPMICModel>
 	<BLPMICControlType>1</BLPMICControlType>
 
+	<!-- Panel Reset Sequence -->
+	<ResetSequence>
+		<PinState1>1</PinState1>
+		<PulseWidth1>20</PulseWidth1>
+		<PinState2>0</PinState2>
+		<PulseWidth2>2</PulseWidth2>
+		<PinState3>1</PinState3>
+		<PulseWidth3>20</PulseWidth3>
+		<EnableBit>2</EnableBit>
+	</ResetSequence>
+
   </PanelEntry>
 </GCDB>
 

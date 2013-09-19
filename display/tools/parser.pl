@@ -421,7 +421,13 @@ if(uc($ARGV[1]) eq "PANEL")
 						lc($nameinH) . "_timing_info");
 		print $PANELH "\n\n";
 	}
-
+	for my $tmpProperty($xmldoc->findnodes('/GCDB/PanelEntry/ResetSequence'))
+	{
+		print $PANELH "static struct panel_reset_sequence " .
+				lc($nameinH) . "_reset_seq = {\n ";
+		printResetSeqinH($PANELH, $tmpProperty);
+		print $PANELH "\n\n"
+	}
 	printSectionHeader($PANELH, "Backlight Settings");
 	print $PANELH "\n";
 	for my $property($xmldoc->findnodes('/GCDB/PanelEntry'))
@@ -530,6 +536,13 @@ if(uc($ARGV[1]) eq "PANEL")
 			printBoolean($PANELDTSI, \@tmp, $property,
 					"qcom,mdss-dsi-" . $lower);
 		}
+		for my $tmpProperty ($xmldoc->findnodes('/GCDB/PanelEntry/ResetSequence'))
+		{
+			print $PANELDTSI "\t";
+			printResetSeq($PANELDTSI, $tmpProperty,
+					"qcom,mdss-dsi-reset-sequence");
+			print $PANELDTSI "\n";
+		}
 	}
 
 	print $PANELH "\n#endif /*_PANEL_" . uc($nameinH) . "_H_*/\n";
@@ -594,17 +607,6 @@ elsif(uc($ARGV[1]) eq "PLATFORM")
 		print $PLATFORMH "\n\n";
 
 		printGPIO($PLATFORMDTSI, $property, "qcom,platform-pwm-gpio");
-	}
-	for my $property ($xmldoc->findnodes('/GCDB/PlatformEntry/ResetSequence'))
-	{
-		print $PLATFORMH "static struct panel_reset_sequence reset_sequence = {\n  ";
-		printResetSeqinH($PLATFORMH, $property);
-		print $PLATFORMH "\n\n";
-
-		print $PLATFORMDTSI "\n";
-		printResetSeq($PLATFORMDTSI, $property,
-						"qcom,platform-reset-sequence");
-		print $PLATFORMDTSI "\n";
 	}
 	printSectionHeader($PLATFORMH, "Supply configuration");
 	print $PLATFORMH "static struct ldo_entry ldo_entry_array[] = {\n  ";
@@ -916,7 +918,7 @@ sub printResetSeq
 	my $fh = shift;
 	my $property = shift;
 	my $name = shift;
-	print $fh "\t" . $name . " = <";
+	print $fh "\t" . $name . " = ";
 	my $first = 1;
 	for (my $i = 1; $i <=5; $i++)
 	{
@@ -928,22 +930,18 @@ sub printResetSeq
 			}
 			else
 			{
-				print $fh " ";
+				print $fh ", ";
 			}
-			print $fh $element->textContent();
+			print $fh "<" . $element->textContent();
 		}
 		for my $element ($property->findnodes("./PulseWidth" . $i))
 		{
 			print $fh " ";
 			print $fh $element->textContent();
+			print $fh ">";
 		}
 	}
-	for my $element ($property->findnodes("./EnableBit"))
-	{
-		print $fh " ";
-		print $fh $element->textContent();
-		print $fh ">;\n";
-	}
+	print $fh ";";
 }
 
 sub printSupplyinH
