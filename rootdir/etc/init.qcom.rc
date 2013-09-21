@@ -26,6 +26,7 @@
 #
 
 import init.qcom.usb.rc
+import init.ril.rc
 import init.target.rc
 
 on early-init
@@ -275,11 +276,6 @@ on property:ro.bluetooth.ftm_enabled=true
 
 service qcom-c_core-sh /system/bin/sh /init.qcom.class_core.sh
     class core
-    user root
-    oneshot
-
-service qcom-c_main-sh /system/bin/sh /init.qcom.class_main.sh
-    class main
     user root
     oneshot
 
