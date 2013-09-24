@@ -58,6 +58,7 @@ ALSA_UCM += snd_soc_msm_TapanLite_SKUF
 ALSA_UCM += snd_soc_msm_8x10_wcd
 ALSA_UCM += snd_soc_msm_8x10_wcd_skuab
 ALSA_UCM += snd_soc_msm_8x10_wcd_skuaa
+ALSA_UCM += snd_soc_msm_samarium_Tapan
 
 #ANGLE
 ANGLE := libangle
