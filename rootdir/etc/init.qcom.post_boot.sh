@@ -400,6 +400,55 @@ case "$target" in
 esac
 
 case "$target" in
+    "apq8084")
+        echo 3 > /sys/module/lpm_levels/enable_low_power/l2
+        echo 1 > /sys/module/pm_8x60/modes/cpu0/power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu1/power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu2/power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu3/power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu0/power_collapse/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu0/standalone_power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu1/standalone_power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu2/standalone_power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu3/standalone_power_collapse/suspend_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu0/standalone_power_collapse/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu1/standalone_power_collapse/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu2/standalone_power_collapse/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu3/standalone_power_collapse/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu0/retention/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu1/retention/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu2/retention/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu3/retention/idle_enabled
+        echo 0 > /sys/module/msm_thermal/core_control/enabled
+        echo 1 > /sys/devices/system/cpu/cpu1/online
+        echo 1 > /sys/devices/system/cpu/cpu2/online
+        echo 1 > /sys/devices/system/cpu/cpu3/online
+        echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+        echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+        echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+        echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+        echo 50000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
+        echo 90 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
+        echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
+        echo 2 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+        echo 300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        echo 300000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+        echo 300000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+        echo 300000 > /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+        chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+        chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        chown root.system /sys/devices/system/cpu/mfreq
+        chmod 220 /sys/devices/system/cpu/mfreq
+        chown root.system /sys/devices/system/cpu/cpu1/online
+        chown root.system /sys/devices/system/cpu/cpu2/online
+        chown root.system /sys/devices/system/cpu/cpu3/online
+        chmod 664 /sys/devices/system/cpu/cpu1/online
+        chmod 664 /sys/devices/system/cpu/cpu2/online
+        chmod 664 /sys/devices/system/cpu/cpu3/online
+    ;;
+esac
+
+case "$target" in
     "msm7627_ffa" | "msm7627_surf" | "msm7627_6x")
         echo 25000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
         ;;
@@ -448,6 +497,10 @@ case "$target" in
     "msm8974")
         start mpdecision
         echo 512 > /sys/block/mmcblk0/bdi/read_ahead_kb
+    ;;
+    "apq8084")
+        rm /data/system/default_values
+        start mpdecision
     ;;
     "msm7627a")
         if [ -f /sys/devices/soc0/soc_id ]; then
