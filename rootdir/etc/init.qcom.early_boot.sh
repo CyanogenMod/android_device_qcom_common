@@ -153,9 +153,13 @@ esac
 # HDMI can be fb1 or fb2
 # Loop through the sysfs nodes and determine
 # the HDMI(dtv panel)
-for file in /sys/class/graphics/fb*
+for fb_cnt in 0 1 2
 do
-    value=`cat $file/msm_fb_type`
+sys_file=/sys/class/graphics/fb$fb_cnt
+dev_file=/dev/graphics/fb$fb_cnt
+  if [ -d "$sys_file" ]
+  then
+    value=`cat $sys_file/msm_fb_type`
     case "$value" in
             "dtv panel")
         chown system.graphics $file/hpd
@@ -169,10 +173,11 @@ do
         chmod 0664 $file/video_mode
         chmod 0664 $file/format_3d
         # create symbolic link
-        ln -s $file /dev/graphics/hdmi
+        ln -s $dev_file /dev/graphics/hdmi
         # Change owner and group for media server and surface flinger
         chown system.system $file/format_3d;;
     esac
+  fi
 done
 
 # Set date to a time after 2008
