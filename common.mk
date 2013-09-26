@@ -320,6 +320,7 @@ LIBLIGHTS += lights.msm7627_surf
 LIBLIGHTS += lights.msm7627_6x
 LIBLIGHTS += lights.msm7627a
 LIBLIGHTS += lights.msm8610
+LIBLIGHTS += lights.apq8084
 
 #LIBHWCOMPOSER
 LIBHWCOMPOSER := hwcomposer.msm8660
