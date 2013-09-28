@@ -34,6 +34,7 @@ ALSA_HARDWARE := alsa.msm8960
 ALSA_HARDWARE += alsa.msm8974
 ALSA_HARDWARE += alsa.msm8226
 ALSA_HARDWARE += alsa.msm8610
+ALSA_HARDWARE += alsa.apq8084
 
 ALSA_UCM := snd_soc_msm
 ALSA_UCM += snd_soc_msm_2x
@@ -64,6 +65,7 @@ ALSA_UCM += snd_soc_msm_samarium_Tapan
 ANGLE := libangle
 
 AUDIO_HARDWARE := audio.primary.mpq8064
+AUDIO_HARDWARE += audio.primary.apq8084
 AUDIO_HARDWARE += audio.primary.msm8960
 AUDIO_HARDWARE += audio.primary.msm8974
 AUDIO_HARDWARE += audio.primary.msm8226
@@ -78,6 +80,7 @@ AUDIO_HARDWARE += audio.a2dp.default
 AUDIO_HARDWARE += audio.usb.default
 #
 AUDIO_POLICY := audio_policy.mpq8064
+AUDIO_POLICY += audio_policy.apq8084
 AUDIO_POLICY += audio_policy.msm8960
 AUDIO_POLICY += audio_policy.msm8974
 AUDIO_POLICY += audio_policy.msm8226
