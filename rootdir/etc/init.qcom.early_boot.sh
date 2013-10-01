@@ -140,10 +140,23 @@ case "$1" in
         esac
         ;;
 
-    "msm8610" | "apq8084")
+    "msm8610")
         case "$soc_hwplatform" in
             *)
                 setprop ro.sf.lcd_density 240
+                ;;
+        esac
+        ;;
+    "apq8084")
+        case "$soc_hwplatform" in
+            "Liquid")
+                setprop ro.sf.lcd_density 293
+                # Liquid do not have hardware navigation keys, so enable
+                # Android sw navigation bar
+                setprop ro.hw.nav_keys 0
+                ;;
+            *)
+                setprop ro.sf.lcd_density 440
                 ;;
         esac
         ;;
