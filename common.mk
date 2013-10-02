@@ -209,6 +209,7 @@ INIT += ueventd.qcom.rc
 INIT += init.ath3k.bt.sh
 INIT += init.qcom.audio.sh
 INIT += init.qcom.ssr.sh
+INIT += init.mdm.sh
 
 #IPROUTE2
 IPROUTE2 := ip
