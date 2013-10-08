@@ -32,6 +32,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
+#include <private/android_filesystem_config.h>
 
 #include "vendor_init.h"
 #include "property_service.h"
@@ -55,6 +57,11 @@ static unsigned long msm_id;
 static unsigned long msm_ver;
 static char board_type[BUF_SIZE];
 static char tmp[BUF_SIZE];
+
+// sys and dev fb paths
+char sys_fb_path[]  = "/sys/class/graphics/";
+char dev_fb_path[]  = "/dev/graphics/";
+#define DEV_GFX_HDMI "/dev/graphics/hdmi"
 
 __attribute__ ((weak))
 void init_msm_properties(unsigned long soc, unsigned long socrev, char *board)
@@ -85,6 +92,83 @@ static int read_file2(const char *fname, char *data, int max_size)
     close(fd);
 
     return 1;
+}
+
+/*
+ * setPerms: sets the permission to the file node
+ * @path: file node
+ * @mode: permissions to be set(0664)
+ */
+void setPerms(char *path, uint32_t mode)
+{
+    // set the permission if the file exists
+    int fd = open(path, O_RDONLY | O_NOFOLLOW);
+    if (fd >= 0) {
+       if (fchmod(fd, mode) < 0)
+          ERROR("chmod failed for %s: errno = %d", path, errno);
+       close(fd);
+    }
+}
+
+/*
+ * setOwners: sets the owner and group for a file node
+ * @path: file node
+ * @owner: AID for owner
+ * @group: AID for group
+ */
+void setOwners(char *path, int owner, int group)
+{
+    // set the permissinn if the file exists
+    int fd = open(path, O_RDONLY | O_NOFOLLOW);
+    if (fd >= 0) {
+       if (fchown(fd, owner, group) < 0)
+          ERROR(" chown failed for %s: errno = %d", path, errno);
+       close(fd);
+    }
+}
+
+/*
+ * Setup HDMI related nodes & permissions. HDMI can be fb1 or fb2
+ * Loop through the sysfs nodes and determine the HDMI(dtv panel)
+ */
+void set_hdmi_node_perms()
+{
+    char panel_type[] = "dtv panel";
+    char buf[BUF_SIZE];
+    int num;
+
+    for (num=0; num<=2; num++) {
+        snprintf(tmp,sizeof(tmp),"%sfb%d/msm_fb_type", sys_fb_path, num);
+        if(read_file2(tmp, buf, sizeof(buf))) {
+            if(!strncmp(buf, panel_type, strlen(panel_type))) {
+                // Set appropriate permissions for the nodes
+                snprintf(tmp, sizeof(tmp), "%sfb%d/hpd", sys_fb_path, num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/vendor_name", sys_fb_path,
+                             num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/product_description",
+                            sys_fb_path, num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/video_mode",
+                            sys_fb_path, num);
+                setPerms(tmp, 0664);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/format_3d", sys_fb_path,
+                            num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_SYSTEM);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/hdcp/tp", sys_fb_path, num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_SYSTEM);
+                snprintf(tmp, sizeof(tmp), "%sfb%d", dev_fb_path, num);
+                symlink(tmp, DEV_GFX_HDMI);
+                break;
+            }
+        }
+    }
 }
 
 void vendor_load_properties()
@@ -124,4 +208,7 @@ void vendor_load_properties()
 
     /* Define MSM family properties */
     init_msm_properties(msm_id, msm_ver, board_type);
+
+    /* Set Hdmi Node Permissions */
+    set_hdmi_node_perms();
 }
