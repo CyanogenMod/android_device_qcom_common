@@ -121,9 +121,9 @@ endif
 #----------------------------------------------------------------------
 # Generate CDROM image
 #----------------------------------------------------------------------
+CDROM_RES_FILE = $(TARGET_DEVICE_DIR)/cdrom_res
 ifneq ($(wildcard $(CDROM_RES_FILE)),)
 CDROM_ISO_TARGET := $(PRODUCT_OUT)/system/etc/cdrom_install.iso
-CDROM_RES_FILE = $(TARGET_DEVICE_DIR)/cdrom_res
 
 define build-cdrom-target
     $(hide) mkisofs -o $(CDROM_ISO_TARGET)  $(CDROM_RES_FILE)
