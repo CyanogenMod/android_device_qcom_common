@@ -501,6 +501,7 @@ case "$target" in
     "apq8084")
         rm /data/system/default_values
         start mpdecision
+        echo 512 > /sys/block/mmcblk0/bdi/read_ahead_kb
         echo 512 > /sys/block/sda/bdi/read_ahead_kb
         echo 512 > /sys/block/sdb/bdi/read_ahead_kb
         echo 512 > /sys/block/sdc/bdi/read_ahead_kb
