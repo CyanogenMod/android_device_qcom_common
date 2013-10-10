@@ -76,8 +76,8 @@ config_bt ()
         setprop ro.qualcomm.bluetooth.opp true
         setprop ro.qualcomm.bluetooth.ftp true
         setprop ro.qualcomm.bluetooth.nap false
-        setprop ro.qualcomm.bluetooth.sap false
-        setprop ro.qualcomm.bluetooth.dun false
+        setprop ro.bluetooth.sap false
+        setprop ro.bluetooth.dun false
         # For MPQ as baseband is same for both
         case $soc_hwid in
           "130")
@@ -102,8 +102,8 @@ config_bt ()
         setprop ro.qualcomm.bluetooth.ftp true
         setprop ro.qualcomm.bluetooth.map true
         setprop ro.qualcomm.bluetooth.nap true
-        setprop ro.qualcomm.bluetooth.sap true
-        setprop ro.qualcomm.bluetooth.dun false
+        setprop ro.bluetooth.sap true
+        setprop ro.bluetooth.dun false
         ;;
     "msm")
         setprop ro.qualcomm.bluetooth.opp true
@@ -112,8 +112,8 @@ config_bt ()
         setprop ro.qualcomm.bluetooth.pbap true
         setprop ro.qualcomm.bluetooth.ftp true
         setprop ro.qualcomm.bluetooth.nap true
-        setprop ro.qualcomm.bluetooth.sap true
-        setprop ro.qualcomm.bluetooth.dun true
+        setprop ro.bluetooth.sap true
+        setprop ro.bluetooth.dun true
         case $btsoc in
           "ath3k")
               setprop ro.qualcomm.bluetooth.map false
@@ -131,8 +131,8 @@ config_bt ()
         setprop ro.qualcomm.bluetooth.ftp true
         setprop ro.qualcomm.bluetooth.map true
         setprop ro.qualcomm.bluetooth.nap true
-        setprop ro.qualcomm.bluetooth.sap true
-        setprop ro.qualcomm.bluetooth.dun true
+        setprop ro.bluetooth.sap true
+        setprop ro.bluetooth.dun true
         ;;
   esac
 
