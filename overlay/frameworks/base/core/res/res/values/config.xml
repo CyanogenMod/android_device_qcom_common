@@ -176,4 +176,6 @@
         <item>255</item>
     </integer-array>
 
+    <!-- bool value to for enabling motion accelerometer -->
+    <bool name="use_motion_accel">true</bool>
 </resources>
