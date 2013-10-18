@@ -140,10 +140,23 @@ case "$1" in
         esac
         ;;
 
-    "msm8610" | "apq8084")
+    "msm8610")
         case "$soc_hwplatform" in
             *)
                 setprop ro.sf.lcd_density 240
+                ;;
+        esac
+        ;;
+    "apq8084")
+        case "$soc_hwplatform" in
+            "Liquid")
+                setprop ro.sf.lcd_density 293
+                # Liquid do not have hardware navigation keys, so enable
+                # Android sw navigation bar
+                setprop ro.hw.nav_keys 0
+                ;;
+            *)
+                setprop ro.sf.lcd_density 440
                 ;;
         esac
         ;;
@@ -155,11 +168,11 @@ esac
 # the HDMI(dtv panel)
 for fb_cnt in 0 1 2
 do
-sys_file=/sys/class/graphics/fb$fb_cnt
+file=/sys/class/graphics/fb$fb_cnt
 dev_file=/dev/graphics/fb$fb_cnt
-  if [ -d "$sys_file" ]
+  if [ -d "$file" ]
   then
-    value=`cat $sys_file/msm_fb_type`
+    value=`cat $file/msm_fb_type`
     case "$value" in
             "dtv panel")
         chown system.graphics $file/hpd

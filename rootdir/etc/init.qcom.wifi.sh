@@ -274,6 +274,17 @@ case "$target" in
       esac
       ;;
 
+    apq8084*)
+      echo "*** Use the CNSS CLD driver.**"
+      setprop wlan.driver.ath 0
+
+      # Use different wpa_supplicant.conf template between wcn driver
+      # and ath6kl driver
+      rm /system/etc/wifi/wpa_supplicant.conf
+      ln -s /system/etc/wifi/wpa_supplicant_wcn.conf \
+                /system/etc/wifi/wpa_supplicant.conf
+    ;;
+
     msm8960*)
 
       # Move cfg80211.ko to prima directory, the default cfg80211.ko is

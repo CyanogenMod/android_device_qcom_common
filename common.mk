@@ -35,6 +35,7 @@ ALSA_HARDWARE := alsa.msm8960
 ALSA_HARDWARE += alsa.msm8974
 ALSA_HARDWARE += alsa.msm8226
 ALSA_HARDWARE += alsa.msm8610
+ALSA_HARDWARE += alsa.apq8084
 
 ALSA_UCM := snd_soc_msm
 ALSA_UCM += snd_soc_msm_2x
@@ -65,6 +66,7 @@ ALSA_UCM += snd_soc_msm_samarium_Tapan
 ANGLE := libangle
 
 AUDIO_HARDWARE := audio.primary.mpq8064
+AUDIO_HARDWARE += audio.primary.apq8084
 AUDIO_HARDWARE += audio.primary.msm8960
 AUDIO_HARDWARE += audio.primary.msm8974
 AUDIO_HARDWARE += audio.primary.msm8226
@@ -79,6 +81,7 @@ AUDIO_HARDWARE += audio.a2dp.default
 AUDIO_HARDWARE += audio.usb.default
 #
 AUDIO_POLICY := audio_policy.mpq8064
+AUDIO_POLICY += audio_policy.apq8084
 AUDIO_POLICY += audio_policy.msm8960
 AUDIO_POLICY += audio_policy.msm8974
 AUDIO_POLICY += audio_policy.msm8226
@@ -136,6 +139,10 @@ CURL += curl
 #DASH
 DASH := libdashplayer
 DASH += qcmediaplayer
+
+#DATA_OS
+DATA_OS := librmnetctl
+DATA_OS += rmnetcli
 
 #E2FSPROGS
 E2FSPROGS := e2fsck
@@ -210,6 +217,7 @@ INIT += ueventd.qcom.rc
 INIT += init.ath3k.bt.sh
 INIT += init.qcom.audio.sh
 INIT += init.qcom.ssr.sh
+INIT += init.mdm.sh
 
 #IPROUTE2
 IPROUTE2 := ip
@@ -564,6 +572,7 @@ PRODUCT_PACKAGES += $(CONNECTIVITY)
 PRODUCT_PACKAGES += $(CHARGER)
 PRODUCT_PACKAGES += $(CURL)
 PRODUCT_PACKAGES += $(DASH)
+PRODUCT_PACKAGES += $(DATA_OS)
 PRODUCT_PACKAGES += $(E2FSPROGS)
 PRODUCT_PACKAGES += $(EBTABLES)
 PRODUCT_PACKAGES += $(FASTPOWERON)
@@ -652,18 +661,13 @@ PRODUCT_COPY_FILES := \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
     frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
     frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
     packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
-
-# copy proximity sensor files
-ifneq ($(TARGET_USES_QCOM_SENSOR_PROXIMITY),false)
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml
-endif
 
 # Bluetooth configuration files
 PRODUCT_COPY_FILES += \
@@ -709,7 +713,8 @@ PRODUCT_LOCALES := en_US es_US de_DE zh_CN
 PRODUCT_LOCALES += hdpi mdpi
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=/vendor/lib/libqc-opt.so
+    ro.vendor.extension_library=/vendor/lib/libqc-opt.so \
+    persist.radio.apm_sim_not_pwdn=1
 
 PRODUCT_PRIVATE_KEY := device/qcom/common/qcom.key
 
