@@ -43,11 +43,19 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
 
     UNUSED(msm_id);
     UNUSED(msm_ver);
-    UNUSED(board_type);
 
     rc = property_get("ro.board.platform", platform);
     if (!rc || !ISMATCH(platform, ANDROID_TARGET))
         return;
 
-    property_set(PROP_LCDDENSITY, "240");
+    if (ISMATCH(board_type, "Liquid")) {
+        property_set(PROP_LCDDENSITY, "293");
+        /* Liquid do not have hardware navigation keys, so enable
+           Android sw navigation bar
+         */
+        property_set(PROP_HWNAVKEY, "0");
+    }
+    else {
+        property_set(PROP_LCDDENSITY, "440");
+    }
 }
