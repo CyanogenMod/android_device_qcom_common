@@ -130,11 +130,17 @@ case "$target" in
 esac
 
 #
-# Select USB BAM - 2.0 or 3.0
+# Do target specific things
 #
 case "$target" in
     "msm8974")
+# Select USB BAM - 2.0 or 3.0
         echo ssusb > /sys/bus/platform/devices/usb_bam/enable
+    ;;
+    "apq8084")
+	if [ "$baseband" == "apq" ]; then
+		echo "msm_hsic_host" > /sys/bus/platform/drivers/xhci_msm_hsic/unbind
+	fi
     ;;
 esac
 
