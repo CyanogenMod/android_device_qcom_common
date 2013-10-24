@@ -142,6 +142,13 @@ case "$target" in
 		echo "msm_hsic_host" > /sys/bus/platform/drivers/xhci_msm_hsic/unbind
 	fi
     ;;
+    "msm8226")
+         if [ -e /sys/bus/platform/drivers/msm_hsic_host ]; then
+             if [ ! -L /sys/bus/usb/devices/1-1 ]; then
+                 echo msm_hsic_host > /sys/bus/platform/drivers/msm_hsic_host/unbind
+             fi
+         fi
+    ;;
 esac
 
 #
