@@ -22,6 +22,7 @@
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 #define BTM_DEF_LOCAL_NAME   "QCOM-BTD"
-
+// Enables Interleave scan
+#define BTA_HOST_INTERLEAVE_SEARCH  TRUE
 #define MAX_L2CAP_CHANNELS    14
 #endif
