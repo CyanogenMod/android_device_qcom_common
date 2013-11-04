@@ -269,3 +269,16 @@ void undo_hint_action(int hint_id)
         }
     }
 }
+
+/*
+ * Used to release initial lock holding
+ * two cores online when the display is on
+ */
+void undo_initial_hint_action()
+{
+    if (qcopt_handle) {
+        if (perf_lock_rel) {
+            perf_lock_rel(1);
+        }
+    }
+}
