@@ -159,6 +159,7 @@ config_bt ()
        elif [ "$btsoc" = "rome" ]
        then
            setprop ro.bluetooth.hfp.ver 1.6
+           setprop ro.bluetooth.dun true
        fi
        ;;
     *)
