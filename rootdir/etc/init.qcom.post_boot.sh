@@ -262,14 +262,10 @@ case "$target" in
         echo 1 > /sys/module/pm_8x60/modes/cpu1/standalone_power_collapse/idle_enabled
         echo 1 > /sys/module/pm_8x60/modes/cpu2/standalone_power_collapse/idle_enabled
         echo 1 > /sys/module/pm_8x60/modes/cpu3/standalone_power_collapse/idle_enabled
-        soc_revision=`cat /sys/devices/soc0/revision`
-        if [ "$soc_revision" != "1.0" ]; then
-            log -p i -t POSTBOOT SOC=$soc_revision, Enable Retention
-            echo 1 > /sys/module/pm_8x60/modes/cpu0/retention/idle_enabled
-            echo 1 > /sys/module/pm_8x60/modes/cpu1/retention/idle_enabled
-            echo 1 > /sys/module/pm_8x60/modes/cpu2/retention/idle_enabled
-            echo 1 > /sys/module/pm_8x60/modes/cpu3/retention/idle_enabled
-        fi
+        echo 1 > /sys/module/pm_8x60/modes/cpu0/retention/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu1/retention/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu2/retention/idle_enabled
+        echo 1 > /sys/module/pm_8x60/modes/cpu3/retention/idle_enabled
         echo 0 > /sys/module/msm_thermal/core_control/enabled
         echo 1 > /sys/devices/system/cpu/cpu1/online
         echo 1 > /sys/devices/system/cpu/cpu2/online
