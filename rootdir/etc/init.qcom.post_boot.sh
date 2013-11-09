@@ -397,7 +397,7 @@ esac
 
 case "$target" in
     "apq8084")
-        echo 3 > /sys/module/lpm_levels/enable_low_power/l2
+        echo 4 > /sys/module/lpm_levels/enable_low_power/l2
         echo 1 > /sys/module/pm_8x60/modes/cpu0/power_collapse/suspend_enabled
         echo 1 > /sys/module/pm_8x60/modes/cpu1/power_collapse/suspend_enabled
         echo 1 > /sys/module/pm_8x60/modes/cpu2/power_collapse/suspend_enabled
