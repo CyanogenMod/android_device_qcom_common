@@ -274,7 +274,8 @@ LIB_NL := libnl_2
 LIB_XML2 := libxml2
 
 #LIBCAMERA
-LIBCAMERA := camera.msm8974
+LIBCAMERA := camera.apq8084
+LIBCAMERA += camera.msm8974
 LIBCAMERA += camera.msm8226
 LIBCAMERA += camera.msm8610
 LIBCAMERA += camera.msm8960
