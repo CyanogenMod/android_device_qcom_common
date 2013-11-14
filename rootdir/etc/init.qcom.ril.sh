@@ -38,8 +38,8 @@ if [ "$carrier" = "ChinaTelecom" ]; then
     # Copy the modules to system app.
     `cp /system/vendor/ChinaTelecom/system/app/RoamingSettings.apk /system/app/RoamingSettings.apk`
     `cp /system/vendor/ChinaTelecom/system/app/UniversalDownload.apk /system/app/UniversalDownload.apk`
-    `chmod 644 /system/app/RoamingSettings.apk`
-    `chmod 644 /system/app/UniversalDownload.apk`
+    `chmod -h 644 /system/app/RoamingSettings.apk`
+    `chmod -h 644 /system/app/UniversalDownload.apk`
 
     # Remount /system with read-only
     `mount -o remount,ro /system`
