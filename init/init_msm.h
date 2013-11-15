@@ -34,7 +34,7 @@
 
 #define PROP_HWROTATE    "ro.sf.hwrotation"
 #define PROP_LCDDENSITY  "ro.sf.lcd_density"
-#define PROP_HWNAVKEY    "ro.hw.nav_keys"
+#define PROP_QEMU_NAVKEY "qemu.hw.mainkeys"
 
 #define UNUSED(a)       ((void)(a))
 #define ISMATCH(a,b)    (!strncmp(a,b,PROP_VALUE_MAX))

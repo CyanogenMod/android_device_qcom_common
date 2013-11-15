@@ -53,7 +53,7 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
         /* Liquid do not have hardware navigation keys, so enable
            Android sw navigation bar
          */
-        property_set(PROP_HWNAVKEY, "0");
+        property_set(PROP_QEMU_NAVKEY, "0");
     }
     else {
         property_set(PROP_LCDDENSITY, "440");
