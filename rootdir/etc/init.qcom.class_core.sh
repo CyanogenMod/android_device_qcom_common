@@ -186,23 +186,8 @@ fake_batt_capacity=`getprop persist.bms.fake_batt_capacity`
 case "$fake_batt_capacity" in
     "") ;; #Do nothing here
     * )
-    case $target in
-        "msm8960")
-        echo "$fake_batt_capacity" > /sys/module/pm8921_bms/parameters/bms_fake_battery
-        ;;
-
-	"msm8974")
-        echo "$fake_batt_capacity" > /sys/module/qpnp_bms/parameters/bms_fake_battery
-        ;;
-
-	"msm8226")
-        echo "$fake_batt_capacity" > /sys/module/qpnp_bms/parameters/bms_fake_battery
-        ;;
-
-	"msm8610")
-        echo "$fake_batt_capacity" > /sys/module/qpnp_bms/parameters/bms_fake_battery
-        ;;
-    esac
+    echo "$fake_batt_capacity" > /sys/class/power_supply/battery/capacity
+    ;;
 esac
 
 case "$target" in
