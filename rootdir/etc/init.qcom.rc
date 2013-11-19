@@ -309,7 +309,7 @@ on property:ro.boot.emmc=true
 service rfs_access /system/bin/rfs_access
    class core
    user system
-   group system
+   group system net_raw
 
 on property:ro.boot.emmc=true
     start rfs_access
