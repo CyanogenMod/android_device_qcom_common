@@ -47,8 +47,8 @@ case "$serialno" in
     echo "$serialno" > /sys/class/android_usb/android0/iSerial
 esac
 
-chown root.system /sys/devices/platform/msm_hsusb/gadget/wakeup
-chmod 220 /sys/devices/platform/msm_hsusb/gadget/wakeup
+chown -h root.system /sys/devices/platform/msm_hsusb/gadget/wakeup
+chmod -h 220 /sys/devices/platform/msm_hsusb/gadget/wakeup
 
 #
 # Allow persistent usb charging disabling
@@ -166,7 +166,7 @@ case "$baseband" in
         esac
         echo 1 > /sys/module/rmnet_usb/parameters/rmnet_data_init
         # Allow QMUX daemon to assign port open wait time
-        chown radio.radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
+        chown -h radio.radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
     ;;
     "dsda2")
           echo 2 > /sys/module/rmnet_usb/parameters/no_rmnet_devs
@@ -190,6 +190,6 @@ case "$baseband" in
           esac
           echo 1 > /sys/module/rmnet_usb/parameters/rmnet_data_init
           # Allow QMUX daemon to assign port open wait time
-          chown radio.radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
+          chown -h radio.radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
     ;;
 esac

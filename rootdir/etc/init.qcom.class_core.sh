@@ -84,10 +84,10 @@ init_DMM()
         block_size_bytes=0x`cat $mem/block_size_bytes`
         block=$((#${movable_start_bytes}/${block_size_bytes}))
 
-        chown system.system $mem/memory$block/state
-        chown system.system $mem/probe
-        chown system.system $mem/active
-        chown system.system $mem/remove
+        chown -h system.system $mem/memory$block/state
+        chown -h system.system $mem/probe
+        chown -h system.system $mem/active
+        chown -h system.system $mem/remove
 
         case "$target" in
         "msm7630_surf" | "msm7630_1x" | "msm7630_fusion")
@@ -195,9 +195,9 @@ case "$target" in
         insmod /system/lib/modules/ss_mfcinit.ko
         insmod /system/lib/modules/ss_vencoder.ko
         insmod /system/lib/modules/ss_vdecoder.ko
-        chmod 0666 /dev/ss_mfc_reg
-        chmod 0666 /dev/ss_vdec
-        chmod 0666 /dev/ss_venc
+        chmod -h 0666 /dev/ss_mfc_reg
+        chmod -h 0666 /dev/ss_vdec
+        chmod -h 0666 /dev/ss_venc
 
         init_DMM
         ;;

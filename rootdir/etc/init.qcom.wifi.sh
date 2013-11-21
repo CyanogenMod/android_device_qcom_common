@@ -99,10 +99,10 @@ case "$target" in
            echo msm_hsic_host > /sys/bus/platform/drivers/msm_hsic_host/unbind
        fi
 
-       chown system.system /sys/bus/platform/drivers/msm_hsic_host/bind
-       chown system.system /sys/bus/platform/drivers/msm_hsic_host/unbind
-       chmod 0200 /sys/bus/platform/drivers/msm_hsic_host/bind
-       chmod 0200 /sys/bus/platform/drivers/msm_hsic_host/unbind
+       chown -h system.system /sys/bus/platform/drivers/msm_hsic_host/bind
+       chown -h system.system /sys/bus/platform/drivers/msm_hsic_host/unbind
+       chmod -h 0200 /sys/bus/platform/drivers/msm_hsic_host/bind
+       chmod -h 0200 /sys/bus/platform/drivers/msm_hsic_host/unbind
     fi
 
     wlanchip=""
@@ -213,15 +213,15 @@ case "$target" in
       setprop qcom.bluetooth.soc ath3k
       btsoc="ath3k"
       # Chown polling nodes as needed from UI running on system server
-      chmod 0200 /sys/devices/msm_sdcc.1/polling
-      chmod 0200 /sys/devices/msm_sdcc.2/polling
-      chmod 0200 /sys/devices/msm_sdcc.3/polling
-      chmod 0200 /sys/devices/msm_sdcc.4/polling
+      chmod -h 0200 /sys/devices/msm_sdcc.1/polling
+      chmod -h 0200 /sys/devices/msm_sdcc.2/polling
+      chmod -h 0200 /sys/devices/msm_sdcc.3/polling
+      chmod -h 0200 /sys/devices/msm_sdcc.4/polling
 
-      chown system.system /sys/devices/msm_sdcc.1/polling
-      chown system.system /sys/devices/msm_sdcc.2/polling
-      chown system.system /sys/devices/msm_sdcc.3/polling
-      chown system.system /sys/devices/msm_sdcc.4/polling
+      chown -h system.system /sys/devices/msm_sdcc.1/polling
+      chown -h system.system /sys/devices/msm_sdcc.2/polling
+      chown -h system.system /sys/devices/msm_sdcc.3/polling
+      chown -h system.system /sys/devices/msm_sdcc.4/polling
 
       rm  /system/lib/modules/wlan.ko
       ln -s /system/lib/modules/ath6kl-3.5/ath6kl_sdio.ko \
@@ -254,8 +254,8 @@ case "$target" in
       if [ ! -e /data/misc/wifi/WCNSS_qcom_cfg.ini ]; then
           cp /system/etc/wifi/WCNSS_qcom_cfg.ini \
 		/data/misc/wifi/WCNSS_qcom_cfg.ini
-          chown system:wifi /data/misc/wifi/WCNSS_qcom_cfg.ini
-          chmod 660 /data/misc/wifi/WCNSS_qcom_cfg.ini
+          chown -h system:wifi /data/misc/wifi/WCNSS_qcom_cfg.ini
+          chmod -h 660 /data/misc/wifi/WCNSS_qcom_cfg.ini
       fi
 
       # The property below is used in Qcom SDK for softap to determine

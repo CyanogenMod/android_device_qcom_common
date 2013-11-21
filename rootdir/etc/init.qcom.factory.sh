@@ -27,67 +27,67 @@
 #
 
 # Actions on fast factory test mode
-    chown bluetooth.bluetooth /sys/module/bluetooth_power/parameters/power
-    chown bluetooth.bluetooth /sys/class/rfkill/rfkill0/type
-    chown bluetooth.bluetooth /sys/class/rfkill/rfkill0/state
-    chown bluetooth.bluetooth /proc/bluetooth/sleep/proto
-    chown system.system /sys/module/sco/parameters/disable_esco
-    chown bluetooth.bluetooth /sys/module/hci_smd/parameters/hcismd_set
-    chmod 0660 /sys/module/bluetooth_power/parameters/power
-    chmod 0660 /sys/module/hci_smd/parameters/hcismd_set
-    chmod 0660 /sys/class/rfkill/rfkill0/state
-    chmod 0660 /proc/bluetooth/sleep/proto
-    chown bluetooth.bluetooth /dev/ttyHS0
-    chmod 0660 /dev/ttyHS0
-    chown bluetooth.bluetooth /sys/devices/platform/msm_serial_hs.0/clock
-    chmod 0660 /sys/devices/platform/msm_serial_hs.0/clock
+    chown -h bluetooth.bluetooth /sys/module/bluetooth_power/parameters/power
+    chown -h bluetooth.bluetooth /sys/class/rfkill/rfkill0/type
+    chown -h bluetooth.bluetooth /sys/class/rfkill/rfkill0/state
+    chown -h bluetooth.bluetooth /proc/bluetooth/sleep/proto
+    chown -h system.system /sys/module/sco/parameters/disable_esco
+    chown -h bluetooth.bluetooth /sys/module/hci_smd/parameters/hcismd_set
+    chmod -h 0660 /sys/module/bluetooth_power/parameters/power
+    chmod -h 0660 /sys/module/hci_smd/parameters/hcismd_set
+    chmod -h 0660 /sys/class/rfkill/rfkill0/state
+    chmod -h 0660 /proc/bluetooth/sleep/proto
+    chown -h bluetooth.bluetooth /dev/ttyHS0
+    chmod -h 0660 /dev/ttyHS0
+    chown -h bluetooth.bluetooth /sys/devices/platform/msm_serial_hs.0/clock
+    chmod -h 0660 /sys/devices/platform/msm_serial_hs.0/clock
 
-    chmod 0660 /dev/ttyHS2
-    chown bluetooth.bluetooth /dev/ttyHS2
+    chmod -h 0660 /dev/ttyHS2
+    chown -h bluetooth.bluetooth /dev/ttyHS2
 
     #Create QMUX deamon socket area
     mkdir -p /dev/socket/qmux_radio
-    chown radio.radio /dev/socket/qmux_radio
-    chmod 2770 /dev/socket/qmux_radio
+    chown -h radio.radio /dev/socket/qmux_radio
+    chmod -h 2770 /dev/socket/qmux_radio
     mkdir -p /dev/socket/qmux_audio
-    chown media.audio /dev/socket/qmux_audio
-    chmod 2770 /dev/socket/qmux_audio
+    chown -h media.audio /dev/socket/qmux_audio
+    chmod -h 2770 /dev/socket/qmux_audio
     mkdir -p /dev/socket/qmux_bluetooth
-    chown bluetooth.bluetooth /dev/socket/qmux_bluetooth
-    chmod 2770 /dev/socket/qmux_bluetooth
+    chown -h bluetooth.bluetooth /dev/socket/qmux_bluetooth
+    chmod -h 2770 /dev/socket/qmux_bluetooth
     mkdir -p /dev/socket/qmux_gps
-    chown gps.gps /dev/socket/qmux_gps
-    chmod 2770 /dev/socket/qmux_gps
+    chown -h gps.gps /dev/socket/qmux_gps
+    chmod -h 2770 /dev/socket/qmux_gps
 
     # Allow QMUX daemon to assign port open wait time
-    chown radio.radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
+    chown -h radio.radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
 
     setprop wifi.interface wlan0
 
     setprop ro.telephony.call_ring.multiple false
 
     #Set SUID bit for usbhub
-    chmod 4755 /system/bin/usbhub
-    chmod 755 /system/bin/usbhub_init
+    chmod -h 4755 /system/bin/usbhub
+    chmod -h 755 /system/bin/usbhub_init
 
     #Remove SUID bit for iproute2 ip tool
-    chmod 0755 /system/bin/ip
+    chmod -h 0755 /system/bin/ip
 
-    chmod 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
+    chmod -h 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
 
     # setup permissions for fb1 related nodes
-    chown system.graphics /sys/class/graphics/fb1/hpd
-    chown system.system /sys/class/graphics/fb1/hdcp/tp
-    chmod 0664 /sys/devices/virtual/graphics/fb1/hpd
-    chmod 0664 /sys/devices/virtual/graphics/fb1/hdcp/tp
-    chmod 0664 /sys/devices/virtual/graphics/fb1/video_mode
-    chmod 0664 /sys/devices/virtual/graphics/fb1/format_3d
+    chown -h system.graphics /sys/class/graphics/fb1/hpd
+    chown -h system.system /sys/class/graphics/fb1/hdcp/tp
+    chmod -h 0664 /sys/devices/virtual/graphics/fb1/hpd
+    chmod -h 0664 /sys/devices/virtual/graphics/fb1/hdcp/tp
+    chmod -h 0664 /sys/devices/virtual/graphics/fb1/video_mode
+    chmod -h 0664 /sys/devices/virtual/graphics/fb1/format_3d
 
     # Change owner and group for media server and surface flinger
-    chown system.system /sys/devices/virtual/graphics/fb1/format_3d
+    chown -h system.system /sys/devices/virtual/graphics/fb1/format_3d
 
     #For bridgemgr daemon to inform the USB driver of the correct transport
-    chown radio.radio /sys/class/android_usb/f_rmnet_smd_sdio/transport
+    chown -h radio.radio /sys/class/android_usb/f_rmnet_smd_sdio/transport
 
     #To allow interfaces to get v6 address when tethering is enabled
     echo 2 > /proc/sys/net/ipv6/conf/rmnet0/accept_ra
@@ -133,78 +133,78 @@
 # parameters to match how it is managing things.
     echo 1 > /proc/sys/vm/overcommit_memory
     echo 4 > /proc/sys/vm/min_free_order_shift
-    chown root.system /sys/module/lowmemorykiller/parameters/adj
-    chmod 0664 /sys/module/lowmemorykiller/parameters/adj
-    chown root.system /sys/module/lowmemorykiller/parameters/minfree
-    chmod 0664 /sys/module/lowmemorykiller/parameters/minfree
+    chown -h root.system /sys/module/lowmemorykiller/parameters/adj
+    chmod -h 0664 /sys/module/lowmemorykiller/parameters/adj
+    chown -h root.system /sys/module/lowmemorykiller/parameters/minfree
+    chmod -h 0664 /sys/module/lowmemorykiller/parameters/minfree
 
     # Tweak background writeout
     echo 200 > /proc/sys/vm/dirty_expire_centisecs
     echo 5 > /proc/sys/vm/dirty_background_ratio
 
     # Permissions for System Server and daemons.
-    chown radio.system /sys/android_power/state
-    chown radio.system /sys/android_power/request_state
-    chown radio.system /sys/android_power/acquire_full_wake_lock
-    chown radio.system /sys/android_power/acquire_partial_wake_lock
-    chown radio.system /sys/android_power/release_wake_lock
-    chown system.system /sys/power/autosleep
-    chown system.system /sys/power/state
-    chown system.system /sys/power/wakeup_count
-    chown radio.system /sys/power/wake_lock
-    chown radio.system /sys/power/wake_unlock
-    chmod 0660 /sys/power/state
-    chmod 0660 /sys/power/wake_lock
-    chmod 0660 /sys/power/wake_unlock
+    chown -h radio.system /sys/android_power/state
+    chown -h radio.system /sys/android_power/request_state
+    chown -h radio.system /sys/android_power/acquire_full_wake_lock
+    chown -h radio.system /sys/android_power/acquire_partial_wake_lock
+    chown -h radio.system /sys/android_power/release_wake_lock
+    chown -h system.system /sys/power/autosleep
+    chown -h system.system /sys/power/state
+    chown -h system.system /sys/power/wakeup_count
+    chown -h radio.system /sys/power/wake_lock
+    chown -h radio.system /sys/power/wake_unlock
+    chmod -h 0660 /sys/power/state
+    chmod -h 0660 /sys/power/wake_lock
+    chmod -h 0660 /sys/power/wake_unlock
 
-    chown system.system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-    chown system.system /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
-    chown system.system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chown system.system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-    chown system.system /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
-    chown system.system /sys/devices/system/cpu/cpufreq/interactive/boost
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost
-    chown system.system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
-    chown system.system /sys/devices/system/cpu/cpufreq/interactive/input_boost
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/input_boost
-    chown system.system /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    chown -h system.system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chmod -h 0660 /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chown -h system.system /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    chmod -h 0660 /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    chown -h system.system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chmod -h 0660 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chown -h system.system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chmod -h 0660 /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chown -h system.system /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    chmod -h 0660 /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    chown -h system.system /sys/devices/system/cpu/cpufreq/interactive/boost
+    chmod -h 0660 /sys/devices/system/cpu/cpufreq/interactive/boost
+    chown -h system.system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+    chown -h system.system /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    chmod -h 0660 /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    chown -h system.system /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    chmod -h 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
 
     # Assume SMP uses shared cpufreq policy for all CPUs
-    chown system.system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown -h system.system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod -h 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
-    chown system.system /sys/class/timed_output/vibrator/enable
-    chown system.system /sys/class/leds/keyboard-backlight/brightness
-    chown system.system /sys/class/leds/lcd-backlight/brightness
-    chown system.system /sys/class/leds/button-backlight/brightness
-    chown system.system /sys/class/leds/jogball-backlight/brightness
-    chown system.system /sys/class/leds/red/brightness
-    chown system.system /sys/class/leds/green/brightness
-    chown system.system /sys/class/leds/blue/brightness
-    chown system.system /sys/class/leds/red/device/grpfreq
-    chown system.system /sys/class/leds/red/device/grppwm
-    chown system.system /sys/class/leds/red/device/blink
-    chown system.system /sys/class/leds/red/brightness
-    chown system.system /sys/class/leds/green/brightness
-    chown system.system /sys/class/leds/blue/brightness
-    chown system.system /sys/class/leds/red/device/grpfreq
-    chown system.system /sys/class/leds/red/device/grppwm
-    chown system.system /sys/class/leds/red/device/blink
-    chown system.system /sys/class/timed_output/vibrator/enable
-    chown system.system /sys/module/sco/parameters/disable_esco
-    chown system.system /sys/kernel/ipv4/tcp_wmem_min
-    chown system.system /sys/kernel/ipv4/tcp_wmem_def
-    chown system.system /sys/kernel/ipv4/tcp_wmem_max
-    chown system.system /sys/kernel/ipv4/tcp_rmem_min
-    chown system.system /sys/kernel/ipv4/tcp_rmem_def
-    chown system.system /sys/kernel/ipv4/tcp_rmem_max
-    chown root radio /proc/cmdline
+    chown -h system.system /sys/class/timed_output/vibrator/enable
+    chown -h system.system /sys/class/leds/keyboard-backlight/brightness
+    chown -h system.system /sys/class/leds/lcd-backlight/brightness
+    chown -h system.system /sys/class/leds/button-backlight/brightness
+    chown -h system.system /sys/class/leds/jogball-backlight/brightness
+    chown -h system.system /sys/class/leds/red/brightness
+    chown -h system.system /sys/class/leds/green/brightness
+    chown -h system.system /sys/class/leds/blue/brightness
+    chown -h system.system /sys/class/leds/red/device/grpfreq
+    chown -h system.system /sys/class/leds/red/device/grppwm
+    chown -h system.system /sys/class/leds/red/device/blink
+    chown -h system.system /sys/class/leds/red/brightness
+    chown -h system.system /sys/class/leds/green/brightness
+    chown -h system.system /sys/class/leds/blue/brightness
+    chown -h system.system /sys/class/leds/red/device/grpfreq
+    chown -h system.system /sys/class/leds/red/device/grppwm
+    chown -h system.system /sys/class/leds/red/device/blink
+    chown -h system.system /sys/class/timed_output/vibrator/enable
+    chown -h system.system /sys/module/sco/parameters/disable_esco
+    chown -h system.system /sys/kernel/ipv4/tcp_wmem_min
+    chown -h system.system /sys/kernel/ipv4/tcp_wmem_def
+    chown -h system.system /sys/kernel/ipv4/tcp_wmem_max
+    chown -h system.system /sys/kernel/ipv4/tcp_rmem_min
+    chown -h system.system /sys/kernel/ipv4/tcp_rmem_def
+    chown -h system.system /sys/kernel/ipv4/tcp_rmem_max
+    chown -h root radio /proc/cmdline
 
 # Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
