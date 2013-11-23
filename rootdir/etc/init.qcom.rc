@@ -241,10 +241,6 @@ service usbhub_init /system/bin/usbhub_init
 on property:persist.radio.atfwd.start=false
     stop atfwd
 
-on property:init.svc.surfaceflinger=stopped
-    stop ppd
-    stop hdmid
-
 on property:ro.board.platform=msm7630_fusion
     start usbhub_init
 
@@ -618,17 +614,6 @@ service atfwd /system/bin/ATFWD-daemon
     class late_start
     user system
     group system radio
-
-service hdmid /system/bin/hdmid
-    class late_start
-    socket hdmid stream 0660 root system graphics
-    disabled
-
-service ppd /system/bin/mm-pp-daemon
-    class late_start
-    user system
-    socket pps stream 0660 system system graphics
-    group system graphics
 
 service hostapd /system/bin/hostapd -dddd /data/hostapd/hostapd.conf
     class late_start
