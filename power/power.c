@@ -55,7 +55,6 @@ static int saved_mpdecision_slack_min = -1;
 static int saved_interactive_mode = -1;
 static int slack_node_rw_failed = 0;
 static int display_hint_sent;
-int display_boost;
 
 static struct hw_module_methods_t power_module_methods = {
     .open = NULL,
@@ -64,22 +63,6 @@ static struct hw_module_methods_t power_module_methods = {
 static void power_init(struct power_module *module)
 {
     ALOGI("QCOM power HAL initing.");
-
-    int fd;
-    char buf[10] = {0};
-
-    fd = open("/sys/devices/soc0/soc_id", O_RDONLY);
-    if (fd >= 0) {
-        if (read(fd, buf, sizeof(buf) - 1) == -1) {
-            ALOGW("Unable to read soc_id");
-        } else {
-            int soc_id = atoi(buf);
-            if (soc_id == 194 || (soc_id >= 208 && soc_id <= 218)) {
-                display_boost = 1;
-            }
-        }
-        close(fd);
-    }
 }
 
 static void process_video_decode_hint(void *metadata)
@@ -259,7 +242,7 @@ void set_interactive(struct power_module *module, int on)
             }
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {TR_MS_500, THREAD_MIGRATION_SYNC_OFF};
+            int resource_values[] = {DISPLAY_OFF, TR_MS_500, THREAD_MIGRATION_SYNC_OFF};
 
             if (!display_hint_sent) {
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
