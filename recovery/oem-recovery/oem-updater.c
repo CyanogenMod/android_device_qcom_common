@@ -28,6 +28,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "edify/expr.h"
 #include "dec.h"
@@ -44,6 +45,9 @@ Value* DecryptFn(const char* name, State* state, int argc, Expr* argv[]) {
         return NULL;
 
     rc = decrypt_image(src_file, dst_file);
+
+    free(src_file);
+    free(dst_file);
 
     return StringValue(strdup(rc >= 0 ? "t" : ""));
 }
@@ -70,6 +74,8 @@ Value* BootUpdateFn(const char* name, State* state, int argc, Expr* argv[])
         fprintf(stderr, "Unrecognized boot update stage, exitting\n");
         rc = -1;
     }
+
+    free(stageStr);
 
     if (!rc)
         rc = prepare_boot_update(stage);
