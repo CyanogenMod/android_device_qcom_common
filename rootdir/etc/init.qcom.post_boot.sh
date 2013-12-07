@@ -290,6 +290,8 @@ case "$target" in
                 echo 20 > /sys/module/cpu_boost/parameters/boost_ms
                 echo 1728000 > /sys/module/cpu_boost/parameters/sync_threshold
                 echo 100000 > /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor
+                echo 1497600 > /sys/module/cpu_boost/parameters/input_boost_freq
+                echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
             ;;
             *)
                 echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
