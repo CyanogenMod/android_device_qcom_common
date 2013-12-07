@@ -25,4 +25,6 @@
 // Enables Interleave scan
 #define BTA_HOST_INTERLEAVE_SEARCH  TRUE
 #define MAX_L2CAP_CHANNELS    14
+// skips conn update at conn completion
+#define BTA_BLE_SKIP_CONN_UPD  TRUE
 #endif
