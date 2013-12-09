@@ -527,6 +527,7 @@ CRDA += init.crda.sh
 
 #WLAN
 WLAN := prima_wlan.ko
+WLAN += pronto_wlan.ko
 
 PRODUCT_PACKAGES := \
     AccountAndSyncSettings \
