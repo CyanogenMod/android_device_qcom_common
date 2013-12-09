@@ -40,7 +40,7 @@ case "$baseband" in
 esac
 
 case "$baseband" in
-    "msm" | "csfb" | "svlte2a" | "mdm" | "sglte" | "sglte2" | "dsda2" | "unknown")
+    "msm" | "csfb" | "svlte2a" | "mdm" | "mdm2" | "sglte" | "sglte2" | "dsda2" | "unknown")
     start qmuxd
     case "$baseband" in
         "svlte2a" | "csfb")
