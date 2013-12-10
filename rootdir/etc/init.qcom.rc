@@ -57,6 +57,7 @@ on early-boot
     setrlimit 8 67108864 67108864
     # Allow subsystem (modem etc) debugging
     write /sys/module/subsystem_restart/parameters/enable_debug ${persist.sys.ssr.enable_debug}
+    write /sys/kernel/boot_adsp/boot 1
 
 on boot
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
