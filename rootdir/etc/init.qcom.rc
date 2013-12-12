@@ -223,8 +223,6 @@ on post-fs-data
     mkdir /data/time/ 0700 system system
 
     mkdir /data/audio/ 0770 media audio
-    # Enable the setgid bit on the directory
-    chmod 2770 /data/audio
 
     setprop vold.post_fs_data_done 1
 
