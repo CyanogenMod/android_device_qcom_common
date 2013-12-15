@@ -246,3 +246,4 @@
     start qcom-usb-sh
     start qcomsysd
     start ptt_ffbm
+    start ftm_ffbm
