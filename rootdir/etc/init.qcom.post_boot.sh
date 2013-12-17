@@ -277,7 +277,10 @@ case "$target" in
         fi
         case "$soc_id" in
             "208" | "211" | "214" | "217" | "209" | "212" | "215" | "218" | "194" | "210" | "213" | "216")
-                echo 1 > /sys/module/cpubw_krait/parameters/enable
+                for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
+                do
+                    echo "cpubw_hwmon" > $devfreq_gov
+                done
                 echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
                 echo "interactive" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
                 echo "interactive" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
