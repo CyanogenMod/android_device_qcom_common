@@ -336,6 +336,7 @@ LIBMEMTRACK += memtrack.msm8974
 LIBMEMTRACK += memtrack.msm8226
 LIBMEMTRACK += memtrack.msm8610
 LIBMEMTRACK += memtrack.apq8084
+LIBMEMTRACK += memtrack.mpq8092
 
 #LIBLIGHTS
 LIBLIGHTS := lights.msm8660
