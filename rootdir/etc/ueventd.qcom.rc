@@ -115,6 +115,7 @@
 /dev/adsprpc-smd          0664   system     system
 
 #permissions for audio
+/dev/audio_slimslave      0660   system     audio
 /dev/msm_qcelp            0660   system     audio
 /dev/msm_evrc             0660   system     audio
 /dev/msm_wma              0660   system     audio
