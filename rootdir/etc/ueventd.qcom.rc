@@ -176,3 +176,6 @@
 /dev/uio0                 0660   system     system
 /dev/uio1                 0660   system     system
 /dev/uio2                 0660   system     system
+
+# ESOC devices
+/dev/subsys_esoc*         0640   system     radio
