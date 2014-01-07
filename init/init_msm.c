@@ -42,6 +42,8 @@
 
 #include "init_msm.h"
 
+#include <sys/resource.h>
+
 #define SOC_ID_PATH1     "/sys/devices/soc0/soc_id"
 #define SOC_ID_PATH2     "/sys/devices/system/soc/soc0/id"
 #define SOC_VER_PATH1    "/sys/devices/soc0/platform_version"
@@ -171,6 +173,23 @@ void set_hdmi_node_perms()
     }
 }
 
+static int check_rlim_action()
+{
+    char pval[PROP_VALUE_MAX];
+    int rc;
+    struct rlimit rl;
+    rc = property_get("persist.debug.trace",pval);
+
+    if(rc && (strcmp(pval,"1") == 0)) {
+        rl.rlim_cur = RLIM_INFINITY;
+        rl.rlim_max = RLIM_INFINITY;
+        if (setrlimit(RLIMIT_CORE, &rl) < 0) {
+            ERROR("could not enable core file generation");
+        }
+    }
+    return 0;
+}
+
 void vendor_load_properties()
 {
     int rc;
@@ -208,6 +227,9 @@ void vendor_load_properties()
 
     /* Define MSM family properties */
     init_msm_properties(msm_id, msm_ver, board_type);
+
+    /*check for coredump*/
+    check_rlim_action();
 
     /* Set Hdmi Node Permissions */
     set_hdmi_node_perms();
