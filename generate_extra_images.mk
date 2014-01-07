@@ -134,7 +134,7 @@ define build-cdrom-target
     $(hide) mkisofs -o $(CDROM_ISO_TARGET)  $(CDROM_RES_FILE)
 endef
 
-$(CDROM_ISO_TAREGT): $(CDROM_RES_FILE)
+$(CDROM_ISO_TARGET): $(CDROM_RES_FILE)
 	$(build-cdrom-target)
 
 ALL_DEFAULT_INSTALLED_MODULES += $(CDROM_ISO_TARGET)
