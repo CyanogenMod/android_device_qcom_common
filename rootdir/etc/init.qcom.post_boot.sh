@@ -446,6 +446,10 @@ case "$target" in
         echo 1 > /sys/devices/system/cpu/cpu1/online
         echo 1 > /sys/devices/system/cpu/cpu2/online
         echo 1 > /sys/devices/system/cpu/cpu3/online
+        for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
+        do
+            echo "cpubw_hwmon" > $devfreq_gov
+        done
         echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
         echo "interactive" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
         echo "interactive" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
