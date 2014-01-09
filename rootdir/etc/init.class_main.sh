@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2013, The Linux Foundation. All rights reserved.
+# Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -30,8 +30,8 @@
 # start ril-daemon only for targets on which radio is present
 #
 baseband=`getprop ro.baseband`
-netmgr=`getprop ro.use_data_netmgrd`
 sgltecsfb=`getprop persist.radio.sglte_csfb`
+datamode=`getprop persist.data.mode`
 
 case "$baseband" in
     "apq")
@@ -70,8 +70,12 @@ case "$baseband" in
         start ril-daemon2
     fi
 
-    case "$netmgr" in
-        "true")
-        start netmgrd
+    case "$datamode" in
+        "tethered")
+            start qti
+            ;;
+        *)
+            start netmgrd
+            ;;
     esac
 esac
