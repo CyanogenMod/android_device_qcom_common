@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Copyright (c) 2012-2013, The Linux Foundation. All rights reserved
+<!--Copyright (c) 2012-2014, The Linux Foundation. All rights reserved
 
     Not a Contribution, Apache license notifications and license are retained
     for attribution purposes only.
@@ -195,5 +195,8 @@
 
     <!-- Flag indicating if the speed up audio on mt call code should be executed -->
     <bool name="config_speed_up_audio_on_mt_calls">true</bool>
+
+    <!-- Whether camera shutter sound is forced or not  (country specific). -->
+    <bool name="config_camera_sound_forced">true</bool>
 
 </resources>
