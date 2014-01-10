@@ -253,6 +253,9 @@ service usbhub_init /system/bin/usbhub_init
    disabled
    oneshot
 
+service qcomsysd /system/bin/qcom-system-daemon
+    class main
+
 on property:persist.radio.atfwd.start=false
     stop atfwd
 
