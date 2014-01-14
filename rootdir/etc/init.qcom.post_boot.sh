@@ -446,14 +446,18 @@ case "$target" in
         echo 1 > /sys/devices/system/cpu/cpu1/online
         echo 1 > /sys/devices/system/cpu/cpu2/online
         echo 1 > /sys/devices/system/cpu/cpu3/online
-        echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-        echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
-        echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
-        echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
-        echo 50000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
-        echo 90 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
-        echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
-        echo 2 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+        echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+        echo "interactive" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+        echo "interactive" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+        echo "interactive" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+        echo "20000 1400000:40000 1700000:20000" > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+        echo 90 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+        echo 1497600 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+        echo "85 1500000:90 1800000:70" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
+        echo 40000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+        echo 20 > /sys/module/cpu_boost/parameters/boost_ms
+        echo 1728000 > /sys/module/cpu_boost/parameters/sync_threshold
+        echo 100000 > /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor
         echo 300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
         echo 300000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
         echo 300000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
