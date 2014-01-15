@@ -81,6 +81,7 @@ AUDIO_HARDWARE += audio.primary.msm7630_fusion
 #AUDIO_HARDWARE += audio.primary.default
 AUDIO_HARDWARE += audio.a2dp.default
 AUDIO_HARDWARE += audio.usb.default
+AUDIO_HARDWARE += audio.r_submix.default
 AUDIO_HARDWARE += audio.primary.mpq8092
 #
 AUDIO_POLICY := audio_policy.mpq8064
