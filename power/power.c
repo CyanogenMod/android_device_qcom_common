@@ -74,7 +74,7 @@ static void power_init(struct power_module *module)
             ALOGW("Unable to read soc_id");
         } else {
             int soc_id = atoi(buf);
-            if (soc_id == 194 || (soc_id >= 208 && soc_id <= 218)) {
+            if (soc_id == 194 || (soc_id >= 208 && soc_id <= 218) || soc_id == 178) {
                 display_boost = 1;
             }
         }
