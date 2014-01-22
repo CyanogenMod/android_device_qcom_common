@@ -98,6 +98,23 @@ for f in /sys/bus/esoc/devices/*; do
 done
 fi
 
+target=`getprop ro.product.device`
+cdromenable=`getprop persist.service.cdrom.enable`
+create_luns() {
+	case "$1" in
+		"msm8226" | "msm8610")
+		case "$2" in
+			0)
+				setprop persist.sys.usb.luns ""
+			;;
+			1)
+				setprop persist.sys.usb.luns rom
+			;;
+		esac
+		;;
+	esac
+}
+
 #
 # Allow USB enumeration with default PID/VID
 #
@@ -134,6 +151,7 @@ case "$usb_config" in
                    setprop persist.sys.usb.config diag,diag_mdm,diag_mdm2,serial_hsic,serial_hsusb,rmnet_hsic,rmnet_hsusb,mass_storage,adb
               ;;
               *)
+                   create_luns $target $cdromenable
                    setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_bam,mass_storage,adb
               ;;
           esac
@@ -141,26 +159,6 @@ case "$usb_config" in
       esac
     ;;
     * ) ;; #USB persist config exists, do nothing
-esac
-
-#
-# Add support for exposing lun0 as cdrom in mass-storage
-#
-target=`getprop ro.product.device`
-cdromname="/system/etc/cdrom_install.iso"
-cdromenable=`getprop persist.service.cdrom.enable`
-case "$target" in
-        "msm8226" | "msm8610")
-                case "$cdromenable" in
-                        0)
-                                echo "" > /sys/class/android_usb/android0/f_mass_storage/lun0/file
-                                ;;
-                        1)
-                                echo "mounting usbcdrom lun"
-                                echo $cdromname > /sys/class/android_usb/android0/f_mass_storage/lun0/file
-                                ;;
-                esac
-                ;;
 esac
 
 #
@@ -226,4 +224,23 @@ case "$baseband" in
           # Allow QMUX daemon to assign port open wait time
           chown -h radio.radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
     ;;
+esac
+
+#
+# Add support for exposing lun0 as cdrom in mass-storage
+#
+cdromname="/system/etc/cdrom_install.iso"
+case "$target" in
+        "msm8226" | "msm8610")
+                case "$cdromenable" in
+                        1)
+                                echo "mounting usbcdrom lun"
+				if [ ! -f /sys/class/android_usb/android0/f_mass_storage/lun0/file ]; then
+					sleep 2 # cdrom lun still not created. give some time.
+				fi
+                                echo $cdromname > /sys/class/android_usb/android0/f_mass_storage/lun0/file
+				chmod 0444 /sys/class/android_usb/android0/f_mass_storage/lun0/file
+                                ;;
+                esac
+                ;;
 esac
