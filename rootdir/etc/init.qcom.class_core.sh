@@ -169,25 +169,6 @@ case "$target" in
                 ;;
         esac
         ;;
-
-    "msm8610" | "msm8974" | "msm8226")
-	case "$serial" in
-	     "0")
-		echo 0 > /sys/devices/f991f000.serial/console
-		;;
-	     "1")
-		echo 1 > /sys/devices/f991f000.serial/console
-		start console
-		;;
-            *)
-		case "$dserial" in
-                     "1")
-			start console
-			;;
-		esac
-		;;
-	esac
-	;;
     *)
         case "$dserial" in
             "1")
