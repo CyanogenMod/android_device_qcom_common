@@ -84,6 +84,7 @@ AUDIO_HARDWARE += audio.a2dp.default
 AUDIO_HARDWARE += audio.usb.default
 AUDIO_HARDWARE += audio.r_submix.default
 AUDIO_HARDWARE += audio.primary.mpq8092
+AUDIO_HARDWARE += audio.primary.msm8916
 #
 AUDIO_POLICY := audio_policy.mpq8064
 AUDIO_POLICY += audio_policy.apq8084
@@ -100,6 +101,7 @@ AUDIO_POLICY += audio_policy.msm7630_fusion
 #AUDIO_POLICY += audio_policy.default
 AUDIO_POLICY += audio_policy.conf
 AUDIO_POLICY += audio_policy_8064.conf
+AUDIO_POLICY += audio_policy.msm8916
 
 #tinyalsa test apps
 TINY_ALSA_TEST_APPS := tinyplay
