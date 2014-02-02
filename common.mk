@@ -430,6 +430,7 @@ MM_VIDEO += libdivxdrmdecrypt
 MM_VIDEO += liblasic
 MM_VIDEO += libOmxVdec
 MM_VIDEO += libOmxVdecHevc
+MM_VIDEO += libOmxVdpp
 MM_VIDEO += libOmxVenc
 MM_VIDEO += libOmxVidEnc
 MM_VIDEO += libstagefrighthw
