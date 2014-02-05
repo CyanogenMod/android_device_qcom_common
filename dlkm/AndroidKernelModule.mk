@@ -1,4 +1,13 @@
-ifeq ($(TARGET_KERNEL_DLKM_DISABLE),true)
+DISABLE_THIS_DLKM := $(strip $(TARGET_KERNEL_DLKM_DISABLE))
+
+ifeq ($(DISABLE_THIS_DLKM),true)
+ifneq (,$(filter $(LOCAL_MODULE),$(TARGET_KERNEL_DLKM_OVERRIDE)))
+    DISABLE_THIS_DLKM = false
+else
+endif
+endif
+
+ifeq ($(DISABLE_THIS_DLKM),true)
 $(warning DLKM '$(LOCAL_MODULE)' disabled for target)
 else
 
