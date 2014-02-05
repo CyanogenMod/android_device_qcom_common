@@ -757,3 +757,8 @@ on property:persist.sys.rootagent=1
     start rootagent
 on property:persist.sys.rootagent=0
     stop rootagent
+
+service vm_bms /system/bin/vm_bms
+    user root
+    group root
+    disabled
