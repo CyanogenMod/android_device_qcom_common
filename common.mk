@@ -705,7 +705,8 @@ PRODUCT_COPY_FILES += device/qcom/common/media/media_profiles.xml:system/etc/med
 
 # enable overlays to use our version of
 # source/resources etc.
-DEVICE_PACKAGE_OVERLAYS += device/qcom/common/overlay
+DEVICE_PACKAGE_OVERLAYS += device/qcom/common/device/overlay
+PRODUCT_PACKAGE_OVERLAYS += device/qcom/common/product/overlay
 
 # include additional build utilities
 -include device/qcom/common/utils.mk
