@@ -128,10 +128,10 @@ void setOwners(char *path, int owner, int group)
 }
 
 /*
- * Setup HDMI related nodes & permissions. HDMI can be fb1 or fb2
+ * Setup Display related nodes & permissions. For HDMI, it can be fb1 or fb2
  * Loop through the sysfs nodes and determine the HDMI(dtv panel)
  */
-void set_hdmi_node_perms()
+void set_display_node_perms()
 {
     char panel_type[] = "dtv panel";
     char buf[BUF_SIZE];
@@ -169,6 +169,10 @@ void set_hdmi_node_perms()
             }
         }
     }
+    // Set the permission for idle_time.
+    snprintf(tmp, sizeof(tmp), "%sfb0/idle_time", sys_fb_path);
+    setPerms(tmp, 0664);
+    setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
 }
 
 void vendor_load_properties()
@@ -209,6 +213,6 @@ void vendor_load_properties()
     /* Define MSM family properties */
     init_msm_properties(msm_id, msm_ver, board_type);
 
-    /* Set Hdmi Node Permissions */
-    set_hdmi_node_perms();
+    /* Set Display Node Permissions */
+    set_display_node_perms();
 }
