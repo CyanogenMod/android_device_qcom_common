@@ -66,6 +66,7 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     /* Populate system properties */
     switch (msm_id) {
         case 87:
+        case 123:
             /* 8960 */
             property_set("debug.composition.type", "dyn");
 
