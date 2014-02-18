@@ -150,13 +150,13 @@ case "$1" in
     "apq8084")
         case "$soc_hwplatform" in
             "Liquid")
-                setprop ro.sf.lcd_density 293
+                setprop ro.sf.lcd_density 320
                 # Liquid do not have hardware navigation keys, so enable
                 # Android sw navigation bar
                 setprop ro.hw.nav_keys 0
                 ;;
             *)
-                setprop ro.sf.lcd_density 440
+                setprop ro.sf.lcd_density 480
                 ;;
         esac
         ;;
