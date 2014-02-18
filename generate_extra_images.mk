@@ -131,7 +131,7 @@ endif
 CDROM_RES_FILE := $(TARGET_DEVICE_DIR)/cdrom_res
 ifneq ($(wildcard $(CDROM_RES_FILE)),)
 CDROM_ISO_TARGET := $(PRODUCT_OUT)/system/etc/cdrom_install.iso
-CDROM_RES_SIZE := $(shell du -b $(CDROM_RES_FILE) | egrep -o '^[0-9]+')
+CDROM_RES_SIZE := $(shell du -bs $(CDROM_RES_FILE) | egrep -o '^[0-9]+')
 #At least 300 sectors, 2048Bytes per Sector, set as 310 here
 CDROM_MIN_SIZE := 634880
 CDROM_CAPACITY_IS_ENOUGH := $(shell expr $(CDROM_RES_SIZE) / $(CDROM_MIN_SIZE))
