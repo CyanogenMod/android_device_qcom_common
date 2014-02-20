@@ -143,6 +143,16 @@ if(uc($ARGV[1]) eq "PANEL")
 				printArray($PANELDTSI, \@tmp, $property,
 							"qcom,mdss-dsi-panel-framerate");
 			}
+			elsif($_ eq "PixelPacking")
+			{
+				printPixelPacking($PANELDTSI, \@tmp, $property,
+							"qcom,mdss-dsi-pixel-packing");
+			}
+			elsif($_ eq "ColorOrder")
+			{
+				printColorOrder($PANELDTSI, \@tmp, $property,
+							"qcom,mdss-dsi-color-order");
+			}
 			else
 			{
 				printArray($PANELDTSI, \@tmp, $property,
@@ -228,8 +238,7 @@ if(uc($ARGV[1]) eq "PANEL")
 						"qcom,mdss-dsi-" . $lower);
 		}
 
-		my @attrs = ("HSyncPulse", "TrafficMode",
-		"DSILaneMap",);
+		my @attrs = ("HSyncPulse",);
 
 		foreach(@attrs)
 		{
@@ -239,6 +248,22 @@ if(uc($ARGV[1]) eq "PANEL")
 			$lower = convertLower($lower);
 			printArray($PANELDTSI, \@tmp, $property,
 						"qcom,mdss-dsi-" . $lower);
+		}
+
+		@attrs = ("TrafficMode",);
+		foreach(@attrs)
+		{
+			push(my @tmp, $_);
+			printTrafficMode($PANELDTSI, \@tmp, $property,
+					"qcom,mdss-dsi-traffic-mode");
+		}
+
+		@attrs = ("DSILaneMap",);
+		foreach(@attrs)
+		{
+			push(my @tmp, $_);
+			printLaneMap($PANELDTSI, \@tmp, $property,
+					"qcom,mdss-dsi-lane-map");
 		}
 
 		@attrs = ("BLLPEOFPowerMode");
@@ -479,14 +504,14 @@ if(uc($ARGV[1]) eq "PANEL")
 		foreach(@attrs)
 		{
 			push(my @tmp, $_);
-			printArray($PANELDTSI, \@tmp, $property,
+			printTrigger($PANELDTSI, \@tmp, $property,
 					"qcom,mdss-dsi-dma-trigger");
 		}
 		@attrs = ("DSIMDPTrigger");
 		foreach(@attrs)
 		{
 			push(my @tmp, $_);
-			printArray($PANELDTSI, \@tmp, $property,
+			printTrigger($PANELDTSI, \@tmp, $property,
 					"qcom,mdss-dsi-mdp-trigger");
 		}
 
@@ -595,6 +620,22 @@ elsif(uc($ARGV[1]) eq "PLATFORM")
 		print $PLATFORMH "\n\n";
 
 		printGPIO($PLATFORMDTSI, $property, "qcom,platform-te-gpio");
+	}
+	for my $property ($xmldoc->findnodes('/GCDB/PlatformEntry/ModeGPIO'))
+	{
+		printStruct($PLATFORMH, \@gpioConfAttrs, $property, "gpio_pin",
+								 "mode_gpio");
+		print $PLATFORMH "\n\n";
+
+		printGPIO($PLATFORMDTSI, $property, "qcom,platform-mode-gpio");
+	}
+	for my $property ($xmldoc->findnodes('/GCDB/PlatformEntry/BacklightGPIO'))
+	{
+		printStruct($PLATFORMH, \@gpioConfAttrs, $property,
+						"gpio_pin", "bklight_gpio");
+		print $PLATFORMH "\n\n";
+
+		printGPIO($PLATFORMDTSI, $property, "qcom,platform-bklight-gpio");
 	}
 	for my $property ($xmldoc->findnodes('/GCDB/PlatformEntry/PWMGPIO'))
 	{
@@ -1108,6 +1149,217 @@ sub printCommandState
 			else
 			{
 				print $fh "dsi_hs_mode";
+			}
+			print $fh "\";\n";
+		}
+	}
+}
+
+sub printTrigger
+{
+	my $fh = shift;
+	my $attrs = shift;
+	my @attrs = @$attrs;
+	my $property = shift;
+	my $name = shift;
+	my $first = 1;
+	foreach(@attrs)
+	{
+		for my $element ($property->findnodes("./" . $_))
+		{
+			print $fh "\t\t" . $name . " = \"";
+			my $str = $element->textContent();
+			if ($str =~ /0x0.$/) {
+				$str =~ s/0x0//;
+			}
+			$str =~ s/0x//;
+			if($str eq "0")
+			{
+				print $fh "none";
+			}
+			elsif($str eq "2")
+			{
+				print $fh "trigger_te";
+			}
+			elsif($str eq "4")
+			{
+				print $fh "trigger_sw";
+			}
+			elsif($str eq "5")
+			{
+				print $fh "trigger_sw_seof";
+			}
+			elsif($str eq "6")
+			{
+				print $fh "trigger_sw_te";
+			}
+			print $fh "\";\n";
+		}
+	}
+}
+
+sub printPixelPacking
+{
+	my $fh = shift;
+	my $attrs = shift;
+	my @attrs = @$attrs;
+	my $property = shift;
+	my $name = shift;
+	my $first = 1;
+	foreach(@attrs)
+	{
+		for my $element ($property->findnodes("./" . $_))
+		{
+			my $str = $element->textContent();
+			if ($str =~ /0x0.$/) {
+				$str =~ s/0x0//;
+			}
+			$str =~ s/0x//;
+			print $fh "\t\t" . $name . " = \"";
+			if($str eq "1")
+			{
+				print $fh "loose";
+			}
+			elsif($str eq "0")
+			{
+				print $fh "tight";
+			}
+			print $fh "\";\n";
+		}
+	}
+}
+
+sub printTrafficMode
+{
+	my $fh = shift;
+	my $attrs = shift;
+	my @attrs = @$attrs;
+	my $property = shift;
+	my $name = shift;
+	my $first = 1;
+	foreach(@attrs)
+	{
+		for my $element ($property->findnodes("./" . $_))
+		{
+			print $fh "\t\t" . $name . " = \"";
+			my $str = $element->textContent();
+			if ($str =~ /0x0.$/) {
+				$str =~ s/0x0//;
+			}
+			$str =~ s/0x//;
+			if($str eq "0")
+			{
+				print $fh "non_burst_sync_pulse";
+			}
+			elsif($str eq "1")
+			{
+				print $fh "non_burst_sync_event";
+			}
+			elsif($str eq "2")
+			{
+				print $fh "burst_mode";
+			}
+			print $fh "\";\n";
+		}
+	}
+}
+
+sub printColorOrder
+{
+	my $fh = shift;
+	my $attrs = shift;
+	my @attrs = @$attrs;
+	my $property = shift;
+	my $name = shift;
+	my $first = 1;
+	foreach(@attrs)
+	{
+		for my $element ($property->findnodes("./" . $_))
+		{
+			print $fh "\t\t" . $name . " = \"";
+			my $str = $element->textContent();
+			if ($str =~ /0x0.$/) {
+				$str =~ s/0x0//;
+			}
+			$str =~ s/0x//;
+			if($str eq "0")
+			{
+				print $fh "rgb_swap_rgb";
+			}
+			elsif($str eq "1")
+			{
+				print $fh "rgb_swap_rbg";
+			}
+			elsif($str eq "2")
+			{
+				print $fh "rgb_swap_bgr";
+			}
+			elsif($str eq "3")
+			{
+				print $fh "rgb_swap_brg";
+			}
+			elsif($str eq "4")
+			{
+				print $fh "rgb_swap_grb";
+			}
+			elsif($str eq "5")
+			{
+				print $fh "rgb_swap_gbr";
+			}
+			print $fh "\";\n";
+		}
+	}
+}
+
+sub printLaneMap
+{
+	my $fh = shift;
+	my $attrs = shift;
+	my @attrs = @$attrs;
+	my $property = shift;
+	my $name = shift;
+	my $first = 1;
+	foreach(@attrs)
+	{
+		for my $element ($property->findnodes("./" . $_))
+		{
+			print $fh "\t\t" . $name . " = \"";
+			my $str = $element->textContent();
+			if ($str =~ /0x0.$/) {
+				$str =~ s/0x0//;
+			}
+			$str =~ s/0x//;
+			if($str eq "0")
+			{
+				print $fh "lane_map_0123";
+			}
+			elsif($str eq "1")
+			{
+				print $fh "lane_map_3012";
+			}
+			elsif($str eq "2")
+			{
+				print $fh "lane_map_2301";
+			}
+			elsif($str eq "3")
+			{
+				print $fh "lane_map_1230";
+			}
+			elsif($str eq "4")
+			{
+				print $fh "lane_map_0321";
+			}
+			elsif($str eq "5")
+			{
+				print $fh "lane_map_1032";
+			}
+			elsif($str eq "6")
+			{
+				print $fh "lane_map_2103";
+			}
+			elsif($str eq "7")
+			{
+				print $fh "lane_map_3210";
 			}
 			print $fh "\";\n";
 		}
