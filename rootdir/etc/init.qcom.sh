@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2009-2013, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2014, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -83,6 +83,17 @@ start_charger_monitor()
 	fi
 }
 
+start_vm_bms()
+{
+	if [ -e /dev/vm_bms ]; then
+		chown -h root.system /sys/class/power_supply/bms/current_now
+		chown -h root.system /sys/class/power_supply/bms/voltage_ocv
+		chmod -h 0664 /sys/class/power_supply/bms/current_now
+		chmod -h 0664 /sys/class/power_supply/bms/voltage_ocv
+		start vm_bms
+	fi
+}
+
 baseband=`getprop ro.baseband`
 #
 # Suppress default route installation during RA for IPV6; user space will take
@@ -163,5 +174,8 @@ case "$target" in
         ;;
     "msm8610")
         start_charger_monitor
+        ;;
+    "msm8916")
+        start_vm_bms
         ;;
 esac
