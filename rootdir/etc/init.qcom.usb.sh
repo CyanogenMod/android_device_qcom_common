@@ -193,3 +193,33 @@ case "$baseband" in
           chown -h radio.radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
     ;;
 esac
+
+
+#
+# Add changes to support diag with rndis
+#
+diag_extra=`getprop persist.sys.usb.config.extra`
+case "$diag_extra" in
+	"diag" | "diag,diag_mdm" | "diag,diag_mdm,diag_qsc")
+		case "$baseband" in
+			"mdm")
+				setprop persist.sys.usb.config.extra diag,diag_mdm
+			;;
+		        "dsda" | "sglte2" )
+				setprop persist.sys.usb.config.extra diag,diag_mdm,diag_qsc
+			;;
+		        "sglte")
+				setprop persist.sys.usb.config.extra diag,diag_qsc
+			;;
+		        "dsda2")
+				setprop persist.sys.usb.config.extra diag,diag_mdm,diag_mdm2
+			;;
+		        *)
+				setprop persist.sys.usb.config.extra diag
+			;;
+	        esac
+	;;
+        *)
+		setprop persist.sys.usb.config.extra none
+	;;
+esac
