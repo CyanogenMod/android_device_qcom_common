@@ -126,6 +126,7 @@ case "$usb_config" in
       case "$esoc_link" in
           "HSIC")
               setprop persist.sys.usb.config diag,diag_mdm,serial_hsic,serial_tty,rmnet_hsic,mass_storage,adb
+              setprop persist.rmnet.mux enabled
           ;;
           "HSIC+PCIe")
               setprop persist.sys.usb.config diag,diag_mdm,serial_hsic,rmnet_qti_ether,mass_storage,adb
