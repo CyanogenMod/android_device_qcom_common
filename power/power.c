@@ -337,7 +337,7 @@ void set_interactive(struct power_module *module, int on)
             }
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {TR_MS_500, THREAD_MIGRATION_SYNC_OFF};
+            int resource_values[] = {TR_MS_50, THREAD_MIGRATION_SYNC_OFF};
 
             if (!display_hint_sent) {
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
