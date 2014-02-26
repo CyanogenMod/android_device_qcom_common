@@ -1,4 +1,4 @@
-# Copyright (c) 2013, The Linux Foundation. All rights reserved.
+# Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -785,6 +785,10 @@ sub printOnCommand
 			}
 			else
 			{
+				for( ; ($j % 2) ne 0 ; $j++)
+				{
+					$toPrint .= "0xFF, ";
+				}
 				$toPrint .= $cmdtype . ", 0x80";
 			}
 			$toPrint .= " };\n"
@@ -840,10 +844,9 @@ sub printOnCommand
 				$hexsize = sprintf("{ 0x%x , ", 4);
 			}
 
-
 			$toPrint .=  $hexsize;
 
-			$toPrint .= $cmdname . $i . "},";
+			$toPrint .= $cmdname . $i . ", " . $sep[4] . "},";
 
 			$i++;
 
