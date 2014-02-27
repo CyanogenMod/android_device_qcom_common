@@ -73,6 +73,7 @@ case "$baseband" in
     case "$datamode" in
         "tethered")
             start qti
+            start port-bridge
             ;;
         *)
             start netmgrd

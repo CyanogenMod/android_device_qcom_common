@@ -393,10 +393,10 @@ service bridgemgrd /system/bin/bridgemgrd
     group radio qcom_diag
     disabled
 
-service port-bridge /system/bin/port-bridge /dev/smd0 /dev/ttyGS0
-    class late_start
-    user system
-    group system inet
+service port-bridge /system/bin/port-bridge /dev/mhi_pipe_32 /dev/ttyGS0
+    class main
+    user radio system
+    group radio system inet
     disabled
 
 service qmiproxy /system/bin/qmiproxy
