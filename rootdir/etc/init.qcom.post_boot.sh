@@ -429,6 +429,21 @@ case "$target" in
 esac
 
 case "$target" in
+    "msm8916")
+        echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+        echo "25000 1094400:50000 1344000:25000" > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+        echo 90 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+        echo 25000 > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+        echo 787200 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+        echo 1 > /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+        echo "85 787200:90 998400:70" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
+        echo 50000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+        echo 100000 > /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor
+    ;;
+esac
+
+
+case "$target" in
     "apq8084")
         echo 4 > /sys/module/lpm_levels/enable_low_power/l2
         echo 1 > /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled
