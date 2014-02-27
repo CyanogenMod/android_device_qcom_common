@@ -366,6 +366,10 @@ on property:sys.usb.config=diag,serial_hsic,serial_tty,rmnet_hsic,mass_storage,a
     write /sys/class/android_usb/android0/f_rmnet/transports hsic,hsic
     write /sys/class/android_usb/android0/f_rmnet/transport_names rmnet_hsic
     write /sys/class/android_usb/android0/functions diag,adb,serial,rmnet,mass_storage
+    write /sys/module/mdm_bridge/parameters/rx_rmnet_buffer_size 16384
+    write /sys/module/mdm_bridge/parameters/max_rx_urbs 20
+    write /sys/module/g_android/parameters/ghsic_data_rx_req_size 16384
+    write /sys/module/g_android/parameters/ghsic_data_rmnet_rx_q_size 20
     write /sys/class/android_usb/android0/enable 1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
@@ -381,6 +385,10 @@ on property:sys.usb.config=diag,diag_mdm,serial_hsic,serial_tty,rmnet_hsic,mass_
     write /sys/class/android_usb/android0/f_rmnet/transports hsic,hsic
     write /sys/class/android_usb/android0/f_rmnet/transport_names rmnet_hsic
     write /sys/class/android_usb/android0/functions diag,adb,serial,rmnet,mass_storage
+    write /sys/module/mdm_bridge/parameters/rx_rmnet_buffer_size 16384
+    write /sys/module/mdm_bridge/parameters/max_rx_urbs 20
+    write /sys/module/g_android/parameters/ghsic_data_rx_req_size 16384
+    write /sys/module/g_android/parameters/ghsic_data_rmnet_rx_q_size 20
     write /sys/class/android_usb/android0/enable 1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
@@ -396,6 +404,10 @@ on property:sys.usb.config=diag,diag_mdm,serial_hsic,serial_tty,rmnet_hsic,mass_
     write /sys/class/android_usb/android0/f_rmnet/transports hsic,hsic
     write /sys/class/android_usb/android0/f_rmnet/transport_names rmnet_hsic
     write /sys/class/android_usb/android0/functions diag,serial,rmnet,mass_storage
+    write /sys/module/mdm_bridge/parameters/rx_rmnet_buffer_size 16384
+    write /sys/module/mdm_bridge/parameters/max_rx_urbs 20
+    write /sys/module/g_android/parameters/ghsic_data_rx_req_size 16384
+    write /sys/module/g_android/parameters/ghsic_data_rmnet_rx_q_size 20
     write /sys/class/android_usb/android0/enable 1
     setprop sys.usb.state ${sys.usb.config}
 
@@ -410,6 +422,10 @@ on property:sys.usb.config=diag,diag_mdm,diag_qsc,serial_hsic,serial_hsuart,rmne
     write /sys/class/android_usb/android0/f_rmnet/transports hsic,hsic,hsuart,hsuart
     write /sys/class/android_usb/android0/f_rmnet/transport_names rmnet_hsic,rmnet_hsuart
     write /sys/class/android_usb/android0/functions diag,adb,serial,rmnet,mass_storage
+    write /sys/module/mdm_bridge/parameters/rx_rmnet_buffer_size 16384
+    write /sys/module/mdm_bridge/parameters/max_rx_urbs 20
+    write /sys/module/g_android/parameters/ghsic_data_rx_req_size 16384
+    write /sys/module/g_android/parameters/ghsic_data_rmnet_rx_q_size 20
     write /sys/class/android_usb/android0/enable 1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
@@ -425,6 +441,10 @@ on property:sys.usb.config=diag,diag_mdm,diag_qsc,serial_hsic,serial_hsuart,rmne
     write /sys/class/android_usb/android0/f_rmnet/transports hsic,hsic,hsuart,hsuart
     write /sys/class/android_usb/android0/f_rmnet/transport_names rmnet_hsic,rmnet_hsuart
     write /sys/class/android_usb/android0/functions diag,serial,rmnet,mass_storage
+    write /sys/module/mdm_bridge/parameters/rx_rmnet_buffer_size 16384
+    write /sys/module/mdm_bridge/parameters/max_rx_urbs 20
+    write /sys/module/g_android/parameters/ghsic_data_rx_req_size 16384
+    write /sys/module/g_android/parameters/ghsic_data_rmnet_rx_q_size 20
     write /sys/class/android_usb/android0/enable 1
     setprop sys.usb.state ${sys.usb.config}
 
@@ -439,6 +459,10 @@ on property:sys.usb.config=diag,diag_mdm,diag_mdm2,serial_hsic,serial_hsusb,rmne
     write /sys/class/android_usb/android0/f_rmnet/transports hsic,hsic,hsic,hsic
     write /sys/class/android_usb/android0/f_rmnet/transport_names rmnet_hsic,rmnet_hsusb
     write /sys/class/android_usb/android0/functions diag,adb,serial,rmnet,mass_storage
+    write /sys/module/mdm_bridge/parameters/rx_rmnet_buffer_size 16384
+    write /sys/module/mdm_bridge/parameters/max_rx_urbs 20
+    write /sys/module/g_android/parameters/ghsic_data_rx_req_size 16384
+    write /sys/module/g_android/parameters/ghsic_data_rmnet_rx_q_size 20
     write /sys/class/android_usb/android0/enable 1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
@@ -454,6 +478,10 @@ on property:sys.usb.config=diag,diag_mdm,diag_mdm2,serial_hsic,serial_hsusb,rmne
     write /sys/class/android_usb/android0/f_rmnet/transports hsic,hsic,hsic,hsic
     write /sys/class/android_usb/android0/f_rmnet/transport_names rmnet_hsic,rmnet_hsusb
     write /sys/class/android_usb/android0/functions diag,serial,rmnet,mass_storage
+    write /sys/module/mdm_bridge/parameters/rx_rmnet_buffer_size 16384
+    write /sys/module/mdm_bridge/parameters/max_rx_urbs 20
+    write /sys/module/g_android/parameters/ghsic_data_rx_req_size 16384
+    write /sys/module/g_android/parameters/ghsic_data_rmnet_rx_q_size 20
     write /sys/class/android_usb/android0/enable 1
     setprop sys.usb.state ${sys.usb.config}
 
