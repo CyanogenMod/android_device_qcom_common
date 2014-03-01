@@ -245,10 +245,7 @@ esac
 
 case "$target" in
     "msm8974")
-        echo 2 > /sys/module/lpm_resources/enable_low_power/l2
-        echo 1 > /sys/module/lpm_resources/enable_low_power/pxo
-        echo 1 > /sys/module/lpm_resources/enable_low_power/vdd_dig
-        echo 1 > /sys/module/lpm_resources/enable_low_power/vdd_mem
+        echo 4 > /sys/module/lpm_levels/enable_low_power/l2
         echo 1 > /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu1/power_collapse/suspend_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu2/power_collapse/suspend_enabled
@@ -339,11 +336,7 @@ esac
 
 case "$target" in
     "msm8226")
-        echo 2 > /sys/module/lpm_resources/enable_low_power/l2
-        soc_revision=`cat /sys/devices/soc0/revision`
-        if [ "$soc_revision" != "1.0" ]; then
-                echo 1 > /sys/module/lpm_resources/enable_low_power/pxo
-        fi
+        echo 4 > /sys/module/lpm_levels/enable_low_power/l2
         echo 1 > /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu1/power_collapse/suspend_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu2/power_collapse/suspend_enabled
@@ -385,10 +378,7 @@ esac
 
 case "$target" in
     "msm8610")
-        echo 2 > /sys/module/lpm_resources/enable_low_power/l2
-        echo 1 > /sys/module/lpm_resources/enable_low_power/pxo
-        echo 1 > /sys/module/lpm_resources/enable_low_power/vdd_dig
-        echo 1 > /sys/module/lpm_resources/enable_low_power/vdd_mem
+        echo 4 > /sys/module/lpm_levels/enable_low_power/l2
         echo 1 > /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu1/power_collapse/suspend_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu2/power_collapse/suspend_enabled
