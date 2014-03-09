@@ -296,64 +296,64 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
         /* Find "qcom,msm-id" */
         while ((llen = getline(&line, &line_size, pfile)) != -1) {
             if (msmversion == 1) {
-            if ((pos = strstr(line, QCDT_DT_TAG)) != NULL) {
-                pos += strlen(QCDT_DT_TAG);
+                if ((pos = strstr(line, QCDT_DT_TAG)) != NULL) {
+                    pos += strlen(QCDT_DT_TAG);
 
-                entryEnded = 0;
-                while (1) {
-                    entryValid = 1;
-                    for (i = 0; i < 3; i++) {
-                        tok = strtok_r(pos, " \t", &sptr);
-                        pos = NULL;
-                        if (tok != NULL) {
-                            if (*tok == '>') {
-                                entryEnded = 1;
+                    entryEnded = 0;
+                    while (1) {
+                        entryValid = 1;
+                        for (i = 0; i < 3; i++) {
+                            tok = strtok_r(pos, " \t", &sptr);
+                            pos = NULL;
+                            if (tok != NULL) {
+                                if (*tok == '>') {
+                                    entryEnded = 1;
+                                    entryValid = 0;
+                                    break;
+                                }
+                                data[i] = strtoul(tok, NULL, 0);
+                            } else {
+                                data[i] = 0;
                                 entryValid = 0;
+                                entryEnded = 1;
+                            }
+                        }
+                        if (entryEnded) {
+                            free(line);
+                            pclose(pfile);
+                            *num = count;
+                            return chip;
+                        }
+                        if (entryValid) {
+                            tmp = (struct chipInfo_t *)
+                                      malloc(sizeof(struct chipInfo_t));
+                            if (!tmp) {
+                                log_err("Out of memory\n");
                                 break;
                             }
-                            data[i] = strtoul(tok, NULL, 0);
-                        } else {
-                            data[i] = 0;
-                            entryValid = 0;
-                            entryEnded = 1;
-                        }
-                    }
-                    if (entryEnded) {
-                        free(line);
-                        pclose(pfile);
-                        *num = count;
-                        return chip;
-                    }
-                    if (entryValid) {
-                        tmp = (struct chipInfo_t *)
-                                  malloc(sizeof(struct chipInfo_t));
-                        if (!tmp) {
-                            log_err("Out of memory\n");
-                            break;
-                        }
-                        if (!chip) {
-                            chip = tmp;
-                            chip->t_next = NULL;
-                        } else {
-                            tmp->t_next = chip->t_next;
-                            chip->t_next = tmp;
-                        }
-                        tmp->chipset  = data[0];
-                        tmp->platform = data[1];
+                            if (!chip) {
+                                chip = tmp;
+                                chip->t_next = NULL;
+                            } else {
+                                tmp->t_next = chip->t_next;
+                                chip->t_next = tmp;
+                            }
+                            tmp->chipset  = data[0];
+                            tmp->platform = data[1];
                             tmp->subtype  = 0;
-                        tmp->revNum   = data[2];
-                        tmp->dtb_size = 0;
-                        tmp->dtb_file = NULL;
-                        tmp->master   = chip;
-                        tmp->wroteDtb = 0;
-                        tmp->master_offset = 0;
-                        count++;
+                            tmp->revNum   = data[2];
+                            tmp->dtb_size = 0;
+                            tmp->dtb_file = NULL;
+                            tmp->master   = chip;
+                            tmp->wroteDtb = 0;
+                            tmp->master_offset = 0;
+                            count++;
+                        }
                     }
-                }
 
-                log_err("... skip, incorrect '%s' format\n", QCDT_DT_TAG);
-                break;
-            }
+                    log_err("... skip, incorrect '%s' format\n", QCDT_DT_TAG);
+                    break;
+                }
             } else if (msmversion == 2) {
                 if ((pos = strstr(line, QCDT_DT_TAG)) != NULL) {
                     pos += strlen(QCDT_DT_TAG);
@@ -397,7 +397,7 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
                             tmp_id->revNum= data_st[1];
                             count1++;
                         }
-        }
+                    }
                 }
 
                 if ((pos = strstr(line,QCDT_BOARD_TAG)) != NULL) {
@@ -448,8 +448,8 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
         }
     }
 
-        if (line)
-            free(line);
+    if (line)
+        free(line);
 
     if (force_v2 || msmversion == 2) {
 
@@ -503,7 +503,7 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
         free(chipId);
         return chip;
     }
-    
+
     } else {
         pclose(pfile);
     }
@@ -652,12 +652,12 @@ int main(int argc, char **argv)
                 chip = getChipInfo(filename, &num, msmversion);
 
                 if (msmversion == 1) {
-                if (!chip) {
-                    log_err("skip, failed to scan for '%s' tag\n",
-                            QCDT_DT_TAG);
-                    free(filename);
-                    continue;
-                }
+                    if (!chip) {
+                        log_err("skip, failed to scan for '%s' tag\n",
+                                QCDT_DT_TAG);
+                        free(filename);
+                        continue;
+                    }
                 }
                 if (msmversion == 2) {
                     if (!chip) {
