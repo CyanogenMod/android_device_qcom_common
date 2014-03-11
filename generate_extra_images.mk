@@ -322,6 +322,43 @@ endif # !BUILD_TINY_ANDROID
 
 endif # is-board-platform-in-list
 
+#####################################################################################################
+# support for small user data image
+
+ifneq ($(strip $(BOARD_SMALL_USERDATAIMAGE_PARTITION_SIZE)),)
+# Don't build userdata.img if it's extfs but no partition size
+skip_userdata.img :=
+ifdef INTERNAL_USERIMAGES_EXT_VARIANT
+ifndef BOARD_USERDATAIMAGE_PARTITION_SIZE
+skip_userdata.img := true
+endif
+endif
+
+ifneq ($(skip_userdata.img),true)
+
+INSTALLED_SMALL_USERDATAIMAGE_TARGET := $(PRODUCT_OUT)/userdata_small.img
+
+define build-small-userdataimage
+  @echo "target small userdata image"
+  $(hide) mkdir -p $(1)
+  $(hide) $(MKEXTUSERIMG) -s $(TARGET_OUT_DATA) $(2) ext4 data $(BOARD_SMALL_USERDATAIMAGE_PARTITION_SIZE)
+  $(hide) chmod a+r $@
+  $(hide) $(call assert-max-image-size,$@,$(BOARD_SMALL_USERDATAIMAGE_PARTITION_SIZE),yaffs)
+endef
+
+
+$(INSTALLED_SMALL_USERDATAIMAGE_TARGET): $(MKEXTUSERIMG) $(MAKE_EXT4FS) $(INSTALLED_USERDATAIMAGE_TARGET)
+	$(hide) $(call build-small-userdataimage,$(PRODUCT_OUT),$(INSTALLED_SMALL_USERDATAIMAGE_TARGET))
+
+ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_SMALL_USERDATAIMAGE_TARGET)
+ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_SMALL_USERDATAIMAGE_TARGET)
+
+endif
+
+endif
+
+###################################################################################################
+
 .PHONY: aboot
 aboot: $(INSTALLED_BOOTLOADER_MODULE)
 
