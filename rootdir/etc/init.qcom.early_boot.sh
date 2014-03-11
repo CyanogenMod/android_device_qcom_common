@@ -155,6 +155,12 @@ case "$1" in
                 # Android sw navigation bar
                 setprop ro.hw.nav_keys 0
                 ;;
+            "SBC")
+                setprop ro.sf.lcd_density 200
+                # SBC do not have hardware navigation keys, so enable
+                # Android sw navigation bar
+                setprop qemu.hw.mainkeys 0
+                ;;
             *)
                 setprop ro.sf.lcd_density 480
                 ;;
