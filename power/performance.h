@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012, 2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -80,6 +80,22 @@ enum CPU3_MIN_FREQ_LVL {
     CPU3_MIN_FREQ_TURBO_MAX = 0x5FE,
 };
 
+enum CPU0_MAX_FREQ_LVL {
+    CPU0_MAX_FREQ_NONTURBO_MAX = 0x150A,
+};
+
+enum CPU1_MAX_FREQ_LVL {
+    CPU1_MAX_FREQ_NONTURBO_MAX = 0x160A,
+};
+
+enum CPU2_MAX_FREQ_LVL {
+    CPU2_MAX_FREQ_NONTURBO_MAX = 0x170A,
+};
+
+enum CPU3_MAX_FREQ_LVL {
+    CPU3_MAX_FREQ_NONTURBO_MAX = 0x180A,
+};
+
 enum CPUS_ONLINE_LVL {
     CPUS_ONLINE_MIN_2 = 0x702,
     CPUS_ONLINE_MIN_3 = 0x703,
@@ -90,11 +106,6 @@ enum CPUS_ONLINE_LVL {
     CPUS_ONLINE_MAX_LIMIT_3 = 0x7FC,
     CPUS_ONLINE_MAX_LIMIT_4 = 0x7FB,
     CPUS_ONLINE_MAX_LIMIT_MAX = 0x7FB,
-};
-
-enum ALL_CPUS_FREQBOOST_LVL {
-    ALL_CPUS_FREQ_NONTURBO_MAX = 0x90A,
-    ALL_CPUS_FREQ_TURBO = 0x9FE,
 };
 
 enum SAMPLING_RATE_LVL {
