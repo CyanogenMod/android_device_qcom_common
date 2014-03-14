@@ -169,6 +169,15 @@ case "$target" in
         esac
         start_charger_monitor
         ;;
+    "apq8084")
+        platformvalue=`cat /sys/devices/soc0/hw_platform`
+        case "$platformvalue" in
+             "Fluid")
+                 start profiler_daemon;;
+             "Liquid")
+                 start profiler_daemon;;
+        esac
+        ;;
     "msm8226")
         start_charger_monitor
         ;;
