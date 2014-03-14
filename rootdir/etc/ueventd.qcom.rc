@@ -164,8 +164,10 @@
 
 # sensors
 /sys/devices/i2c-12/12-*  pollrate_ms 0664 system system
-/sys/devices/f9925000.i2c/i2c-0/0-* enable          0660     input     system
-/sys/devices/f9925000.i2c/i2c-0/0-* poll_delay      0660     input     system
+/sys/devices/f9925000.i2c/i2c-0/0-*                 enable         0660    input    system
+/sys/devices/f9925000.i2c/i2c-0/0-*                 poll_delay     0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-0/0-*            enable         0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-0/0-*            poll_delay     0660    input    system
 /sys/devices/virtual/optical_sensors/proximity      ps_adc         0660    input    system
 /sys/devices/virtual/optical_sensors/proximity      ps_poll_delay  0660    input    system
 /sys/devices/virtual/optical_sensors/lightsensor    ls_auto        0660    input    system
