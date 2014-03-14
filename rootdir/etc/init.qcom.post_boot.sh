@@ -599,7 +599,7 @@ esac
 
 # Post-setup services
 case "$target" in
-    "msm8660" | "msm8960" | "msm8226" | "msm8610" | "mpq8092")
+    "msm8660" | "msm8960" | "msm8226" | "msm8610" | "mpq8092" | "msm8916")
         start mpdecision
     ;;
     "msm8974")
