@@ -629,7 +629,7 @@ int main(int argc, char **argv)
        extract "qcom,msm-id" parameter
      */
     while ((dp = readdir(dir)) != NULL) {
-        if ((dp->d_type == DT_REG)) {
+        if ((dp->d_type == DT_REG || dp->d_type == DT_UNKNOWN)) {
             flen = strlen(dp->d_name);
             if ((flen > 4) &&
                 (strncmp(&dp->d_name[flen-4], ".dtb", 4) == 0)) {
