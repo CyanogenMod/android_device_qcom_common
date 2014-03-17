@@ -663,6 +663,8 @@ PRODUCT_PACKAGES += flatland
 # MSM updater library
 PRODUCT_PACKAGES += librecovery_updater_msm
 
+# vcard jar
+PRODUCT_PACKAGES += vcard
 
 #intialise PRODUCT_PACKAGES_DEBUG list for debug modules
 PRODUCT_PACKAGES_DEBUG :=
