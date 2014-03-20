@@ -152,8 +152,15 @@ case "$usb_config" in
                    setprop persist.sys.usb.config diag,diag_mdm,diag_mdm2,serial_hsic,serial_hsusb,rmnet_hsic,rmnet_hsusb,mass_storage,adb
               ;;
               *)
-                   create_luns $target $cdromenable
-                   setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_bam,mass_storage,adb
+		create_luns $target $cdromenable
+		case "$target" in
+			"msm8916")
+				setprop persist.sys.usb.config diag,serial_smd,rmnet_bam,adb
+			;;
+			*)
+				setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_bam,mass_storage,adb
+			;;
+		esac
               ;;
           esac
           ;;
