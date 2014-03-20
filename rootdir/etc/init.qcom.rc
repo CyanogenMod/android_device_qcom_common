@@ -528,12 +528,6 @@ service ftm_ffbm /system/bin/ftmdaemon
     disabled
     oneshot
 
-service cnss-diag /system/bin/cnss-diag --q
-    class main
-    user root
-    group root
-    oneshot
-
 service dhcpcd_bt-pan /system/bin/dhcpcd -BKLG
     class late_start
     disabled
