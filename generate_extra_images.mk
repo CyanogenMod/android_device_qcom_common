@@ -148,6 +148,7 @@ $(shell dd if=/dev/zero of=$(CDROM_RES_FILE)/zero.bin bs=1024 count=$(CDROM_DUMM
 endif
 
 define build-cdrom-target
+    @mkdir -p $(PRODUCT_OUT)/system/etc
     $(hide) mkisofs -o $(CDROM_ISO_TARGET)  $(CDROM_RES_FILE)
 endef
 
