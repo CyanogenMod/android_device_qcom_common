@@ -289,6 +289,12 @@ on property:bluetooth.dun.status=stopped
 on property:ro.bluetooth.ftm_enabled=true
     start ftmd
 
+on property:bluetooth.startbtsnoop=true
+    start btsnoop
+
+on property:bluetooth.startbtsnoop=false
+    stop btsnoop
+
 service qcom-c_core-sh /system/bin/sh /init.qcom.class_core.sh
     class core
     user root
@@ -381,6 +387,13 @@ service bt-sap /system/bin/sapd 15
     class late_start
     disabled
     oneshot
+
+service btsnoop /system/bin/btsnoop
+   user bluetooth
+   group bluetooth net_bt_admin sdcard_rw sdcard_r
+   class late_start
+   disabled
+   oneshot
 
 service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
     class late_start
