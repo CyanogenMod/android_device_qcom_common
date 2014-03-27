@@ -99,21 +99,6 @@ done
 fi
 
 target=`getprop ro.product.device`
-cdromenable=`getprop persist.service.cdrom.enable`
-create_luns() {
-	case "$1" in
-		"msm8226" | "msm8610")
-		case "$2" in
-			0)
-				setprop persist.sys.usb.luns ""
-			;;
-			1)
-				setprop persist.sys.usb.luns rom
-			;;
-		esac
-		;;
-	esac
-}
 
 #
 # Allow USB enumeration with default PID/VID
@@ -152,7 +137,6 @@ case "$usb_config" in
                    setprop persist.sys.usb.config diag,diag_mdm,diag_mdm2,serial_hsic,serial_hsusb,rmnet_hsic,rmnet_hsusb,mass_storage,adb
               ;;
               *)
-                    create_luns $target $cdromenable
                     echo $target
                     case "$target" in
                         "msm8916_32")
@@ -247,19 +231,17 @@ esac
 # Add support for exposing lun0 as cdrom in mass-storage
 #
 cdromname="/system/etc/cdrom_install.iso"
+platformver=`cat /sys/devices/soc0/hw_platform`
 case "$target" in
-        "msm8226" | "msm8610")
-                case "$cdromenable" in
-                        1)
-                                echo "mounting usbcdrom lun"
-				if [ ! -f /sys/class/android_usb/android0/f_mass_storage/lun0/file ]; then
-					sleep 2 # cdrom lun still not created. give some time.
-				fi
-                                echo $cdromname > /sys/class/android_usb/android0/f_mass_storage/lun0/file
-				chmod 0444 /sys/class/android_usb/android0/f_mass_storage/lun0/file
-                                ;;
-                esac
-                ;;
+        "msm8226" | "msm8610" | "msm8916" | "msm8916_32" | "msm8916_64")
+		case $platformver in
+			"QRD")
+				echo "mounting usbcdrom lun"
+				echo $cdromname > /sys/class/android_usb/android0/f_mass_storage/rom/file
+				chmod 0444 /sys/class/android_usb/android0/f_mass_storage/rom/file
+				;;
+		esac
+		;;
 esac
 
 #
