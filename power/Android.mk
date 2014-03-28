@@ -1,9 +1,11 @@
 LOCAL_PATH := $(call my-dir)
 
-ifneq ($(TARGET_PROVIDES_POWERHAL),true)
-ifneq ($(TARGET_USES_CM_POWERHAL),true)
+# Hey Mr. Make Author, DIAF PLX
+ifeq ($(TARGET_POWERHAL_VARIANT),qcom)
+USE_ME := true
+endif
 
-ifneq (,$(filter true,$(BOARD_USES_QCOM_HARDWARE) $(WITH_QC_PERF)))
+ifneq (,$(filter true,$(USE_ME) $(WITH_QC_PERF)))
 
 # HAL module implemenation stored in
 # hw/<POWERS_HARDWARE_MODULE_ID>.<ro.hardware>.so
@@ -43,6 +45,4 @@ LOCAL_MODULE := power.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_SHARED_LIBRARY)
 
-endif # BOARD_USES_QCOM_HARDWARE || WITH_QC_PERF
-endif # !TARGET_USES_CM_POWERHAL
-endif # !TARGET_PROVIDES_POWERHAL
+endif # TARGET_POWERHAL_VARIANT == qcom || WITH_QC_PERF
