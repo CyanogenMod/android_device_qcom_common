@@ -1,4 +1,4 @@
-# Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2012,2014 The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -245,6 +245,9 @@ on post-fs-data
 
     #Create a folder for SRS to be able to create a usercfg file
     mkdir /data/data/media 0770 media media
+
+    #Grant access to system UID for SMSC HUB sysfs entry
+    chown system system /sys/bus/platform/devices/msm_smsc_hub/enable
 
 # Export GPIO56 for fusion targets to enable/disable hub
 service usbhub_init /system/bin/usbhub_init
@@ -676,6 +679,17 @@ service ril-daemon2 /system/bin/rild -c 2
     user root
     disabled
     group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
+
+service usb_uicc_daemon /system/bin/usb_uicc_client
+    class main
+    user system
+    group system log
+
+on property:usb_uicc.spi_bridge_enabled=1
+    insmod /system/lib/modules/ice40-hcd.ko
+
+on property:usb_uicc.spi_bridge_enabled=0
+    rmmod /system/lib/modules/ice40-hcd.ko
 
 service profiler_daemon /system/bin/profiler_daemon
     class late_start
