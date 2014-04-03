@@ -60,12 +60,8 @@ case "$baseband" in
     multisim=`getprop persist.radio.multisim.config`
 
     if [ "$multisim" = "dsds" ] || [ "$multisim" = "dsda" ]; then
-        stop ril-daemon
-        start ril-daemon
         start ril-daemon1
     elif [ "$multisim" = "tsts" ]; then
-        stop ril-daemon
-        start ril-daemon
         start ril-daemon1
         start ril-daemon2
     fi
