@@ -36,11 +36,32 @@
 
 #include "init_msm.h"
 
+#define VIRTUAL_SIZE "/sys/class/graphics/fb0/virtual_size"
+#define BUF_SIZE 64
+
 void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
 {
+    char platform[PROP_VALUE_MAX], *virtual_size = NULL;
+    int rc;
+    char str[BUF_SIZE];
 
+    UNUSED(msm_id);
     UNUSED(msm_ver);
     UNUSED(board_type);
+
+    rc = property_get("ro.board.platform", platform);
+    if (!rc || !ISMATCH(platform, ANDROID_TARGET))
+        return;
+
+    rc = read_file2(VIRTUAL_SIZE, str, sizeof(str));
+    if (rc) {
+        virtual_size = strtok(str,",");
+    }
+
+    if (!strncmp(virtual_size,"1080",strlen(virtual_size))) {
+        property_set(PROP_LCDDENSITY, "480");
+    } else
+        property_set(PROP_LCDDENSITY, "320");
 
     if (msm_id == 206) {
         property_set("media.swhevccodectype", "1");
