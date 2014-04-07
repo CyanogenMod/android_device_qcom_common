@@ -44,7 +44,11 @@
 #define QCDT_VERSION   1       /* QCDT version */
 #define QCDT_VERSION_NEW   2       /* QCDT version */
 
+#ifdef HTC_BOARD /* Because yeah, htc craps also dtbs! */
+#define QCDT_DT_TAG    "htc,project-id = <"
+#else
 #define QCDT_DT_TAG    "qcom,msm-id = <"
+#endif
 #define QCDT_BOARD_TAG "qcom,board-id = <"
 
 #define PAGE_SIZE_DEF  2048

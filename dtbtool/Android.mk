@@ -9,6 +9,10 @@ LOCAL_SRC_FILES := \
 LOCAL_CFLAGS += \
 	-Wall
 
+ifeq ($(BOARD_VENDOR,htc),true)
+LOCAL_CFLAGS += -DHTC_BOARD
+endif
+
 ## Hybrid v1/v2 dtbTool. Use a different name to avoid conflicts with copies in device repos
 LOCAL_MODULE := dtbToolCM
 LOCAL_MODULE_TAGS := optional
