@@ -93,6 +93,7 @@ struct chipSt_t {
 char *input_dir;
 char *output_file;
 char *dtc_path;
+char *dt_tag = QCDT_DT_TAG;
 int   verbose;
 int   page_size = PAGE_SIZE_DEF;
 int   force_v2;
@@ -106,6 +107,7 @@ void print_help()
     log_info("  --output-file/-o     output file\n");
     log_info("  --dtc-path/-p        path to dtc\n");
     log_info("  --page-size/-s       page size in bytes\n");
+    log_info("  --dt-tag/-d          alternate QCDT_DT_TAG\n");
     log_info("  --verbose/-v         verbose\n");
     log_info("  --force-v2/-2        use dtb v2 format\n");
     log_info("  --help/-h            this help screen\n");
@@ -119,13 +121,14 @@ int parse_commandline(int argc, char *const argv[])
         {"output-file", 1, 0, 'o'},
         {"dtc-path",    1, 0, 'p'},
         {"page-size",   1, 0, 's'},
+        {"dt-tag",      1, 0, 'd'},
         {"verbose",     0, 0, 'v'},
         {"help",        0, 0, 'h'},
         {"force-v2",    0, 0, '2'},
         {0, 0, 0, 0}
     };
 
-    while ((c = getopt_long(argc, argv, "-o:p:s:vh2", long_options, NULL))
+    while ((c = getopt_long(argc, argv, "-o:p:s:d:vh2", long_options, NULL))
            != -1) {
         switch (c) {
         case 1:
@@ -144,6 +147,9 @@ int parse_commandline(int argc, char *const argv[])
                 log_err("Invalid page size (> 0 and <=1MB\n");
                 return RC_ERROR;
             }
+            break;
+        case 'd':
+            dt_tag = optarg;
             break;
         case 'v':
             verbose = 1;
@@ -296,8 +302,8 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
         /* Find "qcom,msm-id" */
         while ((llen = getline(&line, &line_size, pfile)) != -1) {
             if (msmversion == 1) {
-                if ((pos = strstr(line, QCDT_DT_TAG)) != NULL) {
-                    pos += strlen(QCDT_DT_TAG);
+                if ((pos = strstr(line, dt_tag)) != NULL) {
+                    pos += strlen(dt_tag);
 
                     entryEnded = 0;
                     while (1) {
@@ -351,12 +357,12 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
                         }
                     }
 
-                    log_err("... skip, incorrect '%s' format\n", QCDT_DT_TAG);
+                    log_err("... skip, incorrect '%s' format\n", dt_tag);
                     break;
                 }
             } else if (msmversion == 2) {
-                if ((pos = strstr(line, QCDT_DT_TAG)) != NULL) {
-                    pos += strlen(QCDT_DT_TAG);
+                if ((pos = strstr(line, dt_tag)) != NULL) {
+                    pos += strlen(dt_tag);
 
                     entryEndedDT = 0;
                     for (;entryEndedDT < 1;) {
@@ -454,7 +460,7 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
     if (force_v2 || msmversion == 2) {
 
     if (count1 == 0) {
-        log_err("... skip, incorrect '%s' format\n", QCDT_DT_TAG);
+        log_err("... skip, incorrect '%s' format\n", dt_tag);
         return NULL;
     }
     if (count2 == 0) {
@@ -654,7 +660,7 @@ int main(int argc, char **argv)
                 if (msmversion == 1) {
                     if (!chip) {
                         log_err("skip, failed to scan for '%s' tag\n",
-                                QCDT_DT_TAG);
+                                dt_tag);
                         free(filename);
                         continue;
                     }
@@ -662,7 +668,7 @@ int main(int argc, char **argv)
                 if (msmversion == 2) {
                     if (!chip) {
                         log_err("skip, failed to scan for '%s' or '%s' tag\n",
-                                QCDT_DT_TAG, QCDT_BOARD_TAG);
+                                dt_tag, QCDT_BOARD_TAG);
                         free(filename);
                         continue;
                     }
