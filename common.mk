@@ -686,21 +686,19 @@ PRODUCT_COPY_FILES := \
     frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
-    packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml \
-    frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
 
 # Bluetooth configuration files
-PRODUCT_COPY_FILES += \
+#PRODUCT_COPY_FILES += \
     system/bluetooth/data/audio.conf:system/etc/bluetooth/audio.conf \
     system/bluetooth/data/auto_pairing.conf:system/etc/bluetooth/auto_pairing.conf \
     system/bluetooth/data/blacklist.conf:system/etc/bluetooth/blacklist.conf \
     system/bluetooth/data/input.conf:system/etc/bluetooth/input.conf \
     system/bluetooth/data/network.conf:system/etc/bluetooth/network.conf \
 
-ifeq ($(BOARD_HAVE_BLUETOOTH_BLUEZ),true)
-PRODUCT_COPY_FILES += \
+#ifeq ($(BOARD_HAVE_BLUETOOTH_BLUEZ),true)
+#PRODUCT_COPY_FILES += \
     system/bluetooth/data/stack.conf:system/etc/bluetooth/stack.conf
-endif # BOARD_HAVE_BLUETOOTH_BLUEZ
+#endif # BOARD_HAVE_BLUETOOTH_BLUEZ
 
 # gps/location secuity configuration file
 PRODUCT_COPY_FILES += \
