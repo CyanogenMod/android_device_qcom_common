@@ -697,6 +697,7 @@ service usb_uicc_daemon /system/bin/usb_uicc_client
     class main
     user system
     group system log
+    oneshot
 
 on property:usb_uicc.spi_bridge_enabled=1
     insmod /system/lib/modules/ice40-hcd.ko
