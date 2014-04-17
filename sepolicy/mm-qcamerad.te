@@ -1,0 +1,34 @@
+type mm-qcamerad, domain;
+permissive mm-qcamerad;
+type mm-qcamerad_exec, exec_type, file_type;
+init_daemon_domain(mm-qcamerad)
+
+#============= mm-qcamerad ==============
+#Communicate with user land process through domain socket
+allow mm-qcamerad system_data_file:sock_file { create unlink };
+
+#Communicate with the backend video device node
+allow mm-qcamerad video_device:chr_file { open read write ioctl };
+
+allow mm-qcamerad device:dir search;
+allow mm-qcamerad init:fd use;
+allow mm-qcamerad kernel:fd use;
+allow mm-qcamerad device:chr_file { read write open ioctl getattr };
+allow mm-qcamerad log_device:chr_file { write open };
+allow mm-qcamerad properties_device:file { open read getattr};
+allow mm-qcamerad null_device:chr_file { open read write getattr};
+allow mm-qcamerad rootfs:lnk_file read;
+allow mm-qcamerad system_file:dir search;
+allow mm-qcamerad system_file:file { open read execute };
+allow mm-qcamerad debugfs:dir search;
+allow mm-qcamerad ion_device:chr_file { read write open ioctl };
+allow mm-qcamerad self:process { execmem fork };
+allow mm-qcamerad self:unix_dgram_socket { bind create read };
+allow mm-qcamerad self:unix_stream_socket { create connect connectto bind read write getattr };
+allow mm-qcamerad init:unix_stream_socket { connectto };
+allow mm-qcamerad self:fifo_file { write read };
+allow mm-qcamerad apk_data_file:sock_file { read write };
+allow mm-qcamerad mediaserver:fd { use };
+allow mm-qcamerad surfaceflinger:fd { use };
+allow mm-qcamerad system_data_file:file { open read getattr write create};
+allow mm-qcamerad system_data_file:dir { write remove_name search add_name };
