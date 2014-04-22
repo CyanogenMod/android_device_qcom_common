@@ -42,4 +42,6 @@
          ignored and manual operator selection will always be available. See
          CPHS4_2.WW6, CPHS B.4.7.1 for more information -->
     <bool name="csp_enabled">true</bool>
+    <!-- Disable data before manual PLMN scan if true-->
+    <bool name="config_disable_data_manual_plmn">true</bool>
 </resources>
