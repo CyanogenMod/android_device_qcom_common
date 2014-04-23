@@ -455,14 +455,14 @@ esac
 case "$target" in
     "msm8916")
         echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-        echo "25000 800000:50000 1094400:25000" > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+        echo "25000 1094400:50000" > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
         echo 90 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
         echo 25000 > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-        echo 800000 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+        echo 998400 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
         echo 1 > /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
-        echo "85 800000:90 998400:70" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
+        echo "85 998400:90 1094400:80" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
         echo 50000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
-        echo 100000 > /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor
+        echo 50000 > /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor
         echo 800000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     ;;
 esac
