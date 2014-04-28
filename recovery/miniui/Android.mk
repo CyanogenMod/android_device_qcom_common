@@ -11,12 +11,16 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_C_INCLUDES += bootable/recovery
 
+ifeq ($(call is-platform-sdk-version-at-least,18),true)
+LOCAL_SRC_FILES += qcom_device.cpp
+else
 LOCAL_SRC_FILES += qcom_recovery_ui.c
 
 LOCAL_STATIC_LIBRARIES += libext4_utils libz
 LOCAL_STATIC_LIBRARIES += libminzip libunz libmtdutils libmincrypt
 LOCAL_STATIC_LIBRARIES += libminui libpixelflinger_static libpng libcutils
 LOCAL_STATIC_LIBRARIES += libstdc++ libc
+endif
 
 include $(BUILD_STATIC_LIBRARY)
 endif   # TARGET_ARCH == arm
