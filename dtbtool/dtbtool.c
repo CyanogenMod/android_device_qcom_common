@@ -635,16 +635,6 @@ int main(int argc, char **argv)
        extract "qcom,msm-id" parameter
      */
     while ((dp = readdir(dir)) != NULL) {
-        if ((dp->d_type != DT_REG)) {
-            continue;
-        }
-
-        flen = strlen(dp->d_name);
-        if ((flen <= 4) ||
-            (strncmp(&dp->d_name[flen-4], ".dtb", 4) != 0)) {
-            continue;
-        }
-        log_info("Found file: %s ... ", dp->d_name);
 
         flen = strlen(input_dir) + strlen(dp->d_name) + 1;
         filename = (char *)malloc(flen);
@@ -655,6 +645,19 @@ int main(int argc, char **argv)
         }
         strncpy(filename, input_dir, flen);
         strncat(filename, dp->d_name, flen);
+
+        if (stat(filename, &st) != 0 || !S_ISREG(st.st_mode)) {
+            free(filename);
+            continue;
+        }
+
+        flen = strlen(dp->d_name);
+        if ((flen <= 4) || (strncmp(&dp->d_name[flen-4], ".dtb", 4) != 0)) {
+            free(filename);
+            continue;
+        }
+
+        log_info("Found file: %s ... ", dp->d_name);
 
         /* To identify the version number */
         msmversion = force_v2 ? GetVersionInfo(filename) : 1;
@@ -679,8 +682,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if ((stat(filename, &st) != 0) ||
-            (st.st_size == 0)) {
+        if (st.st_size == 0) {
             log_err("skip, failed to get DTB size\n");
             free(filename);
             continue;
