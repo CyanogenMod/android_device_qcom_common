@@ -635,83 +635,86 @@ int main(int argc, char **argv)
        extract "qcom,msm-id" parameter
      */
     while ((dp = readdir(dir)) != NULL) {
-        if ((dp->d_type == DT_REG)) {
-            flen = strlen(dp->d_name);
-            if ((flen > 4) &&
-                (strncmp(&dp->d_name[flen-4], ".dtb", 4) == 0)) {
-                log_info("Found file: %s ... ", dp->d_name);
+        if ((dp->d_type != DT_REG)) {
+            continue;
+        }
 
-                flen = strlen(input_dir) + strlen(dp->d_name) + 1;
-                filename = (char *)malloc(flen);
-                if (!filename) {
-                    log_err("Out of memory\n");
-                    rc = RC_ERROR;
-                    break;
-                }
-                strncpy(filename, input_dir, flen);
-                strncat(filename, dp->d_name, flen);
+        flen = strlen(dp->d_name);
+        if ((flen <= 4) ||
+            (strncmp(&dp->d_name[flen-4], ".dtb", 4) != 0)) {
+            continue;
+        }
+        log_info("Found file: %s ... ", dp->d_name);
 
-                /* To identify the version number */
-                msmversion = force_v2 ? GetVersionInfo(filename) : 1;
+        flen = strlen(input_dir) + strlen(dp->d_name) + 1;
+        filename = (char *)malloc(flen);
+        if (!filename) {
+            log_err("Out of memory\n");
+            rc = RC_ERROR;
+            break;
+        }
+        strncpy(filename, input_dir, flen);
+        strncat(filename, dp->d_name, flen);
 
-                num = 1;
-                chip = getChipInfo(filename, &num, msmversion);
+        /* To identify the version number */
+        msmversion = force_v2 ? GetVersionInfo(filename) : 1;
 
-                if (msmversion == 1) {
-                    if (!chip) {
-                        log_err("skip, failed to scan for '%s' tag\n",
-                                dt_tag);
-                        free(filename);
-                        continue;
-                    }
-                }
-                if (msmversion == 2) {
-                    if (!chip) {
-                        log_err("skip, failed to scan for '%s' or '%s' tag\n",
-                                dt_tag, QCDT_BOARD_TAG);
-                        free(filename);
-                        continue;
-                    }
-                }
+        num = 1;
+        chip = getChipInfo(filename, &num, msmversion);
 
-                if ((stat(filename, &st) != 0) ||
-                    (st.st_size == 0)) {
-                    log_err("skip, failed to get DTB size\n");
-                    free(filename);
-                    continue;
-                }
-
-                log_info("chipset: %u, rev: %u, platform: %u, subtype: %u\n",
-                         chip->chipset, chip->revNum, chip->platform, chip->subtype);
-
-                for (t_chip = chip->t_next; t_chip; t_chip = t_chip->t_next) {
-                    log_info("   additional chipset: %u, rev: %u, platform: %u, subtype: %u\n",
-                             t_chip->chipset, t_chip->revNum, t_chip->platform, t_chip->subtype);
-                }
-
-                rc = chip_add(chip);
-                if (rc != RC_SUCCESS) {
-                    log_err("... duplicate info, skipped\n");
-                    free(filename);
-                    continue;
-                }
-
-                dtb_count++;
-
-                chip->dtb_size = st.st_size +
-                                   (page_size - (st.st_size % page_size));
-                chip->dtb_file = filename;
-
-                for (t_chip = chip->t_next; t_chip; t_chip = t_chip->t_next) {
-                    rc = chip_add(t_chip);
-                    if (rc != RC_SUCCESS) {
-                        log_err("... duplicate info, skipped (chipset %u, rev: %u, platform: %u, subtype %u:\n",
-                             t_chip->chipset, t_chip->revNum, t_chip->platform, t_chip->subtype);
-                        continue;
-                    }
-                    dtb_count++;
-                }
+        if (msmversion == 1) {
+            if (!chip) {
+                log_err("skip, failed to scan for '%s' tag\n",
+                        dt_tag);
+                free(filename);
+                continue;
             }
+        }
+        if (msmversion == 2) {
+            if (!chip) {
+                log_err("skip, failed to scan for '%s' or '%s' tag\n",
+                        dt_tag, QCDT_BOARD_TAG);
+                free(filename);
+                continue;
+            }
+        }
+
+        if ((stat(filename, &st) != 0) ||
+            (st.st_size == 0)) {
+            log_err("skip, failed to get DTB size\n");
+            free(filename);
+            continue;
+        }
+
+        log_info("chipset: %u, rev: %u, platform: %u, subtype: %u\n",
+                 chip->chipset, chip->revNum, chip->platform, chip->subtype);
+
+        for (t_chip = chip->t_next; t_chip; t_chip = t_chip->t_next) {
+            log_info("   additional chipset: %u, rev: %u, platform: %u, subtype: %u\n",
+                     t_chip->chipset, t_chip->revNum, t_chip->platform, t_chip->subtype);
+        }
+
+        rc = chip_add(chip);
+        if (rc != RC_SUCCESS) {
+            log_err("... duplicate info, skipped\n");
+            free(filename);
+            continue;
+        }
+
+        dtb_count++;
+
+        chip->dtb_size = st.st_size +
+                           (page_size - (st.st_size % page_size));
+        chip->dtb_file = filename;
+
+        for (t_chip = chip->t_next; t_chip; t_chip = t_chip->t_next) {
+            rc = chip_add(t_chip);
+            if (rc != RC_SUCCESS) {
+                log_err("... duplicate info, skipped (chipset %u, rev: %u, platform: %u, subtype %u:\n",
+                     t_chip->chipset, t_chip->revNum, t_chip->platform, t_chip->subtype);
+                continue;
+            }
+            dtb_count++;
         }
     }
     closedir(dir);
