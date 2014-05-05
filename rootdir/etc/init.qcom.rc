@@ -626,6 +626,9 @@ service cnss_diag /system/bin/cnss_diag --q
     group root
     oneshot
 
+service cnss-daemon /system/bin/cnss-daemon -n -l
+    class late_start
+
 service dhcpcd_bt-pan /system/bin/dhcpcd -BKLG
     class late_start
     disabled
