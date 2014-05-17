@@ -173,10 +173,9 @@ int get_scaling_governor(char governor[], int size)
 
 void interaction(int duration, int num_args, int opt_list[])
 {
-#ifdef INTERACTION_BOOST
     static int lock_handle = 0;
 
-    if (duration < 0 || num_args < 1 || opt_list[0] == NULL)
+    if (duration <= 0 || num_args < 1 || opt_list[0] == NULL)
         return;
 
     if (qcopt_handle) {
@@ -186,7 +185,6 @@ void interaction(int duration, int num_args, int opt_list[])
                 ALOGE("Failed to acquire lock.");
         }
     }
-#endif
 }
 
 void perform_hint_action(int hint_id, int resource_values[], int num_resources)
