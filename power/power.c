@@ -272,7 +272,6 @@ static void power_hint(struct power_module *module, power_hint_t hint,
             int duration = (int)data / 1000;
             int resources[] = {0x702, 0x20B, 0x30B};
 
-            ALOGI("boost duration=%d", duration);
             if (duration > 0)
                 interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         }
