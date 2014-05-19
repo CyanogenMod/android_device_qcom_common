@@ -141,6 +141,7 @@
 /dev/msm_a2dp_in          0660   system     audio
 /dev/msm_ac3              0660   system     audio
 /dev/msm_audio_cal        0660   system     audio
+/dev/msm_hweffects        0660   system     audio
 /dev/msm_cad              0660   system     audio
 /dev/msm_fm               0660   system     audio
 /dev/msm_mvs              0660   system     audio
