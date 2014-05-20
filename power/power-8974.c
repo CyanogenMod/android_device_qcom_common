@@ -116,6 +116,7 @@ int power_hint_override(struct power_module *module, power_hint_t hint, void *da
 	return HINT_NONE;
 }
 
+#ifdef CORE_CONTROL
 int set_interactive_override(struct power_module *module, int on)
 {
     char governor[80];
@@ -176,3 +177,4 @@ int set_interactive_override(struct power_module *module, int on)
 
     return HINT_NONE;
 }
+#endif
