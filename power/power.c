@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2014, The CyanogenMod Project
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -56,7 +57,14 @@ static int saved_mpdecision_slack_min = -1;
 static int saved_interactive_mode = -1;
 static int slack_node_rw_failed = 0;
 static int display_hint_sent;
+static int current_power_profile = 1;
 int display_boost;
+
+enum {
+    PROFILE_POWER_SAVE = 0,
+    PROFILE_BALANCED,
+    PROFILE_HIGH_PERFORMANCE
+};
 
 static struct hw_module_methods_t power_module_methods = {
     .open = NULL,
@@ -244,6 +252,33 @@ static void process_audio_hint(void *metadata)
     }
 }
 
+static void set_power_profile(int profile) {
+
+    if (profile == current_power_profile)
+        return;
+
+    ALOGV("%s: profile=%d", __func__, profile);
+
+    if (current_power_profile != PROFILE_BALANCED) {
+        undo_hint_action(DEFAULT_PROFILE_HINT_ID);
+        ALOGV("%s: hint undone", __func__);
+    }
+
+    if (profile == PROFILE_HIGH_PERFORMANCE) {
+        int resource_values[] = { 0x704, CPU0_MIN_FREQ_TURBO_MAX,
+            CPU1_MIN_FREQ_TURBO_MAX, CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX };
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID,
+            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set performance mode", __func__);
+    } else if (profile == PROFILE_POWER_SAVE) {
+        int resource_values[] = { 0x7FD, 0x150A, 0x160A };
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID,
+            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set powersave", __func__);
+    }
+
+    current_power_profile = profile;
+}
 
 int __attribute__ ((weak)) power_hint_override(struct power_module *module, power_hint_t hint,
         void *data)
@@ -256,10 +291,19 @@ extern void interaction(int duration, int num_args, int opt_list[]);
 static void power_hint(struct power_module *module, power_hint_t hint,
         void *data)
 {
+    pthread_mutex_lock(&hint_mutex);
+
+    /* If we are in a custom power profile, don't honor any other
+     * hints until we switch back to normal mode.
+     */
+    if ((current_power_profile != PROFILE_BALANCED) &&
+            (hint != POWER_HINT_SET_PROFILE))
+        goto out;
+
     /* Check if this hint has been overridden. */
     if (power_hint_override(module, hint, data) == HINT_HANDLED) {
         /* The power_hint has been handled. We can skip the rest. */
-        return;
+        goto out;
     }
 
     switch(hint) {
@@ -277,22 +321,22 @@ static void power_hint(struct power_module *module, power_hint_t hint,
         }
 #endif
         break;
+        case POWER_HINT_SET_PROFILE:
+            set_power_profile((int)data);
+        break;
         case POWER_HINT_VIDEO_ENCODE:
-            pthread_mutex_lock(&hint_mutex);
             process_video_encode_hint(data);
-            pthread_mutex_unlock(&hint_mutex);
         break;
         case POWER_HINT_VIDEO_DECODE:
-            pthread_mutex_lock(&hint_mutex);
             process_video_decode_hint(data);
-            pthread_mutex_unlock(&hint_mutex);
         break;
         case POWER_HINT_AUDIO:
-            pthread_mutex_lock(&hint_mutex);
             process_audio_hint(data);
-            pthread_mutex_unlock(&hint_mutex);
         break;
     }
+
+out:
+    pthread_mutex_unlock(&hint_mutex);
 }
 
 int __attribute__ ((weak)) set_interactive_override(struct power_module *module, int on)

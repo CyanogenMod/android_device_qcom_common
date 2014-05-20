@@ -33,6 +33,7 @@
 #define DISPLAY_STATE_HINT_ID           (0x0C00)
 #define DISPLAY_STATE_HINT_ID_2         (0x0D00)
 #define DEFAULT_AUDIO_HINT_ID           (0x0E00)
+#define DEFAULT_PROFILE_HINT_ID         (0x0F00)
 
 struct hint_data {
     unsigned long hint_id; /* This is our key. */
