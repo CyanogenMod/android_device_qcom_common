@@ -71,6 +71,10 @@ case "$baseband" in
             start qti
             start port-bridge
             ;;
+        "concurrent")
+            start qti
+            start netmgrd
+            ;;
         *)
             start netmgrd
             ;;
