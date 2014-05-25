@@ -41,4 +41,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <public type="drawable" name="digital_pen_low_battery" id="0x10803f5" />
   <!-- @hide -->
   <public type="drawable" name="digital_pen_positioning_problem" id="0x10803f6" />
+  <!-- @hide -->
+  <public type="drawable" name="digital_pen_background_side_channel" id="0x10803f7" />
 </resources>
