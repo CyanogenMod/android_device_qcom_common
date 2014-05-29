@@ -115,7 +115,7 @@ ion_memalloc(struct ion_buf_handle *buf, uint32_t size, uint32_t heap)
     alloc_data.align = 4096;
 
     alloc_data.flags = 0;
-    alloc_data.heap_mask = ION_HEAP(heap);
+    alloc_data.heap_id_mask = ION_HEAP(heap);
 
     /* Set the buffers to be uncached */
     alloc_data.flags = 0;
