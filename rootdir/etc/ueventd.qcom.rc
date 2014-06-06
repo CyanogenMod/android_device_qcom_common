@@ -56,6 +56,7 @@
 /dev/smdcntl5             0640   radio      radio
 /dev/smdcntl6             0640   radio      radio
 /dev/smdcntl7             0640   radio      radio
+/dev/smdcntl8             0640   radio      radio
 /dev/smdcnt_rev0          0640   radio      radio
 /dev/smdcnt_rev1          0640   radio      radio
 /dev/smdcnt_rev2          0640   radio      radio
