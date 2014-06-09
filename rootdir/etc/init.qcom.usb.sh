@@ -161,6 +161,9 @@ case "$usb_config" in
                         "msm8916_64")
                             setprop persist.sys.usb.config diag,serial_smd,rmnet_bam,adb
                         ;;
+                        "msm8994")
+                            setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_ipa,mass_storage,adb
+                        ;;
                         *)
                             setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_bam,mass_storage,adb
                         ;;
