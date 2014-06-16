@@ -581,6 +581,28 @@ case "$target" in
         echo 0 > /sys/module/lpm_levels/system/a57/a57-l2-pc/idle_enabled
         echo 0 > /sys/module/lpm_levels/system/system-cci-pc/idle_enabled
         echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
+        # enable interactive first in case interactive_pro doesn't exist
+        echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+        echo "interactive" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+        echo "interactive_pro" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+        echo "20000 600000:40000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/above_hispeed_delay
+        echo 90 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/go_hispeed_load
+        echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/timer_rate
+        echo 940800 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/hispeed_freq
+        echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/io_is_busy
+        echo "85 600000:90" > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/target_loads
+        echo 40000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/min_sample_time
+        echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        # enable governor for performance cluster
+        echo "interactive_pro" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+        echo "20000 600000:40000" > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/above_hispeed_delay
+        echo 90 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/go_hispeed_load
+        echo 20000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/timer_rate
+        echo 600000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/hispeed_freq
+        echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/io_is_busy
+        echo "85 600000:90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/target_loads
+        echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/min_sample_time
+        echo 200000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
     ;;
 esac
 
