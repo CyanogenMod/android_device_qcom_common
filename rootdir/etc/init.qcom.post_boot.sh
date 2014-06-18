@@ -576,6 +576,15 @@ case "$target" in
 esac
 
 case "$target" in
+    "msm8994")
+        echo 0 > /sys/module/lpm_levels/system/a53/a53-l2-pc/idle_enabled
+        echo 0 > /sys/module/lpm_levels/system/a57/a57-l2-pc/idle_enabled
+        echo 0 > /sys/module/lpm_levels/system/system-cci-pc/idle_enabled
+        echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
+    ;;
+esac
+
+case "$target" in
     "msm7627_ffa" | "msm7627_surf" | "msm7627_6x")
         echo 25000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
         ;;
