@@ -284,6 +284,7 @@ LIBCAMERA += camera.msm7630_surf
 LIBCAMERA += camera.msm7630_fusion
 LIBCAMERA += camera.msm7627a
 LIBCAMERA += camera.msm8916
+LIBCAMERA += camera.msm8994
 LIBCAMERA += libcamera
 LIBCAMERA += libmmcamera_interface
 LIBCAMERA += libmmcamera_interface2
