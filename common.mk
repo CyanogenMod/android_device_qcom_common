@@ -202,6 +202,7 @@ INIT += init.ath3k.bt.sh
 INIT += qca6234-service.sh
 INIT += init.qcom.audio.sh
 INIT += init.qcom.ssr.sh
+INIT += ssr_setup
 INIT += enable_swap.sh
 INIT += init.mdm.sh
 INIT += init.qcom.uicc.sh
