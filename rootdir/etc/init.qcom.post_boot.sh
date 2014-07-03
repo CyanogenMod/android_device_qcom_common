@@ -577,9 +577,6 @@ esac
 
 case "$target" in
     "msm8994")
-        echo 0 > /sys/module/lpm_levels/system/a53/a53-l2-pc/idle_enabled
-        echo 0 > /sys/module/lpm_levels/system/a57/a57-l2-pc/idle_enabled
-        echo 0 > /sys/module/lpm_levels/system/system-cci-pc/idle_enabled
         echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
         # enable interactive first in case interactive_pro doesn't exist
         echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
