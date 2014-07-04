@@ -448,6 +448,17 @@ service netmgrd /system/bin/netmgrd
     class main
     disabled
 
+service ipacm-diag /system/bin/ipacm-diag
+    class main
+    user system
+    group qcom_diag
+    disabled
+
+service ipacm /system/bin/ipacm
+    class main
+    user root
+    disabled
+
 service qti /system/vendor/bin/qti
     class main
     disabled
