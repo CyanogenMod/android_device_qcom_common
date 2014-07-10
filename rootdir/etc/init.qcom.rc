@@ -275,8 +275,21 @@ service ssr_setup /system/bin/ssr_setup
     oneshot
     disabled
 
+service ss_ramdump /system/bin/subsystem_ramdump
+    class main
+    user system
+    group system
+    disabled
+
 on property:persist.sys.ssr.restart_level=*
     start ssr_setup
+
+on property:persist.sys.ssr.enable_ramdumps=1
+    write /sys/module/subsystem_restart/parameters/enable_ramdumps 1
+    start ss_ramdump
+
+on property:persist.sys.ssr.enable_ramdumps=0
+    write /sys/module/subsystem_restart/parameters/enable_ramdumps 0
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
