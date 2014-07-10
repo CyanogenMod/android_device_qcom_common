@@ -28,12 +28,12 @@
             android:layout_width="@dimen/switcher_size"
             android:layout_gravity="right" />
 
-        <include layout="@layout/menu_indicators"
+        <!--include layout="@layout/menu_indicators"
             android:layout_width="64dip"
             android:layout_height="64dip"
             android:layout_marginTop="-8dip"
             android:layout_marginRight="8dip"
-            android:layout_gravity="top|right"/>
+            android:layout_gravity="top|right"/-->
 
         <com.android.camera.ui.PieMenuButton
             android:id="@+id/menu"
