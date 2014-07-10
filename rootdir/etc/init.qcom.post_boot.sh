@@ -600,6 +600,10 @@ case "$target" in
         echo "85 600000:90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/target_loads
         echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/min_sample_time
         echo 199200 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+        for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
+        do
+            echo "bw_hwmon" > $devfreq_gov
+        done
     ;;
 esac
 
