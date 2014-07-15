@@ -589,7 +589,7 @@ case "$target" in
         echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/io_is_busy
         echo "85 600000:90" > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/target_loads
         echo 40000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/min_sample_time
-        echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        echo 199200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
         # enable governor for performance cluster
         echo "interactive_pro" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
         echo "20000 600000:40000" > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/above_hispeed_delay
@@ -599,7 +599,7 @@ case "$target" in
         echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/io_is_busy
         echo "85 600000:90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/target_loads
         echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/min_sample_time
-        echo 200000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+        echo 199200 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
     ;;
 esac
 
