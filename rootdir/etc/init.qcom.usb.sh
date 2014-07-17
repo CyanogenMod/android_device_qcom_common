@@ -198,6 +198,8 @@ case "$target" in
     ;;
     "msm8994")
         echo BAM2BAM_IPA > /sys/class/android_usb/android0/f_rndis_qc/rndis_transports
+        echo 1 > /sys/class/android_usb/android0/f_rndis_qc/max_pkt_per_xfer # Disable RNDIS UL aggregation
+    ;;
 esac
 
 #
