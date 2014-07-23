@@ -194,6 +194,18 @@ void set_display_node_perms()
                 snprintf(tmp, sizeof(tmp), "%sfb%d/hdcp/tp", sys_fb_path, num);
                 setPerms(tmp, 0664);
                 setOwners(tmp, AID_SYSTEM, AID_SYSTEM);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/cec/enable", sys_fb_path, num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_SYSTEM);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/cec/logical_addr", sys_fb_path, num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_SYSTEM);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/cec/rd_msg", sys_fb_path, num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_SYSTEM);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/cec/wr_msg", sys_fb_path, num);
+                setPerms(tmp, 0600);
+                setOwners(tmp, AID_SYSTEM, AID_SYSTEM);
                 snprintf(tmp, sizeof(tmp), "%sfb%d", dev_fb_path, num);
                 symlink(tmp, DEV_GFX_HDMI);
                 break;
