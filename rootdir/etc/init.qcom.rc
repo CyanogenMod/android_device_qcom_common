@@ -348,7 +348,7 @@ on property:ro.boot.emmc=true
 
 service rfs_access /system/bin/rfs_access
    class core
-   user system
+   user root
    group system net_raw
 
 on property:ro.boot.emmc=true
