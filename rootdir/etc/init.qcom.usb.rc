@@ -166,7 +166,6 @@ on property:sys.usb.config=diag,serial_smd,serial_tty,rmnet_bam,mass_storage,adb
     write /sys/class/android_usb/android0/f_serial/transports smd,tty
     write /sys/class/android_usb/android0/f_rmnet/transports smd,bam
     write /sys/class/android_usb/android0/functions diag,adb,serial,rmnet,mass_storage
-    write /sys/class/android_usb/android0/f_mass_storage/luns ${persist.sys.usb.luns}
     write /sys/class/android_usb/android0/enable 1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
@@ -192,7 +191,6 @@ on property:sys.usb.config=diag,serial_smd,serial_tty,rmnet_bam,mass_storage
     write /sys/class/android_usb/android0/f_serial/transports smd,tty
     write /sys/class/android_usb/android0/f_rmnet/transports smd,bam
     write /sys/class/android_usb/android0/functions diag,serial,rmnet,mass_storage
-    write /sys/class/android_usb/android0/f_mass_storage/luns ${persist.sys.usb.luns}
     write /sys/class/android_usb/android0/enable 1
     setprop sys.usb.state ${sys.usb.config}
 
@@ -303,7 +301,6 @@ on property:sys.usb.config=diag,serial_tty,serial_tty,rmnet_smd,mass_storage,adb
     write /sys/class/android_usb/android0/f_diag/clients diag
     write /sys/class/android_usb/android0/f_serial/transports tty,tty
     write /sys/class/android_usb/android0/functions diag,adb,serial,rmnet_smd,mass_storage
-    write /sys/class/android_usb/android0/f_mass_storage/luns ${persist.sys.usb.luns}
     write /sys/class/android_usb/android0/enable 1
     start adbd
     start port-bridge
@@ -329,7 +326,6 @@ on property:sys.usb.config=diag,serial_tty,serial_tty,rmnet_smd,mass_storage
     write /sys/class/android_usb/android0/f_diag/clients diag
     write /sys/class/android_usb/android0/f_serial/transports tty,tty
     write /sys/class/android_usb/android0/functions diag,serial,rmnet_smd,mass_storage
-    write /sys/class/android_usb/android0/f_mass_storage/luns ${persist.sys.usb.luns}
     write /sys/class/android_usb/android0/enable 1
     start port-bridge
     setprop sys.usb.state ${sys.usb.config}
