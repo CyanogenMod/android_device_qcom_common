@@ -822,3 +822,9 @@ service vm_bms /system/bin/vm_bms
     user root
     group root
     disabled
+
+service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
+    class core
+    user root
+    group root
+    disabled
