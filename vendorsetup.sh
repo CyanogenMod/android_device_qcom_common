@@ -40,3 +40,4 @@ add_lunch_combo msm8916_64-userdebug
 add_lunch_combo msm8994-userdebug
 add_lunch_combo thulium-userdebug
 add_lunch_combo ferrum-userdebug
+add_lunch_combo ferrum_512-userdebug
