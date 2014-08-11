@@ -42,9 +42,7 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     UNUSED(msm_ver);
     UNUSED(board_type);
 
-    if (msm_id >= 239 && msm_id <= 243) {
-        property_set("media.hwhevccodectype", "1");
-    } else if (msm_id == 206) {
+    if (msm_id == 206) {
         property_set("media.swhevccodectype", "1");
     }
 }
