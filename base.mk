@@ -563,9 +563,6 @@ PRODUCT_PACKAGES := \
     DeskClock \
     AlarmProvider \
     Bluetooth \
-    BluetoothExt \
-    BTTestApp \
-    HiddTestApp \
     Calculator \
     Calendar \
     Camera \
@@ -593,6 +590,14 @@ PRODUCT_PACKAGES := \
     FM2 \
     FMRecord \
     VideoEditor
+
+
+ifneq ($(TARGET_USES_AOSP),true)
+PRODUCT_PACKAGES := \
+       BluetoothExt \
+       BTTestApp \
+       HiddTestApp
+endif
 
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
 PRODUCT_PACKAGES += $(ALSA_UCM)
