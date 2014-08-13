@@ -582,27 +582,29 @@ case "$target" in
 	echo 1 > /sys/devices/system/cpu/cpu6/online
 	echo 1 > /sys/devices/system/cpu/cpu7/online
         echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
-        # enable interactive first in case interactive_pro doesn't exist
+        # configure governor settings for little cluster
         echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-        echo "interactive" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
-        echo "interactive_pro" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-        echo "20000 600000:40000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/above_hispeed_delay
-        echo 90 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/go_hispeed_load
-        echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/timer_rate
-        echo 940800 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/hispeed_freq
-        echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/io_is_busy
-        echo "85 600000:90" > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/target_loads
-        echo 40000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive_pro/min_sample_time
+        echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
+        echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif
+        echo "20000 600000:40000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
+        echo 90 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
+        echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
+        echo 940800 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
+        echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy
+        echo "85 600000:90" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+        echo 40000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
         echo 199200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-        # enable governor for performance cluster
-        echo "interactive_pro" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
-        echo "20000 600000:40000" > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/above_hispeed_delay
-        echo 90 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/go_hispeed_load
-        echo 20000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/timer_rate
-        echo 600000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/hispeed_freq
-        echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/io_is_busy
-        echo "85 600000:90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/target_loads
-        echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive_pro/min_sample_time
+        # configure governor settings for big cluster
+        echo "interactive" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+        echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
+        echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif
+        echo "20000 600000:40000" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
+        echo 90 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
+        echo 20000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate
+        echo 600000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
+        echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
+        echo "85 600000:90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
+        echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
         echo 199200 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
         for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
         do
