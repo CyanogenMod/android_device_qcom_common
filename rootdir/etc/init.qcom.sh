@@ -57,11 +57,11 @@ start_battery_monitor()
 		chown -h root.system /sys/bus/spmi/devices/qpnp-bms-*/fcc_data
 		chown -h root.system /sys/bus/spmi/devices/qpnp-bms-*/fcc_temp
 		chown -h root.system /sys/bus/spmi/devices/qpnp-bms-*/fcc_chgcyl
-		chmod -h 0660 /sys/module/qpnp_bms/parameters/*
-		chmod -h 0660 /sys/module/pm8921_bms/parameters/*
+		chmod 0660 /sys/module/qpnp_bms/parameters/*
+		chmod 0660 /sys/module/pm8921_bms/parameters/*
 		mkdir -p /data/bms
 		chown -h root.system /data/bms
-		chmod -h 0770 /data/bms
+		chmod 0770 /data/bms
 		start battery_monitor
 	fi
 }
@@ -74,11 +74,11 @@ start_charger_monitor()
 		chown -h root.system /sys/class/power_supply/battery/input_current_trim
 		chown -h root.system /sys/class/power_supply/battery/input_current_settled
 		chown -h root.system /sys/class/power_supply/battery/voltage_min
-		chmod -h 0664 /sys/class/power_supply/battery/input_current_max
-		chmod -h 0664 /sys/class/power_supply/battery/input_current_trim
-		chmod -h 0664 /sys/class/power_supply/battery/input_current_settled
-		chmod -h 0664 /sys/class/power_supply/battery/voltage_min
-		chmod -h 0664 /sys/module/qpnp_charger/parameters/charger_monitor
+		chmod 0664 /sys/class/power_supply/battery/input_current_max
+		chmod 0664 /sys/class/power_supply/battery/input_current_trim
+		chmod 0664 /sys/class/power_supply/battery/input_current_settled
+		chmod 0664 /sys/class/power_supply/battery/voltage_min
+		chmod 0664 /sys/module/qpnp_charger/parameters/charger_monitor
 		start charger_monitor
 	fi
 }
@@ -88,8 +88,8 @@ start_vm_bms()
 	if [ -e /dev/vm_bms ]; then
 		chown -h root.system /sys/class/power_supply/bms/current_now
 		chown -h root.system /sys/class/power_supply/bms/voltage_ocv
-		chmod -h 0664 /sys/class/power_supply/bms/current_now
-		chmod -h 0664 /sys/class/power_supply/bms/voltage_ocv
+		chmod 0664 /sys/class/power_supply/bms/current_now
+		chmod 0664 /sys/class/power_supply/bms/voltage_ocv
 		start vm_bms
 	fi
 }
