@@ -208,6 +208,10 @@ void set_display_node_perms()
     snprintf(tmp, sizeof(tmp), "%sfb0/dynamic_fps", sys_fb_path);
     setPerms(tmp, 0664);
     setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
+    // Set permissions for dynamic partial update
+    snprintf(tmp, sizeof(tmp), "%sfb0/dyn_pu", sys_fb_path);
+    setPerms(tmp, 0664);
+    setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
 }
 
 static int check_rlim_action()
