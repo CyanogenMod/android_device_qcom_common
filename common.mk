@@ -15,7 +15,7 @@ PRODUCT_MANUFACTURER := QUALCOMM
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=/vendor/lib/libqc-opt.so \
+    ro.vendor.extension_library=libqti-perfd-client.so \
     persist.radio.apm_sim_not_pwdn=1
 
 PRODUCT_PRIVATE_KEY := device/qcom/common/qcom.key
