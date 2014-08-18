@@ -143,7 +143,11 @@ DASH := libdashplayer
 DASH += qcmediaplayer
 
 #EXTENDEDMEDIA_EXT
-EXTENDEDMEDIA_EXT := extendedmediaextractor
+EXTENDEDMEDIA_EXT := libextendedmediaextractor
+EXTENDEDMEDIA_EXT += libextendedmediaextractor_jni
+EXTENDEDMEDIA_EXT += extendedmediaextractor
+EXTENDEDMEDIA_EXT += ExtendedMediaPlayer
+
 
 #DATA_OS
 DATA_OS := librmnetctl
