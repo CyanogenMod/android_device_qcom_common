@@ -609,6 +609,8 @@ case "$target" in
             echo "bw_hwmon" > $devfreq_gov
         done
         /system/bin/energy-awareness
+        #enable rps static configuration
+        echo 8 >  /sys/class/net/rmnet_ipa0/queues/rx-0/rps_cpus
     ;;
 esac
 
