@@ -709,6 +709,11 @@ esac
 
 case "$target" in
     "msm8994")
+        echo 0 > /sys/module/msm_thermal/core_control/enabled
+        echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
+        bcl_hotplug_mask=`cat /sys/devices/soc.*/qcom,bcl.*/hotplug_mask`
+        echo 0 > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
+        echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
 	echo 1 > /sys/devices/system/cpu/cpu4/online
 	echo 1 > /sys/devices/system/cpu/cpu5/online
 	echo 1 > /sys/devices/system/cpu/cpu6/online
@@ -738,6 +743,10 @@ case "$target" in
         echo "85 780000:90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
         echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
         echo 384000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+	echo 1 > /sys/module/msm_thermal/core_control/enabled
+	echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
+	echo $bcl_hotplug_mask > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
+	echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
         for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
         do
             echo "bw_hwmon" > $devfreq_gov
