@@ -173,6 +173,10 @@ enum INTERACTIVE_IO_BUSY_LVL {
     INTERACTIVE_IO_BUSY_OFF = 0x1B00,
     INTERACTIVE_IO_BUSY_ON = 0x1B01,
 };
+
+enum SCHED_BOOST_LVL {
+    SCHED_BOOST_ON = 0x1E01,
+};
 #ifdef __cplusplus
 }
 #endif
