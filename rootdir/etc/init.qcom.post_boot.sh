@@ -454,6 +454,7 @@ case "$target" in
         echo "85 800000:90 998400:70" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
         echo 50000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
         echo 100000 > /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor
+        echo 800000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     ;;
 esac
 
