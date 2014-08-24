@@ -351,6 +351,9 @@ case "$target" in
         echo 1 > /sys/module/msm_pm/modes/cpu2/standalone_power_collapse/idle_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu3/standalone_power_collapse/idle_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled
+        echo 1 > /sys/module/msm_pm/modes/cpu1/power_collapse/idle_enabled
+        echo 1 > /sys/module/msm_pm/modes/cpu2/power_collapse/idle_enabled
+        echo 1 > /sys/module/msm_pm/modes/cpu3/power_collapse/idle_enabled
         echo 1 > /sys/devices/system/cpu/cpu1/online
         echo 1 > /sys/devices/system/cpu/cpu2/online
         echo 1 > /sys/devices/system/cpu/cpu3/online
@@ -373,6 +376,9 @@ case "$target" in
         echo 1 > /sys/module/msm_pm/modes/cpu2/standalone_power_collapse/idle_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu3/standalone_power_collapse/idle_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled
+        echo 1 > /sys/module/msm_pm/modes/cpu1/power_collapse/idle_enabled
+        echo 1 > /sys/module/msm_pm/modes/cpu2/power_collapse/idle_enabled
+        echo 1 > /sys/module/msm_pm/modes/cpu3/power_collapse/idle_enabled
         echo 1 > /sys/devices/system/cpu/cpu1/online
         echo 1 > /sys/devices/system/cpu/cpu2/online
         echo 1 > /sys/devices/system/cpu/cpu3/online
@@ -415,6 +421,9 @@ case "$target" in
         echo 1 > /sys/module/msm_pm/modes/cpu2/standalone_power_collapse/idle_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu3/standalone_power_collapse/idle_enabled
         echo 1 > /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled
+        echo 1 > /sys/module/msm_pm/modes/cpu1/power_collapse/idle_enabled
+        echo 1 > /sys/module/msm_pm/modes/cpu2/power_collapse/idle_enabled
+        echo 1 > /sys/module/msm_pm/modes/cpu3/power_collapse/idle_enabled
         echo 1 > /sys/devices/system/cpu/cpu1/online
         echo 1 > /sys/devices/system/cpu/cpu2/online
         echo 1 > /sys/devices/system/cpu/cpu3/online
