@@ -201,4 +201,7 @@
     <!--
     <bool name="config_feature_iwlan_enabled">true</bool>
     -->
+
+    <!-- Is the device capable of supporting digital pen -->
+    <bool name="config_digitalPenCapable">true</bool>
 </resources>
