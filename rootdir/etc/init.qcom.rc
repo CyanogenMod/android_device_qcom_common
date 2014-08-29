@@ -797,12 +797,22 @@ service fastmmisrv /system/bin/sh /init.qcom.factory.sh
     disabled
     oneshot
 
+on mmi
+    start fastmmisrv
+
 on ffbm
     trigger early-fs
     trigger fs
     trigger post-fs
     trigger post-fs-data
-    start fastmmisrv
+
+    # Load properties from /system/ + /factory after fs mount. Place
+    # this in another action so that the load will be scheduled after the prior
+    # issued fs triggers have completed.
+    trigger load_all_props_action
+
+    trigger early-boot
+    trigger mmi
 
 service hvdcp /system/bin/hvdcp
     class core

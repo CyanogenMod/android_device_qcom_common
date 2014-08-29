@@ -234,10 +234,10 @@
     setprop system_init.startsurfaceflinger 0
 
 # Start the following services needed for fftm
+    start logd
     start config_bluetooth
     start media
     start fastmmi
-    start adbd
     start qcom-post-boot
     start rmt_storage
     start qcom-c_main-sh
