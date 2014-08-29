@@ -594,7 +594,7 @@ PRODUCT_PACKAGES := \
 
 
 ifneq ($(TARGET_USES_AOSP),true)
-PRODUCT_PACKAGES := \
+PRODUCT_PACKAGES += \
        BluetoothExt \
        BTTestApp \
        HiddTestApp
