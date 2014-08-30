@@ -198,9 +198,7 @@
     <bool name="config_camera_sound_forced">true</bool>
 
     <!-- Configuration to enable non-default PDP during IWLAN -->
-    <!--
     <bool name="config_feature_iwlan_enabled">true</bool>
-    -->
 
     <!-- Is the device capable of supporting digital pen -->
     <bool name="config_digitalPenCapable">true</bool>
