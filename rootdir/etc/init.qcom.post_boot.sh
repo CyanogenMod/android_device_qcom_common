@@ -785,8 +785,23 @@ esac
 
 # Post-setup services
 case "$target" in
-    "msm8660" | "msm8960" | "msm8226" | "msm8610" | "mpq8092" | "msm8916")
+    "msm8660" | "msm8960" | "msm8226" | "msm8610" | "mpq8092" )
         start mpdecision
+    ;;
+    "msm8916")
+        if [ -f /sys/devices/soc0/soc_id ]; then
+           soc_id=`cat /sys/devices/soc0/soc_id`
+        else
+           soc_id=`cat /sys/devices/system/soc/soc0/id`
+        fi
+        if [ $soc_id = 239 ]; then
+            setprop ro.min_freq_0 800000
+            setprop ro.min_freq_4 499200
+        else
+            setprop ro.min_freq_0 800000
+        fi
+        #start perfd after setprop
+        start perfd # start perfd on 8916 and 8939
     ;;
     "msm8974")
         start mpdecision
@@ -870,7 +885,7 @@ case "$target" in
 esac
 
 case "$target" in
-    "msm8226" | "msm8974" | "msm8610" | "apq8084" | "mpq8092" | "msm8610")
+    "msm8226" | "msm8974" | "msm8610" | "apq8084" | "mpq8092" | "msm8610" | "msm8916" | "msm8994")
         # Let kernel know our image version/variant/crm_version
         image_version="10:"
         image_version+=`getprop ro.build.id`
