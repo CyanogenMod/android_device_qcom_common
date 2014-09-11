@@ -197,3 +197,6 @@
 
 # SSR devices
 /dev/subsys_*         0640   system     system
+
+# Ultrasound device
+/dev/usf1                 0660   system     system
