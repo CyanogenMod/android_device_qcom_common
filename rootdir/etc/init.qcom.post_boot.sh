@@ -809,6 +809,9 @@ case "$target" in
         echo 512 > /sys/block/mmcblk0/bdi/read_ahead_kb
     ;;
     "msm8994")
+        rm /data/system/default_values
+        setprop ro.min_freq_0 384000
+        setprop ro.min_freq_4 384000
         start perfd
     ;;
     "apq8084")
