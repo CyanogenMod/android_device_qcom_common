@@ -469,7 +469,7 @@ case "$target" in
 	echo 3 > /proc/sys/kernel/sched_ravg_hist_size
 
 	# HMP Task packing settings for 8916, 8936, 8939
-        echo 30 > /proc/sys/kernel/sched_small_task
+        echo 50 > /proc/sys/kernel/sched_small_task
         echo 50 > /proc/sys/kernel/sched_mostly_idle_load
         echo 10 > /proc/sys/kernel/sched_mostly_idle_nr_run
 
@@ -559,7 +559,7 @@ case "$target" in
                 echo 25000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate
                 echo 800000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
                 echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
-                echo "1 499200:85 800000:90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
+                echo "1 499200:75 800000:80" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
                 echo 50000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
                 echo 50000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/sampling_down_factor
                 echo 499200 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
