@@ -29,6 +29,5 @@
 #define BLE_VND_INCLUDED   TRUE
 // skips conn update at conn completion
 #define BTA_BLE_SKIP_CONN_UPD  FALSE
-#define BLE_PERIPHERAL_DISPLAYONLY  TRUE
 #define BLE_PERIPHERAL_ADV_NAME  TRUE
 #endif
