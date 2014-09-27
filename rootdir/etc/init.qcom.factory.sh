@@ -248,6 +248,7 @@ setprop persist.sys.usb.config diag,adb
     start config_bluetooth
     start media
     start fastmmi
+    start wcnss-service
     start qcom-post-boot
     start rmt_storage
     start qcom-c_main-sh
