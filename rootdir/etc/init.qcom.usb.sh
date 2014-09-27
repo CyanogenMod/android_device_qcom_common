@@ -148,7 +148,7 @@ case "$usb_config" in
                         "msm8994")
                             setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_ipa,mass_storage,adb
                         ;;
-			"ferrum")
+			"msm8909")
 				setprop persist.sys.usb.config diag,adb
 			;;
                         *)
