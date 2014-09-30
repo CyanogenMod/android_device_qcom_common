@@ -183,7 +183,7 @@ endif
 #----------------------------------------------------------------------
 # Generate NAND images
 #----------------------------------------------------------------------
-ifeq ($(call is-board-platform-in-list,msm7627a msm7630_surf),true)
+ifeq ($(call is-board-platform-in-list,msm7627a msm7630_surf msm8909),true)
 
 2K_NAND_OUT := $(PRODUCT_OUT)/2k_nand_images
 4K_NAND_OUT := $(PRODUCT_OUT)/4k_nand_images
@@ -265,8 +265,8 @@ define build-nand-bootimage
 	@echo "target NAND boot image: $(3)"
 	$(hide) mkdir -p $(1)
 	$(hide) $(MKBOOTIMG) $(2) --output $(3)
-endef
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
+endef
 endif
 
 # Generate system image for NAND
@@ -291,10 +291,48 @@ endef
 define build-nand-persistimage
   @echo "target NAND persist image: $(3)"
   $(hide) mkdir -p $(1)
-  $(hide) $(MKYAFFS2) -f $(2) $(TARGET_OUT_PERSIST) $(3)
+  $(hide) $(MKYAFFS2) $(2) $(TARGET_OUT_PERSIST) $(3)
   $(hide) chmod a+r $(3)
   $(hide) $(call assert-max-image-size,$@,$(BOARD_PERSISTIMAGE_PARTITION_SIZE),yaffs)
 endef
+
+ifeq ($(call is-board-platform,msm8909),true)
+
+$(INSTALLED_2K_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INSTALLED_BOOTIMAGE_TARGET)
+	$(hide) $(call build-nand-bootimage,$(2K_NAND_OUT),$(INTERNAL_2K_BOOTIMAGE_ARGS),$(INSTALLED_2K_BOOTIMAGE_TARGET))
+
+$(INSTALLED_2K_SYSTEMIMAGE_TARGET): $(MKYAFFS2) $(INSTALLED_SYSTEMIMAGE)
+	$(hide) $(call build-nand-systemimage,$(2K_NAND_OUT),$(INTERNAL_2K_MKYAFFS2_FLAGS),$(INSTALLED_2K_SYSTEMIMAGE_TARGET))
+
+$(INSTALLED_2K_USERDATAIMAGE_TARGET): $(MKYAFFS2) $(INSTALLED_USERDATAIMAGE_TARGET)
+	$(hide) $(call build-nand-userdataimage,$(2K_NAND_OUT),$(INTERNAL_2K_MKYAFFS2_FLAGS),$(INSTALLED_2K_USERDATAIMAGE_TARGET))
+
+$(INSTALLED_2K_PERSISTIMAGE_TARGET): $(MKYAFFS2) $(INSTALLED_PERSISTIMAGE_TARGET)
+	$(hide) $(call build-nand-persistimage,$(2K_NAND_OUT),$(INTERNAL_2K_MKYAFFS2_FLAGS),$(INSTALLED_2K_PERSISTIMAGE_TARGET))
+
+$(INSTALLED_2K_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(INSTALLED_RECOVERYIMAGE_TARGET) $(recovery_nand_fstab)
+	$(hide) cp -f $(recovery_nand_fstab) $(TARGET_RECOVERY_ROOT_OUT)/etc
+	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
+	$(hide) $(call build-nand-bootimage,$(2K_NAND_OUT),$(INTERNAL_2K_RECOVERYIMAGE_ARGS),$(INSTALLED_2K_RECOVERYIMAGE_TARGET))
+
+ALL_DEFAULT_INSTALLED_MODULES += \
+        $(INSTALLED_2K_BOOTIMAGE_TARGET) \
+        $(INSTALLED_2K_SYSTEMIMAGE_TARGET) \
+        $(INSTALLED_2K_USERDATAIMAGE_TARGET) \
+        $(INSTALLED_2K_PERSISTIMAGE_TARGET)
+
+ALL_MODULES.$(LOCAL_MODULE).INSTALLED += \
+        $(INSTALLED_2K_BOOTIMAGE_TARGET) \
+        $(INSTALLED_2K_SYSTEMIMAGE_TARGET) \
+        $(INSTALLED_2K_USERDATAIMAGE_TARGET) \
+        $(INSTALLED_2K_PERSISTIMAGE_TARGET)
+
+ifneq ($(BUILD_TINY_ANDROID),true)
+ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_2K_RECOVERYIMAGE_TARGET)
+ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_2K_RECOVERYIMAGE_TARGET)
+endif # !BUILD_TINY_ANDROID
+
+else
 
 $(INSTALLED_4K_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INSTALLED_BOOTIMAGE_TARGET)
 	$(hide) $(call build-nand-bootimage,$(4K_NAND_OUT),$(INTERNAL_4K_BOOTIMAGE_ARGS),$(INSTALLED_4K_BOOTIMAGE_TARGET))
@@ -333,6 +371,7 @@ ifeq ($(call is-board-platform,msm7627a),true)
 	$(hide) $(call build-nand-bootimage,$(BCHECC_OUT),$(INTERNAL_4K_RECOVERYIMAGE_ARGS),$(INSTALLED_BCHECC_RECOVERYIMAGE_TARGET))
 endif # is-board-platform
 
+
 ALL_DEFAULT_INSTALLED_MODULES += \
 	$(INSTALLED_4K_BOOTIMAGE_TARGET) \
 	$(INSTALLED_4K_SYSTEMIMAGE_TARGET) \
@@ -349,6 +388,8 @@ ifneq ($(BUILD_TINY_ANDROID),true)
 ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_4K_RECOVERYIMAGE_TARGET)
 ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_4K_RECOVERYIMAGE_TARGET)
 endif # !BUILD_TINY_ANDROID
+
+endif
 
 endif # is-board-platform-in-list
 
