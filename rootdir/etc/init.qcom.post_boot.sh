@@ -343,17 +343,17 @@ case "$target" in
             soc_id=`cat /sys/devices/system/soc/soc0/id`
         fi
         case "$soc_id" in
-            "206")
+            "206" | "247" | "248" | "249" | "250")
 		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 	        echo 1 > /sys/devices/system/cpu/cpu1/online
 		echo 1 > /sys/devices/system/cpu/cpu2/online
 	        echo 1 > /sys/devices/system/cpu/cpu3/online
 	    ;;
-           "239" | "241" )
+           "239" | "241" | "263")
 		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 		echo 10 > /sys/class/net/rmnet0/queues/rx-0/rps_cpus
             ;;
-             "233")
+             "233" | "240" | "242")
 		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 	        echo 1 > /sys/devices/system/cpu/cpu1/online
 		echo 1 > /sys/devices/system/cpu/cpu2/online
@@ -475,7 +475,7 @@ case "$target" in
 
         # Apply governor settings for 8916
         case "$soc_id" in
-            "206")
+            "206" | "247" | "248" | "249" | "250")
 
 		# disable thermal core_control to update scaling_min_freq
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
@@ -504,7 +504,7 @@ case "$target" in
 
 	# Apply governor settings for 8936
         case "$soc_id" in
-            "233")
+            "233" | "240" | "242")
 
 		# disable thermal core_control to update scaling_min_freq, interactive gov
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
@@ -533,7 +533,7 @@ case "$target" in
 
         # Apply governor settings for 8939
         case "$soc_id" in
-            "239"  | "241" )
+            "239" | "241" | "263")
 
 		# disable thermal core_control to update interactive gov settings
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
