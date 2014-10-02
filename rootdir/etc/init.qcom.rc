@@ -396,16 +396,10 @@ service rmt_storage /system/bin/rmt_storage
     user root
     disabled
 
-on property:ro.boot.emmc=true
-    start rmt_storage
-
 service rfs_access /system/bin/rfs_access
    class core
    user root
    group system net_raw
-
-on property:ro.boot.emmc=true
-    start rfs_access
 
 on property:wc_transport.start_hci=true
     start start_hci_filter
