@@ -201,3 +201,6 @@
 
 # Ultrasound device
 /dev/usf1                 0660   system     system
+
+# Ramdump devices
+/dev/ramdump*             0640   system     system
