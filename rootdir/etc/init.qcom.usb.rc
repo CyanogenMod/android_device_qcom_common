@@ -1099,3 +1099,27 @@ on property:sys.usb.config=charging,adb
     write /sys/class/android_usb/android0/functions charging
     write /sys/class/android_usb/android0/enable 1
     setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=diag,diag_cnss,serial_smd,serial_tty,rmnet_bam,mass_storage,adb
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 05C6
+    write /sys/class/android_usb/android0/idProduct 90B2
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_cnss
+    write /sys/class/android_usb/android0/f_serial/transports smd,tty
+    write /sys/class/android_usb/android0/f_rmnet/transports smd,bam
+    write /sys/class/android_usb/android0/functions diag,diag_cnss,adb,serial,rmnet,mass_storage
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=diag,diag_cnss,serial_smd,serial_tty,rmnet_bam,mass_storage
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 05C6
+    write /sys/class/android_usb/android0/idProduct 90B3
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_cnss
+    write /sys/class/android_usb/android0/f_serial/transports smd,tty
+    write /sys/class/android_usb/android0/f_rmnet/transports smd,bam
+    write /sys/class/android_usb/android0/functions diag,diag_cnss,serial,rmnet,mass_storage
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
