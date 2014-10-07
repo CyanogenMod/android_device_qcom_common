@@ -535,6 +535,11 @@ case "$target" in
         case "$soc_id" in
             "239"  | "241" )
 
+		for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
+		do
+			 echo "bw_hwmon" > $devfreq_gov
+		done
+
 		# disable thermal core_control to update interactive gov settings
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
 
