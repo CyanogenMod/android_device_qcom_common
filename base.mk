@@ -265,6 +265,7 @@ KEYPAD += 7x27a_kp.kl
 KEYPAD += 8660_handset.kl
 KEYPAD += atmel_mxt_ts.kl
 KEYPAD += synaptics_rmi4_i2c.kl
+KEYPAD += synaptics_dsx.kl
 KEYPAD += cyttsp-i2c.kl
 KEYPAD += ft5x06_ts.kl
 KEYPAD += ffa-keypad.kl
