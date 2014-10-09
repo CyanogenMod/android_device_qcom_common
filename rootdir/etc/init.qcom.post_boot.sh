@@ -368,6 +368,13 @@ case "$target" in
                                 ;;
                             esac
                         ;;
+                        "MTP")
+                            case "$platform_subtype_id" in
+                                "3")
+                                    start hbtp
+                                ;;
+                            esac
+                        ;;
                     esac
                     ;;
                 esac
