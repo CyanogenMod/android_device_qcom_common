@@ -188,6 +188,8 @@ on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
     chown media_rw media_rw /data/media
 
+    mkdir /data/ipa 0700 net_admin net_admin
+
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
 
     # Create the directories used by the Wireless subsystem
@@ -500,12 +502,14 @@ service netmgrd /system/bin/netmgrd
 service ipacm-diag /system/bin/ipacm-diag
     class main
     user system
-    group qcom_diag
+    socket ipacm_log_file dgram 660 system net_admin
+    group net_admin qcom_diag
     disabled
 
 service ipacm /system/bin/ipacm
     class main
-    user root
+    user net_admin
+    group net_admin inet
     disabled
 
 service qti /system/vendor/bin/qti
