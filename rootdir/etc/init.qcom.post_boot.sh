@@ -756,6 +756,7 @@ case "$target" in
         /system/bin/energy-awareness
         #enable rps static configuration
         echo 8 >  /sys/class/net/rmnet_ipa0/queues/rx-0/rps_cpus
+        echo 30 > /proc/sys/kernel/sched_small_task
     ;;
 esac
 
