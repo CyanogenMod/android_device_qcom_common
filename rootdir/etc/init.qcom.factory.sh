@@ -66,10 +66,6 @@
 
     setprop ro.telephony.call_ring.multiple false
 
-    #Set SUID bit for usbhub
-    chmod -h 4755 /system/bin/usbhub
-    chmod -h 755 /system/bin/usbhub_init
-
     #Remove SUID bit for iproute2 ip tool
     chmod -h 0755 /system/bin/ip
 
