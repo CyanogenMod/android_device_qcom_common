@@ -208,6 +208,9 @@ case "$target" in
     "msm8994")
         start_msm_irqbalance
         ;;
+    "msm8909")
+        start_vm_bms
+        ;;
 esac
 
 bootmode=`getprop ro.bootmode`
