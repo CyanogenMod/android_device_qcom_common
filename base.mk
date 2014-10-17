@@ -79,6 +79,7 @@ AUDIO_HARDWARE += audio.usb.default
 AUDIO_HARDWARE += audio.r_submix.default
 AUDIO_HARDWARE += audio.primary.mpq8092
 AUDIO_HARDWARE += audio.primary.msm8916
+AUDIO_HARDWARE += audio.primary.msm8909
 AUDIO_HARDWARE += audio.primary.msm8994
 #
 AUDIO_POLICY := audio_policy.mpq8064
@@ -97,6 +98,7 @@ AUDIO_POLICY += audio_policy.msm7630_fusion
 AUDIO_POLICY += audio_policy.conf
 AUDIO_POLICY += audio_policy_8064.conf
 AUDIO_POLICY += audio_policy.msm8916
+AUDIO_POLICY += audio_policy.msm8909
 AUDIO_POLICY += audio_policy.msm8994
 
 #tinyalsa test apps
