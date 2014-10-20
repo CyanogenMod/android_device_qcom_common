@@ -361,6 +361,10 @@ service rfs_access /system/bin/rfs_access
 on property:ro.boot.emmc=true
     start rfs_access
 
+service tftp_server /system/bin/tftp_server
+   class core
+   user root
+
 on property:wc_transport.start_hci=true
     start start_hci_filter
 
