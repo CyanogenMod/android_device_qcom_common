@@ -793,10 +793,10 @@ service usb_uicc_daemon /system/bin/usb_uicc_client
     group system log net_raw
     oneshot
 
-on property:usb_uicc.enabled=1
+on property:sys.usb_uicc.enabled=1
     start usb_uicc_enable
 
-on property:usb_uicc.enabled=0
+on property:sys.usb_uicc.enabled=0
     start usb_uicc_enable
 
 service profiler_daemon /system/bin/profiler_daemon

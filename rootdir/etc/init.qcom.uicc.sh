@@ -27,7 +27,7 @@
 #
 
 target=`getprop ro.board.platform`
-action=`getprop usb_uicc.enabled`
+action=`getprop sys.usb_uicc.enabled`
 
 if [ -f /sys/devices/soc0/soc_id ]; then
     soc_hwid=`cat /sys/devices/soc0/soc_id`
@@ -102,11 +102,11 @@ uicc_remove()
 case $action in
 "1")
     uicc_insert
-    setprop usb_uicc.loading 1
+    setprop sys.usb_uicc.loading 1
     ;;
 "0")
     uicc_remove
-    setprop usb_uicc.loading 1
+    setprop sys.usb_uicc.loading 1
     ;;
 *)
     echo "USB_UICC invalid action for uicc operation!"
