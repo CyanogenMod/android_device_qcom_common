@@ -43,11 +43,13 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
 
     UNUSED(msm_id);
     UNUSED(msm_ver);
-    UNUSED(board_type);
 
     rc = property_get("ro.board.platform", platform);
     if (!rc || !ISMATCH(platform, ANDROID_TARGET))
         return;
 
-    property_set(PROP_LCDDENSITY, "480");
+    if (ISMATCH(board_type, "Dragon"))
+        property_set(PROP_LCDDENSITY, "240");
+    else
+        property_set(PROP_LCDDENSITY, "480");
 }
