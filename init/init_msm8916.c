@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+   Copyright (c) 2014, The Linux Foundation. All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
@@ -36,23 +36,15 @@
 
 #include "init_msm.h"
 
-#define SUBTYPE_ID_PATH1 "/sys/devices/soc0/platform_subtype_id"
-#define SUBTYPE_ID_PATH2 "/sys/devices/system/soc/soc0/platform_subtype_id"
+#define VIRTUAL_SIZE "/sys/class/graphics/fb0/virtual_size"
 #define BUF_SIZE 64
-
-enum {
-    PLATFORM_SUBTYPE_720p = 0x0,
-    PLATFORM_SUBTYPE_1080p = 0x2,
-    PLATFORM_SUBTYPE_1080p_EXT_BUCK = 0x3,
-    PLATFORM_SUBTYPE_INVALID,
-};
 
 void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
 {
     char platform[PROP_VALUE_MAX];
     int rc;
-    unsigned long subtype = PLATFORM_SUBTYPE_720p;
-    char tmp[BUF_SIZE];
+    unsigned long virtual_size = 0;
+    char str[BUF_SIZE];
 
     UNUSED(msm_id);
     UNUSED(msm_ver);
@@ -62,16 +54,19 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     if (!rc || !ISMATCH(platform, ANDROID_TARGET))
         return;
 
-    rc = read_file2(SUBTYPE_ID_PATH1, tmp, sizeof(tmp));
-    if (!rc) {
-        rc = read_file2(SUBTYPE_ID_PATH2, tmp, sizeof(tmp));
-    }
+    rc = read_file2(VIRTUAL_SIZE, str, sizeof(str));
     if (rc) {
-        subtype = strtoul(tmp, NULL, 0);
+        virtual_size = strtoul(str, NULL, 0);
     }
 
-    if ((subtype == PLATFORM_SUBTYPE_1080p) || (subtype == PLATFORM_SUBTYPE_1080p_EXT_BUCK))
+    if(virtual_size == 1080) {
         property_set(PROP_LCDDENSITY, "480");
-    else
+    } else if (virtual_size == 720) {
+        // For 720x1280 resolution
+        property_set(PROP_LCDDENSITY, "320");
+    } else if (virtual_size == 480) {
+        // For 480x854 resolution QRD.
+        property_set(PROP_LCDDENSITY, "240");
+    } else
         property_set(PROP_LCDDENSITY, "320");
 }
