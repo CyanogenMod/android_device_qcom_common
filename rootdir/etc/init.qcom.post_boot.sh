@@ -766,6 +766,11 @@ case "$target" in
 	echo 1 > /sys/devices/system/cpu/cpu2/online
 	echo 1 > /sys/devices/system/cpu/cpu3/online
 	echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
+
+	for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
+	do
+		echo "bw_hwmon" > $devfreq_gov
+	done
 	;;
 esac
 
