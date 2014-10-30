@@ -78,7 +78,7 @@ static void power_init(struct power_module *module)
             ALOGW("Unable to read soc_id");
         } else {
             int soc_id = atoi(buf);
-            if (soc_id == 194 || (soc_id >= 208 && soc_id <= 218)) {
+            if (soc_id == 194 || (soc_id >= 208 && soc_id <= 218) || soc_id == 178) {
                 display_boost = 1;
             }
         }
@@ -331,7 +331,7 @@ void set_interactive(struct power_module *module, int on)
             }
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {TR_MS_500, THREAD_MIGRATION_SYNC_OFF};
+            int resource_values[] = {TR_MS_50, THREAD_MIGRATION_SYNC_OFF};
 
             if (!display_hint_sent) {
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
