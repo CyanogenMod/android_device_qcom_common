@@ -193,6 +193,9 @@ on boot
 
 # msm specific files that need to be created on /data
 on post-fs-data
+    # Create directory for TZ Apps
+    mkdir /data/misc/qsee 0770 system system
+
     # we will remap this as /mnt/sdcard with the sdcard fuse tool
     mkdir /data/media 0770 media_rw media_rw
     chown media_rw media_rw /data/media
