@@ -40,7 +40,7 @@ enum SCREEN_DISPLAY_TYPE {
 };
 
 enum PWR_CLSP_TYPE {
-    ALL_CPUS_PWR_CLPS_DIS = 0x100,
+    ALL_CPUS_PWR_CLPS_DIS = 0x101,
 };
 
 /* For CPUx min freq, the leftmost byte
