@@ -821,12 +821,15 @@ case "$target" in
         else
            soc_id=`cat /sys/devices/system/soc/soc0/id`
         fi
-        if [ $soc_id = 239 ]; then
+        case $soc_id in
+            "239" | "241" | "263")
             setprop ro.min_freq_0 800000
             setprop ro.min_freq_4 499200
-        else
+	;;
+	    "206" | "247" | "248" | "249" | "250" | "233" | "240" | "242")
             setprop ro.min_freq_0 800000
-        fi
+        ;;
+        esac
         #start perfd after setprop
         start perfd # start perfd on 8916 and 8939
     ;;
