@@ -539,7 +539,10 @@ case "$target" in
 		do
 			 echo "bw_hwmon" > $devfreq_gov
 		done
-
+		for gpu_bimc_io_percent in /sys/class/devfreq/qcom,gpubw*/bw_hwmon/io_percent
+		do
+			 echo 40 > $gpu_bimc_io_percent
+		done
 		# disable thermal core_control to update interactive gov settings
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
 
