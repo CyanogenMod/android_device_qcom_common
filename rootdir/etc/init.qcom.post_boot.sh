@@ -967,36 +967,3 @@ case "$target" in
         echo $oem_version > /sys/devices/soc0/image_crm_version
         ;;
 esac
-
-# Create native cgroup and move all tasks to it. Allot 15% real-time
-# bandwidth limit to native cgroup (which is what remains after
-# Android uses up 80% real-time bandwidth limit). root cgroup should
-# become empty after all tasks are moved to native cgroup.
-
-CGROUP_ROOT=/dev/cpuctl
-mkdir $CGROUP_ROOT/native
-echo 150000 > $CGROUP_ROOT/native/cpu.rt_runtime_us
-
-# We could be racing with task creation, as a result of which its possible that
-# we may fail to move all tasks from root cgroup to native cgroup in one shot.
-# Retry few times before giving up.
-
-for loop_count in 1 2 3
-do
-	for i in $(cat $CGROUP_ROOT/tasks)
-	do
-		echo $i > $CGROUP_ROOT/native/tasks
-	done
-
-	root_tasks=$(cat $CGROUP_ROOT/tasks)
-	if [ -z "$root_tasks" ]
-	then
-		break
-	fi
-done
-
-# Check if we failed to move all tasks from root cgroup
-if [ ! -z "$root_tasks" ]
-then
-	echo "Error: Could not move all tasks to native cgroup"
-fi
