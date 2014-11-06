@@ -78,17 +78,24 @@ static int process_video_encode_hint(void *metadata)
     if (video_encode_metadata.state == 1) {
         if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {}; /* dummy node */
+            /* sched and cpufreq params */
+            // hispeed freq - 768 MHz
+            // target load - 90
+            // above_hispeed_delay - 40ms
+            // sched_small_tsk - 50
+            // sched_mostly_idle_load - 50
+            // sched_mostly_idle_nr_run - 10
+            int resource_values[] = {0x2C07, 0x2F5A, 0x2728, 0x4032, 0x4132, 0x420A};
 
             perform_hint_action(video_encode_metadata.hint_id,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
-	    return HINT_HANDLED;
+            return HINT_HANDLED;
         }
     } else if (video_encode_metadata.state == 0) {
         if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(video_encode_metadata.hint_id);
-	    return HINT_HANDLED;
+            return HINT_HANDLED;
         }
     }
     return HINT_NONE;
@@ -100,9 +107,9 @@ int power_hint_override(struct power_module *module, power_hint_t hint, void *da
     switch(hint) {
         case POWER_HINT_VIDEO_ENCODE:
             ret_val = process_video_encode_hint(data);
-	    break;
-	default:
-	    break;
+            break;
+        default:
+            break;
     }
     return ret_val;
 }
@@ -118,27 +125,25 @@ int set_interactive_override(struct power_module *module, int on)
     }
 
     if (!on) {
-	/* Display off */
-	if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
-	    (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-	    int resource_values[] = {}; /* dummy node */
-	    if (!display_hint_sent) {
-		perform_hint_action(DISPLAY_STATE_HINT_ID,
-		resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
-		display_hint_sent = 1;
-		return HINT_HANDLED;
-	    }
-	}
+        /* Display off */
+        if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+            (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
+            int resource_values[] = {}; /* dummy node */
+            if (!display_hint_sent) {
+                perform_hint_action(DISPLAY_STATE_HINT_ID,
+                resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+                display_hint_sent = 1;
+                return HINT_HANDLED;
+            }
+        }
     } else {
-	/* Display on */
-	if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
-                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
+        /* Display on */
+        if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+            (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
             display_hint_sent = 0;
-
             return HINT_HANDLED;
         }
     }
-
     return HINT_NONE;
 }
