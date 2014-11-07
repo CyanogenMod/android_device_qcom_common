@@ -697,6 +697,9 @@ PRODUCT_PACKAGES += librecovery_updater_msm
 # vcard jar
 PRODUCT_PACKAGES += vcard
 
+# tcmiface for tcm support
+PRODUCT_PACKAGES += tcmiface
+
 #intialise PRODUCT_PACKAGES_DEBUG list for debug modules
 PRODUCT_PACKAGES_DEBUG :=
 
