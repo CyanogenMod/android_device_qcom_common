@@ -743,6 +743,8 @@ case "$target" in
         echo "85 780000:90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
         echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
         echo 384000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+        echo 0:1344000 > /sys/module/cpu_boost/parameters/input_boost_freq
+        echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
 	echo 1 > /sys/module/msm_thermal/core_control/enabled
 	echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
 	echo $bcl_hotplug_mask > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
