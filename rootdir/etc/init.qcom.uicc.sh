@@ -63,6 +63,10 @@ uicc_insert()
         echo Y > /sys/module/ehci_hcd/parameters/uicc_card_present
         echo msm_ehci_host > /sys/bus/platform/drivers/msm_ehci_host/bind
         ;;
+    "msm8994")
+        echo Y > /sys/module/ehci_msm2/parameters/uicc_card_present
+        echo f9a55000.ehci > /sys/bus/platform/drivers/msm_ehci_host/bind
+        ;;
     *)
         echo "USB_UICC invalid target when insert uicc!"
         ;;
@@ -92,6 +96,10 @@ uicc_remove()
     "msm8974")
         echo msm_ehci_host > /sys/bus/platform/drivers/msm_ehci_host/unbind
         echo N > /sys/module/ehci_hcd/parameters/uicc_card_present
+        ;;
+    "msm8994")
+        echo f9a55000.ehci > /sys/bus/platform/drivers/msm_ehci_host/unbind
+        echo N > /sys/module/ehci_msm2/parameters/uicc_card_present
         ;;
     *)
         echo "USB_UICC invalid target when remove uicc!"
