@@ -36,15 +36,14 @@ on init
     mkdir /persist 0771 system system
     # See storage config details at http://source.android.com/tech/storage/
     mkdir /mnt/shell/emulated 0700 shell shell
-    mkdir /storage 0050 system sdcard_r
     mkdir /storage/emulated 0555 root root
-    mkdir /storage/emulated/legacy 0555 root root
     mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
     mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
     mkdir /mnt/media_rw/uicc0 0700 media_rw media_rw
     mkdir /mnt/media_rw/uicc1 0700 media_rw media_rw
     mkdir /storage/sdcard1 0700 root root
     mkdir /storage/uicc0 0700 root root
+    mkdir /storage/uicc1 0700 root root
     mkdir /storage/usbotg 0700 root root
 
     export EXTERNAL_STORAGE /storage/emulated/legacy
@@ -56,12 +55,16 @@ on init
     symlink /storage/emulated/legacy /sdcard
     symlink /storage/emulated/legacy /mnt/sdcard
     symlink /storage/emulated/legacy /storage/sdcard0
+    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
     # Allow subsystem (modem etc) debugging
     write /sys/module/subsystem_restart/parameters/enable_debug ${persist.sys.ssr.enable_debug}
+    write /sys/module/pil_msa/parameters/pbl_mba_boot_timeout_ms ${persist.sys.mba_boot_timeout}
+    write /sys/module/pil_msa/parameters/modem_auth_timeout_ms ${persist.sys.modem_auth_timeout}
+    write /sys/module/peripheral_loader/parameters/proxy_timeout_ms ${persist.sys.pil_proxy_timeout}
     write /sys/kernel/boot_adsp/boot 1
 
 on boot
@@ -100,6 +103,12 @@ on boot
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
 
+    #Create PERFD deamon related dirs
+    mkdir /data/misc/perfd 0755 root system
+    chmod 2755 /data/misc/perfd
+    mkdir /data/system/perfd 0770 root system
+    chmod 2770 /data/system/perfd
+
     setprop wifi.interface wlan0
 
 #   Define TCP buffer sizes for various networks
@@ -108,10 +117,6 @@ on boot
 
 
     setprop ro.telephony.call_ring.multiple false
-
-    #Set SUID bit for usbhub
-    chmod 4755 /system/bin/usbhub
-    chmod 755 /system/bin/usbhub_init
 
     #Remove SUID bit for iproute2 ip tool
     chmod 0755 /system/bin/ip
@@ -178,11 +183,19 @@ on boot
     # Set the default message loglevel to KERN_INFO
     write /proc/sys/kernel/printk "6 6 1 7"
 
+    # Allow access for CCID command/response timeout configuration
+    chown system system /sys/module/ccid_bridge/parameters/bulk_msg_timeout
+
 # msm specific files that need to be created on /data
 on post-fs-data
     # we will remap this as /mnt/sdcard with the sdcard fuse tool
+    #Create folder for mm-qcamera-daemon
+    mkdir /data/misc/camera 0770 camera camera
+
     mkdir /data/media 0770 media_rw media_rw
     chown media_rw media_rw /data/media
+
+    mkdir /data/misc/ipa 0700 net_admin net_admin
 
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
 
@@ -261,22 +274,30 @@ on post-fs-data
     #Create a folder for SRS to be able to create a usercfg file
     mkdir /data/data/media 0770 media media
 
-# Export GPIO56 for fusion targets to enable/disable hub
-service usbhub_init /system/bin/usbhub_init
-   class late_start
-   user root
-   disabled
-   oneshot
-
 service qcomsysd /system/bin/qcom-system-daemon
     class main
+    user root
+    group root qcom_diag
 
 service ssr_setup /system/bin/ssr_setup
     oneshot
     disabled
 
+service ss_ramdump /system/bin/subsystem_ramdump
+    class main
+    user system
+    group system
+    disabled
+
 on property:persist.sys.ssr.restart_level=*
     start ssr_setup
+
+on property:persist.sys.ssr.enable_ramdumps=1
+    write /sys/module/subsystem_restart/parameters/enable_ramdumps 1
+    start ss_ramdump
+
+on property:persist.sys.ssr.enable_ramdumps=0
+    write /sys/module/subsystem_restart/parameters/enable_ramdumps 0
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
@@ -284,8 +305,31 @@ on property:sys.boot_completed=1
 on property:persist.radio.atfwd.start=false
     stop atfwd
 
-on property:ro.board.platform=msm7630_fusion
-    start usbhub_init
+service qcom-debug /system/bin/sh /system/etc/init.qcom.debug.sh
+    class core
+    user root
+    oneshot
+
+# corefile limit and ETB enabling
+on property:persist.debug.trace=1
+    mkdir /data/core 0777 root root
+    write /proc/sys/kernel/core_pattern "/data/core/%E.%p.%e"
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu2/online 1
+    write /sys/devices/system/cpu/cpu3/online 1
+    write /sys/bus/coresight/devices/coresight-etm0/enable 0
+    write /sys/bus/coresight/devices/coresight-etm1/enable 0
+    write /sys/bus/coresight/devices/coresight-etm2/enable 0
+    write /sys/bus/coresight/devices/coresight-etm3/enable 0
+    write /sys/bus/coresight/devices/coresight-etm0/reset 1
+    write /sys/bus/coresight/devices/coresight-etm1/reset 1
+    write /sys/bus/coresight/devices/coresight-etm2/reset 1
+    write /sys/bus/coresight/devices/coresight-etm3/reset 1
+    write /sys/bus/coresight/devices/coresight-etm0/enable 1
+    write /sys/bus/coresight/devices/coresight-etm1/enable 1
+    write /sys/bus/coresight/devices/coresight-etm2/enable 1
+    write /sys/bus/coresight/devices/coresight-etm3/enable 1
+    write /sys/module/coresight_event/parameters/event_abort_enable 1
 
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
@@ -350,16 +394,10 @@ service rmt_storage /system/bin/rmt_storage
     user root
     disabled
 
-on property:ro.boot.emmc=true
-    start rmt_storage
-
 service rfs_access /system/bin/rfs_access
    class core
    user root
    group system net_raw
-
-on property:ro.boot.emmc=true
-    start rfs_access
 
 on property:wc_transport.start_hci=true
     start start_hci_filter
@@ -447,7 +485,7 @@ service qmiproxy /system/bin/qmiproxy
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /system/bin/qmuxd
     class main
-    user radio
+    user root
     group radio audio bluetooth gps qcom_diag
     disabled
 
@@ -458,12 +496,14 @@ service netmgrd /system/bin/netmgrd
 service ipacm-diag /system/bin/ipacm-diag
     class main
     user system
-    group qcom_diag
+    socket ipacm_log_file dgram 660 system net_admin
+    group net_admin qcom_diag
     disabled
 
 service ipacm /system/bin/ipacm
     class main
-    user root
+    user net_admin
+    group net_admin inet
     disabled
 
 service qti /system/vendor/bin/qti
@@ -578,6 +618,15 @@ service ftm_ffbm /system/bin/ftmdaemon
     disabled
     oneshot
 
+service cnss_diag /system/bin/cnss_diag --q
+    class main
+    user root
+    group root
+    oneshot
+
+service cnss-daemon /system/bin/cnss-daemon -n -l
+    class late_start
+
 service dhcpcd_bt-pan /system/bin/dhcpcd -BKLG
     class late_start
     disabled
@@ -659,9 +708,15 @@ service wifi-crda /system/bin/sh /system/etc/init.crda.sh
    disabled
    oneshot
 
+service config-zram /system/bin/sh /system/etc/init.qcom.zram.sh
+   class late_start
+   user root
+   disabled
+   oneshot
 
 on property:sys.boot_completed=1
     start qcom-post-boot
+    start config-zram
 
 service atfwd /system/bin/ATFWD-daemon
     class late_start
@@ -717,19 +772,41 @@ service ril-daemon3 /system/bin/rild -c 3
     disabled
     group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
 
+service usb_uicc_enable /system/bin/sh /system/etc/init.qcom.uicc.sh
+    class late_start
+    user root
+    disabled
+    oneshot
+
+service usb_uicc_daemon /system/bin/usb_uicc_client
+    class main
+    user system
+    group system log net_raw
+    oneshot
+
+on property:sys.usb_uicc.enabled=1
+    start usb_uicc_enable
+
+on property:sys.usb_uicc.enabled=0
+    start usb_uicc_enable
+
 service profiler_daemon /system/bin/profiler_daemon
     class late_start
     user root
     group root
     disabled
 
-service sdcard /system/bin/sdcard /data/media /mnt/shell/emulated 1023 1023
+# virtual sdcard daemon running as media_rw (1023)
+service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
     class late_start
 
-service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
+service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
     class late_start
 
 service fuse_uicc0 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/uicc0 /storage/uicc0
+    class late_start
+
+service fuse_uicc1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/uicc1 /storage/uicc1
     class late_start
 
 service fuse_usbotg /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbotg /storage/usbotg
@@ -766,8 +843,22 @@ service fastmmisrv /system/bin/sh /init.qcom.factory.sh
     disabled
     oneshot
 
-on ffbm
+on mmi
     start fastmmisrv
+
+on ffbm
+    trigger early-fs
+    trigger fs
+    trigger post-fs
+    trigger post-fs-data
+
+    # Load properties from /system/ + /factory after fs mount. Place
+    # this in another action so that the load will be scheduled after the prior
+    # issued fs triggers have completed.
+    trigger load_all_props_action
+
+    trigger early-boot
+    trigger mmi
 
 service hvdcp /system/bin/hvdcp
     class core
@@ -810,6 +901,7 @@ service diag_mdlog_stop /system/bin/diag_mdlog -k
     oneshot
 
 service qlogd /system/xbin/qlogd
+    socket qlogd stream 0662 system system
     class main
     disabled
 on property:persist.sys.qlogd=1
