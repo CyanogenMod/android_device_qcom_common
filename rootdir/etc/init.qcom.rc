@@ -214,9 +214,6 @@ on post-fs-data
     mkdir /data/dpm 0771 system system
     chown system system /data/dpm
 
-    mkdir /data/dpm/fdMgr 0771 system system
-    chown system system /data/dpm/fdMgr
-
     mkdir /data/dpm/nsrm 0771 system system
     chown system system /data/dpm/nsrm
 
