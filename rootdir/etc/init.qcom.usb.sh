@@ -30,6 +30,13 @@
 chown -h root.system /sys/devices/platform/msm_hsusb/gadget/wakeup
 chmod -h 220 /sys/devices/platform/msm_hsusb/gadget/wakeup
 
+# Set platform variables
+if [ -f /sys/devices/soc0/hw_platform ]; then
+    soc_hwplatform=`cat /sys/devices/soc0/hw_platform` 2> /dev/null
+else
+    soc_hwplatform=`cat /sys/devices/system/soc/soc0/hw_platform` 2> /dev/null
+fi
+
 #
 # Allow persistent usb charging disabling
 # User needs to set usb charging disabled in persist.usb.chgdisabled
@@ -122,7 +129,11 @@ case "$usb_config" in
                             setprop persist.sys.usb.config diag,serial_smd,rmnet_bam,adb
                         ;;
                         "msm8994")
-                            setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_ipa,mass_storage,adb
+                            if [ "$soc_hwplatform" == "Dragon" ]; then
+                               setprop persist.sys.usb.config diag,adb
+                            else
+                               setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_ipa,mass_storage,adb
+                            fi
                         ;;
                         "msm8909")
                             setprop persist.sys.usb.config diag,serial_smd,rmnet_qti_bam,adb
