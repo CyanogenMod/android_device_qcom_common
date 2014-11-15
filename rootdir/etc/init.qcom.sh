@@ -226,6 +226,13 @@ case "$target" in
                                       ;;
                             esac
                             ;;
+                       "MTP")
+                          case "$platform_subtype_id"
+                               "3")
+                                    setprop qemu.hw.mainkeys 0
+                                    ;;
+                          esac
+                          ;;
                   esac
                   ;;
         esac
