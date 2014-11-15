@@ -1000,3 +1000,17 @@ case "$target" in
         echo $oem_version > /sys/devices/soc0/image_crm_version
         ;;
 esac
+
+# Enable QDSS agent if QDSS feature is enabled
+# on a non-commercial build.  This allows QDSS
+# debug tracing.
+if [ -c /dev/coresight-stm ]; then
+    build_variant=`getprop ro.build.type`
+    if [ "$build_variant" != "user" ]; then
+        # Test: Is agent present?
+        if [ -f /data/qdss/qdss.agent.sh ]; then
+            # Then tell agent we just booted
+           /system/bin/sh /data/qdss/qdss.agent.sh on.boot &
+        fi
+    fi
+fi
