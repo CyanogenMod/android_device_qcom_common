@@ -34,9 +34,17 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <fcntl.h>
 #include <dlfcn.h>
+#include <cutils/uevent.h>
+#include <errno.h>
+#include <sys/poll.h>
+#include <pthread.h>
+#include <linux/netlink.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define LOG_TAG "QCOM PowerHAL"
 #include <utils/Log.h>
@@ -49,6 +57,30 @@
 #include "hint-data.h"
 #include "performance.h"
 #include "power-common.h"
+
+#define STATE_ON "state=1"
+#define STATE_OFF "state=0"
+#define STATE_HDR_ON "state=2"
+#define STATE_HDR_OFF "state=3"
+#define MAX_LENGTH         50
+#define BOOST_SOCKET       "/dev/socket/mpdecision/pb"
+static int client_sockfd;
+static struct sockaddr_un client_addr;
+static int last_state = -1;
+
+static void socket_init()
+{
+    if (!client_sockfd) {
+        client_sockfd = socket(PF_UNIX, SOCK_DGRAM, 0);
+        if (client_sockfd < 0) {
+            ALOGE("%s: failed to open: %s", __func__, strerror(errno));
+            return;
+        }
+        memset(&client_addr, 0, sizeof(struct sockaddr_un));
+        client_addr.sun_family = AF_UNIX;
+        snprintf(client_addr.sun_path, UNIX_PATH_MAX, BOOST_SOCKET);
+    }
+}
 
 static int saved_dcvs_cpu0_slack_max = -1;
 static int saved_dcvs_cpu0_slack_min = -1;
@@ -68,6 +100,7 @@ static pthread_mutex_t hint_mutex = PTHREAD_MUTEX_INITIALIZER;
 static void power_init(struct power_module *module)
 {
     ALOGI("QCOM power HAL initing.");
+    socket_init();
 
     int fd;
     char buf[10] = {0};
@@ -83,6 +116,60 @@ static void power_init(struct power_module *module)
             }
         }
         close(fd);
+    }
+}
+
+static void sync_thread(int off)
+{
+    int rc;
+    pid_t client;
+    char data[MAX_LENGTH];
+
+    if (client_sockfd < 0) {
+        ALOGE("%s: boost socket not created", __func__);
+        return;
+    }
+
+    client = getpid();
+
+    if (!off) {
+        snprintf(data, MAX_LENGTH, "2:%d", client);
+        rc = sendto(client_sockfd, data, strlen(data), 0,
+            (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+    } else {
+        snprintf(data, MAX_LENGTH, "3:%d", client);
+        rc = sendto(client_sockfd, data, strlen(data), 0,
+            (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+    }
+
+    if (rc < 0) {
+        ALOGE("%s: failed to send: %s", __func__, strerror(errno));
+    }
+}
+
+static void coresonline(int off)
+{
+    int rc;
+    pid_t client;
+    char data[MAX_LENGTH];
+
+    if (client_sockfd < 0) {
+        ALOGE("%s: boost socket not created", __func__);
+        return;
+    }
+
+    client = getpid();
+
+    if (!off) {
+        snprintf(data, MAX_LENGTH, "8:%d", client);
+        rc = sendto(client_sockfd, data, strlen(data), 0, (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+    } else {
+        snprintf(data, MAX_LENGTH, "7:%d", client);
+        rc = sendto(client_sockfd, data, strlen(data), 0, (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+    }
+
+    if (rc < 0) {
+        ALOGE("%s: failed to send: %s", __func__, strerror(errno));
     }
 }
 
@@ -251,6 +338,68 @@ int __attribute__ ((weak)) power_hint_override(struct power_module *module, powe
     return HINT_NONE;
 }
 
+static void touch_boost()
+{
+    int rc, fd;
+    pid_t client;
+    char data[MAX_LENGTH];
+    char buf[MAX_LENGTH];
+
+    if (client_sockfd < 0) {
+        ALOGE("%s: boost socket not created", __func__);
+        return;
+    }
+
+    client = getpid();
+
+    snprintf(data, MAX_LENGTH, "1:%d", client);
+    rc = sendto(client_sockfd, data, strlen(data), 0,
+        (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+    if (rc < 0) {
+        ALOGE("%s: failed to send: %s", __func__, strerror(errno));
+    }
+}
+
+static void low_power(int on)
+{
+    int rc;
+    pid_t client;
+    char data[MAX_LENGTH];
+
+    if (client_sockfd < 0) {
+        ALOGE("%s: boost socket not created", __func__);
+        return;
+    }
+
+    client = getpid();
+
+    if (on) {
+        snprintf(data, MAX_LENGTH, "10:%d", client);
+        rc = sendto(client_sockfd, data, strlen(data), 0, (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+        if (rc < 0) {
+            ALOGE("%s: failed to send: %s", __func__, strerror(errno));
+        }
+    } else {
+        snprintf(data, MAX_LENGTH, "9:%d", client);
+        rc = sendto(client_sockfd, data, strlen(data), 0, (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+        if (rc < 0) {
+            ALOGE("%s: failed to send: %s", __func__, strerror(errno));
+        }
+    }
+}
+
+static void process_low_power_hint(void* data)
+{
+    int on = (long) data;
+    if (client_sockfd < 0) {
+        ALOGE("%s: boost socket not created", __func__);
+        return;
+    }
+
+    low_power(on);
+}
+
+
 extern void interaction(int duration, int num_args, int opt_list[]);
 
 static void power_hint(struct power_module *module, power_hint_t hint,
@@ -279,6 +428,9 @@ static void power_hint(struct power_module *module, power_hint_t hint,
         case POWER_HINT_AUDIO:
             process_audio_hint(data);
         break;
+        case POWER_HINT_LOW_POWER:
+             process_low_power_hint(data);
+             break;
     }
 
 out:
@@ -302,6 +454,25 @@ void set_interactive(struct power_module *module, int on)
     int rc;
 
     pthread_mutex_lock(&hint_mutex);
+
+    if (last_state == -1) {
+        last_state = on;
+    } else {
+        if (last_state == on)
+            return;
+        else
+            last_state = on;
+    }
+
+    ALOGV("%s %s", __func__, (on ? "ON" : "OFF"));
+    if (on) {
+        coresonline(0);
+        sync_thread(0);
+        touch_boost();
+    } else {
+        sync_thread(1);
+        coresonline(1);
+    }
 
 #ifdef SET_INTERACTIVE_EXT
     cm_power_set_interactive_ext(on);
