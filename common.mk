@@ -10,8 +10,12 @@ PRODUCT_BRAND := qcom
 PRODUCT_LOCALES := en_US es_US de_DE zh_CN
 PRODUCT_LOCALES += hdpi mdpi
 
+ifndef PRODUCT_MANUFACTURER
+PRODUCT_MANUFACTURER := QUALCOMM
+endif
+
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=/vendor/lib/libqc-opt.so \
+    ro.vendor.extension_library=libqti-perfd-client.so \
     persist.radio.apm_sim_not_pwdn=1
 
 PRODUCT_PRIVATE_KEY := device/qcom/common/qcom.key

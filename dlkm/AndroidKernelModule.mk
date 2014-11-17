@@ -77,11 +77,23 @@ endif
 # the modules
 $(LOCAL_BUILT_MODULE): $(KBUILD_MODULE) | $(ACP)
 ifneq "$(LOCAL_MODULE_DEBUG_ENABLE)" ""
-	@mkdir -p $(dir $@)
-	$(hide) $(TARGET_STRIP) --strip-debug $< -o $@
-else
-	$(transform-prebuilt-to-target)
+	mkdir -p $(dir $@)
+	cp $< $<.unstripped
+	$(TARGET_STRIP) --strip-debug $<
+	cp $< $<.stripped
 endif
+	@sh -c "\
+	   KMOD_SIG_ALL=`cat $(KERNEL_OUT)/.config | grep CONFIG_MODULE_SIG_ALL | cut -d'=' -f2`; \
+	   KMOD_SIG_HASH=`cat $(KERNEL_OUT)/.config | grep CONFIG_MODULE_SIG_HASH | cut -d'=' -f2 | sed 's/\"//g'`; \
+	   if [ \"\$$KMOD_SIG_ALL\" = \"y\" ] && [ -n \"\$$KMOD_SIG_HASH\" ]; then \
+	      echo \"Signing kernel module: \" `basename $<`; \
+	      MODSECKEY=$(KERNEL_OUT)/signing_key.priv; \
+	      MODPUBKEY=$(KERNEL_OUT)/signing_key.x509; \
+	      cp $< $<.unsigned; \
+	      perl ./kernel/scripts/sign-file \$$KMOD_SIG_HASH \$$MODSECKEY \$$MODPUBKEY $<; \
+	   fi; \
+	"
+	$(transform-prebuilt-to-target)
 
 # This should really be cleared in build/core/clear-vars.mk, but for
 # the time being, we need to clear it ourselves

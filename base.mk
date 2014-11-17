@@ -11,15 +11,16 @@ QCOM_BOARD_PLATFORMS += msm8916_32
 QCOM_BOARD_PLATFORMS += msm8916_32_512
 QCOM_BOARD_PLATFORMS += msm8916_64
 QCOM_BOARD_PLATFORMS += msm8994
-QCOM_BOARD_PLATFORMS += ferrum
-QCOM_BOARD_PLATFORMS += ferrum_512
+QCOM_BOARD_PLATFORMS += msm8909
+QCOM_BOARD_PLATFORMS += msm8909_512
 QCOM_BOARD_PLATFORMS += thulium
 
 QSD8K_BOARD_PLATFORMS := qsd8k
 
 TARGET_USE_VENDOR_CAMERA_EXT := true
 
-MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909
+#List of targets that use video hw
+MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 thulium
 
 # Below projects/packages with LOCAL_MODULEs will be used by
 # PRODUCT_PACKAGES to build LOCAL_MODULEs that are tagged with
@@ -62,6 +63,9 @@ ALSA_UCM += snd_soc_msm_samarium_Tapan
 #ANGLE
 ANGLE := libangle
 
+#APPOPS_POLICY
+APPOPS_POLICY := appops_policy.xml
+
 AUDIO_HARDWARE := audio.primary.mpq8064
 AUDIO_HARDWARE += audio.primary.apq8084
 AUDIO_HARDWARE += audio.primary.msm8960
@@ -79,6 +83,7 @@ AUDIO_HARDWARE += audio.usb.default
 AUDIO_HARDWARE += audio.r_submix.default
 AUDIO_HARDWARE += audio.primary.mpq8092
 AUDIO_HARDWARE += audio.primary.msm8916
+AUDIO_HARDWARE += audio.primary.msm8909
 AUDIO_HARDWARE += audio.primary.msm8994
 #
 AUDIO_POLICY := audio_policy.mpq8064
@@ -97,6 +102,7 @@ AUDIO_POLICY += audio_policy.msm7630_fusion
 AUDIO_POLICY += audio_policy.conf
 AUDIO_POLICY += audio_policy_8064.conf
 AUDIO_POLICY += audio_policy.msm8916
+AUDIO_POLICY += audio_policy.msm8909
 AUDIO_POLICY += audio_policy.msm8994
 
 #tinyalsa test apps
@@ -231,7 +237,10 @@ INIT += init.qcom.audio.sh
 INIT += ssr_setup
 INIT += enable_swap.sh
 INIT += init.mdm.sh
+INIT += init.qcom.uicc.sh
 INIT += fstab.qcom
+INIT += init.qcom.debug.sh
+INIT += init.qcom.zram.sh
 
 #IPROUTE2
 IPROUTE2 := ip
@@ -262,6 +271,7 @@ KEYPAD += 7x27a_kp.kl
 KEYPAD += 8660_handset.kl
 KEYPAD += atmel_mxt_ts.kl
 KEYPAD += synaptics_rmi4_i2c.kl
+KEYPAD += synaptics_dsx.kl
 KEYPAD += cyttsp-i2c.kl
 KEYPAD += ft5x06_ts.kl
 KEYPAD += ffa-keypad.kl
@@ -313,6 +323,7 @@ LIBCOPYBIT += copybit.msm8960
 LIBCOPYBIT += copybit.msm8974
 LIBCOPYBIT += copybit.msm8226
 LIBCOPYBIT += copybit.msm8610
+LIBCOPYBIT += copybit.msm8909
 LIBCOPYBIT += copybit.msm8916
 LIBCOPYBIT += copybit.msm8994
 LIBCOPYBIT += copybit.apq8084
@@ -335,6 +346,7 @@ LIBGRALLOC += gralloc.msm8960
 LIBGRALLOC += gralloc.msm8974
 LIBGRALLOC += gralloc.msm8226
 LIBGRALLOC += gralloc.msm8610
+LIBGRALLOC += gralloc.msm8909
 LIBGRALLOC += gralloc.msm8916
 LIBGRALLOC += gralloc.msm8994
 LIBGRALLOC += gralloc.apq8084
@@ -351,6 +363,7 @@ LIBGRALLOC += libmemalloc
 LIBMEMTRACK := memtrack.default
 LIBMEMTRACK += memtrack.msm8974
 LIBMEMTRACK += memtrack.msm8226
+LIBMEMTRACK += memtrack.msm8909
 LIBMEMTRACK += memtrack.msm8916
 LIBMEMTRACK += memtrack.msm8994
 LIBMEMTRACK += memtrack.msm8610
@@ -362,6 +375,7 @@ LIBLIGHTS := lights.msm8660
 LIBLIGHTS += lights.msm8960
 LIBLIGHTS += lights.msm8974
 LIBLIGHTS += lights.msm8226
+LIBLIGHTS += lights.msm8909
 LIBLIGHTS += lights.msm8916
 LIBLIGHTS += lights.msm8994
 LIBLIGHTS += lights.msm7k
@@ -379,6 +393,7 @@ LIBHWCOMPOSER += hwcomposer.msm8960
 LIBHWCOMPOSER += hwcomposer.msm8974
 LIBHWCOMPOSER += hwcomposer.msm8226
 LIBHWCOMPOSER += hwcomposer.msm8610
+LIBHWCOMPOSER += hwcomposer.msm8909
 LIBHWCOMPOSER += hwcomposer.msm8916
 LIBHWCOMPOSER += hwcomposer.msm8994
 LIBHWCOMPOSER += hwcomposer.apq8084
@@ -550,6 +565,9 @@ CHARGER += charger_res_images
 VT_JNI := libvt_jni
 VT_JNI += libimscamera_jni
 
+# VT QTI Permissions
+VT_QTI_PERMISSIONS := qti_permissions.xml
+
 #CRDA
 CRDA := crda
 CRDA += regdbdump
@@ -596,7 +614,7 @@ PRODUCT_PACKAGES := \
 
 
 ifneq ($(TARGET_USES_AOSP),true)
-PRODUCT_PACKAGES := \
+PRODUCT_PACKAGES += \
        BluetoothExt \
        BTTestApp \
        HiddTestApp
@@ -605,6 +623,7 @@ endif
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
 PRODUCT_PACKAGES += $(ALSA_UCM)
 PRODUCT_PACKAGES += $(ANGLE)
+PRODUCT_PACKAGES += $(APPOPS_POLICY)
 PRODUCT_PACKAGES += $(AUDIO_HARDWARE)
 PRODUCT_PACKAGES += $(AUDIO_POLICY)
 PRODUCT_PACKAGES += $(TINY_ALSA_TEST_APPS)
@@ -673,6 +692,7 @@ PRODUCT_PACKAGES += $(UPDATER)
 PRODUCT_PACKAGES += $(WPA)
 PRODUCT_PACKAGES += $(ZLIB)
 PRODUCT_PACKAGES += $(VT_JNI)
+PRODUCT_PACKAGES += $(VT_QTI_PERMISSIONS)
 PRODUCT_PACKAGES += $(CRDA)
 PRODUCT_PACKAGES += $(WLAN)
 
@@ -696,6 +716,9 @@ PRODUCT_PACKAGES += librecovery_updater_msm
 
 # vcard jar
 PRODUCT_PACKAGES += vcard
+
+# tcpdump for packet capture
+PRODUCT_PACKAGES += tcpdump
 
 # tcmiface for tcm support
 PRODUCT_PACKAGES += tcmiface

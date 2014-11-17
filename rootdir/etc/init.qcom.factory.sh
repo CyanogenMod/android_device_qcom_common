@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2009-2013, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2014, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -65,10 +65,6 @@
     setprop wifi.interface wlan0
 
     setprop ro.telephony.call_ring.multiple false
-
-    #Set SUID bit for usbhub
-    chmod -h 4755 /system/bin/usbhub
-    chmod -h 755 /system/bin/usbhub_init
 
     #Remove SUID bit for iproute2 ip tool
     chmod -h 0755 /system/bin/ip
@@ -233,17 +229,27 @@
 # Set this property so surfaceflinger is not started by system_init
     setprop system_init.startsurfaceflinger 0
 
+# Configurate USB in FFBM mode, two big change for USB.
+# 1) Using diag,adb in FFBM mode, too many interface will cause
+#    problem in factory for multi-line test
+# 2) Not config usb serialnum. Using the default value:"0123456789ABCDEF"
+#    Keep the USB serialnum no change for devices. this fix the problem
+#    of port change for various devices.
+chown -h root.system /sys/devices/platform/msm_hsusb/gadget/wakeup
+chmod -h 220 /sys/devices/platform/msm_hsusb/gadget/wakeup
+setprop persist.sys.usb.config diag,adb
+
 # Start the following services needed for fftm
+    start logd
     start config_bluetooth
     start media
     start fastmmi
-    start adbd
+    start wcnss-service
     start qcom-post-boot
     start rmt_storage
     start qcom-c_main-sh
     start irsc_util
     start qcamerasvr
-    start qcom-usb-sh
     start qcomsysd
     start ptt_ffbm
     start ftm_ffbm

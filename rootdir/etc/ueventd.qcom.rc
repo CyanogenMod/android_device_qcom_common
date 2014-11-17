@@ -41,6 +41,10 @@
 /dev/smd5                 0660   system     system
 /dev/smd6                 0660   system     system
 /dev/smd7                 0660   bluetooth  bluetooth
+/dev/ccid_bridge          0660   system     system
+/dev/ipa                  0660   net_admin  net_admin
+/dev/wwan_ioctl           0660   net_admin  net_admin
+/dev/ipaNatTable          0660   net_admin  net_admin
 
 #permissions for CSVT
 /dev/smd11                0660   radio      radio
@@ -101,6 +105,7 @@
 /dev/media*               0660   system     camera
 /dev/v4l-subdev*          0660   system     camera
 /dev/qseecom              0660   system     drmrpc
+/dev/pft                  0660   system     drmrpc
 /dev/gemini0              0660   system     camera
 /dev/jpeg0                0660   system     camera
 /dev/jpeg1                0660   system     camera
@@ -171,6 +176,10 @@
 /sys/devices/f9925000.i2c/i2c-0/0-*                 poll_delay     0660    input    system
 /sys/devices/soc.0/78b6000.i2c/i2c-0/0-*            enable         0660    input    system
 /sys/devices/soc.0/78b6000.i2c/i2c-0/0-*            poll_delay     0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-0/0-*            enable_wakeup  0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-0/0-*            max_latency    0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-0/0-*            flush          0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-0/0-*            calibrate      0660    input    system
 /sys/devices/virtual/optical_sensors/proximity      ps_adc         0660    input    system
 /sys/devices/virtual/optical_sensors/proximity      ps_poll_delay  0660    input    system
 /sys/devices/virtual/optical_sensors/lightsensor    ls_auto        0660    input    system
@@ -187,6 +196,7 @@
 /dev/wcnss_ctrl           0660   system     system
 #nfc permissions
 /dev/nfc-nci              0660    nfc         nfc
+/dev/assd                 0660    nfc         nfc
 
 # UIO devices
 /dev/uio0                 0660   system     system
@@ -195,3 +205,9 @@
 
 # SSR devices
 /dev/subsys_*         0640   system     system
+
+# Ultrasound device
+/dev/usf1                 0660   system     system
+
+# Ramdump devices
+/dev/ramdump*             0640   system     system

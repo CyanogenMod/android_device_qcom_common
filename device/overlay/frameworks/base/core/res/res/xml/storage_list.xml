@@ -48,7 +48,7 @@
             android:emulated="false"
             android:removable="true"
             android:allowMassStorage="true" />
-        <!--storage android:mountPoint="/storage/uicc0"
+        <storage android:mountPoint="/storage/uicc0"
             android:storageDescription="@string/storage_uicc"
             android:primary="false"
             android:emulated="false"
@@ -59,7 +59,7 @@
             android:primary="false"
             android:emulated="false"
             android:removable="true"
-            android:allowMassStorage="false" /-->
+            android:allowMassStorage="false" />
         <storage android:mountPoint="/storage/usbotg"
             android:storageDescription="@string/storage_usb"
             android:primary="false"

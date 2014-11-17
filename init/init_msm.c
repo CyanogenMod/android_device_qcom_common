@@ -42,6 +42,8 @@
 
 #include "init_msm.h"
 
+#include <sys/resource.h>
+
 #define SOC_ID_PATH1     "/sys/devices/soc0/soc_id"
 #define SOC_ID_PATH2     "/sys/devices/system/soc/soc0/id"
 #define SOC_VER_PATH1    "/sys/devices/soc0/platform_version"
@@ -173,6 +175,27 @@ void set_display_node_perms()
     snprintf(tmp, sizeof(tmp), "%sfb0/idle_time", sys_fb_path);
     setPerms(tmp, 0664);
     setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
+    // Set write permission for dynamic_fps node.
+    snprintf(tmp, sizeof(tmp), "%sfb0/dynamic_fps", sys_fb_path);
+    setPerms(tmp, 0664);
+    setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
+}
+
+static int check_rlim_action()
+{
+    char pval[PROP_VALUE_MAX];
+    int rc;
+    struct rlimit rl;
+    rc = property_get("persist.debug.trace",pval);
+
+    if(rc && (strcmp(pval,"1") == 0)) {
+        rl.rlim_cur = RLIM_INFINITY;
+        rl.rlim_max = RLIM_INFINITY;
+        if (setrlimit(RLIMIT_CORE, &rl) < 0) {
+            ERROR("could not enable core file generation");
+        }
+    }
+    return 0;
 }
 
 void vendor_load_properties()
@@ -215,4 +238,6 @@ void vendor_load_properties()
 
     /* Set Display Node Permissions */
     set_display_node_perms();
+    /*check for coredump*/
+    check_rlim_action();
 }
