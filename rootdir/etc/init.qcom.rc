@@ -399,6 +399,10 @@ service rfs_access /system/bin/rfs_access
    user root
    group system net_raw
 
+service tftp_server /system/bin/tftp_server
+   class core
+   user root
+
 on property:wc_transport.start_hci=true
     start start_hci_filter
 
