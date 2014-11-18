@@ -781,8 +781,6 @@ case "$target" in
         echo 50 > /proc/sys/kernel/sched_mostly_idle_load
         echo 10 > /proc/sys/kernel/sched_mostly_idle_nr_run
 
-        # Apply governor settings for 8909
-
         # disable thermal core_control to update scaling_min_freq
         echo 0 > /sys/module/msm_thermal/core_control/enabled
         echo 1 > /sys/devices/system/cpu/cpu0/online
@@ -806,9 +804,14 @@ case "$target" in
 	echo 1 > /sys/devices/system/cpu/cpu3/online
 	echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 
+        # Apply governor settings for 8909
 	for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
 	do
 		echo "bw_hwmon" > $devfreq_gov
+	done
+	for gpu_bimc_io_percent in /sys/class/devfreq/qcom,gpubw*/bw_hwmon/io_percent
+	do
+		echo 40 > $gpu_bimc_io_percent
 	done
 	;;
 esac
