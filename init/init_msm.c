@@ -176,6 +176,9 @@ void set_display_node_perms()
                 snprintf(tmp, sizeof(tmp), "%sfb%d/hpd", sys_fb_path, num);
                 setPerms(tmp, 0664);
                 setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/res_info", sys_fb_path, num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
                 snprintf(tmp, sizeof(tmp), "%sfb%d/vendor_name", sys_fb_path,
                              num);
                 setPerms(tmp, 0664);
