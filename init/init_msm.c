@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+   Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
@@ -145,6 +145,9 @@ void set_display_node_perms()
             if(!strncmp(buf, panel_type, strlen(panel_type))) {
                 // Set appropriate permissions for the nodes
                 snprintf(tmp, sizeof(tmp), "%sfb%d/hpd", sys_fb_path, num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/res_info", sys_fb_path, num);
                 setPerms(tmp, 0664);
                 setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
                 snprintf(tmp, sizeof(tmp), "%sfb%d/vendor_name", sys_fb_path,
