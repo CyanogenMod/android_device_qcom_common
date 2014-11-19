@@ -224,3 +224,11 @@ case "$target" in
 		esac
 		;;
 esac
+
+#
+# Initialize RNDIS Diag option. If unset, set it to 'none'.
+#
+diag_extra=`getprop persist.sys.usb.config.extra`
+if [ "$diag_extra" == "" ]; then
+	setprop persist.sys.usb.config.extra none
+fi
