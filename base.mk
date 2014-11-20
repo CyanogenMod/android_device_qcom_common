@@ -734,9 +734,6 @@ PRODUCT_PACKAGES += librecovery_updater_msm
 # vcard jar
 PRODUCT_PACKAGES += vcard
 
-# tcpdump for packet capture
-PRODUCT_PACKAGES += tcpdump
-
 # tcmiface for tcm support
 PRODUCT_PACKAGES += tcmiface
 
