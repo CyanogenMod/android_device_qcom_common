@@ -735,15 +735,12 @@ esac
 
 case "$target" in
     "msm8994")
+        # disable thermal bcl hotplug to switch governor
         echo 0 > /sys/module/msm_thermal/core_control/enabled
         echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
         bcl_hotplug_mask=`cat /sys/devices/soc.*/qcom,bcl.*/hotplug_mask`
         echo 0 > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
         echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
-	echo 1 > /sys/devices/system/cpu/cpu4/online
-	echo 1 > /sys/devices/system/cpu/cpu5/online
-	echo 1 > /sys/devices/system/cpu/cpu6/online
-	echo 1 > /sys/devices/system/cpu/cpu7/online
         echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
         # configure governor settings for little cluster
         echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
@@ -757,6 +754,8 @@ case "$target" in
         echo "85 780000:90" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
         echo 40000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
         echo 384000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        # online CPU4
+        echo 1 > /sys/devices/system/cpu/cpu4/online
         # configure governor settings for big cluster
         echo "interactive" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
         echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
@@ -769,12 +768,18 @@ case "$target" in
         echo "85 780000:90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
         echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
         echo 384000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+        # re-enable thermal and BCL hotplug
+        echo 1 > /sys/module/msm_thermal/core_control/enabled
+        echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
+        echo $bcl_hotplug_mask > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
+        echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
+        # plugin remaining A57s
+        echo 1 > /sys/devices/system/cpu/cpu5/online
+        echo 1 > /sys/devices/system/cpu/cpu6/online
+        echo 1 > /sys/devices/system/cpu/cpu7/online
+        # input boost configuration
         echo 0:1344000 > /sys/module/cpu_boost/parameters/input_boost_freq
         echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
-	echo 1 > /sys/module/msm_thermal/core_control/enabled
-	echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
-	echo $bcl_hotplug_mask > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
-	echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
         # Enable task migration fixups in the scheduler
         echo 1 > /proc/sys/kernel/sched_migration_fixup
         for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
