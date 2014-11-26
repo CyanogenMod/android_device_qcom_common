@@ -128,7 +128,7 @@ case "$usb_config" in
                         "msm8916")
                             setprop persist.sys.usb.config diag,serial_smd,rmnet_bam,adb
                         ;;
-                        "msm8994")
+                        "msm8994" | "msm8992")
                             if [ "$soc_hwplatform" == "Dragon" ]; then
                                setprop persist.sys.usb.config diag,adb
                             else
@@ -170,7 +170,7 @@ case "$target" in
              fi
          fi
     ;;
-    "msm8994")
+    "msm8994" | "msm8992")
         echo BAM2BAM_IPA > /sys/class/android_usb/android0/f_rndis_qc/rndis_transports
         echo 1 > /sys/class/android_usb/android0/f_rndis_qc/max_pkt_per_xfer # Disable RNDIS UL aggregation
     ;;
