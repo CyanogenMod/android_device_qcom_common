@@ -569,7 +569,7 @@ case "$target" in
                 echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
                 echo "25000 1113600:50000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
                 echo 85 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
-                echo 25000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
+                echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
                 echo 1113600 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
                 echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy
                 echo "1 960000:85 1113600:90 1344000:80" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
