@@ -214,7 +214,7 @@ esac
 cdromname="/system/etc/cdrom_install.iso"
 platformver=`cat /sys/devices/soc0/hw_platform`
 case "$target" in
-	"msm8226" | "msm8610" | "msm8916")
+	"msm8226" | "msm8610" | "msm8916" | "msm8909")
 		case $platformver in
 			"QRD")
 				echo "mounting usbcdrom lun"
