@@ -468,14 +468,14 @@ case "$target" in
         echo 2 > /proc/sys/kernel/sched_window_stats_policy
 	echo 3 > /proc/sys/kernel/sched_ravg_hist_size
 
-	# HMP Task packing settings for 8916, 8936, 8939
-        echo 50 > /proc/sys/kernel/sched_small_task
-        echo 50 > /proc/sys/kernel/sched_mostly_idle_load
-        echo 10 > /proc/sys/kernel/sched_mostly_idle_nr_run
-
         # Apply governor settings for 8916
         case "$soc_id" in
             "206" | "247" | "248" | "249" | "250")
+
+                # HMP Task packing settings for 8916
+                echo 50 > /proc/sys/kernel/sched_small_task
+                echo 50 > /proc/sys/kernel/sched_mostly_idle_load
+                echo 10 > /proc/sys/kernel/sched_mostly_idle_nr_run
 
 		# disable thermal core_control to update scaling_min_freq
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
@@ -506,6 +506,11 @@ case "$target" in
         case "$soc_id" in
             "233" | "240" | "242")
 
+                # HMP Task packing settings for 8936
+                echo 50 > /proc/sys/kernel/sched_small_task
+                echo 50 > /proc/sys/kernel/sched_mostly_idle_load
+                echo 10 > /proc/sys/kernel/sched_mostly_idle_nr_run
+
 		# disable thermal core_control to update scaling_min_freq, interactive gov
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
 		echo 1 > /sys/devices/system/cpu/cpu0/online
@@ -534,6 +539,11 @@ case "$target" in
         # Apply governor settings for 8939
         case "$soc_id" in
             "239" | "241" | "263")
+
+                # HMP Task packing settings for 8939
+                echo 20 > /proc/sys/kernel/sched_small_task
+                echo 30 > /proc/sys/kernel/sched_mostly_idle_load
+                echo 3 > /proc/sys/kernel/sched_mostly_idle_nr_run
 
 		for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
 		do
