@@ -538,6 +538,12 @@ case "$target" in
 	        echo 1 > /sys/devices/system/cpu/cpu2/online
 	        echo 1 > /sys/devices/system/cpu/cpu3/online
 	        echo 1 > /sys/devices/system/cpu/cpu4/online
+
+		for gpu_bimc_io_percent in /sys/class/devfreq/qcom,gpubw*/bw_hwmon/io_percent
+		do
+			echo 40 > $gpu_bimc_io_percent
+		done
+
             ;;
         esac
 
