@@ -1,4 +1,4 @@
-# Copyright (c) 2009-2012, 2014, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2012, 2014-2015, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -215,6 +215,9 @@ on post-fs-data
 
     # Create directory used by the DASH client
     mkdir /data/misc/dash 0770 media audio
+
+    # Create directory used by display clients
+    mkdir /data/misc/display 0770 system graphics
 
     # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
     # We chown/chmod /persist again so because mount is run as root + defaults
