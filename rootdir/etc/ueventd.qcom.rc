@@ -217,3 +217,7 @@
 
 # Ramdump devices
 /dev/ramdump*             0640   system     system
+
+#Improve Touch
+/dev/hbtp_input           0660   system     system
+/dev/jdi-bu21150          0660   system     system
