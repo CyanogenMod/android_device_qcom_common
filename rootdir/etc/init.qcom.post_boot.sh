@@ -352,6 +352,25 @@ case "$target" in
            "239" | "241" | "263")
 		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 		echo 10 > /sys/class/net/rmnet0/queues/rx-0/rps_cpus
+		if [ -f /sys/devices/soc0/platform_subtype_id ]; then
+                    platform_subtype_id=`cat /sys/devices/soc0/platform_subtype_id`
+                fi
+                if [ -f /sys/devices/soc0/hw_platform ]; then
+                    hw_platform=`cat /sys/devices/soc0/hw_platform`
+                fi
+                case "$soc_id" in
+                    "239")
+                    case "$hw_platform" in
+                        "Surf")
+                            case "$platform_subtype_id" in
+                                "1")
+                                    start hbtp
+                                ;;
+                            esac
+                        ;;
+                    esac
+                    ;;
+                esac
             ;;
              "233" | "240" | "242")
 		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
