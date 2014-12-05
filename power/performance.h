@@ -214,6 +214,15 @@ enum CPU7_MAX_FREQ_LVL {
     CPU7_MAX_FREQ_NONTURBO_MAX = 0x260A,
 };
 
+enum SCHED_PREFER_IDLE {
+    SCHED_PREFER_IDLE_DIS = 0x3E01,
+};
+
+enum SCHED_MIGRATE_COST_CHNG {
+    SCHED_MIGRATE_COST_SET = 0x3F01,
+};
+
+
 #ifdef __cplusplus
 }
 #endif
