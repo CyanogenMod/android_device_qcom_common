@@ -175,7 +175,7 @@ void interaction(int duration, int num_args, int opt_list[])
 {
     static int lock_handle = 0;
 
-    if (duration <= 0 || num_args < 1 || opt_list[0] == NULL)
+    if (duration <= 0 || num_args < 1 || opt_list[0] == 0)
         return;
 
     if (qcopt_handle) {

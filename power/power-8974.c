@@ -95,12 +95,21 @@ static void set_power_profile(int profile) {
 
 extern void interaction(int duration, int num_args, int opt_list[]);
 
-int power_hint_override(struct power_module *module, power_hint_t hint, void *data)
+int power_hint_override(__attribute__((unused)) struct power_module *module,
+        power_hint_t hint, void *data)
 {
 	if (hint == POWER_HINT_SET_PROFILE) {
 		set_power_profile((int)data);
 		return HINT_HANDLED;
 	}
+
+    if (hint == POWER_HINT_LOW_POWER) {
+        if (current_power_profile == PROFILE_POWER_SAVE) {
+            set_power_profile(PROFILE_BALANCED);
+        } else {
+            set_power_profile(PROFILE_POWER_SAVE);
+        }
+    }
 
 	// Skip other hints in custom power modes
 	if (current_power_profile != PROFILE_BALANCED) {

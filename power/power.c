@@ -65,7 +65,7 @@ static struct hw_module_methods_t power_module_methods = {
 
 static pthread_mutex_t hint_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-static void power_init(struct power_module *module)
+static void power_init(__attribute__((unused))struct power_module *module)
 {
     ALOGI("QCOM power HAL initing.");
 
@@ -245,15 +245,17 @@ static void process_audio_hint(void *metadata)
     }
 }
 
-int __attribute__ ((weak)) power_hint_override(struct power_module *module, power_hint_t hint,
-        void *data)
+int __attribute__ ((weak)) power_hint_override(
+        __attribute__((unused)) struct power_module *module,
+        __attribute__((unused)) power_hint_t hint,
+        __attribute__((unused)) void *data)
 {
     return HINT_NONE;
 }
 
 extern void interaction(int duration, int num_args, int opt_list[]);
 
-static void power_hint(struct power_module *module, power_hint_t hint,
+static void power_hint(__attribute__((unused)) struct power_module *module, power_hint_t hint,
         void *data)
 {
     pthread_mutex_lock(&hint_mutex);
@@ -269,6 +271,7 @@ static void power_hint(struct power_module *module, power_hint_t hint,
         case POWER_HINT_INTERACTION:
         case POWER_HINT_CPU_BOOST:
         case POWER_HINT_SET_PROFILE:
+        case POWER_HINT_LOW_POWER:
         break;
         case POWER_HINT_VIDEO_ENCODE:
             process_video_encode_hint(data);
@@ -285,7 +288,9 @@ out:
     pthread_mutex_unlock(&hint_mutex);
 }
 
-int __attribute__ ((weak)) set_interactive_override(struct power_module *module, int on)
+int __attribute__ ((weak)) set_interactive_override(
+        __attribute__((unused)) struct power_module *module,
+        __attribute__((unused)) int on)
 {
     return HINT_NONE;
 }
@@ -514,7 +519,7 @@ struct power_module HAL_MODULE_INFO_SYM = {
         .hal_api_version = HARDWARE_HAL_API_VERSION,
         .id = POWER_HARDWARE_MODULE_ID,
         .name = "QCOM Power HAL",
-        .author = "Qualcomm",
+        .author = "Qualcomm/CyanogenMod",
         .methods = &power_module_methods,
     },
 
