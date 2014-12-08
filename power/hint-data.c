@@ -41,7 +41,7 @@ int hint_compare(struct hint_data *first_hint,
     }
 }
 
-void hint_dump(struct hint_data *hint)
+void hint_dump(__attribute__((unused)) struct hint_data *hint)
 {
     /*ALOGI("hint_id: %lu", hint->hint_id);*/
 }

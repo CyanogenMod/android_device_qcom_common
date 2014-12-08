@@ -34,7 +34,8 @@
 #include "metadata-defs.h"
 
 int parse_metadata(char *metadata, char **metadata_saveptr,
-        char *attribute, int attribute_size, char *value, int value_size)
+        char *attribute, int attribute_size, char *value,
+        unsigned int value_size)
 {
     char *attribute_string;
     char *attribute_value_delim;
