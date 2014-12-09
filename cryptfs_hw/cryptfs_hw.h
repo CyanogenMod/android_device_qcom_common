@@ -35,6 +35,7 @@ extern "C" {
 
 unsigned int set_hw_device_encryption_key(const char*, const char*);
 unsigned int update_hw_device_encryption_key(const char*, const char*);
+unsigned int wipe_hw_device_encryption_key(const char*);
 unsigned int is_hw_disk_encryption(const char*);
 
 #ifdef __cplusplus
