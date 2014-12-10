@@ -595,7 +595,7 @@ PRODUCT_PACKAGES := \
     LatinIME \
     Launcher2 \
     Mms \
-	Eleven \
+    Eleven \
     Phone \
     Provision \
     Protips \
