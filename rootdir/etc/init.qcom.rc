@@ -264,6 +264,9 @@ on post-fs-data
     #Create a folder for SRS to be able to create a usercfg file
     mkdir /data/data/media 0770 media media
 
+    #Create folder for qlogd
+    mkdir /data/misc/qlogd 0664
+
     #Create folder for mm-qcamera-daemon
     mkdir /data/camera 0770 media camera
 
