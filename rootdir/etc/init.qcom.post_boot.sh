@@ -589,7 +589,12 @@ case "$target" in
 		for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
 		do
 			 echo "bw_hwmon" > $devfreq_gov
+                         for cpu_io_percent in /sys/class/devfreq/qcom,cpubw*/bw_hwmon/io_percent
+                         do
+                                echo 20 > $cpu_io_percent
+                         done
 		done
+
 		for gpu_bimc_io_percent in /sys/class/devfreq/qcom,gpubw*/bw_hwmon/io_percent
 		do
 			 echo 40 > $gpu_bimc_io_percent
@@ -616,7 +621,7 @@ case "$target" in
                 echo "25000 800000:50000" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
                 echo 90 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
                 echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate
-                echo 1113600 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
+                echo 998400 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
                 echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
                 echo "1 800000:90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
                 echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
@@ -636,7 +641,7 @@ case "$target" in
                 echo 1 > /sys/devices/system/cpu/cpu7/online
 
                 # HMP scheduler (big.Little cluster related) settings
-                echo 80 > /proc/sys/kernel/sched_upmigrate
+                echo 75 > /proc/sys/kernel/sched_upmigrate
                 echo 60 > /proc/sys/kernel/sched_downmigrate
             ;;
         esac
