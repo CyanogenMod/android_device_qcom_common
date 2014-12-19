@@ -243,6 +243,9 @@ chown -h root.system /sys/devices/platform/msm_hsusb/gadget/wakeup
 chmod -h 220 /sys/devices/platform/msm_hsusb/gadget/wakeup
 setprop persist.sys.usb.config diag,adb
 
+#mount sdcard by default
+    mount -t vfat /dev/block/mmcblk1p1 /storage/sdcard1
+
 # Start the following services needed for fftm
     start logd
     start config_bluetooth
