@@ -240,6 +240,14 @@ void vendor_load_properties()
     /* Define MSM family properties */
     init_msm_properties(msm_id, msm_ver, board_type);
 
+    /*Check for kgsl node and disable HW composition*/
+    if (access("/dev/kgsl-3d0", F_OK) < 0) {
+        ERROR("Failed to open kgsl node, falling back to SW OpenGL err:%s", strerror(errno));
+        property_set("persist.sys.force_sw_gles", "1");
+    } else {
+        property_set("persist.sys.force_sw_gles", "0");
+    }
+
     /* Set Display Node Permissions */
     set_display_node_perms();
     /*check for coredump*/
