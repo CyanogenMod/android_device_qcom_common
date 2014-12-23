@@ -945,6 +945,9 @@ case "$target" in
         #start perfd after setprop
         start perfd # start perfd on 8916 and 8939
     ;;
+    "msm8909")
+	start perfd
+    ;;
     "msm8974")
         start mpdecision
         echo 512 > /sys/block/mmcblk0/bdi/read_ahead_kb
