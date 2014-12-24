@@ -92,10 +92,16 @@ static void set_power_profile(int profile) {
 
 extern void interaction(int duration, int num_args, int opt_list[]);
 
+#ifdef __LP64__
+typedef int64_t hintdata;
+#else
+typedef int hintdata;
+#endif
+
 int power_hint_override(struct power_module *module, power_hint_t hint, void *data)
 {
     if (hint == POWER_HINT_SET_PROFILE) {
-        set_power_profile((int)data);
+        set_power_profile((hintdata)data);
         return HINT_HANDLED;
     }
 
@@ -113,7 +119,7 @@ int power_hint_override(struct power_module *module, power_hint_t hint, void *da
     }
 
     if (hint == POWER_HINT_CPU_BOOST) {
-        int duration = (int)data / 1000;
+        int duration = (hintdata)data / 1000;
         int resources[] = { CPUS_ONLINE_MIN_2, SCHED_BOOST_ON, 0x20B, 0x30B, 0x1C00};
 
         if (duration > 0)
