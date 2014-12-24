@@ -146,6 +146,11 @@ CONNECTIVITY += services-ext
 CURL := libcurl
 CURL += curl
 
+#CM
+CM := CMFileManager
+CM += Trebuchet
+CM += Eleven
+
 #DASH
 DASH := libdashplayer
 DASH += qcmediaplayer
@@ -639,6 +644,7 @@ PRODUCT_PACKAGES += $(CIMAX)
 PRODUCT_PACKAGES += $(CONNECTIVITY)
 PRODUCT_PACKAGES += $(CHARGER)
 PRODUCT_PACKAGES += $(CURL)
+PRODUCT_PACKAGES += $(CM)
 PRODUCT_PACKAGES += $(DASH)
 PRODUCT_PACKAGES += $(DATA_OS)
 PRODUCT_PACKAGES += $(E2FSPROGS)
