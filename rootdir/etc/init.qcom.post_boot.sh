@@ -859,7 +859,16 @@ case "$target" in
 	for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
 	do
 		echo "bw_hwmon" > $devfreq_gov
+		for cpu_bimc_bw_step in /sys/class/devfreq/qcom,cpubw*/bw_hwmon/bw_step
+		do
+			echo 60 > $cpu_bimc_bw_step
+		done
+		for cpu_guard_band_mbps in /sys/class/devfreq/qcom,cpubw*/bw_hwmon/guard_band_mbps
+		do
+			echo 30 > $cpu_guard_band_mbps
+		done
 	done
+
 	for gpu_bimc_io_percent in /sys/class/devfreq/qcom,gpubw*/bw_hwmon/io_percent
 	do
 		echo 40 > $gpu_bimc_io_percent
