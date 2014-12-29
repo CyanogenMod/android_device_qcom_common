@@ -748,7 +748,9 @@ case "$target" in
         echo 0 > /sys/module/msm_thermal/core_control/enabled
         echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
         bcl_hotplug_mask=`cat /sys/devices/soc.*/qcom,bcl.*/hotplug_mask`
+        bcl_soc_hotplug_mask=`cat /sys/devices/soc.*/qcom,bcl.*/hotplug_soc_mask`
         echo 0 > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
+        echo 0 > /sys/devices/soc.*/qcom,bcl.*/hotplug_soc_mask
         echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
         echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
         # configure governor settings for little cluster
@@ -781,6 +783,7 @@ case "$target" in
         echo 1 > /sys/module/msm_thermal/core_control/enabled
         echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
         echo $bcl_hotplug_mask > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
+        echo $bcl_soc_hotplug_mask > /sys/devices/soc.*/qcom,bcl.*/hotplug_soc_mask
         echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
         # plugin remaining A57s
         echo 1 > /sys/devices/system/cpu/cpu5/online
