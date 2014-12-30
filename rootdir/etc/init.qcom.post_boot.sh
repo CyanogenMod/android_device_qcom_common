@@ -878,6 +878,14 @@ case "$target" in
 	do
 		echo 40 > $gpu_bimc_io_percent
 	done
+	for gpu_bimc_bw_step in /sys/class/devfreq/qcom,gpubw*/bw_hwmon/bw_step
+	do
+		echo 60 > $gpu_bimc_bw_step
+	done
+	for gpu_bimc_guard_band_mbps in /sys/class/devfreq/qcom,gpubw*/bw_hwmon/guard_band_mbps
+	do
+		echo 30 > $gpu_bimc_guard_band_mbps
+	done
 	;;
 esac
 
