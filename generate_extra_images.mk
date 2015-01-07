@@ -17,6 +17,13 @@ recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 INSTALLED_USBIMAGE_TARGET := $(PRODUCT_OUT)/usbdisk.img
 endif
 
+#---------------------------------------------------------------------
+#Add systemimage as a dependency on userdata.img
+#---------------------------------------------------------------------
+$(INSTALLED_USERDATAIMAGE_TARGET) : systemimage \
+                                    $(INTERNAL_USERIMAGES_DEPS) \
+                                    $(INTERNAL_USERDATAIMAGE_FILES)
+
 #----------------------------------------------------------------------
 # Generate secure boot image
 #----------------------------------------------------------------------
