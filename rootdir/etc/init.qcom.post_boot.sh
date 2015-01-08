@@ -749,9 +749,9 @@ case "$target" in
         echo 0 > /sys/devices/system/cpu/cpu6/online
         echo 0 > /sys/devices/system/cpu/cpu7/online
         # in case CPU4 is online, limit its frequency
-        echo 633600 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+        echo 960000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
         # Limit A57 max freq from msm_perf module in case CPU 4 is offline
-        echo "4:633600 5:633600 6:633600 7:633600" > /sys/module/msm_performance/parameters/cpu_max_freq
+        echo "4:960000 5:960000 6:960000 7:960000" > /sys/module/msm_performance/parameters/cpu_max_freq
         # disable thermal bcl hotplug to switch governor
         echo 0 > /sys/module/msm_thermal/core_control/enabled
         echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
@@ -777,7 +777,7 @@ case "$target" in
         # online CPU4
         echo 1 > /sys/devices/system/cpu/cpu4/online
         # Best effort limiting for first time boot if msm_performance module is absent
-        echo 633600 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+        echo 960000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
         # configure governor settings for big cluster
         echo "interactive" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
         echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
