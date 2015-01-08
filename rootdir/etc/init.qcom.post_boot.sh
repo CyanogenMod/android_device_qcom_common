@@ -760,7 +760,6 @@ case "$target" in
         echo 0 > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
         echo 0 > /sys/devices/soc.*/qcom,bcl.*/hotplug_soc_mask
         echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
-        echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
         # configure governor settings for little cluster
         echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
         echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
@@ -803,6 +802,7 @@ case "$target" in
         echo 1 > /sys/devices/system/cpu/cpu5/online
         echo 1 > /sys/devices/system/cpu/cpu6/online
         echo 1 > /sys/devices/system/cpu/cpu7/online
+        echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
         # Restore CPU 4 max freq from msm_performance
         echo "4:4294967295 5:4294967295 6:4294967295 7:4294967295" > /sys/module/msm_performance/parameters/cpu_max_freq
         # input boost configuration
