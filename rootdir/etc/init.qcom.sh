@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2009-2014, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2015, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -227,7 +227,7 @@ case "$target" in
                             esac
                             ;;
                        "MTP")
-                          case "$platform_subtype_id"
+                          case "$platform_subtype_id" in
                                "3")
                                     setprop qemu.hw.mainkeys 0
                                     ;;
