@@ -931,6 +931,11 @@ on property:persist.sys.rootagent=1
 on property:persist.sys.rootagent=0
     stop rootagent
 
+service bms-sh /system/bin/sh /init.qcom.bms.sh
+    class main
+    user root
+    oneshot
+
 service vm_bms /system/bin/vm_bms
     user root
     group root
