@@ -68,6 +68,7 @@
 
 #define TYPE_GUID_OFFSET            0
 #define TYPE_GUID_SIZE              16
+#define PTN_ENTRY_SIZE              128
 #define UNIQUE_GUID_OFFSET          16
 #define FIRST_LBA_OFFSET            32
 #define LAST_LBA_OFFSET             40
@@ -235,7 +236,7 @@ static int gpt_boot_chain_swap(const uint8_t *pentries_start,
     for (i = 0; i < ARRAY_SIZE(ptn_swap_list); i++) {
         uint8_t *ptn_entry;
         uint8_t *ptn_bak_entry;
-        uint8_t ptn_swap[TYPE_GUID_SIZE];
+        uint8_t ptn_swap[PTN_ENTRY_SIZE];
 
         ptn_entry = gpt_pentry_seek(ptn_swap_list[i], pentries_start,
                         pentries_end, pentry_size);
@@ -251,10 +252,9 @@ static int gpt_boot_chain_swap(const uint8_t *pentries_start,
         }
 
         /* swap primary <-> backup partition entries */
-        memcpy(ptn_swap, ptn_entry + TYPE_GUID_OFFSET, TYPE_GUID_SIZE);
-        memcpy(ptn_entry + TYPE_GUID_OFFSET,
-                ptn_bak_entry + TYPE_GUID_OFFSET, TYPE_GUID_SIZE);
-        memcpy(ptn_bak_entry + TYPE_GUID_OFFSET, ptn_swap, TYPE_GUID_SIZE);
+        memcpy(ptn_swap, ptn_entry, PTN_ENTRY_SIZE);
+        memcpy(ptn_entry, ptn_bak_entry, PTN_ENTRY_SIZE);
+        memcpy(ptn_bak_entry, ptn_swap, PTN_ENTRY_SIZE);
         backup_not_found = 0;
     }
 
