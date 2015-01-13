@@ -95,7 +95,11 @@ static int load_qseecom_library()
     if (loaded_library)
         return loaded_library;
 
+#ifdef __LP64__
+    void * handle = dlopen("/vendor/lib64/libQSEEComAPI.so", RTLD_NOW);
+#else
     void * handle = dlopen("/vendor/lib/libQSEEComAPI.so", RTLD_NOW);
+#endif
     if(handle) {
         dlerror(); /* Clear any existing error */
         *(void **) (&qseecom_create_key) = dlsym(handle,"QSEECom_create_key");
