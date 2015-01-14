@@ -53,15 +53,9 @@ static int display_hint2_sent;
 static int first_display_off_hint;
 extern int display_boost;
 
-enum {
-    PROFILE_POWER_SAVE = 0,
-    PROFILE_BALANCED,
-    PROFILE_HIGH_PERFORMANCE
-};
+static power_profile_t current_power_profile = PROFILE_BALANCED;
 
-static int current_power_profile = PROFILE_BALANCED;
-
-static void set_power_profile(int profile) {
+static void set_power_profile(power_profile_t profile) {
 
     if (profile == current_power_profile)
         return;
@@ -99,7 +93,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         power_hint_t hint, void *data)
 {
 	if (hint == POWER_HINT_SET_PROFILE) {
-		set_power_profile((int)data);
+		set_power_profile((power_profile_t)data);
 		return HINT_HANDLED;
 	}
 
@@ -138,6 +132,9 @@ int set_interactive_override(struct power_module *module __unused, int on)
 
         return HINT_NONE;
     }
+
+    if (current_power_profile != PROFILE_BALANCED)
+        return HINT_HANDLED;
 
     if (!on) {
         /* Display off. */

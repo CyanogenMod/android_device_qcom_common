@@ -48,15 +48,9 @@
 #include "performance.h"
 #include "power-common.h"
 
-enum {
-    PROFILE_POWER_SAVE = 0,
-    PROFILE_BALANCED,
-    PROFILE_HIGH_PERFORMANCE
-};
+static power_profile_t current_power_profile = PROFILE_BALANCED;
 
-static int current_power_profile = PROFILE_BALANCED;
-
-static void set_power_profile(int profile) {
+static void set_power_profile(power_profile_t profile) {
 
     if (profile == current_power_profile)
         return;
@@ -101,7 +95,7 @@ typedef int hintdata;
 int power_hint_override(struct power_module *module, power_hint_t hint, void *data)
 {
     if (hint == POWER_HINT_SET_PROFILE) {
-        set_power_profile((hintdata)data);
+        set_power_profile((power_profile_t)data);
         return HINT_HANDLED;
     }
 
