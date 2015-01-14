@@ -72,8 +72,8 @@
     chmod -h 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
 
     #Create FTM_AP folder
-    mkdir -p /data/FTM_AP
-    chmod -h 0660 /data/FTM_AP
+    mkdir -p /cache/FTM_AP
+    chmod -h 0660 /cache/FTM_AP
 
     # setup permissions for fb1 related nodes
     chown -h system.graphics /sys/class/graphics/fb1/hpd
