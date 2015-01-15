@@ -735,10 +735,61 @@ esac
 
 case "$target" in
     "msm8992")
+        # disable thermal bcl hotplug to switch governor
+        echo 0 > /sys/module/msm_thermal/core_control/enabled
+        echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
+        bcl_hotplug_mask=`cat /sys/devices/soc.*/qcom,bcl.*/hotplug_mask`
+        echo 0 > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
+        echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
         echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
-        # online A57 cores
+        # configure governor settings for little cluster
+        echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+        echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
+        echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif
+        echo 19000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
+        echo 90 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
+        echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
+        echo 960000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
+        echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy
+        echo 80 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+        echo 40000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
+        echo 80000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
+        echo 384000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        # online CPU4
         echo 1 > /sys/devices/system/cpu/cpu4/online
+        # configure governor settings for big cluster
+        echo "interactive" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+        echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
+        echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif
+        echo 19000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
+        echo 90 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
+        echo 20000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate
+        echo 1536000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
+        echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
+        echo 85 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
+        echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
+        echo 80000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis
+        echo 384000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+        # re-enable thermal and BCL hotplug
+        echo 1 > /sys/module/msm_thermal/core_control/enabled
+        echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
+        echo $bcl_hotplug_mask > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
+        echo $bcl_soc_hotplug_mask > /sys/devices/soc.*/qcom,bcl.*/hotplug_soc_mask
+        echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
+        # plugin remaining A57s
         echo 1 > /sys/devices/system/cpu/cpu5/online
+        # input boost configuration
+        echo 0:1248000 > /sys/module/cpu_boost/parameters/input_boost_freq
+        echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
+        # Enable task migration fixups in the scheduler
+        echo 1 > /proc/sys/kernel/sched_migration_fixup
+        for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
+        do
+            echo "bw_hwmon" > $devfreq_gov
+        done
+        #enable rps static configuration
+        echo 8 >  /sys/class/net/rmnet_ipa0/queues/rx-0/rps_cpus
+        echo 30 > /proc/sys/kernel/sched_small_task
     ;;
 esac
 
@@ -941,7 +992,7 @@ case "$target" in
         start mpdecision
         echo 512 > /sys/block/mmcblk0/bdi/read_ahead_kb
     ;;
-    "msm8994")
+    "msm8994" | "msm8992")
         rm /data/system/perfd/default_values
         setprop ro.min_freq_0 384000
         setprop ro.min_freq_4 384000
@@ -1022,7 +1073,7 @@ case "$target" in
 esac
 
 case "$target" in
-    "msm8226" | "msm8974" | "msm8610" | "apq8084" | "mpq8092" | "msm8610" | "msm8916" | "msm8994")
+    "msm8226" | "msm8974" | "msm8610" | "apq8084" | "mpq8092" | "msm8610" | "msm8916" | "msm8994" | "msm8992")
         # Let kernel know our image version/variant/crm_version
         image_version="10:"
         image_version+=`getprop ro.build.id`
