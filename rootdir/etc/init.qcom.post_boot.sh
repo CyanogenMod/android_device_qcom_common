@@ -805,12 +805,24 @@ case "$target" in
         echo "4:960000 5:960000 6:960000 7:960000" > /sys/module/msm_performance/parameters/cpu_max_freq
         # disable thermal bcl hotplug to switch governor
         echo 0 > /sys/module/msm_thermal/core_control/enabled
-        echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
-        bcl_hotplug_mask=`cat /sys/devices/soc.*/qcom,bcl.*/hotplug_mask`
-        bcl_soc_hotplug_mask=`cat /sys/devices/soc.*/qcom,bcl.*/hotplug_soc_mask`
-        echo 0 > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
-        echo 0 > /sys/devices/soc.*/qcom,bcl.*/hotplug_soc_mask
-        echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
+        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        do
+            echo -n disable > $mode
+        done
+        for hotplug_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_mask
+        do
+            bcl_hotplug_mask=`cat $hotplug_mask`
+            echo 0 > $hotplug_mask
+        done
+        for hotplug_soc_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_soc_mask
+        do
+            bcl_soc_hotplug_mask=`cat $hotplug_soc_mask`
+            echo 0 > $hotplug_soc_mask
+        done
+        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        do
+            echo -n enable > $mode
+        done
         # configure governor settings for little cluster
         echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
         echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
@@ -845,10 +857,22 @@ case "$target" in
         cat /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_max_freq > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
         # re-enable thermal and BCL hotplug
         echo 1 > /sys/module/msm_thermal/core_control/enabled
-        echo -n disable > /sys/devices/soc.*/qcom,bcl.*/mode
-        echo $bcl_hotplug_mask > /sys/devices/soc.*/qcom,bcl.*/hotplug_mask
-        echo $bcl_soc_hotplug_mask > /sys/devices/soc.*/qcom,bcl.*/hotplug_soc_mask
-        echo -n enable > /sys/devices/soc.*/qcom,bcl.*/mode
+        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        do
+            echo -n disable > $mode
+        done
+        for hotplug_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_mask
+        do
+            echo $bcl_hotplug_mask > $hotplug_mask
+        done
+        for hotplug_soc_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_soc_mask
+        do
+            echo $bcl_soc_hotplug_mask > $hotplug_soc_mask
+        done
+        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        do
+            echo -n enable > $mode
+        done
         # plugin remaining A57s
         echo 1 > /sys/devices/system/cpu/cpu5/online
         echo 1 > /sys/devices/system/cpu/cpu6/online
