@@ -491,7 +491,7 @@ case "$target" in
         fi
 
         # HMP scheduler settings for 8916, 8936, 8939, 8929
-        echo 2 > /proc/sys/kernel/sched_window_stats_policy
+        echo 3 > /proc/sys/kernel/sched_window_stats_policy
 	echo 3 > /proc/sys/kernel/sched_ravg_hist_size
 
         # Apply governor settings for 8916
@@ -829,7 +829,7 @@ case "$target" in
         fi
 
         # HMP scheduler settings for 8909 similiar to 8916
-        echo 2 > /proc/sys/kernel/sched_window_stats_policy
+        echo 3 > /proc/sys/kernel/sched_window_stats_policy
         echo 3 > /proc/sys/kernel/sched_ravg_hist_size
 
         # HMP Task packing settings for 8909 similiar to 8916
