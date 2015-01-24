@@ -258,5 +258,3 @@ setprop persist.sys.usb.config diag,adb
     start irsc_util
     start qcamerasvr
     start qcomsysd
-    start ptt_ffbm
-    start ftm_ffbm

@@ -617,18 +617,6 @@ service ptt_socket_app /system/bin/ptt_socket_app -d
     group root
     oneshot
 
-service ptt_ffbm /system/bin/ptt_socket_app -f -d
-    user root
-    group root
-    disabled
-    oneshot
-
-service ftm_ffbm /system/bin/ftmdaemon
-    user root
-    group root
-    disabled
-    oneshot
-
 service cnss_diag /system/bin/cnss_diag --q
     class main
     user root
