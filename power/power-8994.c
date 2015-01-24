@@ -115,7 +115,7 @@ int power_hint_override(struct power_module *module, power_hint_t hint, void *da
 
 int set_interactive_override(struct power_module *module, int on)
 {
-    return HINT_NONE; /* Don't excecute this code path, not in use */
+    return HINT_HANDLED; /* Don't excecute this code path, not in use */
     char governor[80];
 
     if (get_scaling_governor(governor, sizeof(governor)) == -1) {
