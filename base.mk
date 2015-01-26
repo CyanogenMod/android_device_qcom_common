@@ -13,6 +13,7 @@ QCOM_BOARD_PLATFORMS += msm8916_64
 QCOM_BOARD_PLATFORMS += msm8994
 QCOM_BOARD_PLATFORMS += msm8909
 QCOM_BOARD_PLATFORMS += msm8909_512
+QCOM_BOARD_PLATFORMS += msm8992
 QCOM_BOARD_PLATFORMS += thulium
 
 QSD8K_BOARD_PLATFORMS := qsd8k
@@ -20,7 +21,7 @@ QSD8K_BOARD_PLATFORMS := qsd8k
 TARGET_USE_VENDOR_CAMERA_EXT := true
 
 #List of targets that use video hw
-MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 thulium
+MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 msm8992 thulium
 
 # Below projects/packages with LOCAL_MODULEs will be used by
 # PRODUCT_PACKAGES to build LOCAL_MODULEs that are tagged with
@@ -85,6 +86,7 @@ AUDIO_HARDWARE += audio.primary.mpq8092
 AUDIO_HARDWARE += audio.primary.msm8916
 AUDIO_HARDWARE += audio.primary.msm8909
 AUDIO_HARDWARE += audio.primary.msm8994
+AUDIO_HARDWARE += audio.primary.msm8992
 #
 AUDIO_POLICY := audio_policy.mpq8064
 AUDIO_POLICY += audio_policy.apq8084
@@ -104,6 +106,7 @@ AUDIO_POLICY += audio_policy_8064.conf
 AUDIO_POLICY += audio_policy.msm8916
 AUDIO_POLICY += audio_policy.msm8909
 AUDIO_POLICY += audio_policy.msm8994
+AUDIO_POLICY += audio_policy.msm8992
 
 #tinyalsa test apps
 TINY_ALSA_TEST_APPS := tinyplay
@@ -135,6 +138,10 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/common
 
 #C2DColorConvert
 C2DCC := libc2dcolorconvert
+
+CHROMIUM := libwebviewchromium
+CHROMIUM += libwebviewchromium_loader
+CHROMIUM += libwebviewchromium_plat_support
 
 #CIMAX
 CIMAX := libcimax_spi
@@ -327,6 +334,7 @@ LIBCOPYBIT += copybit.msm8610
 LIBCOPYBIT += copybit.msm8909
 LIBCOPYBIT += copybit.msm8916
 LIBCOPYBIT += copybit.msm8994
+LIBCOPYBIT += copybit.msm8992
 LIBCOPYBIT += copybit.apq8084
 LIBCOPYBIT += copybit.msm7k
 LIBCOPYBIT += copybit.qsd8k
@@ -350,6 +358,7 @@ LIBGRALLOC += gralloc.msm8610
 LIBGRALLOC += gralloc.msm8909
 LIBGRALLOC += gralloc.msm8916
 LIBGRALLOC += gralloc.msm8994
+LIBGRALLOC += gralloc.msm8992
 LIBGRALLOC += gralloc.apq8084
 LIBGRALLOC += gralloc.mpq8092
 LIBGRALLOC += gralloc.msm7k
@@ -379,6 +388,7 @@ LIBLIGHTS += lights.msm8226
 LIBLIGHTS += lights.msm8909
 LIBLIGHTS += lights.msm8916
 LIBLIGHTS += lights.msm8994
+LIBLIGHTS += lights.msm8992
 LIBLIGHTS += lights.msm7k
 LIBLIGHTS += lights.msm7630_surf
 LIBLIGHTS += lights.msm7630_fusion
@@ -397,6 +407,7 @@ LIBHWCOMPOSER += hwcomposer.msm8610
 LIBHWCOMPOSER += hwcomposer.msm8909
 LIBHWCOMPOSER += hwcomposer.msm8916
 LIBHWCOMPOSER += hwcomposer.msm8994
+LIBHWCOMPOSER += hwcomposer.msm8992
 LIBHWCOMPOSER += hwcomposer.apq8084
 LIBHWCOMPOSER += hwcomposer.mpq8092
 LIBHWCOMPOSER += hwcomposer.msm7k
@@ -634,6 +645,7 @@ PRODUCT_PACKAGES += $(BRCTL)
 PRODUCT_PACKAGES += $(BSON)
 PRODUCT_PACKAGES += $(BT)
 PRODUCT_PACKAGES += $(C2DCC)
+PRODUCT_PACKAGES += $(CHROMIUM)
 PRODUCT_PACKAGES += $(CIMAX)
 PRODUCT_PACKAGES += $(CONNECTIVITY)
 PRODUCT_PACKAGES += $(CHARGER)

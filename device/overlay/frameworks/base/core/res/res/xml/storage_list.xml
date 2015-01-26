@@ -59,7 +59,8 @@
             android:primary="false"
             android:emulated="false"
             android:removable="true"
-            android:allowMassStorage="false" />
+            android:allowMassStorage="false"
+            android:allowMtp="false" />
         <storage android:mountPoint="/storage/usbotg"
             android:storageDescription="@string/storage_usb"
             android:primary="false"

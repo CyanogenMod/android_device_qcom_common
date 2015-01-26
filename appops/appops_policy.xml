@@ -40,5 +40,11 @@
         </pkg>
 
     -->
-    </application>
+        <pkg name="com.android.calendar" type="system-app">
+            <op name="android:read_contacts" permission="ask" show="true"/>
+        </pkg>
+        <pkg name="com.android.email" type="system-app">
+            <op name="android:read_contacts" permission="ask" show="true"/>
+        </pkg>
+   </application>
 </appops-policy>
