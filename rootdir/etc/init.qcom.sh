@@ -207,9 +207,16 @@ case "$target" in
         case "$soc_id" in
              "239")
                   case "$hw_platform" in
-                       "Surf" | "MTP")
+                       "Surf")
                             case "$platform_subtype_id" in
-                                 "1" | "3")
+                                 "1" | "2")
+                                      setprop qemu.hw.mainkeys 0
+                                      ;;
+                            esac
+                            ;;
+                       "MTP")
+                            case "$platform_subtype_id" in
+                                 "3")
                                       setprop qemu.hw.mainkeys 0
                                       ;;
                             esac

@@ -363,7 +363,7 @@ case "$target" in
                     case "$hw_platform" in
                         "Surf")
                             case "$platform_subtype_id" in
-                                "1")
+                                "1" | "2")
                                     start hbtp
                                 ;;
                             esac
