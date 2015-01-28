@@ -43,7 +43,7 @@ uicc_insert()
 {
     case $target in
     "msm8916")
-        if [ $soc_hwid == "239" ]; then
+        if [ $soc_hwid == "239" ] || [ $soc_hwid == "268" ] || [ $soc_hwid == "269" ] || [ $soc_hwid == "270" ] || [ $soc_hwid == "271" ]; then
             echo Y > /sys/module/ehci_msm_uicc/parameters/uicc_card_present
             echo 79c0000.qcom,ehci-host  > /sys/bus/platform/drivers/msm_ehci_uicc/bind
         elif [ $soc_hwid == "206" ]; then
@@ -73,7 +73,7 @@ uicc_remove()
 {
     case $target in
     "msm8916")
-        if [ $soc_hwid == "239" ]; then
+        if [ $soc_hwid == "239" ] || [ $soc_hwid == "268" ] || [ $soc_hwid == "269" ] || [ $soc_hwid == "270" ] || [ $soc_hwid == "271" ]; then
             echo 79c0000.qcom,ehci-host  > /sys/bus/platform/drivers/msm_ehci_uicc/unbind
             echo N > /sys/module/ehci_msm_uicc/parameters/uicc_card_present
         elif [ $soc_hwid == "206" ]; then
