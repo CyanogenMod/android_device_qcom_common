@@ -191,6 +191,10 @@ void set_display_node_perms()
                             num);
                 setPerms(tmp, 0664);
                 setOwners(tmp, AID_SYSTEM, AID_SYSTEM);
+                snprintf(tmp, sizeof(tmp), "%sfb%d/s3d_mode", sys_fb_path,
+                            num);
+                setPerms(tmp, 0664);
+                setOwners(tmp, AID_SYSTEM, AID_SYSTEM);
                 snprintf(tmp, sizeof(tmp), "%sfb%d/hdcp/tp", sys_fb_path, num);
                 setPerms(tmp, 0664);
                 setOwners(tmp, AID_SYSTEM, AID_SYSTEM);
