@@ -210,8 +210,6 @@ case "$target" in
                        "Surf" | "MTP")
                             case "$platform_subtype_id" in
                                  "1" | "3")
-                                      mkdir -p /data/misc/hbtp
-                                      chmod -h 775 /data/misc/hbtp
                                       setprop qemu.hw.mainkeys 0
                                       ;;
                             esac
