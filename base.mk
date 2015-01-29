@@ -563,6 +563,7 @@ WPA := wpa_supplicant.conf
 WPA += wpa_supplicant_wcn.conf
 WPA += wpa_supplicant_ath6kl.conf
 WPA += wpa_supplicant
+WPA += hs20-osu-client
 
 #ZLIB
 ZLIB := gzip
