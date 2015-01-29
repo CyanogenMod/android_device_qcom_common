@@ -883,9 +883,11 @@ service qbcharger /charger -m 1
     oneshot
 
 on property:sys.qbcharger.enable=true
+    write /sys/power/wake_lock QuickBoot
     start qbcharger
 
 on property:sys.qbcharger.enable=false
+    write /sys/power/wake_unlock QuickBoot
     stop qbcharger
 
 service diag_mdlog_start /system/bin/diag_mdlog
