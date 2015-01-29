@@ -30,6 +30,13 @@
 chown -h root.system /sys/devices/platform/msm_hsusb/gadget/wakeup
 chmod -h 220 /sys/devices/platform/msm_hsusb/gadget/wakeup
 
+# Set platform variables
+if [ -f /sys/devices/soc0/hw_platform ]; then
+    soc_hwplatform=`cat /sys/devices/soc0/hw_platform` 2> /dev/null
+else
+    soc_hwplatform=`cat /sys/devices/system/soc/soc0/hw_platform` 2> /dev/null
+fi
+
 #
 # Allow persistent usb charging disabling
 # User needs to set usb charging disabled in persist.usb.chgdisabled
@@ -121,8 +128,12 @@ case "$usb_config" in
                         "msm8916")
                             setprop persist.sys.usb.config diag,serial_smd,rmnet_bam,adb
                         ;;
-                        "msm8994")
-                            setprop persist.sys.usb.config diag,adb
+                        "msm8994" | "msm8992")
+                            if [ "$soc_hwplatform" == "Dragon" ]; then
+                               setprop persist.sys.usb.config diag,adb
+                            else
+                               setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_ipa,mass_storage,adb
+                            fi
                         ;;
                         "msm8909")
                             setprop persist.sys.usb.config diag,serial_smd,rmnet_qti_bam,adb
@@ -159,7 +170,7 @@ case "$target" in
              fi
          fi
     ;;
-    "msm8994")
+    "msm8994" | "msm8992")
         echo BAM2BAM_IPA > /sys/class/android_usb/android0/f_rndis_qc/rndis_transports
         echo 1 > /sys/class/android_usb/android0/f_rndis_qc/max_pkt_per_xfer # Disable RNDIS UL aggregation
     ;;
@@ -226,30 +237,9 @@ case "$target" in
 esac
 
 #
-# Add changes to support diag with rndis
+# Initialize RNDIS Diag option. If unset, set it to 'none'.
 #
 diag_extra=`getprop persist.sys.usb.config.extra`
-case "$diag_extra" in
-	"diag" | "diag,diag_mdm" | "diag,diag_mdm,diag_qsc")
-		case "$baseband" in
-			"mdm")
-				setprop persist.sys.usb.config.extra diag,diag_mdm
-			;;
-		        "dsda" | "sglte2" )
-				setprop persist.sys.usb.config.extra diag,diag_mdm,diag_qsc
-			;;
-		        "sglte")
-				setprop persist.sys.usb.config.extra diag,diag_qsc
-			;;
-		        "dsda2")
-				setprop persist.sys.usb.config.extra diag,diag_mdm,diag_mdm2
-			;;
-		        *)
-				setprop persist.sys.usb.config.extra diag
-			;;
-	        esac
-	;;
-        *)
-		setprop persist.sys.usb.config.extra none
-	;;
-esac
+if [ "$diag_extra" == "" ]; then
+	setprop persist.sys.usb.config.extra none
+fi

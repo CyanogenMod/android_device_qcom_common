@@ -73,6 +73,13 @@ enable_stm_events()
     echo 1 > /sys/kernel/debug/tracing/events/regulator/enable
     # power
     echo 1 > /sys/kernel/debug/tracing/events/msm_low_power/enable
+    #thermal
+    echo 1 > /sys/kernel/debug/tracing/events/thermal/thermal_pre_core_offline/enable
+    echo 1 > /sys/kernel/debug/tracing/events/thermal/thermal_post_core_offline/enable
+    echo 1 > /sys/kernel/debug/tracing/events/thermal/thermal_pre_core_online/enable
+    echo 1 > /sys/kernel/debug/tracing/events/thermal/thermal_post_core_online/enable
+    echo 1 > /sys/kernel/debug/tracing/events/thermal/thermal_pre_frequency_mit/enable
+    echo 1 > /sys/kernel/debug/tracing/events/thermal/thermal_post_frequency_mit/enable
 }
 
 coresight_config=`getprop persist.debug.coresight.config`
