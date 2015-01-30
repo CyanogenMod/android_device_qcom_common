@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2014, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2015, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -25,14 +25,25 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-# The script will check total_ram and enable zram for devices with total_ram
-# less or equals to 1GB
 
-MemTotalStr=`cat /proc/meminfo | grep MemTotal`
-MemTotal=${MemTotalStr:16:8}
-ZRAM_THRESHOLD=1048576
-IsLowMemory=0
-((IsLowMemory=MemTotal<ZRAM_THRESHOLD?1:0))
-if [ $IsLowMemory -eq 1 ]; then
-    setprop ro.config.zram true
-fi
+target=`getprop ro.board.platform`
+
+start_vm_bms()
+{
+	if [ -e /dev/vm_bms ]; then
+		chown -h root.system /sys/class/power_supply/bms/current_now
+		chown -h root.system /sys/class/power_supply/bms/voltage_ocv
+		chmod 0664 /sys/class/power_supply/bms/current_now
+		chmod 0664 /sys/class/power_supply/bms/voltage_ocv
+		start vm_bms
+	fi
+}
+
+case "$target" in
+    "msm8916")
+        start_vm_bms
+        ;;
+    "msm8909")
+        start_vm_bms
+        ;;
+esac

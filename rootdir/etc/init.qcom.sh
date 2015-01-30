@@ -83,17 +83,6 @@ start_charger_monitor()
 	fi
 }
 
-start_vm_bms()
-{
-	if [ -e /dev/vm_bms ]; then
-		chown -h root.system /sys/class/power_supply/bms/current_now
-		chown -h root.system /sys/class/power_supply/bms/voltage_ocv
-		chmod 0664 /sys/class/power_supply/bms/current_now
-		chmod 0664 /sys/class/power_supply/bms/voltage_ocv
-		start vm_bms
-	fi
-}
-
 start_msm_irqbalance_8939()
 {
 	if [ -f /system/bin/msm_irqbalance ]; then
@@ -202,7 +191,6 @@ case "$target" in
         start_charger_monitor
         ;;
     "msm8916")
-        start_vm_bms
         start_msm_irqbalance_8939
         if [ -f /sys/devices/soc0/soc_id ]; then
             soc_id=`cat /sys/devices/soc0/soc_id`
@@ -236,7 +224,6 @@ case "$target" in
         start_msm_irqbalance
         ;;
     "msm8909")
-        start_vm_bms
         ;;
 esac
 

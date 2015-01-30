@@ -72,8 +72,8 @@
     chmod -h 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
 
     #Create FTM_AP folder
-    mkdir -p /data/FTM_AP
-    chmod -h 0660 /data/FTM_AP
+    mkdir -p /cache/FTM_AP
+    chmod -h 0660 /cache/FTM_AP
 
     # setup permissions for fb1 related nodes
     chown -h system.graphics /sys/class/graphics/fb1/hpd
@@ -243,6 +243,9 @@ chown -h root.system /sys/devices/platform/msm_hsusb/gadget/wakeup
 chmod -h 220 /sys/devices/platform/msm_hsusb/gadget/wakeup
 setprop persist.sys.usb.config diag,adb
 
+#mount sdcard by default
+    mount -t vfat /dev/block/mmcblk1p1 /storage/sdcard1
+
 # Start the following services needed for fftm
     start logd
     start config_bluetooth
@@ -255,5 +258,3 @@ setprop persist.sys.usb.config diag,adb
     start irsc_util
     start qcamerasvr
     start qcomsysd
-    start ptt_ffbm
-    start ftm_ffbm

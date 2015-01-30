@@ -135,6 +135,10 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/common
 #C2DColorConvert
 C2DCC := libc2dcolorconvert
 
+CHROMIUM := libwebviewchromium
+CHROMIUM += libwebviewchromium_loader
+CHROMIUM += libwebviewchromium_plat_support
+
 #CIMAX
 CIMAX := libcimax_spi
 
@@ -145,6 +149,11 @@ CONNECTIVITY += services-ext
 #CURL
 CURL := libcurl
 CURL += curl
+
+#CM
+CM := CMFileManager
+CM += Trebuchet
+CM += Eleven
 
 #DASH
 DASH := libdashplayer
@@ -240,6 +249,8 @@ INIT += init.qcom.uicc.sh
 INIT += fstab.qcom
 INIT += init.qcom.debug.sh
 INIT += init.qcom.zram.sh
+INIT += init.qti.synaptics_dsx_qhd.sh
+INIT += init.qcom.bms.sh
 
 #IPROUTE2
 IPROUTE2 := ip
@@ -463,6 +474,7 @@ MM_CORE += libOmxCore
 MM_VIDEO := ast-mm-vdec-omx-test
 MM_VIDEO += libdivxdrmdecrypt
 MM_VIDEO += liblasic
+MM_VIDEO += libOmxSwVencMpeg4
 MM_VIDEO += libOmxVdec
 MM_VIDEO += libOmxVdecHevc
 MM_VIDEO += libOmxVdpp
@@ -568,6 +580,13 @@ VT_JNI += libimscamera_jni
 # VT QTI Permissions
 VT_QTI_PERMISSIONS := qti_permissions.xml
 
+#RCS
+RCS := rcs_service_aidl
+RCS += rcs_service_aidl.xml
+RCS += rcs_service_aidl_static
+RCS += rcs_service_api
+RCS += rcs_service_api.xml
+
 #CRDA
 CRDA := crda
 CRDA += regdbdump
@@ -633,10 +652,13 @@ PRODUCT_PACKAGES += $(BRCTL)
 PRODUCT_PACKAGES += $(BSON)
 PRODUCT_PACKAGES += $(BT)
 PRODUCT_PACKAGES += $(C2DCC)
+PRODUCT_PACKAGES += $(CHROMIUM)
 PRODUCT_PACKAGES += $(CIMAX)
 PRODUCT_PACKAGES += $(CONNECTIVITY)
 PRODUCT_PACKAGES += $(CHARGER)
 PRODUCT_PACKAGES += $(CURL)
+PRODUCT_PACKAGES += $(CM)
+PRODUCT_PACKAGES += $(RCS)
 PRODUCT_PACKAGES += $(DASH)
 PRODUCT_PACKAGES += $(DATA_OS)
 PRODUCT_PACKAGES += $(E2FSPROGS)
