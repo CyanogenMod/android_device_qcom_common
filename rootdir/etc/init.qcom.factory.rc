@@ -37,6 +37,10 @@ service srvmag_ffbm /system/bin/servicemanager
     disabled
     oneshot
 
+# Creating a scratch storage on /data for factory testing.
+on factory-fs
+    mount tmpfs tmpfs /data
+
 on mmi
     # ====================================================================
     #       The follow setting come from "on boot" in init.qcom.rc
@@ -270,6 +274,7 @@ on mmi
 
 on ffbm
     trigger early-fs
+    trigger factory-fs
     trigger fs
     trigger post-fs
     trigger post-fs-data
