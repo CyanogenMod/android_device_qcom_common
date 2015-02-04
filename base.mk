@@ -153,7 +153,6 @@ CURL += curl
 #CM
 CM := CMFileManager
 CM += Trebuchet
-CM += Eleven
 
 #DASH
 DASH := libdashplayer
