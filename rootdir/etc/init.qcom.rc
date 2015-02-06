@@ -422,7 +422,7 @@ service rfs_access /system/bin/rfs_access
    group system net_raw
 
 service tftp_server /system/bin/tftp_server
-   class core
+   class main
    user root
 
 on property:wc_transport.start_hci=true
