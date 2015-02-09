@@ -31,11 +31,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     <!-- Overlay config file for Verizon operator -->
 
-    <!-- Flag specifying whether VoLTE & VT should be available for carrier: independent of
-         carrier provisioning. If false: hard disabled. If true: then depends on carrier
-         provisioning, availability etc -->
-    <bool name="config_carrier_volte_vt_available">true</bool>
-
 <!-- If Voice Radio Technology is RIL_RADIO_TECHNOLOGY_LTE:14 this is the value
          that should be used instead. A value of RIL_RADIO_TECHNOLOGY_UNKNOWN:0 means
          there is no replacement value and VoLTE is assumed to be supported -->
