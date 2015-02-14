@@ -192,59 +192,6 @@ static void process_video_encode_hint(void *metadata)
     }
 }
 
-static void process_audio_hint(void *metadata)
-{
-    char governor[80];
-    struct audio_metadata_t audio_metadata;
-
-    if (get_scaling_governor(governor, sizeof(governor)) == -1) {
-        ALOGE("Can't obtain scaling governor.");
-
-        return;
-    }
-
-    if (metadata) {
-        ALOGI("Processing audio hint. Metadata: %s", (char *)metadata);
-    }
-
-    /* Initialize encode metadata struct fields. */
-    memset(&audio_metadata, 0, sizeof(struct audio_metadata_t));
-    audio_metadata.state = -1;
-    audio_metadata.hint_id = DEFAULT_AUDIO_HINT_ID;
-
-    if (metadata) {
-        if (parse_audio_metadata((char *)metadata, &audio_metadata) == -1) {
-            ALOGE("Error occurred while parsing metadata.");
-            return;
-        }
-    } else {
-        return;
-    }
-
-    if (audio_metadata.state == 1) {
-        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
-                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
-            int resource_values[] = {MS_50};
-
-            perform_hint_action(audio_metadata.hint_id,
-                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
-        } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
-                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {TR_MS_30};
-
-            perform_hint_action(audio_metadata.hint_id,
-                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
-        }
-    } else if (audio_metadata.state == 0) {
-        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
-                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
-        } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
-                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            undo_hint_action(audio_metadata.hint_id);
-        }
-    }
-}
-
 int __attribute__ ((weak)) power_hint_override(
         __attribute__((unused)) struct power_module *module,
         __attribute__((unused)) power_hint_t hint,
@@ -270,6 +217,7 @@ static void power_hint(__attribute__((unused)) struct power_module *module, powe
         case POWER_HINT_VSYNC:
         case POWER_HINT_INTERACTION:
         case POWER_HINT_CPU_BOOST:
+        case POWER_HINT_AUDIO:
         case POWER_HINT_SET_PROFILE:
         case POWER_HINT_LOW_POWER:
         break;
@@ -279,8 +227,6 @@ static void power_hint(__attribute__((unused)) struct power_module *module, powe
         case POWER_HINT_VIDEO_DECODE:
             process_video_decode_hint(data);
         break;
-        case POWER_HINT_AUDIO:
-            process_audio_hint(data);
         break;
     }
 
@@ -336,7 +282,7 @@ void set_interactive(struct power_module *module, int on)
             }
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {TR_MS_50, THREAD_MIGRATION_SYNC_OFF};
+            int resource_values[] = {THREAD_MIGRATION_SYNC_OFF};
 
             if (!display_hint_sent) {
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
