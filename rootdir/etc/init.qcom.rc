@@ -1,4 +1,4 @@
-# Copyright (c) 2009-2012, 2014, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2012, 2014-2015, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -27,6 +27,7 @@
 
 import init.qcom.usb.rc
 import init.target.rc
+import init.qcom.factory.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
@@ -215,6 +216,9 @@ on post-fs-data
 
     # Create directory used by the DASH client
     mkdir /data/misc/dash 0770 media audio
+
+    # Create directory used by display clients
+    mkdir /data/misc/display 0770 system graphics
 
     # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
     # We chown/chmod /persist again so because mount is run as root + defaults
@@ -519,6 +523,8 @@ service ipacm /system/bin/ipacm
 
 service qti /system/vendor/bin/qti
     class main
+    user radio
+    group radio net_raw qcom_diag usb net_admin
     disabled
 
 service sensors /system/bin/sensors.qcom
@@ -834,34 +840,6 @@ service ssr_diag /system/bin/ssr_diag
     group system
     disabled
 
-# Define fastmmi
-service fastmmi /system/bin/mmi
-    user root
-    group root
-    disabled
-
-service fastmmisrv /system/bin/sh /init.qcom.factory.sh
-    user root
-    disabled
-    oneshot
-
-on mmi
-    start fastmmisrv
-
-on ffbm
-    trigger early-fs
-    trigger fs
-    trigger post-fs
-    trigger post-fs-data
-
-    # Load properties from /system/ + /factory after fs mount. Place
-    # this in another action so that the load will be scheduled after the prior
-    # issued fs triggers have completed.
-    trigger load_all_props_action
-
-    trigger early-boot
-    trigger mmi
-
 service hvdcp /system/bin/hvdcp
     class core
     user root
@@ -883,9 +861,11 @@ service qbcharger /charger -m 1
     oneshot
 
 on property:sys.qbcharger.enable=true
+    write /sys/power/wake_lock QuickBoot
     start qbcharger
 
 on property:sys.qbcharger.enable=false
+    write /sys/power/wake_unlock QuickBoot
     stop qbcharger
 
 service diag_mdlog_start /system/bin/diag_mdlog

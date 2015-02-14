@@ -87,7 +87,7 @@ start_msm_irqbalance_8939()
 {
 	if [ -f /system/bin/msm_irqbalance ]; then
 		case "$platformid" in
-		    "239")
+		    "239" | "241" | "263" | "268" | "269" | "270" | "271")
 			start msm_irqbalance;;
 		esac
 	fi
@@ -210,8 +210,6 @@ case "$target" in
                        "Surf" | "MTP")
                             case "$platform_subtype_id" in
                                  "1" | "3")
-                                      mkdir -p /data/misc/hbtp
-                                      chmod -h 775 /data/misc/hbtp
                                       setprop qemu.hw.mainkeys 0
                                       ;;
                             esac
