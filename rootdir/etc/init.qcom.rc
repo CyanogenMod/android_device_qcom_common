@@ -282,6 +282,7 @@ on post-fs-data
     chmod 2755 /data/misc/perfd
     mkdir /data/system/perfd 0770 root system
     chmod 2770 /data/system/perfd
+    mkdir /persist/drm 0770 system system
 
     # NFC local data and nfcee xml storage
     mkdir /data/nfc 0770 nfc nfc
