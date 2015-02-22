@@ -643,6 +643,16 @@ case "$target" in
                 # HMP scheduler (big.Little cluster related) settings
                 echo 75 > /proc/sys/kernel/sched_upmigrate
                 echo 60 > /proc/sys/kernel/sched_downmigrate
+
+                # cpu idle load threshold
+                echo 30 > /sys/devices/system/cpu/cpu0/sched_mostly_idle_load
+                echo 30 > /sys/devices/system/cpu/cpu1/sched_mostly_idle_load
+                echo 30 > /sys/devices/system/cpu/cpu2/sched_mostly_idle_load
+                echo 30 > /sys/devices/system/cpu/cpu3/sched_mostly_idle_load
+                echo 30 > /sys/devices/system/cpu/cpu4/sched_mostly_idle_load
+                echo 30 > /sys/devices/system/cpu/cpu5/sched_mostly_idle_load
+                echo 30 > /sys/devices/system/cpu/cpu6/sched_mostly_idle_load
+                echo 30 > /sys/devices/system/cpu/cpu7/sched_mostly_idle_load
             ;;
         esac
     ;;
