@@ -367,6 +367,7 @@ LIBGRALLOC += gralloc.msm7630_fusion
 LIBGRALLOC += gralloc.msm7627_surf
 LIBGRALLOC += gralloc.msm7627_6x
 LIBGRALLOC += gralloc.msm7627a
+LIBGRALLOC += gralloc.thulium
 LIBGRALLOC += libmemalloc
 
 #memtrack
@@ -379,6 +380,7 @@ LIBMEMTRACK += memtrack.msm8994
 LIBMEMTRACK += memtrack.msm8610
 LIBMEMTRACK += memtrack.apq8084
 LIBMEMTRACK += memtrack.mpq8092
+LIBMEMTRACK += memtrack.thulium
 
 #LIBLIGHTS
 LIBLIGHTS := lights.msm8660
@@ -416,6 +418,7 @@ LIBHWCOMPOSER += hwcomposer.msm7630_fusion
 LIBHWCOMPOSER += hwcomposer.msm7627_surf
 LIBHWCOMPOSER += hwcomposer.msm7627_6x
 LIBHWCOMPOSER += hwcomposer.msm7627a
+LIBHWCOMPOSER += hwcomposer.thulium
 
 #LIBAUDIOPARAM -- Exposing AudioParameter as dynamic library for SRS TruMedia to work
 LIBAUDIOPARAM := libaudioparameter
