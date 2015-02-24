@@ -87,6 +87,7 @@ AUDIO_HARDWARE += audio.primary.msm8916
 AUDIO_HARDWARE += audio.primary.msm8909
 AUDIO_HARDWARE += audio.primary.msm8994
 AUDIO_HARDWARE += audio.primary.msm8992
+AUDIO_HARDWARE += audio.primary.thulium
 #
 AUDIO_POLICY := audio_policy.mpq8064
 AUDIO_POLICY += audio_policy.apq8084
@@ -107,6 +108,7 @@ AUDIO_POLICY += audio_policy.msm8916
 AUDIO_POLICY += audio_policy.msm8909
 AUDIO_POLICY += audio_policy.msm8994
 AUDIO_POLICY += audio_policy.msm8992
+AUDIO_POLICY += audio_policy.thulium
 
 #tinyalsa test apps
 TINY_ALSA_TEST_APPS := tinyplay
