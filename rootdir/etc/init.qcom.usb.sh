@@ -27,6 +27,10 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 #
+vbus_draw=`getprop persist.sys.usb.vbus.draw`
+if [ "$vbus_draw" != "" ]; then
+	echo "${vbus_draw}" > /sys/module/ci13xxx_msm/parameters/vbus_draw_mA
+fi
 chown -h root.system /sys/devices/platform/msm_hsusb/gadget/wakeup
 chmod -h 220 /sys/devices/platform/msm_hsusb/gadget/wakeup
 
