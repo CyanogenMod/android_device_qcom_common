@@ -160,7 +160,7 @@ config_bt ()
            setprop ro.qualcomm.bt.hci_transport smd
        fi
        ;;
-    "apq8084" | "mpq8092" | "msm8994" | "msm8992" )
+    "apq8084" | "mpq8092" | "msm8994" | "msm8992" | "thulium" )
        if [ "$btsoc" != "rome" ]
        then
            setprop ro.qualcomm.bt.hci_transport smd
