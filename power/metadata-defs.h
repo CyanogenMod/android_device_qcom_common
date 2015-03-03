@@ -51,6 +51,11 @@ struct audio_metadata_t {
     int state;
 };
 
+struct cam_preview_metadata_t {
+    int hint_id;
+    int state;
+};
+
 int parse_metadata(char *metadata, char **metadata_saveptr,
     char *attribute, int attribute_size, char *value,
     unsigned int value_size);
@@ -60,4 +65,5 @@ int parse_video_decode_metadata(char *metadata,
     struct video_decode_metadata_t *video_decode_metadata);
 int parse_audio_metadata(char *metadata,
     struct audio_metadata_t *audio_metadata);
-
+int parse_cam_preview_metadata(char *metadata,
+    struct cam_preview_metadata_t *video_decode_metadata);
