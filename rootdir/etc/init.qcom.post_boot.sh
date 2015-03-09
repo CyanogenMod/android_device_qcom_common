@@ -503,8 +503,8 @@ case "$target" in
 
                 # HMP Task packing settings for 8916
                 echo 50 > /proc/sys/kernel/sched_small_task
-                echo 50 > /proc/sys/kernel/sched_mostly_idle_load
-                echo 10 > /proc/sys/kernel/sched_mostly_idle_nr_run
+                echo 30 > /proc/sys/kernel/sched_mostly_idle_load
+                echo 5 > /proc/sys/kernel/sched_mostly_idle_nr_run
 
 		# disable thermal core_control to update scaling_min_freq
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
