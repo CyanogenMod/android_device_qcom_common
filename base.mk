@@ -348,6 +348,7 @@ LIBCOPYBIT += copybit.msm7630_fusion
 LIBCOPYBIT += copybit.msm7627_surf
 LIBCOPYBIT += copybit.msm7627_6x
 LIBCOPYBIT += copybit.msm7627a
+LIBCOPYBIT += copybit.thulium
 
 #LIBGESTURES
 LIBGESTURES := libgestures
@@ -404,6 +405,7 @@ LIBLIGHTS += lights.msm7627_6x
 LIBLIGHTS += lights.msm7627a
 LIBLIGHTS += lights.msm8610
 LIBLIGHTS += lights.apq8084
+LIBLIGHTS += lights.thulium
 
 #LIBHWCOMPOSER
 LIBHWCOMPOSER := hwcomposer.msm8660
