@@ -48,6 +48,45 @@ void usage()
     printf("eg: meta_image sbl1 sbl1.mbn rpm rpm.mbn tz tz.mbn hyp hyp.mbn aboot emmc_appsboot.mbn -o bootloader.img -v M8916AAAAAULGD21210017.1\n");
 }
 
+int extract_images (char *file_path)
+{
+    FILE *fp;
+    FILE *fout;
+    void *buffer;
+    int i, images = 0;
+
+#if VERBOSE
+    printf ("Extracting images...\n");
+#endif
+    if(file_path != NULL) {
+        fp = fopen(file_path, "rb");
+        fread(&meta_header, sizeof(meta_header), 1, fp);
+        fread(&img_header, sizeof(img_header), 1, fp);
+#if VERBOSE
+        printf("Image version: %s\n", meta_header.img_version);
+#endif
+
+        images = meta_header.img_hdr_sz / sizeof(img_header_entry_t);
+        for(i=0; i<images; i++) {
+            if((img_header[i].ptn_name == NULL) ||
+                (img_header[i].start_offset == 0) ||
+                (img_header[i].size == 0))
+               break;
+#if VERBOSE
+            printf("%16s %8d %8d\n", img_header[i].ptn_name, img_header[i].start_offset, img_header[i].size);
+#endif
+            fout = fopen(strcat(img_header[i].ptn_name,".bin"), "wb");
+            fseek(fp, img_header[i].start_offset, SEEK_SET);
+            buffer = malloc(img_header[i].size);
+            fread(buffer, img_header[i].size, 1, fp);
+            fwrite(buffer, img_header[i].size, 1, fout);
+            fclose(fout);
+        }
+        fclose(fp);
+    }
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
     int i, entry=0;
@@ -66,10 +105,17 @@ int main(int argc, char *argv[])
     for (i=1; i<argc; i++) {
 
         if (strcmp(argv[i], "-o") == 0)  {
+            /* Output file name */
             meta_image = fopen(argv[++i], "wb");
         } else if (strcmp(argv[i], "-v") == 0)  {
+            /* Image version string */
             strncpy(meta_header.img_version, argv[++i], 32);
+        } else if (strcmp(argv[i], "-x") == 0)  {
+            /* Special case - extract images from meta_image */
+            extract_images(argv[++i]);
+            return 0;
         } else {
+            /* Populate entry in img_header for ptn name, size & offset */
             strcpy(img_header[entry].ptn_name, argv[i]);
             img_header[entry].start_offset = start_offset;
             i++;
