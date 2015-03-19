@@ -490,6 +490,16 @@ case "$target" in
            soc_id=`cat /sys/devices/system/soc/soc0/id`
         fi
 
+        #Enable adaptive LMK and set vmpressure_file_min
+        ProductName=`getprop ro.product.name`
+        if [ "$ProductName" == "msm8916_32" ] || [ "$ProductName" == "msm8916_32_LMT" ]; then
+            echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+            echo 69253 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+        elif [ "$ProductName" == "msm8916_64" ] || [ "$ProductName" == "msm8916_64_LMT" ]; then
+            echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+            echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+        fi
+
         # HMP scheduler settings for 8916, 8936, 8939, 8929
         echo 3 > /proc/sys/kernel/sched_window_stats_policy
 	echo 3 > /proc/sys/kernel/sched_ravg_hist_size
@@ -837,6 +847,10 @@ case "$target" in
         else
            soc_id=`cat /sys/devices/system/soc/soc0/id`
         fi
+
+        #Enable adaptive LMK and set vmpressure_file_min
+        echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+        echo 69253 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
 
         # HMP scheduler settings for 8909 similiar to 8916
         echo 3 > /proc/sys/kernel/sched_window_stats_policy
