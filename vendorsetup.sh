@@ -34,9 +34,11 @@ add_lunch_combo apq8084-userdebug
 add_lunch_combo mpq8092-userdebug
 add_lunch_combo msm_bronze-userdebug
 add_lunch_combo msm8916_32-userdebug
+add_lunch_combo msm8916_32_LMT-userdebug
 add_lunch_combo msm8916_32_512-userdebug
 add_lunch_combo msm8916_32_k64-userdebug
 add_lunch_combo msm8916_64-userdebug
+add_lunch_combo msm8916_64_LMT-userdebug
 add_lunch_combo msm8994-userdebug
 add_lunch_combo thulium-userdebug
 add_lunch_combo msm8909-userdebug
