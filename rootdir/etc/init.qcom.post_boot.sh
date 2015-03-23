@@ -1115,7 +1115,7 @@ case "$target" in
 esac
 
 case "$target" in
-    "thulium")
+    "msm8996")
         # disable thermal bcl hotplug to switch governor
         echo 0 > /sys/module/msm_thermal/core_control/enabled
         for mode in /sys/devices/soc.0/qcom,bcl.*/mode
