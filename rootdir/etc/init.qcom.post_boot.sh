@@ -349,10 +349,21 @@ case "$target" in
 		echo 1 > /sys/devices/system/cpu/cpu2/online
 	        echo 1 > /sys/devices/system/cpu/cpu3/online
 	    ;;
-           "239" | "241" | "263" | "268" | "269" | "270" | "271")
-		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
-		echo 10 > /sys/class/net/rmnet0/queues/rx-0/rps_cpus
-		if [ -f /sys/devices/soc0/platform_subtype_id ]; then
+            "239" | "241" | "263")
+               if [ -f /sys/devices/soc0/revision ]; then
+                   revision=`cat /sys/devices/soc0/revision`
+               else
+                   revision=`cat /sys/devices/system/soc/soc0/revision`
+               fi
+               case "$revision" in
+                   "3.0")
+                       echo N > /sys/module/lpm_levels/system/power/power-l2-gdhs/idle_enabled
+                       echo N > /sys/module/lpm_levels/system/performance/performance-l2-gdhs/idle_enabled
+                   ;;
+               esac
+               echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
+               echo 10 > /sys/class/net/rmnet0/queues/rx-0/rps_cpus
+                if [ -f /sys/devices/soc0/platform_subtype_id ]; then
                     platform_subtype_id=`cat /sys/devices/soc0/platform_subtype_id`
                 fi
                 if [ -f /sys/devices/soc0/hw_platform ]; then
@@ -378,6 +389,10 @@ case "$target" in
                     esac
                     ;;
                 esac
+            ;;
+            "268" | "269" | "270" | "271")
+                echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
+                echo 10 > /sys/class/net/rmnet0/queues/rx-0/rps_cpus
             ;;
              "233" | "240" | "242")
 		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
