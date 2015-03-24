@@ -512,9 +512,15 @@ case "$target" in
                 echo 3 > /proc/sys/kernel/sched_ravg_hist_size
 
                 # HMP Task packing settings for 8916
-                echo 50 > /proc/sys/kernel/sched_small_task
-                echo 30 > /proc/sys/kernel/sched_mostly_idle_load
-                echo 5 > /proc/sys/kernel/sched_mostly_idle_nr_run
+                echo 30 > /proc/sys/kernel/sched_small_task
+                echo 50 > /sys/devices/system/cpu/cpu0/sched_mostly_idle_load
+                echo 50 > /sys/devices/system/cpu/cpu1/sched_mostly_idle_load
+                echo 50 > /sys/devices/system/cpu/cpu2/sched_mostly_idle_load
+                echo 50 > /sys/devices/system/cpu/cpu3/sched_mostly_idle_load
+                echo 3 > /sys/devices/system/cpu/cpu0/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu1/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu2/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu3/sched_mostly_idle_nr_run
 
 		# disable thermal core_control to update scaling_min_freq
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
