@@ -845,22 +845,22 @@ case "$target" in
         # HMP Task packing settings for 8909 similiar to 8916
         echo 30 > /proc/sys/kernel/sched_small_task
         echo 50 > /proc/sys/kernel/sched_mostly_idle_load
-        echo 10 > /proc/sys/kernel/sched_mostly_idle_nr_run
+        echo 5 > /proc/sys/kernel/sched_mostly_idle_nr_run
 
         # disable thermal core_control to update scaling_min_freq
         echo 0 > /sys/module/msm_thermal/core_control/enabled
         echo 1 > /sys/devices/system/cpu/cpu0/online
         echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-        echo 400000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        echo 800000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
         # enable thermal core_control now
         echo 1 > /sys/module/msm_thermal/core_control/enabled
 
-        echo "25000 800000:50000" > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+        echo "30000 1094400:50000" > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
         echo 90 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
         echo 30000 > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-        echo 800000 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+        echo 998400 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
         echo 0 > /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
-        echo "1 400000:85 998400:90 1094400:80" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
+        echo "1 800000:85 998400:90 1094400:80" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
         echo 50000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
         echo 50000 > /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor
 
@@ -1102,4 +1102,4 @@ then
 fi
 
 # Start RIDL/LogKit II client
-su -c /data/SelfHost/startRIDL.sh &
+su -c /system/vendor/bin/startRIDL.sh &

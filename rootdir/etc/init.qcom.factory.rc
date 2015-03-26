@@ -260,6 +260,8 @@ on mmi
     #Start the following services needed for fftm
     start qcom-usb-sh
     start logd
+    start debuggerd
+    start debuggerd64
     start config_bluetooth
     start media
     start fastmmi

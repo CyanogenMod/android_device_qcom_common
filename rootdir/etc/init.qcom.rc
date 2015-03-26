@@ -105,6 +105,8 @@ on boot
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
 
+    mkdir /persist/drm 0770 system system
+
     setprop wifi.interface wlan0
 
 #   Define TCP buffer sizes for various networks
@@ -413,7 +415,7 @@ service rfs_access /system/bin/rfs_access
    group system net_raw
 
 service tftp_server /system/bin/tftp_server
-   class core
+   class main
    user root
 
 on property:wc_transport.start_hci=true
