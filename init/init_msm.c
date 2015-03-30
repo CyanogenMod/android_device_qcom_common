@@ -190,6 +190,12 @@ void set_display_node_perms()
     snprintf(tmp, sizeof(tmp), "%sfb0/idle_time", sys_fb_path);
     setPerms(tmp, 0664);
     setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
+
+    // Set the permission for mdp/bw_mode_bitmap.
+    snprintf(tmp, sizeof(tmp), "%sfb0/mdp/bw_mode_bitmap", sys_fb_path);
+    setPerms(tmp, 0664);
+    setOwners(tmp, AID_SYSTEM, AID_GRAPHICS);
+
     // Set write permission for dynamic_fps node.
     snprintf(tmp, sizeof(tmp), "%sfb0/dynamic_fps", sys_fb_path);
     setPerms(tmp, 0664);
