@@ -274,6 +274,8 @@
 4:4294967295:1001:3004
 7:4294967295:1001:3004
 8:4294967295:1001:3004
+/* DPM */
+47:4294967295:1001:3004
 /* Allow communication to some QMI services with radio privilages */
 /* Format is <Service id>:<all instances>:<radio> */
 /* PBM */
