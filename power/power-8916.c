@@ -82,6 +82,10 @@ static int is_target_8916() /* Returns value=8916 if target is 8916 else value 0
     return is_target_8916;
 }
 
+/* Declare function before use */
+void interaction(int duration, int num_args, int opt_list[]);
+
+
 int  power_hint_override(struct power_module *module, power_hint_t hint,
         void *data)
 {

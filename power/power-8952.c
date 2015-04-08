@@ -51,6 +51,8 @@
 static int saved_interactive_mode = -1;
 static int display_hint_sent;
 
+/* Declare function before use */
+void interaction(int duration, int num_args, int opt_list[]);
 
 int  power_hint_override(struct power_module *module, power_hint_t hint,
         void *data)

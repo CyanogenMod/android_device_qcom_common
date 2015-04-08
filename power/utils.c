@@ -31,6 +31,8 @@
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "utils.h"
 #include "list.h"
