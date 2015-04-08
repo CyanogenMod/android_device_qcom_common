@@ -194,6 +194,9 @@ int __attribute__ ((weak)) power_hint_override(struct power_module *module, powe
     return HINT_NONE;
 }
 
+/* Declare function before use */
+void interaction(int duration, int num_args, int opt_list[]);
+
 static void power_hint(struct power_module *module, power_hint_t hint,
         void *data)
 {
