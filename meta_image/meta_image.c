@@ -41,11 +41,52 @@
 meta_header_t meta_header;
 img_header_entry_t  img_header[MAX_IMAGES];
 
+enum MetaImage
+{
+    undefined,
+    bootloader,
+    radio
+};
+
+enum MetaImage meta_image = undefined;
+struct device_info di;
+
 void usage()
 {
     printf("\nUsage:\n");
     printf("meta_image <ptn1> <file1> <ptn2> <file2> ... <ptnN> <fileN> -o <output_file> -v <version>\n");
     printf("eg: meta_image sbl1 sbl1.mbn rpm rpm.mbn tz tz.mbn hyp hyp.mbn aboot emmc_appsboot.mbn -o bootloader.img -v M8916AAAAAULGD21210017.1\n");
+}
+
+int read_devinfo ()
+{
+    FILE *fin = fopen("devinfo.bin", "rb");
+    fread(&di, sizeof(di), 1, fin);
+    fclose(fin);
+}
+
+int write_devinfo ()
+{
+    FILE *fout;
+    /* If image exists, just update it */
+    read_devinfo();
+
+    /* No devinfo.bin, create new one */
+    strncpy(di.magic, DEVICE_MAGIC, sizeof(DEVICE_MAGIC));
+    di.is_unlocked = 1;
+    di.is_tampered = 0;
+    di.is_verified = 0;
+    di.charger_screen_enabled = 1;
+    memset(di.display_panel, 0, sizeof(di.display_panel));
+
+    if (meta_image == bootloader)
+      memcpy(di.bootloader_version, meta_header.img_version, sizeof(di.bootloader_version));
+    else if (meta_image == radio)
+      memcpy(di.radio_version, meta_header.img_version, sizeof(di.radio_version));
+
+    fout = fopen("devinfo.bin", "wb");
+    fwrite(&di, sizeof(di), 1, fout);
+    fclose(fout);
 }
 
 int extract_images (char *file_path)
@@ -58,6 +99,12 @@ int extract_images (char *file_path)
 #if VERBOSE
     printf ("Extracting images...\n");
 #endif
+
+    if(strstr(file_path, "bootloader"))
+        meta_image = bootloader;
+    else
+        meta_image = radio;
+
     if(file_path != NULL) {
         fp = fopen(file_path, "rb");
         fread(&meta_header, sizeof(meta_header), 1, fp);
@@ -84,6 +131,9 @@ int extract_images (char *file_path)
         }
         fclose(fp);
     }
+
+    write_devinfo();
+
     return 0;
 }
 

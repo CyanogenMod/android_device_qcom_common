@@ -50,4 +50,26 @@ typedef struct img_header_entry {
   u32       size;
 } img_header_entry_t;
 
+
+
+typedef int bool;
+typedef struct device_info device_info;
+
+#define DEVICE_MAGIC "ANDROID-BOOT!"
+#define DEVICE_MAGIC_SIZE 13
+#define MAX_PANEL_ID_LEN 64
+#define MAX_VERSION_LEN  64
+
+struct device_info
+{
+	unsigned char magic[DEVICE_MAGIC_SIZE];
+	bool is_unlocked;
+	bool is_tampered;
+	bool is_verified;
+	bool charger_screen_enabled;
+	char display_panel[MAX_PANEL_ID_LEN];
+	char bootloader_version[MAX_VERSION_LEN];
+	char radio_version[MAX_VERSION_LEN];
+};
+
 #endif
