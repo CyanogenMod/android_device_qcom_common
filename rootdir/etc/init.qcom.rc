@@ -110,6 +110,9 @@ on boot
     chmod 2770 /data/system/perfd
     mkdir /persist/drm 0770 system system
 
+    #Create NETMGR daemon socket area
+    mkdir /dev/socket/netmgr 0750 radio radio
+
     setprop wifi.interface wlan0
 
 #   Define TCP buffer sizes for various networks
