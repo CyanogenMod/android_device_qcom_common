@@ -273,6 +273,7 @@ on mmi
     start qcamerasvr
     start qcomsysd
     start srvmag_ffbm
+    start ptt_ffbm
 
 on ffbm
     trigger early-fs
