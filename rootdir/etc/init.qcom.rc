@@ -804,23 +804,6 @@ service profiler_daemon /system/bin/profiler_daemon
 service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
     class late_start
 
-service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
-    class late_start
-
-service fuse_uicc0 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/uicc0 /storage/uicc0
-    class late_start
-
-service fuse_uicc1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/uicc1 /storage/uicc1
-    class late_start
-
-service fuse_usbotg /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbotg /storage/usbotg
-    class late_start
-
-# Binding fuse mount point to /storage/emulated/legacy
-on property:init.svc.sdcard=running
-    wait /mnt/shell/emulated/0
-    mount none /mnt/shell/emulated/0 /storage/emulated/legacy bind
-
 service hcidump /system/bin/sh /system/etc/hcidump.sh
     user bluetooth
     group bluetooth system net_bt_admin net_admin
@@ -835,34 +818,6 @@ service ssr_diag /system/bin/ssr_diag
     user system
     group system
     disabled
-
-# Define fastmmi
-service fastmmi /system/bin/mmi
-    user root
-    group root
-    disabled
-
-service fastmmisrv /system/bin/sh /init.qcom.factory.sh
-    user root
-    disabled
-    oneshot
-
-on mmi
-    start fastmmisrv
-
-on ffbm
-    trigger early-fs
-    trigger fs
-    trigger post-fs
-    trigger post-fs-data
-
-    # Load properties from /system/ + /factory after fs mount. Place
-    # this in another action so that the load will be scheduled after the prior
-    # issued fs triggers have completed.
-    trigger load_all_props_action
-
-    trigger early-boot
-    trigger mmi
 
 service hvdcp /system/bin/hvdcp
     class core
@@ -912,14 +867,6 @@ on property:persist.sys.qlogd=1
     start qlogd
 on property:persist.sys.qlogd=0
     stop qlogd
-
-service rootagent /system/bin/sh /system/etc/init.qcom.rootagent.sh
-    disabled
-    oneshot
-on property:persist.sys.rootagent=1
-    start rootagent
-on property:persist.sys.rootagent=0
-    stop rootagent
 
 service vm_bms /system/bin/vm_bms
     user root
