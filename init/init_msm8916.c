@@ -48,7 +48,6 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
 
     UNUSED(msm_id);
     UNUSED(msm_ver);
-    UNUSED(board_type);
 
     rc = property_get("ro.board.platform", platform);
     if (!rc || !ISMATCH(platform, ANDROID_TARGET)){
@@ -61,7 +60,11 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     }
 
     if(virtual_size >= 1080) {
-        property_set(PROP_LCDDENSITY, "480");
+        if (ISMATCH(board_type, "SBC")) {
+            property_set(PROP_LCDDENSITY, "240");
+            property_set(PROP_QEMU_NAVKEY, "0");
+        } else
+            property_set(PROP_LCDDENSITY, "480");
     } else if (virtual_size >= 720) {
         // For 720x1280 resolution
         property_set(PROP_LCDDENSITY, "320");
