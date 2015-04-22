@@ -201,7 +201,7 @@
     <bool name="config_feature_iwlan_enabled">true</bool>
 
     <!-- Is the device capable of supporting digital pen -->
-    <bool name="config_digitalPenCapable">true</bool>
+    <bool name="config_digitalPenCapable">false</bool>
 
     <!-- Flag specifying whether VoLTE is available on device -->
     <bool name="config_device_volte_available">true</bool>
