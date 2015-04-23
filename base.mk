@@ -23,6 +23,9 @@ TARGET_USE_VENDOR_CAMERA_EXT := true
 #List of targets that use video hw
 MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 msm8992 msm8996
 
+#List of targets that use master side content protection
+MASTER_SIDE_CP_TARGET_LIST := msm8996
+
 # Below projects/packages with LOCAL_MODULEs will be used by
 # PRODUCT_PACKAGES to build LOCAL_MODULEs that are tagged with
 # optional tag, which will not be available on target unless
