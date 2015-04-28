@@ -813,3 +813,8 @@ $(call inherit-product, build/target/product/verity.mk)
 ifeq ($(strip $(QCPATH)),)
 SKIP_BOOT_JARS_CHECK := true
 endif
+
+ifeq ($(TARGET_BUILD_VARIANT),user)
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES+= \
+    ro.adb.secure=1
+endif
