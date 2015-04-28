@@ -883,8 +883,8 @@ case "$target" in
         echo 3 > /proc/sys/kernel/sched_ravg_hist_size
 
         # HMP Task packing settings for 8909 similiar to 8916
-        echo 30 > /proc/sys/kernel/sched_small_task
-        echo 50 > /proc/sys/kernel/sched_mostly_idle_load
+        echo 20 > /proc/sys/kernel/sched_small_task
+        echo 30 > /proc/sys/kernel/sched_mostly_idle_load
         echo 3 > /proc/sys/kernel/sched_mostly_idle_nr_run
 
         # disable thermal core_control to update scaling_min_freq
