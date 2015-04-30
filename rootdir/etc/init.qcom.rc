@@ -941,12 +941,7 @@ on property:sys.wfdservice=enable
 on property:sys.wfdservice=disable
     stop wfdservice
 
-service qcom-RIDL /system/bin/sh /system/vendor/bin/startRIDL.sh
+service RIDL /system/vendor/bin/RIDLClient.exe
     class late_start
     user root
     group root
-    oneshot
-    disabled
-
-on property:dev.bootcomplete=1
-    start qcom-RIDL
