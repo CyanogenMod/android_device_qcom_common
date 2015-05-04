@@ -200,6 +200,21 @@ INSTALLED_2K_USERDATAIMAGE_TARGET := $(2K_NAND_OUT)/userdata.img
 INSTALLED_2K_PERSISTIMAGE_TARGET := $(2K_NAND_OUT)/persist.img
 INSTALLED_2K_RECOVERYIMAGE_TARGET := $(2K_NAND_OUT)/recovery.img
 
+recovery_nand_fstab := $(TARGET_DEVICE_DIR)/recovery_nand.fstab
+
+NAND_BOOTIMAGE_ARGS := \
+        --kernel $(INSTALLED_KERNEL_TARGET) \
+        --ramdisk $(INSTALLED_RAMDISK_TARGET) \
+        --cmdline "$(BOARD_KERNEL_CMDLINE)" \
+        --base $(BOARD_KERNEL_BASE)
+
+NAND_RECOVERYIMAGE_ARGS := \
+        --kernel $(INSTALLED_KERNEL_TARGET) \
+        --ramdisk $(recovery_ramdisk) \
+        --cmdline "$(BOARD_KERNEL_CMDLINE)" \
+        --base $(BOARD_KERNEL_BASE)
+
+
 INTERNAL_2K_BOOTIMAGE_ARGS := $(NAND_BOOTIMAGE_ARGS)
 INTERNAL_2K_BOOTIMAGE_ARGS += --pagesize $(BOARD_KERNEL_2KPAGESIZE)
 
@@ -240,19 +255,6 @@ INTERNAL_4K_RECOVERYIMAGE_ARGS += --pagesize $(BOARD_KERNEL_PAGESIZE)
 
 endif
 
-recovery_nand_fstab := $(TARGET_DEVICE_DIR)/recovery_nand.fstab
-
-NAND_BOOTIMAGE_ARGS := \
-	--kernel $(INSTALLED_KERNEL_TARGET) \
-	--ramdisk $(INSTALLED_RAMDISK_TARGET) \
-	--cmdline "$(BOARD_KERNEL_CMDLINE)" \
-	--base $(BOARD_KERNEL_BASE)
-
-NAND_RECOVERYIMAGE_ARGS := \
-	--kernel $(INSTALLED_KERNEL_TARGET) \
-	--ramdisk $(recovery_ramdisk) \
-	--cmdline "$(BOARD_KERNEL_CMDLINE)" \
-	--base $(BOARD_KERNEL_BASE)
 
 # Generate boot image for NAND
 ifeq ($(TARGET_BOOTIMG_SIGNED),true)

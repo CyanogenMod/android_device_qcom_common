@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-
-Copyright (c) 2014, The Linux Foundation. All rights reserved.
+<!--Copyright (c) 2015, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -27,16 +25,12 @@ BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
 WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 -->
 
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!-- Enable overlay for all location components. -->
-    <bool name="config_enableNetworkLocationOverlay" translatable="false">false</bool>
-    <bool name="config_enableFusedLocationOverlay" translatable="false">false</bool>
-    <string name="config_networkLocationProviderPackageName" translatable="false">com.qualcomm.location</string>
-    <string name="config_fusedLocationProviderPackageName" translatable="false">com.qualcomm.location</string>
-    <bool name="config_allowAllRotations">true</bool>
-
+<!-- If Voice Radio Technology is RIL_RADIO_TECHNOLOGY_LTE:14 this is the value
+         that should be used instead. A value of RIL_RADIO_TECHNOLOGY_UNKNOWN:0 means
+         there is no replacement value and VoLTE is assumed to be supported -->
+    <integer name="config_volte_replacement_rat">6</integer>
 </resources>

@@ -288,6 +288,9 @@ on post-fs-data
     mkdir /data/nfc 0770 nfc nfc
     mkdir /data/nfc/param 0770 nfc nfc
 
+    # Sensor
+    mkdir /persist/sensors 0770 system system
+
 service qcomsysd /system/bin/qcom-system-daemon
     class main
     user root
@@ -415,7 +418,7 @@ service rfs_access /system/bin/rfs_access
    group system net_raw
 
 service tftp_server /system/bin/tftp_server
-   class main
+   class core
    user root
 
 on property:wc_transport.start_hci=true
@@ -625,6 +628,12 @@ service ptt_socket_app /system/bin/ptt_socket_app -d
     class main
     user root
     group root
+    oneshot
+
+service ptt_ffbm /system/bin/ptt_socket_app -f -d
+    user root
+    group root
+    disabled
     oneshot
 
 service cnss_diag /system/bin/cnss_diag --q
@@ -918,3 +927,26 @@ service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqb
     user root
     group root
     disabled
+
+service wfdservice /system/bin/wfdservice
+    class main
+    user system
+    group graphics audio camera inet net_bt net_bt_admin net_bt_stack drmrpc bluetooth media_rw media
+    disabled
+    oneshot
+
+on property:sys.wfdservice=enable
+    start wfdservice
+
+on property:sys.wfdservice=disable
+    stop wfdservice
+
+service qcom-RIDL /system/bin/sh /system/vendor/bin/startRIDL.sh
+    class late_start
+    user root
+    group root
+    oneshot
+    disabled
+
+on property:dev.bootcomplete=1
+    start qcom-RIDL

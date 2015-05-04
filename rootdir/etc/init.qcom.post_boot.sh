@@ -349,10 +349,21 @@ case "$target" in
 		echo 1 > /sys/devices/system/cpu/cpu2/online
 	        echo 1 > /sys/devices/system/cpu/cpu3/online
 	    ;;
-           "239" | "241" | "263" | "268" | "269" | "270" | "271")
-		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
-		echo 10 > /sys/class/net/rmnet0/queues/rx-0/rps_cpus
-		if [ -f /sys/devices/soc0/platform_subtype_id ]; then
+            "239" | "241" | "263")
+               if [ -f /sys/devices/soc0/revision ]; then
+                   revision=`cat /sys/devices/soc0/revision`
+               else
+                   revision=`cat /sys/devices/system/soc/soc0/revision`
+               fi
+               case "$revision" in
+                   "3.0")
+                       echo N > /sys/module/lpm_levels/system/power/power-l2-gdhs/idle_enabled
+                       echo N > /sys/module/lpm_levels/system/performance/performance-l2-gdhs/idle_enabled
+                   ;;
+               esac
+               echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
+               echo 10 > /sys/class/net/rmnet0/queues/rx-0/rps_cpus
+                if [ -f /sys/devices/soc0/platform_subtype_id ]; then
                     platform_subtype_id=`cat /sys/devices/soc0/platform_subtype_id`
                 fi
                 if [ -f /sys/devices/soc0/hw_platform ]; then
@@ -378,6 +389,10 @@ case "$target" in
                     esac
                     ;;
                 esac
+            ;;
+            "268" | "269" | "270" | "271")
+                echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
+                echo 10 > /sys/class/net/rmnet0/queues/rx-0/rps_cpus
             ;;
              "233" | "240" | "242")
 		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
@@ -490,6 +505,16 @@ case "$target" in
            soc_id=`cat /sys/devices/system/soc/soc0/id`
         fi
 
+        #Enable adaptive LMK and set vmpressure_file_min
+        ProductName=`getprop ro.product.name`
+        if [ "$ProductName" == "msm8916_32" ] || [ "$ProductName" == "msm8916_32_LMT" ]; then
+            echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+            echo 69253 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+        elif [ "$ProductName" == "msm8916_64" ] || [ "$ProductName" == "msm8916_64_LMT" ]; then
+            echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+            echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+        fi
+
         # HMP scheduler settings for 8916, 8936, 8939, 8929
         echo 3 > /proc/sys/kernel/sched_window_stats_policy
 	echo 3 > /proc/sys/kernel/sched_ravg_hist_size
@@ -502,9 +527,15 @@ case "$target" in
                 echo 3 > /proc/sys/kernel/sched_ravg_hist_size
 
                 # HMP Task packing settings for 8916
-                echo 50 > /proc/sys/kernel/sched_small_task
-                echo 50 > /proc/sys/kernel/sched_mostly_idle_load
-                echo 10 > /proc/sys/kernel/sched_mostly_idle_nr_run
+                echo 30 > /proc/sys/kernel/sched_small_task
+                echo 50 > /sys/devices/system/cpu/cpu0/sched_mostly_idle_load
+                echo 50 > /sys/devices/system/cpu/cpu1/sched_mostly_idle_load
+                echo 50 > /sys/devices/system/cpu/cpu2/sched_mostly_idle_load
+                echo 50 > /sys/devices/system/cpu/cpu3/sched_mostly_idle_load
+                echo 3 > /sys/devices/system/cpu/cpu0/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu1/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu2/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu3/sched_mostly_idle_nr_run
 
 		# disable thermal core_control to update scaling_min_freq
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
@@ -585,6 +616,11 @@ case "$target" in
                 echo 20 > /proc/sys/kernel/sched_small_task
                 echo 30 > /proc/sys/kernel/sched_mostly_idle_load
                 echo 3 > /proc/sys/kernel/sched_mostly_idle_nr_run
+
+		for devfreq_gov in /sys/class/devfreq/qcom,mincpubw*/governor
+		do
+			echo "cpufreq" > $devfreq_gov
+		done
 
 		for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
 		do
@@ -838,6 +874,10 @@ case "$target" in
            soc_id=`cat /sys/devices/system/soc/soc0/id`
         fi
 
+        #Enable adaptive LMK and set vmpressure_file_min
+        echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+        echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+
         # HMP scheduler settings for 8909 similiar to 8916
         echo 3 > /proc/sys/kernel/sched_window_stats_policy
         echo 3 > /proc/sys/kernel/sched_ravg_hist_size
@@ -845,7 +885,7 @@ case "$target" in
         # HMP Task packing settings for 8909 similiar to 8916
         echo 30 > /proc/sys/kernel/sched_small_task
         echo 50 > /proc/sys/kernel/sched_mostly_idle_load
-        echo 5 > /proc/sys/kernel/sched_mostly_idle_nr_run
+        echo 3 > /proc/sys/kernel/sched_mostly_idle_nr_run
 
         # disable thermal core_control to update scaling_min_freq
         echo 0 > /sys/module/msm_thermal/core_control/enabled
@@ -869,6 +909,14 @@ case "$target" in
 	echo 1 > /sys/devices/system/cpu/cpu2/online
 	echo 1 > /sys/devices/system/cpu/cpu3/online
 	echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
+
+	# Enable core control
+	insmod /system/lib/modules/core_ctl.ko
+	echo 2 > /sys/devices/system/cpu/cpu0/core_ctl/min_cpus
+	echo 72 72 60 50 > /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres
+	echo 30 > /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres
+	echo 100 > /sys/devices/system/cpu/cpu0/core_ctl/offline_delay_ms
+
 
         # Apply governor settings for 8909
 	for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
@@ -1068,6 +1116,12 @@ case "$target" in
         ;;
 esac
 
+#Set per_process_reclaim tuning parameters
+echo 50 > /sys/module/process_reclaim/parameters/pr_pressure_min
+echo 70 > /sys/module/process_reclaim/parameters/pr_pressure_max
+echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
+echo 30 > /sys/module/process_reclaim/parameters/swap_opt_eff
+
 # Create native cgroup and move all tasks to it. Allot 15% real-time
 # bandwidth limit to native cgroup (which is what remains after
 # Android uses up 80% real-time bandwidth limit). root cgroup should
@@ -1100,6 +1154,3 @@ if [ ! -z "$root_tasks" ]
 then
 	echo "Error: Could not move all tasks to native cgroup"
 fi
-
-# Start RIDL/LogKit II client
-su -c /system/vendor/bin/startRIDL.sh &
