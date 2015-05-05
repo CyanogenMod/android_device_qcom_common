@@ -138,7 +138,7 @@ enum INTERACTIVE_TIMER_RATE_LVL {
 };
 
 /* This timer rate applicable to cpu0
-    across 8939 series chipset */
+    across 8939/8952 series chipset */
 enum INTERACTIVE_TIMER_RATE_LVL_CPU0_8939 {
     TR_MS_CPU0_500 = 0x30CD,
     TR_MS_CPU0_100 = 0x30F5,
@@ -148,9 +148,9 @@ enum INTERACTIVE_TIMER_RATE_LVL_CPU0_8939 {
 };
 
 /* This timer rate applicable to cpu4
-    across 8939 series chipset */
+    across 8939/8952 series chipset */
 enum INTERACTIVE_TIMER_RATE_LVL_CPU4_8939 {
-    TR_MS_CPU4_500 = 0x3B0CD,
+    TR_MS_CPU4_500 = 0x3BCD,
     TR_MS_CPU4_100 = 0x3BF5,
     TR_MS_CPU4_50 = 0x3BFA,
     TR_MS_CPU4_30 = 0x3BFC,
