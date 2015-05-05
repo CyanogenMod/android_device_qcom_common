@@ -509,7 +509,7 @@ case "$target" in
         ProductName=`getprop ro.product.name`
         if [ "$ProductName" == "msm8916_32" ] || [ "$ProductName" == "msm8916_32_LMT" ]; then
             echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
-            echo 69253 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+            echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
         elif [ "$ProductName" == "msm8916_64" ] || [ "$ProductName" == "msm8916_64_LMT" ]; then
             echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
             echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
