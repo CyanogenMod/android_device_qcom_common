@@ -1116,12 +1116,6 @@ case "$target" in
         ;;
 esac
 
-#Set per_process_reclaim tuning parameters
-echo 50 > /sys/module/process_reclaim/parameters/pr_pressure_min
-echo 70 > /sys/module/process_reclaim/parameters/pr_pressure_max
-echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
-echo 30 > /sys/module/process_reclaim/parameters/swap_opt_eff
-
 # Create native cgroup and move all tasks to it. Allot 15% real-time
 # bandwidth limit to native cgroup (which is what remains after
 # Android uses up 80% real-time bandwidth limit). root cgroup should
