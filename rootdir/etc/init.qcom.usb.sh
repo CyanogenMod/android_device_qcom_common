@@ -250,7 +250,7 @@ case "$soc_id" in
 	"239" | "241" | "263" | "268" | "269" | "270")
 		setprop sys.usb.rps_mask 10
 	;;
-	"245" | "260" | "261" | "262")
-		setprop sys.usb.rps_mask 2
+	"245" | "258" | "259" | "265" | "275")
+		setprop sys.usb.rps_mask 4
 	;;
 esac
