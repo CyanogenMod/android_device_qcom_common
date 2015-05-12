@@ -913,8 +913,11 @@ case "$target" in
 	# Enable core control
 	insmod /system/lib/modules/core_ctl.ko
 	echo 2 > /sys/devices/system/cpu/cpu0/core_ctl/min_cpus
-	echo 72 72 60 50 > /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres
-	echo 30 > /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres
+        max_freq=`cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq`
+        min_freq=800000
+        echo $((min_freq*100 / max_freq)) $((min_freq*100 / max_freq)) $((66*1000000 / max_freq)) \
+	$((55*1000000 / max_freq)) > /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres
+        echo $((33*1000000 / max_freq)) > /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres
 	echo 100 > /sys/devices/system/cpu/cpu0/core_ctl/offline_delay_ms
 
 
