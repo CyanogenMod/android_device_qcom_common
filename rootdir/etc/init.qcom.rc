@@ -93,6 +93,10 @@ on boot
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/device/extldo
     chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
 
+    #create port-bridge log dir
+    mkdir /data/misc/port_bridge 0770 radio radio
+    chmod 0770 /data/misc/port_bridge
+
     #Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
@@ -469,7 +473,7 @@ service bridgemgrd /system/bin/bridgemgrd
     group radio qcom_diag
     disabled
 
-service port-bridge /system/bin/port-bridge /dev/mhi_pipe_32 /dev/ttyGS0
+service port-bridge /system/bin/port-bridge
     class main
     user radio system
     group radio system inet
