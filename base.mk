@@ -294,6 +294,7 @@ KEYPAD += ft5x06_ts.kl
 KEYPAD += ffa-keypad.kl
 KEYPAD += fluid-keypad.kl
 KEYPAD += gpio-keys.kl
+KEYPAD += qpnp_pon.kl
 KEYPAD += keypad_8960.kl
 KEYPAD += keypad_8960_liquid.kl
 KEYPAD += synaptics_rmi4_i2c.kl
