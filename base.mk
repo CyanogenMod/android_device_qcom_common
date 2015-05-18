@@ -756,6 +756,7 @@ PRODUCT_PACKAGES += tcmiface
 PRODUCT_PACKAGES_DEBUG :=
 
 
+NANOPB_LIBRARY_NAME := libnanopb-c-2.8.0
 PRODUCT_COPY_FILES := \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
