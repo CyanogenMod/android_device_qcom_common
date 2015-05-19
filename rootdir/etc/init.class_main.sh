@@ -32,6 +32,7 @@
 baseband=`getprop ro.baseband`
 sgltecsfb=`getprop persist.radio.sglte_csfb`
 datamode=`getprop persist.data.mode`
+netmgr=`getprop ro.use_data_netmgrd`
 
 case "$baseband" in
     "apq")
@@ -75,10 +76,14 @@ case "$baseband" in
             ;;
         "concurrent")
             start qti
-            start netmgrd
+            if [ "$netmgr" = "true" ]; then
+                start netmgrd
+            fi
             ;;
         *)
-            start netmgrd
+            if [ "$netmgr" = "true" ]; then
+                start netmgrd
+            fi
             ;;
     esac
 esac
