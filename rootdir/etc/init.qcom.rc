@@ -334,6 +334,7 @@ on property:persist.sys.ssr.restart_level=*
 
 on property:persist.sys.ssr.enable_ramdumps=1
     write /sys/module/subsystem_restart/parameters/enable_ramdumps 1
+    mkdir /data/ramdump 770 system system
     start ss_ramdump
 
 on property:persist.sys.ssr.enable_ramdumps=0
