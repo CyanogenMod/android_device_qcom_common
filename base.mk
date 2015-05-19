@@ -504,6 +504,7 @@ MM_VIDEO += mm-venc-omx-test
 MM_VIDEO += mm-venc-omx-test720p
 MM_VIDEO += mm-video-driver-test
 MM_VIDEO += mm-video-encdrv-test
+MM_VIDEO += ExoplayerDemo
 
 #OPENCORE
 OPENCORE := libomx_aacdec_sharedlibrary
