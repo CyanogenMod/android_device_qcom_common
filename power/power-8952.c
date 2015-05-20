@@ -48,11 +48,7 @@
 #include "performance.h"
 #include "power-common.h"
 
-#define MIN_FREQ_CPU0_DISP_OFF 499200
-#define MIN_FREQ_CPU0_DISP_ON  960000
-
 static int saved_interactive_mode = -1;
-static int slack_node_rw_failed = 0;
 static int display_hint_sent;
 
 
@@ -75,6 +71,8 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
             return HINT_HANDLED;
         case POWER_HINT_VIDEO_DECODE: /*Do nothing for encode case  */
             return HINT_HANDLED;
+        default:
+            return HINT_HANDLED;
     }
 return HINT_NONE;
 }
@@ -88,10 +86,15 @@ int  set_interactive_override(struct power_module *module, int on)
 
     ALOGI("Got set_interactive hint");
 
-    if (get_scaling_governor(governor, sizeof(governor)) == -1) {
-        ALOGE("Can't obtain scaling governor.");
-
-        return HINT_HANDLED;
+    if (get_scaling_governor_check_cores(governor, sizeof(governor),CPU0) == -1) {
+        if (get_scaling_governor_check_cores(governor, sizeof(governor),CPU1) == -1) {
+            if (get_scaling_governor_check_cores(governor, sizeof(governor),CPU2) == -1) {
+                if (get_scaling_governor_check_cores(governor, sizeof(governor),CPU3) == -1) {
+                    ALOGE("Can't obtain scaling governor.");
+                    return HINT_HANDLED;
+                }
+            }
+        }
     }
 
     if (!on) {
@@ -100,15 +103,6 @@ int  set_interactive_override(struct power_module *module, int on)
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
                int resource_values[] = {TR_MS_CPU0_50,TR_MS_CPU4_50, THREAD_MIGRATION_SYNC_OFF};
 
-               /* Set CPU0 MIN FREQ to 499.2Mhz avoid extra peak power
-                  impact in volume key press  */
-               snprintf(tmp_str, NODE_MAX, "%d", MIN_FREQ_CPU0_DISP_OFF);
-               if (sysfs_write(SCALING_MIN_FREQ, tmp_str) != 0) {
-                 if(!slack_node_rw_failed) {
-                   ALOGE("Failed to write to %s",SCALING_MIN_FREQ );
-                 }
-                  rc = 1;
-                }
                if (!display_hint_sent) {
                    perform_hint_action(DISPLAY_STATE_HINT_ID,
                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
@@ -121,14 +115,6 @@ int  set_interactive_override(struct power_module *module, int on)
           if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
 
-              /* Recovering MIN_FREQ in display ON case */
-              snprintf(tmp_str, NODE_MAX, "%d", MIN_FREQ_CPU0_DISP_ON);
-              if (sysfs_write(SCALING_MIN_FREQ, tmp_str) != 0) {
-                  if(!slack_node_rw_failed) {
-                     ALOGE("Failed to write to %s",SCALING_MIN_FREQ );
-                  }
-                   rc = 1;
-              }
              undo_hint_action(DISPLAY_STATE_HINT_ID);
              display_hint_sent = 0;
           }
