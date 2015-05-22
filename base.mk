@@ -161,6 +161,7 @@ CURL += curl
 
 #DASH
 DASH := libdashplayer
+DASH += libqcmediaplayer
 DASH += qcmediaplayer
 
 #EXTENDEDMEDIA_EXT
