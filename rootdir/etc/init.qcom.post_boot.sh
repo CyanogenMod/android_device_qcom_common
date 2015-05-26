@@ -987,6 +987,11 @@ case "$target" in
             echo "bw_hwmon" > $devfreq_gov
         done
 
+        for devfreq_gov in /sys/class/devfreq/*qcom,mincpubw*/governor
+        do
+            echo "cpufreq" > $devfreq_gov
+        done
+
 	soc_revision=`cat /sys/devices/soc0/revision`
 	if [ "$soc_revision" == "2.1" ]; then
 		# Disable C4, D3, D4 and M3 LPMs
