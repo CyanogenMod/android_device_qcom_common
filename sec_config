@@ -1,6 +1,8 @@
 /* IPC Security Config */
 /* <GPS QMI Service ID - 16>:<GPS QMI Instance ID - all instances>:<Client Group ID> */
 16:4294967295:1000:3004
+/* <LOWI QMI Service ID - 38>:<LOWI QMI Instance ID - all instances>:<Client Group ID> */
+56:4294967295:1021:3004
 /* Allow SS CTL service to be used by system and net_raw processes */
 43:4294967295:1000:3004
 /* <UIMRMT QMI Service ID - 16>:<UIMRMT QMI Instance ID - all instances>:<Client Group ID> */
