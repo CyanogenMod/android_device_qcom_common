@@ -483,6 +483,7 @@ MM_AUDIO += libOmxEvrcEnc
 MM_AUDIO += libOmxMp3Dec
 MM_AUDIO += libOmxQcelp13Enc
 MM_AUDIO += libOmxAc3HwDec
+MM_AUDIO += libstagefright_soft_flacdec
 
 #MM_CORE
 MM_CORE := libmm-omxcore
