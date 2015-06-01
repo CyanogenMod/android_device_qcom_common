@@ -1116,21 +1116,21 @@ case "$target" in
     "msm8996")
         # disable thermal bcl hotplug to switch governor
         echo 0 > /sys/module/msm_thermal/core_control/enabled
-        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        for mode in /sys/devices/soc/qcom,bcl.*/mode
         do
             echo -n disable > $mode
         done
-        for hotplug_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_mask
+        for hotplug_mask in /sys/devices/soc/qcom,bcl.*/hotplug_mask
         do
             bcl_hotplug_mask=`cat $hotplug_mask`
             echo 0 > $hotplug_mask
         done
-        for hotplug_soc_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_soc_mask
+        for hotplug_soc_mask in /sys/devices/soc/qcom,bcl.*/hotplug_soc_mask
         do
             bcl_soc_hotplug_mask=`cat $hotplug_soc_mask`
             echo 0 > $hotplug_soc_mask
         done
-        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        for mode in /sys/devices/soc/qcom,bcl.*/mode
         do
             echo -n enable > $mode
         done
@@ -1164,19 +1164,19 @@ case "$target" in
         echo 300000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
         # re-enable thermal and BCL hotplug
         echo 1 > /sys/module/msm_thermal/core_control/enabled
-        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        for mode in /sys/devices/soc/qcom,bcl.*/mode
         do
             echo -n disable > $mode
         done
-        for hotplug_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_mask
+        for hotplug_mask in /sys/devices/soc/qcom,bcl.*/hotplug_mask
         do
             echo $bcl_hotplug_mask > $hotplug_mask
         done
-        for hotplug_soc_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_soc_mask
+        for hotplug_soc_mask in /sys/devices/soc/qcom,bcl.*/hotplug_soc_mask
         do
             echo $bcl_soc_hotplug_mask > $hotplug_soc_mask
         done
-        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        for mode in /sys/devices/soc/qcom,bcl.*/mode
         do
             echo -n enable > $mode
         done
