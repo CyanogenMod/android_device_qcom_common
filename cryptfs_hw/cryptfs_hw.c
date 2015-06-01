@@ -52,8 +52,11 @@
 // wipe userdata partition once this error is received.
 #define ERR_MAX_PASSWORD_ATTEMPTS -10
 #define QSEECOM_DISK_ENCRYPTION 1
-#define QSEECOM_ICE_DISK_ENCRYPTION 3
+#define QSEECOM_UFS_ICE_DISK_ENCRYPTION 3
+#define QSEECOM_SDCC_ICE_DISK_ENCRYPTION 4
 #define MAX_PASSWORD_LEN 32
+#define QCOM_ICE_STORAGE_UFS 1
+#define QCOM_ICE_STORAGE_SDCC 2
 
 /* Operations that be performed on HW based device encryption key */
 #define SET_HW_DISK_ENC_KEY 1
@@ -63,13 +66,21 @@ static int loaded_library = 0;
 static unsigned char current_passwd[MAX_PASSWORD_LEN];
 static int (*qseecom_create_key)(int, void*);
 static int (*qseecom_update_key)(int, void*, void*);
+static int (*qseecom_wipe_key)(int);
 
 static int map_usage(int usage)
 {
-    return (is_ice_enabled() && (usage == QSEECOM_DISK_ENCRYPTION)) ?
-                                          QSEECOM_ICE_DISK_ENCRYPTION : usage;
+    int storage_type = is_ice_enabled();
+    if (usage == QSEECOM_DISK_ENCRYPTION) {
+        if (storage_type == QCOM_ICE_STORAGE_UFS) {
+            return QSEECOM_UFS_ICE_DISK_ENCRYPTION;
+        }
+        else if (storage_type == QCOM_ICE_STORAGE_SDCC) {
+            return QSEECOM_SDCC_ICE_DISK_ENCRYPTION ;
+        }
+    }
+    return usage;
 }
-
 
 static unsigned char* get_tmp_passwd(const char* passwd)
 {
@@ -117,8 +128,16 @@ static int load_qseecom_library()
         if((error = dlerror()) == NULL) {
             SLOGD("Success loading QSEECom_create_key \n");
             *(void **) (&qseecom_update_key) = dlsym(handle,"QSEECom_update_key_user_info");
-            if ((error = dlerror()) == NULL)
-                loaded_library = 1;
+            if ((error = dlerror()) == NULL) {
+                SLOGD("Success loading QSEECom_update_key_user_info\n");
+                *(void **) (&qseecom_wipe_key) = dlsym(handle,"QSEECom_wipe_key");
+                if ((error = dlerror()) == NULL) {
+                    loaded_library = 1;
+                    SLOGD("Success loading QSEECom_wipe_key \n");
+                }
+                else
+                    SLOGE("Error %s loading symbols for QSEECom APIs \n", error);
+            }
             else
                 SLOGE("Error %s loading symbols for QSEECom APIs \n", error);
         }
@@ -185,34 +204,31 @@ unsigned int is_hw_disk_encryption(const char* encryption_mode)
 
 int is_ice_enabled(void)
 {
-    /* If (USE_ICE_FLAG) => return 1
-     * if (property set to use gpce) return 0
-     * we are using property to test UFS + GPCE, even though not required
-     * if (storage is ufs) return 1
-     * else return 0 so that emmc based device can work properly
-     */
-#ifdef USE_ICE_FOR_STORAGE_ENCRYPTION
-    SLOGD("Ice enabled = true");
-    return 1;
-#else
-    char enc_hw_type[PATH_MAX];
-    char prop_storage[PATH_MAX];
-    int ice = 0;
-    int i;
-    if (property_get("crypto.fde_enc_hw_type", enc_hw_type, "")) {
-        if(!strncmp(enc_hw_type, "gpce", PROPERTY_VALUE_MAX)) {
-            SLOGD("GPCE would be used for HW FDE");
-            return 0;
-        }
-    }
+  char prop_storage[PATH_MAX];
+  int storage_type = 0;
+  int fd;
 
-    if (property_get("ro.boot.bootdevice", prop_storage, "")) {
-        if(strstr(prop_storage, "ufs")) {
-            SLOGD("ICE would be used for HW FDE");
-            return 1;
-        }
+  if (property_get("ro.boot.bootdevice", prop_storage, "")) {
+    if (strstr(prop_storage, "ufs")) {
+      /* All UFS based devices has ICE in it. So we dont need
+       * to check if corresponding device exists or not
+       */
+      storage_type = QCOM_ICE_STORAGE_UFS;
+    } else if (strstr(prop_storage, "sdhc")) {
+      if (access("/dev/icesdcc", F_OK) != -1)
+        storage_type = QCOM_ICE_STORAGE_SDCC;
     }
-    SLOGD("GPCE would be used for HW FDE");
+  }
+  return storage_type;
+}
+
+int wipe_hw_device_encryption_key(const char* enc_mode)
+{
+    if (!enc_mode)
+        return -1;
+
+    if (is_hw_disk_encryption(enc_mode) && load_qseecom_library())
+        return qseecom_wipe_key(map_usage(QSEECOM_DISK_ENCRYPTION));
+
     return 0;
-#endif
 }

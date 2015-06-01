@@ -23,6 +23,9 @@ TARGET_USE_VENDOR_CAMERA_EXT := true
 #List of targets that use video hw
 MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 msm8992 msm8996
 
+#List of targets that use master side content protection
+MASTER_SIDE_CP_TARGET_LIST := msm8996
+
 # Below projects/packages with LOCAL_MODULEs will be used by
 # PRODUCT_PACKAGES to build LOCAL_MODULEs that are tagged with
 # optional tag, which will not be available on target unless
@@ -291,6 +294,7 @@ KEYPAD += ft5x06_ts.kl
 KEYPAD += ffa-keypad.kl
 KEYPAD += fluid-keypad.kl
 KEYPAD += gpio-keys.kl
+KEYPAD += qpnp_pon.kl
 KEYPAD += keypad_8960.kl
 KEYPAD += keypad_8960_liquid.kl
 KEYPAD += synaptics_rmi4_i2c.kl
@@ -500,6 +504,7 @@ MM_VIDEO += mm-venc-omx-test
 MM_VIDEO += mm-venc-omx-test720p
 MM_VIDEO += mm-video-driver-test
 MM_VIDEO += mm-video-encdrv-test
+MM_VIDEO += ExoplayerDemo
 
 #OPENCORE
 OPENCORE := libomx_aacdec_sharedlibrary
@@ -752,6 +757,7 @@ PRODUCT_PACKAGES += tcmiface
 PRODUCT_PACKAGES_DEBUG :=
 
 
+NANOPB_LIBRARY_NAME := libnanopb-c-2.8.0
 PRODUCT_COPY_FILES := \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \

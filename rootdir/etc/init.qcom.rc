@@ -93,6 +93,10 @@ on boot
     chown bluetooth net_bt /sys/class/rfkill/rfkill0/device/extldo
     chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
 
+    #create port-bridge log dir
+    mkdir /data/misc/port_bridge 0770 radio radio
+    chmod 0770 /data/misc/port_bridge
+
     #Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
@@ -109,6 +113,9 @@ on boot
     mkdir /data/system/perfd 0770 root system
     chmod 2770 /data/system/perfd
     mkdir /persist/drm 0770 system system
+
+    #Create NETMGR daemon socket area
+    mkdir /dev/socket/netmgr 0750 radio radio
 
     setprop wifi.interface wlan0
 
@@ -188,6 +195,11 @@ on boot
 
     # Allow access for CCID command/response timeout configuration
     chown system system /sys/module/ccid_bridge/parameters/bulk_msg_timeout
+
+    # Mark the copy complete flag to not completed
+    write /data/misc/radio/copy_complete 0
+    chown radio radio /data/misc/radio/copy_complete
+    chmod 0660 /data/misc/radio/copy_complete
 
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -380,7 +392,7 @@ service dpmd /system/bin/dpmd
     class late_start
     socket dpmd stream 660 root system
 
-service irsc_util /system/bin/logwrapper /system/bin/irsc_util "/etc/sec_config"
+service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class main
     user root
     oneshot
@@ -469,7 +481,7 @@ service bridgemgrd /system/bin/bridgemgrd
     group radio qcom_diag
     disabled
 
-service port-bridge /system/bin/port-bridge /dev/mhi_pipe_32 /dev/ttyGS0
+service port-bridge /system/bin/port-bridge
     class main
     user radio system
     group radio system inet
@@ -912,3 +924,8 @@ on property:sys.dbg.coresight.enable=1
 
 on property:sys.dbg.coresight.enable=0
     write /persist/coresight/enable 0
+
+service fidodaemon /system/vendor/bin/fidodaemon
+    class late_start
+    user system
+    group system

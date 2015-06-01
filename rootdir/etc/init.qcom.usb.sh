@@ -37,6 +37,13 @@ else
     soc_hwplatform=`cat /sys/devices/system/soc/soc0/hw_platform` 2> /dev/null
 fi
 
+# Get hardware revision
+if [ -f /sys/devices/soc0/revision ]; then
+    soc_revision=`cat /sys/devices/soc0/revision` 2> /dev/null
+else
+    soc_revision=`cat /sys/devices/system/soc/soc0/revision` 2> /dev/null
+fi
+
 #
 # Allow persistent usb charging disabling
 # User needs to set usb charging disabled in persist.usb.chgdisabled
@@ -135,6 +142,14 @@ case "$usb_config" in
                                setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_ipa,mass_storage,adb
                             fi
                         ;;
+			"msm8996")
+			    if [ "$soc_revision" == "1.0" -o "$soc_hwplatform" == "Dragon" ]
+			    then
+                               setprop persist.sys.usb.config diag,adb
+			    else
+			       setprop persist.sys.usb.config diag,serial_cdev,serial_tty,rmnet_ipa,mass_storage,adb
+			    fi
+			;;
                         "msm8909")
                             setprop persist.sys.usb.config diag,serial_smd,rmnet_qti_bam,adb
                         ;;
@@ -170,9 +185,8 @@ case "$target" in
              fi
          fi
     ;;
-    "msm8994" | "msm8992")
+    "msm8994" | "msm8992" | "msm8996")
         echo BAM2BAM_IPA > /sys/class/android_usb/android0/f_rndis_qc/rndis_transports
-        echo 1 > /sys/class/android_usb/android0/f_rndis_qc/max_pkt_per_xfer # Disable RNDIS UL aggregation
     ;;
 esac
 

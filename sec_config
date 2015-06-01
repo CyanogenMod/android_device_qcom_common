@@ -1,10 +1,14 @@
 /* IPC Security Config */
 /* <GPS QMI Service ID - 16>:<GPS QMI Instance ID - all instances>:<Client Group ID> */
 16:4294967295:1000:3004
+/* <LOWI QMI Service ID - 38>:<LOWI QMI Instance ID - all instances>:<Client Group ID> */
+56:4294967295:1021:3004
 /* Allow SS CTL service to be used by system and net_raw processes */
 43:4294967295:1000:3004
 /* <UIMRMT QMI Service ID - 16>:<UIMRMT QMI Instance ID - all instances>:<Client Group ID> */
 50:4294967295:1001
+/* QMI-SLIM service permitted to gps and net_raw */
+55:4294967295:1021:3004
 /* Allow Sensor services to be used by sensor process */
 256:4294967295:3011
 257:4294967295:3011
@@ -270,10 +274,10 @@
 42:4294967295:1001:3004
 18:4294967295:1001:3004
 9:4294967295:1001:3004
-1:4294967295:1001:3004
+1:4294967295:1001:3004:1000
 4:4294967295:1001:3004
 7:4294967295:1001:3004
-8:4294967295:1001:3004
+8:4294967295:1001:3004:1000
 /* DPM */
 47:4294967295:1001:3004
 /* Allow communication to some QMI services with radio privilages */
@@ -292,6 +296,11 @@
 17:4294967295:1001
 /* RFRPE */
 41:4294967295:1001
-/*Data Power Manager Daemon dpmd */
-1:4294967295:1000:3004
+/*UIM*/
+11:4294967295:1001
+/*CAT*/
+10:4294967295:1001
+/*IMSA*/
+33:4294967295:1001
+/* Allow Data dpmd to access QMI DFS */
 48:4294967295:1000:3004

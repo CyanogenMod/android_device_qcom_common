@@ -1096,43 +1096,41 @@ case "$target" in
      ;;
 esac
 
-case "$target" in
-    "msm8226" | "msm8974" | "msm8610" | "apq8084" | "mpq8092" | "msm8610" | "msm8916" | "msm8994" | "msm8992")
-        # Let kernel know our image version/variant/crm_version
-        image_version="10:"
-        image_version+=`getprop ro.build.id`
-        image_version+=":"
-        image_version+=`getprop ro.build.version.incremental`
-        image_variant=`getprop ro.product.name`
-        image_variant+="-"
-        image_variant+=`getprop ro.build.type`
-        oem_version=`getprop ro.build.version.codename`
-        echo 10 > /sys/devices/soc0/select_image
-        echo $image_version > /sys/devices/soc0/image_version
-        echo $image_variant > /sys/devices/soc0/image_variant
-        echo $oem_version > /sys/devices/soc0/image_crm_version
-        ;;
-esac
+# Let kernel know our image version/variant/crm_version
+if [ -f /sys/devices/soc0/select_image ]; then
+    image_version="10:"
+    image_version+=`getprop ro.build.id`
+    image_version+=":"
+    image_version+=`getprop ro.build.version.incremental`
+    image_variant=`getprop ro.product.name`
+    image_variant+="-"
+    image_variant+=`getprop ro.build.type`
+    oem_version=`getprop ro.build.version.codename`
+    echo 10 > /sys/devices/soc0/select_image
+    echo $image_version > /sys/devices/soc0/image_version
+    echo $image_variant > /sys/devices/soc0/image_variant
+    echo $oem_version > /sys/devices/soc0/image_crm_version
+fi
 
 case "$target" in
     "msm8996")
         # disable thermal bcl hotplug to switch governor
         echo 0 > /sys/module/msm_thermal/core_control/enabled
-        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        for mode in /sys/devices/soc/qcom,bcl.*/mode
         do
             echo -n disable > $mode
         done
-        for hotplug_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_mask
+        for hotplug_mask in /sys/devices/soc/qcom,bcl.*/hotplug_mask
         do
             bcl_hotplug_mask=`cat $hotplug_mask`
             echo 0 > $hotplug_mask
         done
-        for hotplug_soc_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_soc_mask
+        for hotplug_soc_mask in /sys/devices/soc/qcom,bcl.*/hotplug_soc_mask
         do
             bcl_soc_hotplug_mask=`cat $hotplug_soc_mask`
             echo 0 > $hotplug_soc_mask
         done
-        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        for mode in /sys/devices/soc/qcom,bcl.*/mode
         do
             echo -n enable > $mode
         done
@@ -1166,19 +1164,19 @@ case "$target" in
         echo 300000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
         # re-enable thermal and BCL hotplug
         echo 1 > /sys/module/msm_thermal/core_control/enabled
-        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        for mode in /sys/devices/soc/qcom,bcl.*/mode
         do
             echo -n disable > $mode
         done
-        for hotplug_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_mask
+        for hotplug_mask in /sys/devices/soc/qcom,bcl.*/hotplug_mask
         do
             echo $bcl_hotplug_mask > $hotplug_mask
         done
-        for hotplug_soc_mask in /sys/devices/soc.0/qcom,bcl.*/hotplug_soc_mask
+        for hotplug_soc_mask in /sys/devices/soc/qcom,bcl.*/hotplug_soc_mask
         do
             echo $bcl_soc_hotplug_mask > $hotplug_soc_mask
         done
-        for mode in /sys/devices/soc.0/qcom,bcl.*/mode
+        for mode in /sys/devices/soc/qcom,bcl.*/mode
         do
             echo -n enable > $mode
         done
@@ -1194,6 +1192,3 @@ case "$target" in
 
     ;;
 esac
-
-# Start RIDL/LogKit II client
-#su -c /system/vendor/bin/startRIDL.sh &
