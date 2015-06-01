@@ -980,8 +980,3 @@ service fidodaemon /system/vendor/bin/fidodaemon
     class late_start
     user system
     group system
-
-service RIDL /system/vendor/bin/RIDLClient.exe
-    class late_start
-    user root
-    group root
