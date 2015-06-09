@@ -71,6 +71,10 @@ config_bt ()
   fi
   btsoc=`getprop qcom.bluetooth.soc`
 
+  if ls /sys/class/leds/bt; then
+    chmod 0666 /sys/class/leds/bt/brightness
+  fi
+
   case $baseband in
     "apq")
         setprop ro.qualcomm.bluetooth.opp true
