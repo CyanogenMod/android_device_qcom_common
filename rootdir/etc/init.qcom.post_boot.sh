@@ -1194,5 +1194,10 @@ case "$target" in
             echo "bw_hwmon" > $devfreq_gov
         done
 
+        # Enable bus-dcvs
+        for devfreq_gov in /sys/class/devfreq/qcom,cpubw*/governor
+        do
+            echo "bw_hwmon" > $devfreq_gov
+        done
     ;;
 esac
