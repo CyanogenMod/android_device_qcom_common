@@ -308,6 +308,7 @@ on post-fs-data
     mkdir /data/misc/SelfHost/QCLogs/ 2750 system shell
     mkdir /data/misc/SelfHost/QCLogs/temp/ 0700 system shell
     mkdir /data/misc/SelfHost/storage/ 0700 system shell
+    mkdir /data/misc/SelfHost/Running/ 2750 system shell
 
 service qcomsysd /system/bin/qcom-system-daemon
     class main
