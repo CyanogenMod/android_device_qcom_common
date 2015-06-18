@@ -986,8 +986,15 @@ case "$target" in
 	fi
 
         #Enable adaptive LMK and set vmpressure_file_min
-        echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
-        echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+        ProductName=`getprop ro.product.name`
+        if [ "$ProductName" == "msm8909" ] || [ "$ProductName" == "msm8909_LMT" ]; then
+		echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+	        echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+        elif [ "$ProductName" == "msm8909_512" ]; then
+		echo "8192,11264,14336,17408,20480,26624" > /sys/module/lowmemorykiller/parameters/minfree
+		echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+		echo 32768 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+        fi
 
         # HMP scheduler settings for 8909 similiar to 8916
         echo 3 > /proc/sys/kernel/sched_window_stats_policy
