@@ -29,11 +29,7 @@
 setprop hw.fm.init 0
 
 mode=`getprop hw.fm.mode`
-version=`getprop hw.fm.version`
-isAnalog=`getprop hw.fm.isAnalog`
-
-#find the transport type
-TRANSPORT=`getprop ro.qualcomm.bt.hci_transport`
+version=199217
 
 LOG_TAG="qcom-fm"
 LOG_NAME="${0}:"
@@ -56,24 +52,14 @@ failed ()
 
 logi "In FM shell Script"
 logi "mode: $mode"
-logi "isAnalog: $isAnalog"
-logi "Transport : $TRANSPORT"
 logi "Version : $version"
 
 #$fm_qsoc_patches <fm_chipVersion> <enable/disable WCM>
 #
 case $mode in
   "normal")
-    case $TRANSPORT in
-    "smd")
         logi "inserting the radio transport module"
-        echo 1 > /sys/module/radio_iris_transport/parameters/fmsmd_set
-     ;;
-     *)
-        logi "default transport case "
-     ;;
-    esac
-      /system/bin/fm_qsoc_patches $version 0
+        /system/bin/fm_qsoc_patches $version 0
      ;;
   "wa_enable")
    /system/bin/fm_qsoc_patches $version 1
@@ -81,11 +67,11 @@ case $mode in
   "wa_disable")
    /system/bin/fm_qsoc_patches $version 2
      ;;
-  "config_dac")
-   /system/bin/fm_qsoc_patches $version 3 $isAnalog
-     ;;
    *)
+    sleep 10
     logi "Shell: Default case"
+    logi "inserting the radio transport module"
+    echo 1 > /sys/module/radio_iris_transport/parameters/fmsmd_set
     /system/bin/fm_qsoc_patches $version 0
     ;;
 esac
