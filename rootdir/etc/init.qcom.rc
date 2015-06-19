@@ -642,6 +642,16 @@ service ptt_ffbm /system/bin/ptt_socket_app -f -d
     disabled
     oneshot
 
+service wifi_ftmd /system/bin/wifi_ftmd
+    user system
+    group system inet net_admin
+    socket wififtmd_server dgram 0660 system system
+    disabled
+    oneshot
+
+on property:wifi.ftmd.load=true
+    insmod /system/lib/modules/wlan.ko con_mode=5
+
 service cnss_diag /system/bin/cnss_diag --q
     class main
     user root
