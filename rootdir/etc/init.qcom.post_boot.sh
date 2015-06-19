@@ -1016,7 +1016,7 @@ case "$target" in
         start mpdecision
         echo 512 > /sys/block/mmcblk0/bdi/read_ahead_kb
     ;;
-    "msm8994" | "msm8992")
+    "msm8994" | "msm8992" | "msm8996")
         rm /data/system/perfd/default_values
         setprop ro.min_freq_0 384000
         setprop ro.min_freq_4 384000
