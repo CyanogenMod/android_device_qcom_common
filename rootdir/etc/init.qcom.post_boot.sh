@@ -1199,5 +1199,29 @@ case "$target" in
         do
             echo "bw_hwmon" > $devfreq_gov
         done
+
+	soc_revision=`cat /sys/devices/soc0/revision`
+	if [ "$soc_revision" == "2.1" ]; then
+		# Disable C4, D3, D4 and M3 LPMs
+		echo 0 > /sys/module/lpm_levels/system/pwr/cpu0/fpc/idle_enabled
+		echo 0 > /sys/module/lpm_levels/system/pwr/cpu1/fpc/idle_enabled
+		echo 0 > /sys/module/lpm_levels/system/perf/cpu2/fpc/idle_enabled
+		echo 0 > /sys/module/lpm_levels/system/perf/cpu3/fpc/idle_enabled
+		echo 0 > /sys/module/lpm_levels/system/pwr/pwr-l2-gdhs/idle_enabled
+		echo 0 > /sys/module/lpm_levels/system/pwr/pwr-l2-fpc/idle_enabled
+		echo 0 > /sys/module/lpm_levels/system/perf/perf-l2-gdhs/idle_enabled
+		echo 0 > /sys/module/lpm_levels/system/perf/perf-l2-fpc/idle_enabled
+		echo 0 > /sys/module/lpm_levels/system/system-fpc/idle_enabled
+
+		# Enable C4 LPM mode
+		echo 1 > /sys/module/lpm_levels/system/pwr/cpu0/fpc/idle_enabled
+		echo 1 > /sys/module/lpm_levels/system/pwr/cpu1/fpc/idle_enabled
+		echo 1 > /sys/module/lpm_levels/system/perf/cpu2/fpc/idle_enabled
+		echo 1 > /sys/module/lpm_levels/system/perf/cpu3/fpc/idle_enabled
+		echo N > /sys/module/lpm_levels/parameters/sleep_disabled
+	else
+		#Disable suspend for v1.0 and v2.0
+		echo pwr_dbg > /sys/power/wake_lock
+	fi
     ;;
 esac
