@@ -44,6 +44,7 @@ static void *qcopt_handle;
 static int (*perf_lock_acq)(unsigned long handle, int duration,
     int list[], int numArgs);
 static int (*perf_lock_rel)(unsigned long handle);
+static int (*perf_lock_use_profile)(unsigned long handle, int profile);
 static struct list_node active_hint_list_head;
 
 static void *get_qcopt_handle()
@@ -87,6 +88,8 @@ static void __attribute__ ((constructor)) initialize(void)
         if (!perf_lock_rel) {
             ALOGE("Unable to get perf_lock_rel function handle.\n");
         }
+
+        perf_lock_use_profile = dlsym(qcopt_handle, "perf_lock_use_profile");
     }
 }
 
@@ -277,6 +280,16 @@ void undo_initial_hint_action()
     if (qcopt_handle) {
         if (perf_lock_rel) {
             perf_lock_rel(1);
+        }
+    }
+}
+
+/* Set a static profile */
+void set_profile(int profile)
+{
+    if (qcopt_handle) {
+        if (perf_lock_use_profile) {
+            perf_lock_use_profile(qcopt_handle, profile);
         }
     }
 }
