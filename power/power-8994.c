@@ -49,6 +49,48 @@
 
 static int display_hint_sent;
 
+enum {
+    PROFILE_POWER_SAVE = 0,
+    PROFILE_BALANCED,
+    PROFILE_HIGH_PERFORMANCE
+};
+
+static int current_power_profile = PROFILE_BALANCED;
+
+static void set_power_profile(int profile) {
+
+    if (profile == current_power_profile)
+        return;
+
+    ALOGV("%s: profile=%d", __func__, profile);
+
+    if (current_power_profile != PROFILE_BALANCED) {
+        undo_hint_action(DEFAULT_PROFILE_HINT_ID);
+        ALOGV("%s: hint undone", __func__);
+    }
+
+    if (profile == PROFILE_HIGH_PERFORMANCE) {
+        int resource_values[] = { CPUS_ONLINE_MIN_4,
+            CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
+            CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX };
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID,
+            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set performance mode", __func__);
+
+    } else if (profile == PROFILE_POWER_SAVE) {
+        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_2,
+            CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
+            CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX };
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID,
+            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set powersave", __func__);
+    }
+
+    current_power_profile = profile;
+}
+
+extern void interaction(int duration, int num_args, int opt_list[]);
+
 static int process_video_encode_hint(void *metadata)
 {
     char governor[80];
@@ -100,20 +142,45 @@ static int process_video_encode_hint(void *metadata)
     return HINT_NONE;
 }
 
-int power_hint_override(struct power_module *module, power_hint_t hint, void *data)
+int power_hint_override(__attribute__((unused)) struct power_module *module,
+        power_hint_t hint, void *data)
 {
-    int ret_val = HINT_NONE;
-    switch(hint) {
-        case POWER_HINT_VIDEO_ENCODE:
-            ret_val = process_video_encode_hint(data);
-            break;
-        default:
-            break;
+    if (hint == POWER_HINT_SET_PROFILE) {
+        set_power_profile((int64_t)data);
+        return HINT_HANDLED;
     }
-    return ret_val;
+
+    if (hint == POWER_HINT_LOW_POWER) {
+        if (current_power_profile == PROFILE_POWER_SAVE) {
+            set_power_profile(PROFILE_BALANCED);
+        } else {
+            set_power_profile(PROFILE_POWER_SAVE);
+        }
+    }
+
+    // Skip other hints in custom power modes
+    if (current_power_profile != PROFILE_BALANCED) {
+        return HINT_HANDLED;
+    }
+
+    if (hint == POWER_HINT_VIDEO_ENCODE) {
+        return process_video_encode_hint(data);
+    }
+
+    if (hint == POWER_HINT_CPU_BOOST) {
+        int duration = (int64_t)data / 1000;
+        int resources[] = { SCHED_BOOST_ON, 0x20D };
+
+        if (duration > 0)
+            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+
+        return HINT_HANDLED;
+    }
+
+    return HINT_NONE;
 }
 
-int set_interactive_override(struct power_module *module, int on)
+int set_interactive_override(__attribute__((unused)) struct power_module *module, int on)
 {
     return HINT_HANDLED; /* Don't excecute this code path, not in use */
     char governor[80];
