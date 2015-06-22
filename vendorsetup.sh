@@ -42,3 +42,5 @@ add_lunch_combo msm8996-userdebug
 add_lunch_combo msm8909-userdebug
 add_lunch_combo msm8909_512-userdebug
 add_lunch_combo msm8992-userdebug
+add_lunch_combo msm8952_64-userdebug
+add_lunch_combo msm8952_32-userdebug
