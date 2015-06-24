@@ -50,7 +50,9 @@
 
 static int saved_interactive_mode = -1;
 static int display_hint_sent;
+static int video_encode_hint_sent;
 
+static void process_video_encode_hint(void *metadata);
 
 int  power_hint_override(struct power_module *module, power_hint_t hint,
         void *data)
@@ -58,23 +60,14 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
 
     switch(hint) {
         case POWER_HINT_VSYNC:
-        break;
-        case POWER_HINT_INTERACTION:
+            break;
+        case POWER_HINT_VIDEO_ENCODE:
         {
-            int resources[] = {0x702, 0x20F, 0x30F};
-            int duration = 3000;
-
-            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+            process_video_encode_hint(data);
+            return HINT_HANDLED;
         }
-            return HINT_HANDLED;
-        case POWER_HINT_VIDEO_ENCODE: /* Do nothing for encode case  */
-            return HINT_HANDLED;
-        case POWER_HINT_VIDEO_DECODE: /*Do nothing for encode case  */
-            return HINT_HANDLED;
-        default:
-            return HINT_HANDLED;
     }
-return HINT_NONE;
+    return HINT_NONE;
 }
 
 int  set_interactive_override(struct power_module *module, int on)
@@ -123,3 +116,66 @@ int  set_interactive_override(struct power_module *module, int on)
     return HINT_HANDLED;
 }
 
+/* Video Encode Hint */
+static void process_video_encode_hint(void *metadata)
+{
+    char governor[80];
+    struct video_encode_metadata_t video_encode_metadata;
+
+    ALOGI("Got process_video_encode_hint");
+
+    if (get_scaling_governor_check_cores(governor,
+        sizeof(governor),CPU0) == -1) {
+            if (get_scaling_governor_check_cores(governor,
+                sizeof(governor),CPU1) == -1) {
+                    if (get_scaling_governor_check_cores(governor,
+                        sizeof(governor),CPU2) == -1) {
+                            if (get_scaling_governor_check_cores(governor,
+                                sizeof(governor),CPU3) == -1) {
+                                    ALOGE("Can't obtain scaling governor.");
+                                    return HINT_HANDLED;
+                            }
+                    }
+            }
+    }
+
+    /* Initialize encode metadata struct fields. */
+    memset(&video_encode_metadata, 0, sizeof(struct video_encode_metadata_t));
+    video_encode_metadata.state = -1;
+    video_encode_metadata.hint_id = DEFAULT_VIDEO_ENCODE_HINT_ID;
+
+    if (metadata) {
+        if (parse_video_encode_metadata((char *)metadata,
+            &video_encode_metadata) == -1) {
+            ALOGE("Error occurred while parsing metadata.");
+            return;
+        }
+    } else {
+        return;
+    }
+
+    if (video_encode_metadata.state == 1) {
+        if ((strncmp(governor, INTERACTIVE_GOVERNOR,
+            strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+            (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
+            /* Sched_load and migration_notif*/
+            int resource_values[] = {INTERACTIVE_USE_SCHED_LOAD_OFF,
+                                     INTERACTIVE_USE_MIGRATION_NOTIF_OFF};
+            if (!video_encode_hint_sent) {
+                perform_hint_action(video_encode_metadata.hint_id,
+                resource_values,
+                sizeof(resource_values)/sizeof(resource_values[0]));
+                video_encode_hint_sent = 1;
+            }
+        }
+    } else if (video_encode_metadata.state == 0) {
+        if ((strncmp(governor, INTERACTIVE_GOVERNOR,
+            strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+            (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
+            undo_hint_action(video_encode_metadata.hint_id);
+            video_encode_hint_sent = 0;
+            return ;
+        }
+    }
+    return;
+}
