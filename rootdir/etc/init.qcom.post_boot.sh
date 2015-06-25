@@ -969,6 +969,9 @@ case "$target" in
         do
             echo -n enable > $mode
         done
+        # input boost configuration
+        echo "0:1344000 2:1344000" > /sys/module/cpu_boost/parameters/input_boost_freq
+        echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
         # Setting b.L scheduler parameters
         echo 1 > /proc/sys/kernel/sched_migration_fixup
         echo 30 > /proc/sys/kernel/sched_small_task
