@@ -950,3 +950,10 @@ service RIDL /system/vendor/bin/RIDLClient.exe
     class late_start
     user root
     group root
+
+# bugreport is triggered by developer options
+service bugreport /system/bin/dumpstate -d -p -B \
+        -o /data/data/com.android.shell/files/bugreports/bugreport
+    class main
+    disabled
+    oneshot
