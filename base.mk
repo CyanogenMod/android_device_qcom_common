@@ -764,7 +764,7 @@ PRODUCT_PACKAGES += vcard
 PRODUCT_PACKAGES += tcmiface
 
 #intialise PRODUCT_PACKAGES_DEBUG list for debug modules
-PRODUCT_PACKAGES_DEBUG :=
+PRODUCT_PACKAGES_DEBUG := init.qcom.testscripts.sh
 
 
 #NANOPB_LIBRARY_NAME := libnanopb-c-2.8.0
