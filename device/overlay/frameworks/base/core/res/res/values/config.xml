@@ -197,11 +197,11 @@
     <!-- Whether camera shutter sound is forced or not  (country specific). -->
     <bool name="config_camera_sound_forced">true</bool>
 
-    <!-- Configuration to enable non-default PDP during IWLAN -->
-    <bool name="config_feature_iwlan_enabled">true</bool>
+    <!-- Configuration to enable non-default PDP during IWLAN 
+    <bool name="config_feature_iwlan_enabled">true</bool> -->
 
-    <!-- Is the device capable of supporting digital pen -->
-    <bool name="config_digitalPenCapable">true</bool>
+    <!-- Is the device capable of supporting digital pen 
+    <bool name="config_digitalPenCapable">true</bool> -->
 
     <!-- Flag specifying whether VoLTE & VT is availasble on device -->
     <bool name="config_device_volte_available">true</bool>
