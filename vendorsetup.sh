@@ -48,3 +48,4 @@ add_lunch_combo thorium_32-userdebug
 add_lunch_combo thorium_64-userdebug
 add_lunch_combo titanium_32-userdebug
 add_lunch_combo titanium_64-userdebug
+add_lunch_combo msmcobalt-userdebug
