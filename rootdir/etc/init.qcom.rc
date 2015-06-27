@@ -106,6 +106,7 @@ on boot
     chmod 2770 /dev/socket/qmux_gps
 
     mkdir /persist/drm 0770 system system
+    mkdir /persist/misc 0770 system system
 
     setprop wifi.interface wlan0
 
