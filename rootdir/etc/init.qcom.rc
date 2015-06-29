@@ -106,6 +106,7 @@ on boot
     chmod 2770 /dev/socket/qmux_gps
 
     mkdir /persist/drm 0770 system system
+    mkdir /persist/misc 0770 system system
 
     setprop wifi.interface wlan0
 
@@ -950,3 +951,10 @@ service RIDL /system/vendor/bin/RIDLClient.exe
     class late_start
     user root
     group root
+
+# bugreport is triggered by developer options
+service bugreport /system/bin/dumpstate -d -p -B \
+        -o /data/data/com.android.shell/files/bugreports/bugreport
+    class main
+    disabled
+    oneshot

@@ -979,9 +979,22 @@ case "$target" in
            soc_id=`cat /sys/devices/system/soc/soc0/id`
         fi
 
+	#Set mmcblk0 read_ahead value for 8909_512 target
+        ProductName=`getprop ro.product.name`
+        if [ "$ProductName" == "msm8909_512" ]; then
+            echo 128 > /sys/block/mmcblk0/queue/read_ahead_kb
+	fi
+
         #Enable adaptive LMK and set vmpressure_file_min
-        echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
-        echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+        ProductName=`getprop ro.product.name`
+        if [ "$ProductName" == "msm8909" ] || [ "$ProductName" == "msm8909_LMT" ]; then
+		echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+	        echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+        elif [ "$ProductName" == "msm8909_512" ]; then
+		echo "8192,11264,14336,17408,20480,26624" > /sys/module/lowmemorykiller/parameters/minfree
+		echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+		echo 32768 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+        fi
 
         # HMP scheduler settings for 8909 similiar to 8916
         echo 3 > /proc/sys/kernel/sched_window_stats_policy
@@ -1223,36 +1236,3 @@ case "$target" in
         echo $oem_version > /sys/devices/soc0/image_crm_version
         ;;
 esac
-
-# Create native cgroup and move all tasks to it. Allot 15% real-time
-# bandwidth limit to native cgroup (which is what remains after
-# Android uses up 80% real-time bandwidth limit). root cgroup should
-# become empty after all tasks are moved to native cgroup.
-
-CGROUP_ROOT=/dev/cpuctl
-mkdir $CGROUP_ROOT/native
-echo 150000 > $CGROUP_ROOT/native/cpu.rt_runtime_us
-
-# We could be racing with task creation, as a result of which its possible that
-# we may fail to move all tasks from root cgroup to native cgroup in one shot.
-# Retry few times before giving up.
-
-for loop_count in 1 2 3
-do
-	for i in $(cat $CGROUP_ROOT/tasks)
-	do
-		echo $i > $CGROUP_ROOT/native/tasks
-	done
-
-	root_tasks=$(cat $CGROUP_ROOT/tasks)
-	if [ -z "$root_tasks" ]
-	then
-		break
-	fi
-done
-
-# Check if we failed to move all tasks from root cgroup
-if [ ! -z "$root_tasks" ]
-then
-	echo "Error: Could not move all tasks to native cgroup"
-fi
