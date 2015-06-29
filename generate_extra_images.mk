@@ -383,7 +383,11 @@ endif
 ###################################################################################################
 
 .PHONY: aboot
+ifeq ($(USESECIMAGETOOL), true)
+aboot: gensecimage_target gensecimage_install
+else
 aboot: $(INSTALLED_BOOTLOADER_MODULE)
+endif
 
 .PHONY: kernel
 kernel: $(INSTALLED_BOOTIMAGE_TARGET) $(INSTALLED_SEC_BOOTIMAGE_TARGET) $(INSTALLED_4K_BOOTIMAGE_TARGET)
