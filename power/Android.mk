@@ -57,6 +57,10 @@ ifeq ($(call is-board-platform-in-list, msm8994), true)
 LOCAL_SRC_FILES += power-8994.c
 endif
 
+ifeq ($(call is-board-platform-in-list, msm8996), true)
+LOCAL_SRC_FILES += power-8996.c
+endif
+
 ifneq ($(TARGET_POWERHAL_SET_INTERACTIVE_EXT),)
 LOCAL_CFLAGS += -DSET_INTERACTIVE_EXT
 LOCAL_SRC_FILES += ../../../../$(TARGET_POWERHAL_SET_INTERACTIVE_EXT)
