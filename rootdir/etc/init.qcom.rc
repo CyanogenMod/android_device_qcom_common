@@ -976,7 +976,7 @@ on property:sys.dbg.coresight.enable=1
 on property:sys.dbg.coresight.enable=0
     write /persist/coresight/enable 0
 
-service fidodaemon /system/vendor/bin/fidodaemon
+service qseeproxydaemon /system/vendor/bin/qseeproxydaemon
     class late_start
     user system
     group system
