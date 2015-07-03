@@ -691,7 +691,7 @@ service ptt_ffbm /system/bin/ptt_socket_app -f -d
     disabled
     oneshot
 
-service cnss_diag /system/bin/cnss_diag --q
+service cnss_diag /system/bin/cnss_diag --q -f -d
     class main
     user root
     group root
