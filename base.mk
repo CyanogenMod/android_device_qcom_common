@@ -92,6 +92,7 @@ AUDIO_HARDWARE += audio.primary.msm8909
 AUDIO_HARDWARE += audio.primary.msm8994
 AUDIO_HARDWARE += audio.primary.msm8992
 AUDIO_HARDWARE += audio.primary.msm8996
+AUDIO_HARDWARE += audio.primary.msm8952
 #
 AUDIO_POLICY := audio_policy.mpq8064
 AUDIO_POLICY += audio_policy.apq8084
@@ -113,6 +114,7 @@ AUDIO_POLICY += audio_policy.msm8909
 AUDIO_POLICY += audio_policy.msm8994
 AUDIO_POLICY += audio_policy.msm8992
 AUDIO_POLICY += audio_policy.msm8996
+AUDIO_POLICY += audio_policy.msm8952
 
 #tinyalsa test apps
 TINY_ALSA_TEST_APPS := tinyplay
@@ -331,6 +333,7 @@ LIBCAMERA += camera.msm8916
 LIBCAMERA += camera.msm8994
 LIBCAMERA += camera.msm8992
 LIBCAMERA += camera.msm8996
+LIBCAMERA += camera.msm8952
 LIBCAMERA += libcamera
 LIBCAMERA += libmmcamera_interface
 LIBCAMERA += libmmcamera_interface2
@@ -358,6 +361,7 @@ LIBCOPYBIT += copybit.msm7627_surf
 LIBCOPYBIT += copybit.msm7627_6x
 LIBCOPYBIT += copybit.msm7627a
 LIBCOPYBIT += copybit.msm8996
+LIBCOPYBIT += copybit.msm8952
 
 #LIBGESTURES
 LIBGESTURES := libgestures
@@ -383,6 +387,7 @@ LIBGRALLOC += gralloc.msm7627_surf
 LIBGRALLOC += gralloc.msm7627_6x
 LIBGRALLOC += gralloc.msm7627a
 LIBGRALLOC += gralloc.msm8996
+LIBGRALLOC += gralloc.msm8952
 LIBGRALLOC += libmemalloc
 
 #memtrack
@@ -396,6 +401,7 @@ LIBMEMTRACK += memtrack.msm8610
 LIBMEMTRACK += memtrack.apq8084
 LIBMEMTRACK += memtrack.mpq8092
 LIBMEMTRACK += memtrack.msm8996
+LIBMEMTRACK += memtrack.msm8952
 
 #LIBLIGHTS
 LIBLIGHTS := lights.msm8660
@@ -415,6 +421,7 @@ LIBLIGHTS += lights.msm7627a
 LIBLIGHTS += lights.msm8610
 LIBLIGHTS += lights.apq8084
 LIBLIGHTS += lights.msm8996
+LIBLIGHTS += lights.msm8952
 
 #LIBHWCOMPOSER
 LIBHWCOMPOSER := hwcomposer.msm8660
@@ -435,6 +442,7 @@ LIBHWCOMPOSER += hwcomposer.msm7627_surf
 LIBHWCOMPOSER += hwcomposer.msm7627_6x
 LIBHWCOMPOSER += hwcomposer.msm7627a
 LIBHWCOMPOSER += hwcomposer.msm8996
+LIBHWCOMPOSER += hwcomposer.msm8952
 
 #LIBAUDIOPARAM -- Exposing AudioParameter as dynamic library for SRS TruMedia to work
 LIBAUDIOPARAM := libaudioparameter
