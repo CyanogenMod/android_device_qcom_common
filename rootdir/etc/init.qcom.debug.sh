@@ -82,8 +82,75 @@ enable_stm_events()
     echo 1 > /sys/kernel/debug/tracing/events/thermal/thermal_post_frequency_mit/enable
 }
 
+# Function MSM8996 DCC configuration
+enable_msm8996_dcc_config()
+{
+    echo  0 > /sys/bus/platform/devices/4b3000.dcc/enable
+    echo cap > /sys/bus/platform/devices/4b3000.dcc/func_type
+    echo sram > /sys/bus/platform/devices/4b3000.dcc/data_sink
+    echo  1 > /sys/bus/platform/devices/4b3000.dcc/config_reset
+
+    #SPM Registers
+    # CPU0
+    echo  0x998000C > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x9980030 > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x998003C > /sys/bus/platform/devices/4b3000.dcc/config
+    # CPU1
+    echo  0x999000C > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x9990030 > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x999003C > /sys/bus/platform/devices/4b3000.dcc/config
+    # CPU2
+    echo  0x99B000C > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x99B0030 > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x99B003C > /sys/bus/platform/devices/4b3000.dcc/config
+    # CPU3
+    echo  0x99C000C > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x99C0030 > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x99C003C > /sys/bus/platform/devices/4b3000.dcc/config
+    # PWRL2
+    echo  0x99A000C > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x99A0030 > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x99A003C > /sys/bus/platform/devices/4b3000.dcc/config
+    # PERFL2
+    echo  0x99D000C > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x99D0030 > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x99D003C > /sys/bus/platform/devices/4b3000.dcc/config
+    # L3
+    echo  0x9A0000C > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x9A00030 > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x9A0003C > /sys/bus/platform/devices/4b3000.dcc/config
+    # CBF
+    echo  0x9A1000C > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x9A10030 > /sys/bus/platform/devices/4b3000.dcc/config
+    echo  0x9A1003C > /sys/bus/platform/devices/4b3000.dcc/config
+    # PWR L2 HW-FLUSH
+    echo  0x99A1060 > /sys/bus/platform/devices/4b3000.dcc/config
+    # PERF L2 HW-FLUSH
+    echo  0x99D1060 > /sys/bus/platform/devices/4b3000.dcc/config
+    # APCS_APC0_SLEEP_EN_VOTE
+    echo  0x99A2030 > /sys/bus/platform/devices/4b3000.dcc/config
+    # APCS_APCC_SW_EN_VOTE
+    echo  0x99E0020 > /sys/bus/platform/devices/4b3000.dcc/config
+
+    echo  1 > /sys/bus/platform/devices/4b3000.dcc/enable
+}
+
+# Function DCC configuration
+enable_dcc_config()
+{
+    target=`getprop ro.board.platform`
+
+    case "$target" in
+        "msm8996")
+            echo "Enabling DCC config."
+            enable_msm8996_dcc_config
+            ;;
+    esac
+}
+
 coresight_config=`getprop ro.dbg.coresight.config`
 
+enable_dcc_config
 case "$coresight_config" in
     "stm_events")
         echo "Enabling STM events."
