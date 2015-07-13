@@ -225,3 +225,6 @@
 
 # Ramdump devices
 /dev/ramdump*             0640   system     system
+
+# Fingerprint device
+/dev/qbt1000              0660   system     system
