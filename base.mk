@@ -645,7 +645,8 @@ ifneq ($(TARGET_USES_AOSP),true)
 PRODUCT_PACKAGES += \
        BluetoothExt \
        BTTestApp \
-       HiddTestApp
+       HiddTestApp \
+       BTLogKit
 endif
 
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
