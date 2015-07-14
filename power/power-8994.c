@@ -64,15 +64,27 @@ static void set_power_profile(int profile) {
 
     ALOGV("%s: profile=%d", __func__, profile);
 
-    switch (profile) {
-        case PROFILE_POWER_SAVE:
-            set_profile(3);
-            break;
-        case PROFILE_HIGH_PERFORMANCE:
-            set_profile(5);
-            break;
-        default:
-            set_profile(-1);
+    if (current_power_profile != PROFILE_BALANCED) {
+        undo_hint_action(DEFAULT_PROFILE_HINT_ID);
+        ALOGV("%s: hint undone", __func__);
+    }
+
+    if (profile == PROFILE_POWER_SAVE) {
+        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_2,
+            CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
+            CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX };
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID,
+            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set powersave", __func__);
+    } else if (profile == PROFILE_HIGH_PERFORMANCE) {
+        int resource_values[] = { CPUS_ONLINE_MAX, SCHED_BOOST_ON, 0x4E63,
+            CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
+            CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX,
+            CPU4_MIN_FREQ_TURBO_MAX, CPU5_MIN_FREQ_TURBO_MAX,
+            CPU6_MIN_FREQ_TURBO_MAX, CPU7_MIN_FREQ_TURBO_MAX };
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID,
+            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set performance mode", __func__);
     }
 
     current_power_profile = profile;
