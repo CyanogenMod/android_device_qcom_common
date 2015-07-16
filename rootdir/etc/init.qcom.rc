@@ -1004,3 +1004,9 @@ service qseeproxydaemon /system/vendor/bin/qseeproxydaemon
     class late_start
     user system
     group system
+
+# Seemp health service
+service seemp_healthd /system/vendor/bin/seemp_healthd
+    class late_start
+    user system
+    group system
