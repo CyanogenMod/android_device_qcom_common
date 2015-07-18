@@ -311,6 +311,15 @@ on post-fs-data
     mkdir /data/misc/SelfHost/storage/ 0700 system shell
     mkdir /data/misc/SelfHost/Running/ 2750 system shell
 
+    #Create IOP  deamon related dirs
+    mkdir /data/misc/iop 0770 root system
+
+service iop /system/bin/iop
+    class main
+    user root
+    group root
+    disabled
+
 service qcomsysd /system/bin/qcom-system-daemon
     class main
     user root

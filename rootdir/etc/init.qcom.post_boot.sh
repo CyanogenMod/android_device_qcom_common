@@ -1016,6 +1016,8 @@ case "$target" in
 		#Disable suspend for v1.0 and v2.0
 		echo pwr_dbg > /sys/power/wake_lock
 	fi
+        # Starting io prefetcher service
+        start iop
     ;;
 esac
 
