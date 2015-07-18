@@ -621,6 +621,10 @@ CRDA += init.crda.sh
 WLAN := prima_wlan.ko
 WLAN += pronto_wlan.ko
 
+#FSTMAN
+FSTMAN := fstman
+FSTMAN += fstman.ini
+
 PRODUCT_PACKAGES := \
     AccountAndSyncSettings \
     DeskClock \
@@ -739,6 +743,7 @@ PRODUCT_PACKAGES += $(VT_QTI_PERMISSIONS)
 PRODUCT_PACKAGES += $(CRDA)
 PRODUCT_PACKAGES += $(WLAN)
 PRODUCT_PACKAGES += $(IPACM)
+PRODUCT_PACKAGES += $(FSTMAN)
 
 # Live Wallpapers
 PRODUCT_PACKAGES += \
