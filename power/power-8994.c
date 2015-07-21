@@ -56,6 +56,7 @@ enum {
 };
 
 static int current_power_profile = PROFILE_BALANCED;
+static int low_power_mode = 0;
 
 static void set_power_profile(int profile) {
 
@@ -70,18 +71,20 @@ static void set_power_profile(int profile) {
     }
 
     if (profile == PROFILE_POWER_SAVE) {
-        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_2,
-            CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
-            CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX };
+        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_1,
+            CPU0_MAX_FREQ_NONTURBO_MAX - 2, CPU1_MAX_FREQ_NONTURBO_MAX - 2,
+            CPU2_MAX_FREQ_NONTURBO_MAX - 2, CPU3_MAX_FREQ_NONTURBO_MAX - 2,
+            CPU4_MAX_FREQ_NONTURBO_MAX - 2, CPU5_MAX_FREQ_NONTURBO_MAX - 2,
+            CPU6_MAX_FREQ_NONTURBO_MAX - 2, CPU7_MAX_FREQ_NONTURBO_MAX - 2 };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         ALOGD("%s: set powersave", __func__);
     } else if (profile == PROFILE_HIGH_PERFORMANCE) {
-        int resource_values[] = { CPUS_ONLINE_MAX, SCHED_BOOST_ON, 0x4E63,
-            CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
-            CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX,
-            CPU4_MIN_FREQ_TURBO_MAX, CPU5_MIN_FREQ_TURBO_MAX,
-            CPU6_MIN_FREQ_TURBO_MAX, CPU7_MIN_FREQ_TURBO_MAX };
+        int resource_values[] = { CPUS_ONLINE_MAX,
+            CPU0_MIN_FREQ_NONTURBO_MAX + 5, CPU1_MIN_FREQ_NONTURBO_MAX + 5,
+            CPU2_MIN_FREQ_NONTURBO_MAX + 5, CPU3_MIN_FREQ_NONTURBO_MAX + 5,
+            CPU4_MIN_FREQ_NONTURBO_MAX + 9, CPU5_MIN_FREQ_NONTURBO_MAX + 9,
+            CPU6_MIN_FREQ_NONTURBO_MAX + 9, CPU7_MIN_FREQ_NONTURBO_MAX + 9 };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         ALOGD("%s: set performance mode", __func__);
@@ -152,17 +155,20 @@ static int process_video_encode_hint(void *metadata)
 int power_hint_override(__attribute__((unused)) struct power_module *module,
         power_hint_t hint, void *data)
 {
-    if (hint == POWER_HINT_SET_PROFILE) {
+    if (hint == POWER_HINT_SET_PROFILE && !low_power_mode) {
         set_power_profile((hintdata)data);
         return HINT_HANDLED;
     }
 
     if (hint == POWER_HINT_LOW_POWER) {
-        if (current_power_profile == PROFILE_POWER_SAVE) {
+        if (low_power_mode) {
             set_power_profile(PROFILE_BALANCED);
+            low_power_mode = 0;
         } else {
             set_power_profile(PROFILE_POWER_SAVE);
+            low_power_mode = 1;
         }
+        return HINT_HANDLED;
     }
 
     // Skip other hints in custom power modes
@@ -170,18 +176,16 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         return HINT_HANDLED;
     }
 
-    if (hint == POWER_HINT_VIDEO_ENCODE) {
-        return process_video_encode_hint(data);
+    if (hint == POWER_HINT_INTERACTION) {
+        int resources[] = {0x702, 0x20F, 0x30F};
+        int duration = 3000;
+
+        interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+        return HINT_HANDLED;
     }
 
-    if (hint == POWER_HINT_CPU_BOOST) {
-        int duration = (hintdata)data / 1000;
-        int resources[] = { SCHED_BOOST_ON, 0x20D };
-
-        if (duration > 0)
-            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
-
-        return HINT_HANDLED;
+    if (hint == POWER_HINT_VIDEO_ENCODE) {
+        return process_video_encode_hint(data);
     }
 
     return HINT_NONE;
