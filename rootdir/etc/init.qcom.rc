@@ -725,6 +725,7 @@ service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     class late_start
     user system
     group system
+    disabled
     oneshot
 
 on property:crypto.driver.load=1
