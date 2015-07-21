@@ -33,4 +33,5 @@
     <bool name="profile_supported_hfpclient">false</bool>
     <bool name="profile_supported_avrcp_controller">false</bool>
     <bool name="profile_supported_a2dp_sink">true</bool>
+    <bool name="profile_supported_sap">true</bool>
 </resources>
