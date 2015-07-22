@@ -51,6 +51,13 @@
 #define MIN_FREQ_CPU0_DISP_OFF 400000
 #define MIN_FREQ_CPU0_DISP_ON  960000
 
+char scaling_min_freq[4][80] ={
+    "sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq",
+    "sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq",
+    "sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq",
+    "sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq"
+};
+
 static int saved_dcvs_cpu0_slack_max = -1;
 static int saved_dcvs_cpu0_slack_min = -1;
 static int saved_mpdecision_slack_max = -1;
@@ -101,6 +108,8 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
             return HINT_HANDLED;
         case POWER_HINT_VIDEO_DECODE: /*Do nothing for encode case  */
             return HINT_HANDLED;
+        default:
+            return HINT_HANDLED;
     }
 return HINT_NONE;
 }
@@ -113,11 +122,15 @@ int  set_interactive_override(struct power_module *module, int on)
     int rc;
 
     ALOGI("Got set_interactive hint");
-
-    if (get_scaling_governor(governor, sizeof(governor)) == -1) {
-        ALOGE("Can't obtain scaling governor.");
-
-        return HINT_HANDLED;
+    if (get_scaling_governor_check_cores(governor, sizeof(governor),CPU0) == -1) {
+        if (get_scaling_governor_check_cores(governor, sizeof(governor),CPU1) == -1) {
+            if (get_scaling_governor_check_cores(governor, sizeof(governor),CPU2) == -1) {
+                if (get_scaling_governor_check_cores(governor, sizeof(governor),CPU3) == -1) {
+                    ALOGE("Can't obtain scaling governor.");
+                    return HINT_HANDLED;
+                }
+            }
+        }
     }
 
     if (!on) {
@@ -148,11 +161,17 @@ int  set_interactive_override(struct power_module *module, int on)
                /* Set CPU0 MIN FREQ to 400Mhz avoid extra peak power
                   impact in volume key press  */
                snprintf(tmp_str, NODE_MAX, "%d", MIN_FREQ_CPU0_DISP_OFF);
-               if (sysfs_write(SCALING_MIN_FREQ, tmp_str) != 0) {
-                 if(!slack_node_rw_failed) {
-                   ALOGE("Failed to write to %s",SCALING_MIN_FREQ );
-                 }
-                  rc = 1;
+               if (sysfs_write(scaling_min_freq[0], tmp_str) != 0) {
+                   if (sysfs_write(scaling_min_freq[1], tmp_str) != 0) {
+                       if (sysfs_write(scaling_min_freq[2], tmp_str) != 0) {
+                           if (sysfs_write(scaling_min_freq[3], tmp_str) != 0) {
+                               if(!slack_node_rw_failed) {
+                                  ALOGE("Failed to write to %s",SCALING_MIN_FREQ );
+                               }
+                                rc = 1;
+                           }
+                       }
+                   }
                 }
 
                   if (!display_hint_sent) {
@@ -184,13 +203,19 @@ int  set_interactive_override(struct power_module *module, int on)
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
 
               /* Recovering MIN_FREQ in display ON case */
-              snprintf(tmp_str, NODE_MAX, "%d", MIN_FREQ_CPU0_DISP_ON);
-              if (sysfs_write(SCALING_MIN_FREQ, tmp_str) != 0) {
-                  if(!slack_node_rw_failed) {
-                     ALOGE("Failed to write to %s",SCALING_MIN_FREQ );
-                  }
-                   rc = 1;
-              }
+               snprintf(tmp_str, NODE_MAX, "%d", MIN_FREQ_CPU0_DISP_ON);
+               if (sysfs_write(scaling_min_freq[0], tmp_str) != 0) {
+                   if (sysfs_write(scaling_min_freq[1], tmp_str) != 0) {
+                       if (sysfs_write(scaling_min_freq[2], tmp_str) != 0) {
+                           if (sysfs_write(scaling_min_freq[3], tmp_str) != 0) {
+                               if(!slack_node_rw_failed) {
+                                  ALOGE("Failed to write to %s",SCALING_MIN_FREQ );
+                               }
+                                rc = 1;
+                           }
+                       }
+                   }
+                }
              undo_hint_action(DISPLAY_STATE_HINT_ID);
              display_hint_sent = 0;
           }
