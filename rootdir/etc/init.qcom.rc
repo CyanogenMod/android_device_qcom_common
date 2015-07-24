@@ -205,6 +205,9 @@ on boot
     # Socket location for RIDL
     mkdir /dev/socket/RIDL 2770 system system
 
+    # bond0 used by FST Manager
+    chown wifi wifi /sys/class/net/bond0/bonding/queue_id
+
 # msm specific files that need to be created on /data
 on post-fs-data
     # Create directory for TZ Apps
@@ -626,11 +629,19 @@ service wpa_supplicant /system/bin/wpa_supplicant \
     disabled
     oneshot
 
-# FST Manager is started by property_set("ctl.start", "fstman:<hostap ctrl iface>");
+# FST Manager can be started by property_set("ctl.start", "fstman:<hostap ctrl iface>");
 service fstman /system/bin/fstman -B -ddd -n -c /data/misc/wifi/fstman.ini
+    user wifi
+    group wifi net_admin net_raw
     class main
     disabled
     oneshot
+
+on property:netd.fstman.start=true
+    start fstman
+
+on property:netd.fstman.start=false
+    stop fstman
 
 service dhcpcd_wlan0 /system/bin/dhcpcd -ABKLG
     class late_start
