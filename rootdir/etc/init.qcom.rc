@@ -292,6 +292,10 @@ on post-fs-data
     # Sensor
     mkdir /persist/sensors 0770 system system
 
+    #Create FM dir for patchdownloader
+    mkdir /data/misc/fm 0770 system system
+    chmod 0770 /data/misc/fm
+
 service qcomsysd /system/bin/qcom-system-daemon
     class main
     user root
