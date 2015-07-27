@@ -830,7 +830,5 @@ PRODUCT_PACKAGE_OVERLAYS += device/qcom/common/product/overlay
 PRODUCT_VERITY_PARTITION=/dev/block/bootdevice/by-name/system
 $(call inherit-product, build/target/product/verity.mk)
 
-#skip boot jars check if QCPATH not available
-ifeq ($(strip $(QCPATH)),)
+#skip boot jars check
 SKIP_BOOT_JARS_CHECK := true
-endif
