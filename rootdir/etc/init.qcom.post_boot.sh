@@ -994,13 +994,11 @@ case "$target" in
         # Setting b.L scheduler parameters
         echo 0 > /proc/sys/kernel/sched_boost
         echo 1 > /proc/sys/kernel/sched_migration_fixup
-        echo 30 > /proc/sys/kernel/sched_small_task
-        echo 20 > /proc/sys/kernel/sched_mostly_idle_load
-        echo 3 > /proc/sys/kernel/sched_mostly_idle_nr_run
         echo 95 > /proc/sys/kernel/sched_upmigrate
         echo 90 > /proc/sys/kernel/sched_downmigrate
         echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
         echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
+        echo 3 > /proc/sys/kernel/sched_spill_nr_run
         # Enable bus-dcvs
         for devfreq_gov in /sys/class/devfreq/*qcom,cpubw*/governor
         do
