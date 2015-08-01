@@ -1000,9 +1000,21 @@ case "$target" in
         echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
         echo 3 > /proc/sys/kernel/sched_spill_nr_run
         # Enable bus-dcvs
-        for devfreq_gov in /sys/class/devfreq/*qcom,cpubw*/governor
+        for cpubw in /sys/class/devfreq/*qcom,cpubw*
         do
-            echo "bw_hwmon" > $devfreq_gov
+            echo "bw_hwmon" > $cpubw/governor
+            echo 50 > $cpubw/polling_interval
+            echo 1525 > $cpubw/min_freq
+            echo "1525 5195 11863 13763" > $cpubw/bw_hwmon/mbps_zones
+            echo 2 > $cpubw/bw_hwmon/sample_ms
+            echo 34 > $cpubw/bw_hwmon/io_percent
+            echo 20 > $cpubw/bw_hwmon/hist_memory
+            echo 10 > $cpubw/bw_hwmon/hyst_length
+            echo 0 > $cpubw/bw_hwmon/low_power_ceil_mbps
+            echo 34 > $cpubw/bw_hwmon/low_power_io_percent
+            echo 20 > $cpubw/bw_hwmon/low_power_delay
+            echo 0 > $cpubw/bw_hwmon/guard_band_mbps
+            echo 250 > $cpubw/bw_hwmon/up_scale
         done
 
         for devfreq_gov in /sys/class/devfreq/*qcom,mincpubw*/governor
