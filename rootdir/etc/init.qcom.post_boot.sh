@@ -1029,6 +1029,10 @@ case "$target" in
 		echo 0 > /sys/module/lpm_levels/system/pwr/pwr-l2-gdhs/idle_enabled
 		echo 0 > /sys/module/lpm_levels/system/perf/perf-l2-gdhs/idle_enabled
 		echo N > /sys/module/lpm_levels/parameters/sleep_disabled
+	elif [ "$soc_revision" == "3.0" ]; then
+		# Enable all LPMs by default
+		# This will enable C4, D4, D3, E4 and M3 LPMs
+		echo N > /sys/module/lpm_levels/parameters/sleep_disabled
 	else
 		#Disable suspend for v1.0 and v2.0
 		echo pwr_dbg > /sys/power/wake_lock
