@@ -257,6 +257,7 @@ INIT += init.qcom.uicc.sh
 INIT += fstab.qcom
 INIT += init.qcom.debug.sh
 INIT += init.qcom.zram.sh
+INIT += init.qcom.sensors.sh
 
 #IPROUTE2
 IPROUTE2 := ip
@@ -620,6 +621,10 @@ CRDA += init.crda.sh
 WLAN := prima_wlan.ko
 WLAN += pronto_wlan.ko
 
+#FSTMAN
+FSTMAN := fstman
+FSTMAN += fstman.ini
+
 PRODUCT_PACKAGES := \
     AccountAndSyncSettings \
     DeskClock \
@@ -658,7 +663,8 @@ ifneq ($(TARGET_USES_AOSP),true)
 PRODUCT_PACKAGES += \
        BluetoothExt \
        BTTestApp \
-       HiddTestApp
+       HiddTestApp \
+       BTLogKit
 endif
 
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
@@ -738,6 +744,7 @@ PRODUCT_PACKAGES += $(VT_QTI_PERMISSIONS)
 PRODUCT_PACKAGES += $(CRDA)
 PRODUCT_PACKAGES += $(WLAN)
 PRODUCT_PACKAGES += $(IPACM)
+PRODUCT_PACKAGES += $(FSTMAN)
 
 # Live Wallpapers
 PRODUCT_PACKAGES += \

@@ -336,6 +336,25 @@ case "$target" in
 esac
 
 case "$target" in
+    "msm8952")
+
+	if [ -f /sys/devices/soc0/soc_id ]; then
+		soc_id=`cat /sys/devices/soc0/soc_id`
+	else
+		soc_id=`cat /sys/devices/system/soc/soc0/id`
+	fi
+
+	case "$soc_id" in
+		"264" | "289")
+
+		# Enable low power modes
+		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
+		;;
+	esac
+	;;
+esac
+
+case "$target" in
     "msm8916")
         if [ -f /sys/devices/soc0/soc_id ]; then
             soc_id=`cat /sys/devices/soc0/soc_id`
@@ -973,43 +992,37 @@ case "$target" in
         echo "0:1344000 2:1344000" > /sys/module/cpu_boost/parameters/input_boost_freq
         echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
         # Setting b.L scheduler parameters
+        echo 0 > /proc/sys/kernel/sched_boost
         echo 1 > /proc/sys/kernel/sched_migration_fixup
-        echo 30 > /proc/sys/kernel/sched_small_task
-        echo 20 > /proc/sys/kernel/sched_mostly_idle_load
-        echo 3 > /proc/sys/kernel/sched_mostly_idle_nr_run
         echo 95 > /proc/sys/kernel/sched_upmigrate
         echo 90 > /proc/sys/kernel/sched_downmigrate
         echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
         echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
+        echo 3 > /proc/sys/kernel/sched_spill_nr_run
         # Enable bus-dcvs
         for devfreq_gov in /sys/class/devfreq/*qcom,cpubw*/governor
         do
             echo "bw_hwmon" > $devfreq_gov
         done
 
+        for devfreq_gov in /sys/class/devfreq/*qcom,mincpubw*/governor
+        do
+            echo "cpufreq" > $devfreq_gov
+        done
+
 	soc_revision=`cat /sys/devices/soc0/revision`
 	if [ "$soc_revision" == "2.1" ]; then
-		# Disable C4, D3, D4 and M3 LPMs
-		echo 0 > /sys/module/lpm_levels/system/pwr/cpu0/fpc/idle_enabled
-		echo 0 > /sys/module/lpm_levels/system/pwr/cpu1/fpc/idle_enabled
-		echo 0 > /sys/module/lpm_levels/system/perf/cpu2/fpc/idle_enabled
-		echo 0 > /sys/module/lpm_levels/system/perf/cpu3/fpc/idle_enabled
+		# Enable C4.D4.E4.M3 LPM modes
+		# Disable D3 state
 		echo 0 > /sys/module/lpm_levels/system/pwr/pwr-l2-gdhs/idle_enabled
-		echo 0 > /sys/module/lpm_levels/system/pwr/pwr-l2-fpc/idle_enabled
 		echo 0 > /sys/module/lpm_levels/system/perf/perf-l2-gdhs/idle_enabled
-		echo 0 > /sys/module/lpm_levels/system/perf/perf-l2-fpc/idle_enabled
-		echo 0 > /sys/module/lpm_levels/system/system-fpc/idle_enabled
-
-		# Enable C4 LPM mode
-		echo 1 > /sys/module/lpm_levels/system/pwr/cpu0/fpc/idle_enabled
-		echo 1 > /sys/module/lpm_levels/system/pwr/cpu1/fpc/idle_enabled
-		echo 1 > /sys/module/lpm_levels/system/perf/cpu2/fpc/idle_enabled
-		echo 1 > /sys/module/lpm_levels/system/perf/cpu3/fpc/idle_enabled
 		echo N > /sys/module/lpm_levels/parameters/sleep_disabled
 	else
 		#Disable suspend for v1.0 and v2.0
 		echo pwr_dbg > /sys/power/wake_lock
 	fi
+        # Starting io prefetcher service
+        start iop
     ;;
 esac
 

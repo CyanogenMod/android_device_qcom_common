@@ -30,6 +30,7 @@ import init.target.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
+    chmod 0755 /sys/kernel/debug
 
 on init
     # Set permissions for persist partition
@@ -183,6 +184,12 @@ on boot
     chown radio radio /data/misc/radio/copy_complete
     chmod 0660 /data/misc/radio/copy_complete
 
+    # Socket location for RIDL
+    mkdir /dev/socket/RIDL 2770 system system
+
+    # bond0 used by FST Manager
+    chown wifi wifi /sys/class/net/bond0/bonding/queue_id
+
 # msm specific files that need to be created on /data
 on post-fs-data
     # Create directory for TZ Apps
@@ -280,6 +287,22 @@ on post-fs-data
 
     #Create a folder for SRS to be able to create a usercfg file
     mkdir /data/data/media 0770 media media
+
+    # RIDL data
+    mkdir /data/misc/SelfHost/ 0710 system shell
+    mkdir /data/misc/SelfHost/QCLogs/ 2750 system shell
+    mkdir /data/misc/SelfHost/QCLogs/temp/ 0700 system shell
+    mkdir /data/misc/SelfHost/storage/ 0700 system shell
+    mkdir /data/misc/SelfHost/Running/ 2750 system shell
+
+    #Create IOP  deamon related dirs
+    mkdir /data/misc/iop 0770 root system
+
+service iop /system/bin/iop
+    class main
+    user root
+    group root
+    disabled
 
 service qcomsysd /system/bin/qcom-system-daemon
     class main
@@ -399,8 +422,20 @@ on property:wc_transport.start_hci=false
 
 service start_hci_filter /system/bin/wcnss_filter
     class late_start
-    user root
-    group bluetooth diag
+    user bluetooth
+    group bluetooth qcom_diag
+    disabled
+
+on property:wc_transport.start_root=true
+    start hci_filter_root
+
+on property:wc_transport.start_root=false
+    stop hci_filter_root
+
+service hci_filter_root /system/bin/wcnss_filter
+    class late_start
+    user bluetooth
+    group bluetooth qcom_diag system
     disabled
 
 service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
@@ -577,7 +612,26 @@ service wpa_supplicant /system/bin/wpa_supplicant \
     disabled
     oneshot
 
+# FST Manager can be started by property_set("ctl.start", "fstman:<hostap ctrl iface>");
+service fstman /system/bin/fstman -B -ddd -n -c /data/misc/wifi/fstman.ini
+    user wifi
+    group wifi net_admin net_raw
+    class main
+    disabled
+    oneshot
+
+on property:netd.fstman.start=true
+    start fstman
+
+on property:netd.fstman.start=false
+    stop fstman
+
 service dhcpcd_wlan0 /system/bin/dhcpcd -ABKLG
+    class late_start
+    disabled
+    oneshot
+
+service dhcpcd_bond0 /system/bin/dhcpcd -ABKLG
     class late_start
     disabled
     oneshot
@@ -588,6 +642,11 @@ service dhcpcd_p2p /system/bin/dhcpcd -ABKLG
     oneshot
 
 service iprenew_wlan0 /system/bin/dhcpcd -n
+    class late_start
+    disabled
+    oneshot
+
+service iprenew_bond0 /system/bin/dhcpcd -n
     class late_start
     disabled
     oneshot
@@ -684,6 +743,11 @@ on property:drmdiag.load=0
 
 service qcom-sh /system/bin/sh /init.qcom.sh
     class late_start
+    user root
+    oneshot
+
+service sensor-sh /system/bin/sh /init.qcom.sensors.sh
+    class core
     user root
     oneshot
 
@@ -889,6 +953,14 @@ on property:sys.wfdservice=enable
 on property:sys.wfdservice=disable
     stop wfdservice
 
+service RIDL /system/vendor/bin/RIDLClient.exe
+    class late_start
+    oneshot
+    user system
+    group system inet log sdcard_r sdcard_rw
+    # removed for security team - misc bluetooth radio gps wifi diag media_rw
+    # limited to 12 groups.  Unused: audio usb qcom_diag net_bt_admin net_bt_stac net_raw net_admin
+
 # Coresight early boot service
 service cs-early-boot /system/bin/sh /persist/coresight/qdss.agent.sh early-boot /system/etc/init.qcom.debug.sh
     class core
@@ -914,3 +986,9 @@ service qseeproxydaemon /system/vendor/bin/qseeproxydaemon
     class late_start
     user system
     group system
+
+# Seemp health service
+#service seemp_healthd /system/vendor/bin/seemp_healthd
+#    class late_start
+#    user system
+#    group system
