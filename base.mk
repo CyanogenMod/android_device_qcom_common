@@ -682,7 +682,8 @@ PRODUCT_PACKAGES += \
        BTTestApp \
        HiddTestApp \
        BTLogKit \
-       a4wpservice
+       a4wpservice \
+       BTLogSave
 endif
 
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
