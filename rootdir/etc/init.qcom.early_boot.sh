@@ -47,7 +47,8 @@ fi
 
 log -t BOOT -p i "MSM target '$1', SoC '$soc_hwplatform', HwID '$soc_hwid', SoC ver '$soc_hwver'"
 
-case "$1" in
+target=`getprop ro.board.platform`
+case "$target" in
     "msm7630_surf" | "msm7630_1x" | "msm7630_fusion")
         case "$soc_hwplatform" in
             "FFA" | "SVLTE_FFA")
@@ -161,6 +162,13 @@ case "$1" in
                 # Android sw navigation bar
                 setprop qemu.hw.mainkeys 0
                 ;;
+            *)
+                setprop ro.sf.lcd_density 480
+                ;;
+        esac
+        ;;
+    "msm8996")
+        case "$soc_hwplatform" in
             *)
                 setprop ro.sf.lcd_density 480
                 ;;
