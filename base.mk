@@ -168,6 +168,7 @@ CURL += curl
 DASH := libdashplayer
 DASH += libqcmediaplayer
 DASH += qcmediaplayer
+DASH += libextmedia_jni
 
 #EXTENDEDMEDIA_EXT
 EXTENDEDMEDIA_EXT := libextendedmediaextractor
