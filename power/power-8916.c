@@ -244,10 +244,5 @@ int power_hint_override(struct power_module *module __unused, power_hint_t hint,
         return HINT_HANDLED;
     }
 
-    if (hint == POWER_HINT_VIDEO_ENCODE || hint == POWER_HINT_VIDEO_DECODE) {
-        // skip this one
-        return HINT_HANDLED;
-    }
-
 	return HINT_NONE;
 }
