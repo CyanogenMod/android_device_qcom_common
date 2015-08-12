@@ -3,7 +3,7 @@ ifeq ($(TARGET_INIT_VENDOR_LIB),libinit_msm)
 LOCAL_PATH := $(call my-dir)
 LIBINIT_MSM_PATH := $(call my-dir)
 
-LIBINIT_USE_MSM_DEFAULT := $(shell if [ ! -f $(LIBINIT_MSM_PATH)/init_$(TARGET_BOARD_PLATFORM).c ]; then echo true; fi)
+LIBINIT_USE_MSM_DEFAULT := $(shell if [ ! -f "$(LIBINIT_MSM_PATH)/init_$(TARGET_BOARD_PLATFORM).c" ]; then echo true; fi)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
