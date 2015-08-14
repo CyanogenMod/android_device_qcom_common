@@ -193,6 +193,12 @@ on boot
 
 # msm specific files that need to be created on /data
 on post-fs-data
+    #Create directories for Fingerprint
+    mkdir /data/misc/stargate 0770 system system
+    mkdir /data/misc/stargate/bg_estimation 0770 system system
+    mkdir /data/misc/stargate/calib_test 0770 system system
+    mkdir /data/misc/stargate/database 0770 system system
+
     # Create directory for TZ Apps
     mkdir /data/misc/qsee 0770 system system
 
