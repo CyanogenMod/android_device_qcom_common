@@ -184,6 +184,9 @@ on boot
     chown radio radio /data/misc/radio/copy_complete
     chmod 0660 /data/misc/radio/copy_complete
 
+    # Socket location for RIDL
+    mkdir /dev/socket/RIDL 2770 system system
+
 # msm specific files that need to be created on /data
 on post-fs-data
     # Create directory for TZ Apps
@@ -295,6 +298,13 @@ on post-fs-data
     #Create FM dir for patchdownloader
     mkdir /data/misc/fm 0770 system system
     chmod 0770 /data/misc/fm
+
+    # RIDL data
+    mkdir /data/misc/SelfHost/ 0710 system shell
+    mkdir /data/misc/SelfHost/QCLogs/ 2750 system shell
+    mkdir /data/misc/SelfHost/QCLogs/temp/ 0700 system shell
+    mkdir /data/misc/SelfHost/storage/ 0700 system shell
+    mkdir /data/misc/SelfHost/Running/ 2750 system shell
 
 service qcomsysd /system/bin/qcom-system-daemon
     class main
@@ -641,6 +651,16 @@ service ptt_ffbm /system/bin/ptt_socket_app -f -d
     disabled
     oneshot
 
+service wifi_ftmd /system/bin/wifi_ftmd
+    user system
+    group system inet net_admin
+    socket wififtmd_server dgram 0660 system system
+    disabled
+    oneshot
+
+on property:wifi.ftmd.load=true
+    insmod /system/lib/modules/wlan.ko con_mode=5
+
 service cnss_diag /system/bin/cnss_diag --q
     class main
     user root
@@ -939,8 +959,11 @@ on property:sys.wfdservice=disable
 
 service RIDL /system/vendor/bin/RIDLClient.exe
     class late_start
-    user root
-    group root
+    oneshot
+    user system
+    group system inet log sdcard_r sdcard_rw
+    # removed for security team - misc bluetooth radio gps wifi diag media_rw
+    # limited to 12 groups.  Unused: audio usb qcom_diag net_bt_admin net_bt_stac net_raw net_admin
 
 # bugreport is triggered by developer options
 service bugreport /system/bin/dumpstate -d -p -B \
