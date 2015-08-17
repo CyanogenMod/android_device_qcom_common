@@ -16,7 +16,8 @@ endif
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.extension_library=libqti-perfd-client.so \
     persist.radio.apm_sim_not_pwdn=1 \
-    persist.radio.sib16_support=1
+    persist.radio.sib16_support=1 \
+    persist.radio.custom_ecc=1
 
 PRODUCT_PRIVATE_KEY := device/qcom/common/qcom.key
 
