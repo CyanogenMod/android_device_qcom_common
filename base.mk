@@ -152,7 +152,7 @@ CURL += curl
 
 #CM
 CM := CMFileManager
-CM += Trebuchet
+CM += Launcher3
 CM += Eleven
 
 #DASH
