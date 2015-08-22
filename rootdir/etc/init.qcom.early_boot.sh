@@ -169,6 +169,10 @@ case "$target" in
         ;;
     "msm8996")
         case "$soc_hwplatform" in
+            "Dragon")
+                setprop ro.sf.lcd_density 240
+                setprop qemu.hw.mainkeys 0
+                ;;
             *)
                 setprop ro.sf.lcd_density 480
                 ;;
