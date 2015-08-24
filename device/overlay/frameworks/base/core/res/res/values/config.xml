@@ -238,5 +238,9 @@
     <!--The locatiotion of .jar file which has the extended implementation
          of telephony base classes.-->
     <string name="telephony_plugin_lib_path" translatable="false">/system/framework/qti-telephony-common.jar</string>
+    <!-- Config determines whether to update phone object when voice registration
+    state changes. Voice radio tech change will always trigger an update of
+    phone object irrespective of this config -->
+    <bool name="config_switch_phone_on_voice_reg_state_change">false</bool>
 
 </resources>
