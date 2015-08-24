@@ -30,6 +30,9 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <sys/mman.h>
 #include <linux/qseecom.h>
 #include <linux/msm_ion.h>
