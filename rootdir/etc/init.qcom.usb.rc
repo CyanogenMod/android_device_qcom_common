@@ -1227,7 +1227,7 @@ on property:sys.usb.config=diag,serial_cdev,serial_tty,rmnet_ipa,mass_storage,dp
     write /sys/class/android_usb/android0/idVendor 05C6
     write /sys/class/android_usb/android0/idProduct 90AD
     write /sys/class/android_usb/android0/f_diag/clients diag
-    write /sys/class/android_usb/android0/f_serial/transports cdev,tty
+    write /sys/class/android_usb/android0/f_serial/transports char_bridge,tty
 # DPL is implemented using QDSS
     write /sys/class/android_usb/android0/f_qdss/debug_intf 0
     write /sys/class/android_usb/android0/f_qdss/transports qti,bam2bam_ipa
@@ -1244,7 +1244,7 @@ on property:sys.usb.config=diag,serial_cdev,serial_tty,rmnet_ipa,mass_storage,dp
     write /sys/class/android_usb/android0/idVendor 05C6
     write /sys/class/android_usb/android0/idProduct 90B0
     write /sys/class/android_usb/android0/f_diag/clients diag
-    write /sys/class/android_usb/android0/f_serial/transports cdev,tty
+    write /sys/class/android_usb/android0/f_serial/transports char_bridge,tty
 # DPL is implemented using QDSS
     write /sys/class/android_usb/android0/f_qdss/debug_intf 0
     write /sys/class/android_usb/android0/f_qdss/transports qti,bam2bam_ipa
