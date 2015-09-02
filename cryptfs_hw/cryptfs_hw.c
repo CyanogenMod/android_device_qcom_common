@@ -38,6 +38,8 @@
 #include "cutils/log.h"
 #include "cutils/properties.h"
 #include "cutils/android_reboot.h"
+#include "keymaster_common.h"
+#include "hardware.h"
 
 
 // When device comes up or when user tries to change the password, user can
@@ -61,6 +63,8 @@
 static unsigned int cpu_id[] = {
 	239, /* MSM8939 SOC ID */
 };
+
+#define KEYMASTER_PARTITION_NAME "/dev/block/bootdevice/by-name/keymaster"
 
 static int loaded_library = 0;
 static int (*qseecom_create_key)(int, void*);
@@ -282,4 +286,37 @@ int is_ice_enabled(void)
     }
   }
   return storage_type;
+}
+
+static int get_keymaster_version()
+{
+    int rc = -1;
+    const hw_module_t* mod;
+    rc = hw_get_module_by_class(KEYSTORE_HARDWARE_MODULE_ID, NULL, &mod);
+    if (rc) {
+        SLOGE("could not find any keystore module");
+        return rc;
+    }
+
+    return mod->module_api_version;
+}
+
+int should_use_keymaster()
+{
+    /* HW FDE key would be tied to keymaster only if:
+     * New Keymaster is available
+     * keymaster partition exists on the device
+     */
+    int rc = 0;
+    if (get_keymaster_version() != KEYMASTER_MODULE_API_VERSION_1_0) {
+        SLOGI("Keymaster version is not 1.0");
+        return rc;
+    }
+
+    if (access(KEYMASTER_PARTITION_NAME, F_OK) == -1) {
+        SLOGI("Keymaster partition does not exists");
+        return rc;
+    }
+
+    return 1;
 }
