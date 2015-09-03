@@ -18,6 +18,7 @@ QCOM_BOARD_PLATFORMS += msm8996
 QCOM_BOARD_PLATFORMS += msm8952
 QCOM_BOARD_PLATFORMS += thorium
 QCOM_BOARD_PLATFORMS += titanium
+QCOM_BOARD_PLATFORMS += msmcobalt
 
 QSD8K_BOARD_PLATFORMS := qsd8k
 
@@ -25,7 +26,7 @@ TARGET_USE_VENDOR_CAMERA_EXT := true
 ANDROID_COMPILE_WITH_JACK := false
 
 #List of targets that use video hw
-MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 msm8992 msm8996 msm8952 thorium titanium
+MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 msm8992 msm8996 msm8952 thorium titanium msmcobalt
 
 #List of targets that use master side content protection
 MASTER_SIDE_CP_TARGET_LIST := msm8996
