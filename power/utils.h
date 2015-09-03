@@ -32,6 +32,7 @@
 int sysfs_read(char *path, char *s, int num_bytes);
 int sysfs_write(char *path, char *s);
 int get_scaling_governor(char governor[], int size);
+int get_scaling_governor_check_cores(char governor[], int size,int core_num);
 
 void vote_ondemand_io_busy_off();
 void unvote_ondemand_io_busy_off();

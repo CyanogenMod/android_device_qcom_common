@@ -40,6 +40,13 @@
 #define LOG_TAG "QCOM PowerHAL"
 #include <utils/Log.h>
 
+char scaling_gov_path[4][80] ={
+    "sys/devices/system/cpu/cpu0/cpufreq/scaling_governor",
+    "sys/devices/system/cpu/cpu1/cpufreq/scaling_governor",
+    "sys/devices/system/cpu/cpu2/cpufreq/scaling_governor",
+    "sys/devices/system/cpu/cpu3/cpufreq/scaling_governor"
+};
+
 static void *qcopt_handle;
 static int (*perf_lock_acq)(unsigned long handle, int duration,
     int list[], int numArgs);
@@ -173,6 +180,22 @@ int get_scaling_governor(char governor[], int size)
     }
 
     return 0;
+}
+
+int get_scaling_governor_check_cores(char governor[], int size,int core_num)
+{
+   if (sysfs_read(scaling_gov_path[core_num], governor,
+               size) == -1) {
+      // Can't obtain the scaling governor. Return.
+      return -1;
+   }
+
+   // Strip newline at the end.
+   int len = strlen(governor);
+   len--;
+   while (len >= 0 && (governor[len] == '\n' || governor[len] == '\r'))
+        governor[len--] = '\0';
+   return 0;
 }
 
 void interaction(int duration, int num_args, int opt_list[])
