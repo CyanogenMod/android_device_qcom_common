@@ -378,16 +378,24 @@ int power_hint_override(struct power_module *module __unused, power_hint_t hint,
         return HINT_HANDLED;
     }
 
+    if (hint == POWER_HINT_LAUNCH_BOOST) {
+        int duration = 2000;
+        int resources[] = { SCHED_BOOST_ON, 0x20F, 0x101, 0x1C00 };
+
+        interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+
+        return HINT_HANDLED;
+	}
+
     if (hint == POWER_HINT_CPU_BOOST) {
         int duration = (hintdata)data / 1000;
-        int resources[] = { SCHED_BOOST_ON, 0x20B, 0x1C00 };
+        int resources[] = { SCHED_BOOST_ON, 0x20D, 0x3E01, 0x101 };
 
         if (duration > 0)
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
 
         return HINT_HANDLED;
 	}
-
 
     if (hint == POWER_HINT_VIDEO_ENCODE) {
         process_video_encode_hint(data);

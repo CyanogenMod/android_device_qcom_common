@@ -182,9 +182,18 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         return HINT_HANDLED;
     }
 
+    if (hint == POWER_HINT_LAUNCH_BOOST) {
+        int duration = 2000;
+        int resources[] = { SCHED_BOOST_ON, 0x20D };
+
+        interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+
+        return HINT_HANDLED;
+    }
+
     if (hint == POWER_HINT_CPU_BOOST) {
         int duration = (hintdata)data / 1000;
-        int resources[] = { CPUS_ONLINE_MIN_2, SCHED_BOOST_ON, 0x20B, 0x30B };
+        int resources[] = { SCHED_BOOST_ON };
 
         if (duration > 0)
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
