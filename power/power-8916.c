@@ -220,8 +220,7 @@ static void process_video_encode_hint(void *metadata)
                 resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {TR_MS_30, HISPEED_LOAD_90, HS_FREQ_1026,
-                INTERACTIVE_IO_BUSY_OFF};
+            int resource_values[] = {TR_MS_30, HISPEED_LOAD_90, HS_FREQ_1026, 0x1C00};
 
             perform_hint_action(video_encode_metadata.hint_id,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
