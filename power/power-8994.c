@@ -71,7 +71,7 @@ static void set_power_profile(int profile) {
     }
 
     if (profile == PROFILE_POWER_SAVE) {
-        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_1,
+        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_2,
             CPU0_MAX_FREQ_NONTURBO_MAX - 2, CPU1_MAX_FREQ_NONTURBO_MAX - 2,
             CPU2_MAX_FREQ_NONTURBO_MAX - 2, CPU3_MAX_FREQ_NONTURBO_MAX - 2,
             CPU4_MAX_FREQ_NONTURBO_MAX - 2, CPU5_MAX_FREQ_NONTURBO_MAX - 2,
