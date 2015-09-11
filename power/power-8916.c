@@ -97,6 +97,28 @@ static int is_target_8916() /* Returns value=8916 if target is 8916 else value 0
     return is_8916;
 }
 
+static int profile_high_performance_8916[3] = {
+    0x1C00, 0x0901, CPU0_MIN_FREQ_TURBO_MAX,
+};
+
+static int profile_high_performance_8939[11] = {
+    SCHED_BOOST_ON, 0x1C00, 0x0901,
+    CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
+    CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX,
+    CPU4_MIN_FREQ_TURBO_MAX, CPU5_MIN_FREQ_TURBO_MAX,
+    CPU6_MIN_FREQ_TURBO_MAX, CPU7_MIN_FREQ_TURBO_MAX,
+};
+
+static int profile_power_save_8916[1] = {
+    CPU0_MAX_FREQ_NONTURBO_MAX,
+};
+
+static int profile_power_save_8939[5] = {
+    CPUS_ONLINE_MAX_LIMIT_2,
+    CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
+    CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX,
+};
+
 static void set_power_profile(int profile) {
 
     if (profile == current_power_profile)
@@ -110,19 +132,17 @@ static void set_power_profile(int profile) {
     }
 
     if (profile == PROFILE_HIGH_PERFORMANCE) {
-        int resource_values[] = { SCHED_BOOST_ON, 0x1C00, 0x0901,
-            CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
-            CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX,
-            CPU4_MIN_FREQ_TURBO_MAX, CPU5_MIN_FREQ_TURBO_MAX,
-            CPU6_MIN_FREQ_TURBO_MAX, CPU7_MIN_FREQ_TURBO_MAX };
+        int *resource_values = is_target_8916() ?
+            profile_high_performance_8916 : profile_high_performance_8939;
+
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         ALOGD("%s: set performance mode", __func__);
 
     } else if (profile == PROFILE_POWER_SAVE) {
-        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_2,
-            CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
-            CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX };
+        int* resource_values = is_target_8916() ?
+            profile_power_save_8916 : profile_power_save_8939;
+
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         ALOGD("%s: set powersave", __func__);
@@ -220,8 +240,7 @@ static void process_video_encode_hint(void *metadata)
                 resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {TR_MS_30, HISPEED_LOAD_90, HS_FREQ_1026,
-                INTERACTIVE_IO_BUSY_OFF};
+            int resource_values[] = {HS_FREQ_800, 0x1C00};
 
             perform_hint_action(video_encode_metadata.hint_id,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
@@ -380,7 +399,7 @@ int power_hint_override(struct power_module *module __unused, power_hint_t hint,
 
     if (hint == POWER_HINT_LAUNCH_BOOST) {
         int duration = 2000;
-        int resources[] = { SCHED_BOOST_ON, 0x20F, 0x101, 0x1C00 };
+        int resources[] = { SCHED_BOOST_ON, 0x20F, 0x101, 0x1C00, 0x3E01, 0x4001, 0x4101, 0x4201 };
 
         interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
 
