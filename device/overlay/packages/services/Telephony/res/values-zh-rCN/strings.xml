@@ -29,6 +29,40 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="preferred_network_mode_choices" translatable="false">
+        <item>@string/preferred_network_mode_td_scdma_lte_gsm_wcdma_cdma_evdo_choice </item>
+        <item>@string/preferred_network_mode_td_scdma_gsm_wcdma_cdma_evdo_choice</item>
+        <item>@string/preferred_network_mode_td_scdma_gsm_wcdma_lte_choice</item>
+        <item>@string/preferred_network_mode_td_scdma_wcdma_lte_choice</item>
+        <item>@string/preferred_network_mode_td_scdma_gsm_wcdma_choice</item>
+        <item>@string/preferred_network_mode_td_scdma_gsm_lte_choice</item>
+        <item>@string/preferred_network_mode_td_scdma_gsm_choice</item>
+        <item>@string/preferred_network_mode_td_scdma_lte_choice</item>
+        <item>@string/preferred_network_mode_td_scdma_wcdma_choice</item>
+        <item>@string/preferred_network_mode_td_scdma_only_choice</item>
+        <item>@string/preferred_network_mode_lte_wcdma_choice</item>
+        <item>@string/preferred_network_mode_lte_choice</item>
+        <item>@string/preferred_network_mode_global_choice</item>
+        <item>@string/preferred_network_mode_gsm_wcdma_lte_choice</item>
+        <item>@string/preferred_network_mode_cdma_lte_evdo_choice</item>
+        <item>@string/preferred_network_mode_cdma_evdo_gsm_wcdma_choice</item>
+        <item>@string/preferred_network_mode_evdo_only_choice</item>
+        <item>@string/preferred_network_mode_cdma_wo_evdo_choice</item>
+        <item>@string/preferred_network_mode_cdma_evdo_auto_choice</item>
+        <item>@string/preferred_network_mode_gsm_wcdma_auto_choice</item>
+        <item>@string/preferred_network_mode_wcdma_only_choice</item>
+        <item>@string/preferred_network_mode_gsm_only_choice</item>
+        <item>@string/preferred_network_mode_gsm_wcdma_preferred_choice</item>
+    </string-array>
+    <string name="preferred_network_mode_td_scdma_only_choice">"仅 TD-SCDMA"</string>
+    <string name="preferred_network_mode_global_choice">"通用"</string>
+    <string name="preferred_network_mode_evdo_only_choice">"仅 EvDo"</string>
+    <string name="preferred_network_mode_cdma_wo_evdo_choice">"CDMA，无 EvDo 功能"</string>
+    <string name="preferred_network_mode_cdma_evdo_auto_choice">"CDMA/EvDo 自动选择"</string>
+    <string name="preferred_network_mode_gsm_wcdma_auto_choice">"GSM/WCDMA 自动选择"</string>
+    <string name="preferred_network_mode_wcdma_only_choice">"仅 WCDMA"</string>
+    <string name="preferred_network_mode_gsm_only_choice">"仅 GSM"</string>
+    <string name="preferred_network_mode_gsm_wcdma_preferred_choice">"首选 GSM/WCDMA"</string>
     <string name="preferred_network_mode_4g_3g_2g_auto">"4G/3G/2G (自动选择)"</string>
     <string name="preferred_network_mode_3g_2g_auto">"3G/2G (自动选择)"</string>
     <string name="preferred_network_mode_dialogtitle_show_radio_tech">"网络模式"</string>
