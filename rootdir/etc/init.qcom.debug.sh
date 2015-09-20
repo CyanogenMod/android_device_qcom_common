@@ -137,6 +137,15 @@ enable_msm8996_dcc_config()
     echo  0x99A2030 > $DCC_PATH/config
     # APCS_APCC_SW_EN_VOTE
     echo  0x99E0020 > $DCC_PATH/config
+    # pIMEM
+    echo  0x0038070 > $DCC_PATH/config
+    echo  0x0038074 > $DCC_PATH/config
+    echo  0x0038078 > $DCC_PATH/config
+    echo  0x003807C > $DCC_PATH/config
+    echo  0x0038080 > $DCC_PATH/config
+    echo  0x0038084 > $DCC_PATH/config
+    echo  0x0038088 > $DCC_PATH/config
+    echo  0x003808C > $DCC_PATH/config
 
     echo  1 > $DCC_PATH/enable
 }
