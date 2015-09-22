@@ -683,7 +683,8 @@ PRODUCT_PACKAGES += \
        HiddTestApp \
        BTLogKit \
        a4wpservice \
-       BTLogSave
+       BTLogSave \
+       wipowerservice
 endif
 
 PRODUCT_PACKAGES += $(ALSA_HARDWARE)
