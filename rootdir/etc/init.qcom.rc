@@ -299,15 +299,6 @@ on post-fs-data
     mkdir /data/misc/SelfHost/Running/ 2750 system shell
     mkdir /data/misc/SelfHost/socket/ 2770 system system
 
-    #Create IOP  deamon related dirs
-    mkdir /data/misc/iop 0770 root system
-
-service iop /system/bin/iop
-    class main
-    user root
-    group root
-    disabled
-
     #Create PERFD deamon related dirs
     mkdir /data/misc/perfd 0755 root system
     chmod 2755 /data/misc/perfd
@@ -317,6 +308,15 @@ service iop /system/bin/iop
     # NFC local data and nfcee xml storage
     mkdir /data/nfc 0770 nfc nfc
     mkdir /data/nfc/param 0770 nfc nfc
+
+    #Create IOP  deamon related dirs
+    mkdir /data/misc/iop 0770 root system
+
+service iop /system/bin/iop
+    class main
+    user root
+    group root
+    disabled
 
 service qcomsysd /system/bin/qcom-system-daemon
     class main
