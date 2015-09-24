@@ -1393,7 +1393,7 @@ case "$target" in
             echo 50 > $cpubw/polling_interval
             echo 1525 > $cpubw/min_freq
             echo "1525 5195 11863 13763" > $cpubw/bw_hwmon/mbps_zones
-            echo 2 > $cpubw/bw_hwmon/sample_ms
+            echo 4 > $cpubw/bw_hwmon/sample_ms
             echo 34 > $cpubw/bw_hwmon/io_percent
             echo 20 > $cpubw/bw_hwmon/hist_memory
             echo 10 > $cpubw/bw_hwmon/hyst_length
@@ -1402,6 +1402,7 @@ case "$target" in
             echo 20 > $cpubw/bw_hwmon/low_power_delay
             echo 0 > $cpubw/bw_hwmon/guard_band_mbps
             echo 250 > $cpubw/bw_hwmon/up_scale
+            echo 1600 > $cpubw/bw_hwmon/idle_mbps
         done
 
         for devfreq_gov in /sys/class/devfreq/*qcom,mincpubw*/governor
