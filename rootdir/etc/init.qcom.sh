@@ -112,8 +112,6 @@ case "$baseband" in
         ;;
 esac
 
-start_copying_prebuilt_qcril_db
-
 case "$target" in
     "msm7630_surf" | "msm7630_1x" | "msm7630_fusion")
         if [ -f /sys/devices/soc0/hw_platform ]; then
@@ -241,7 +239,13 @@ case "$emmc_boot"
 esac
 
 #
-# Make modem config folder and copy firmware config to that folder
+# Copy qcril.db if needed for RIL
+#
+start_copying_prebuilt_qcril_db
+echo 1 > /data/misc/radio/db_check_done
+
+#
+# Make modem config folder and copy firmware config to that folder for RIL
 #
 rm -rf /data/misc/radio/modem_config
 mkdir /data/misc/radio/modem_config
