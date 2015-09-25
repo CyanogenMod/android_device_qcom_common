@@ -45,11 +45,7 @@ ifeq ($(call is-board-platform-in-list, apq8084), true)
 LOCAL_SRC_FILES += power-8084.c
 endif
 
-ifeq ($(call is-board-platform-in-list, msm8992), true)
-LOCAL_SRC_FILES += power-8992.c
-endif
-
-ifeq ($(call is-board-platform-in-list, msm8994), true)
+ifeq ($(call is-board-platform-in-list, msm8992 msm8994), true)
 LOCAL_SRC_FILES += power-8994.c
 endif
 
