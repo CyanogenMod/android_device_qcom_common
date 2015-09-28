@@ -87,8 +87,18 @@ static int process_video_encode_hint(void *metadata)
              * go hispeed load for sLVT - 95
              * hispeed freq for sLVT - 729 MHz
              * target load for sLVT - 90
+             * bus DCVS set to V1 config:
+             *  sample ms - 50
+             *  io percent - 16
+             *  hist memory - 0
+             *  hyst length - 0
+             *  low power ceil mpbs - 0
+             *  guard band mbps - 100
+             *  up scale - 0
              */
-            int resource_values[] = {0x2704, 0x2B5F, 0x2C07, 0x2F5A, 0x3204, 0x365F, 0x3707, 0x3A5A};
+            int resource_values[] = {0x41400000, 0x4, 0x41410000, 0x5F, 0x41414000, 0x2D9,
+                0x41420000, 0x5A, 0x41400100, 0x4, 0x41410100, 0x5F, 0x41414100, 0x2D9,
+                0x41420100, 0x5A, 0x4180C000, 0x0};
 
             perform_hint_action(video_encode_metadata.hint_id,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
