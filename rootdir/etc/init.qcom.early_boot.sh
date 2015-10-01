@@ -192,6 +192,19 @@ case "$platform" in
                 setprop ro.sf.lcd_density 320
             fi
         fi
+
+        # Set ro.opengles.version based on chip id.
+        # MSM8939 variants supports OpenGLES 3.1
+        # 196608 is decimal for 0x30000 to report version 3.0
+        # 196609 is decimal for 0x30001 to report version 3.1
+        case "$soc_hwid" in
+            233|239|240|241|242|243|263|268|269|270|271)
+                setprop ro.opengles.version 196609
+                ;;
+            *)
+                setprop ro.opengles.version 196608
+                ;;
+        esac
         ;;
 esac
 
