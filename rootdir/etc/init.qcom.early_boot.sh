@@ -44,10 +44,14 @@ if [ -f /sys/devices/soc0/platform_version ]; then
 else
     soc_hwver=`cat /sys/devices/system/soc/soc0/platform_version` 2> /dev/null
 fi
+if [ -f /sys/class/graphics/fb0/virtual_size ]; then
+    virtual_size=$(echo `cat /sys/class/graphics/fb0/virtual_size` | cut -d',' -f1) 2>/dev/null
+fi
 
-log -t BOOT -p i "MSM target '$1', SoC '$soc_hwplatform', HwID '$soc_hwid', SoC ver '$soc_hwver'"
+platform=`getprop ro.board.platform`
+log -t BOOT -p i "MSM target '$platform', SoC '$soc_hwplatform', HwID '$soc_hwid', SoC ver '$soc_hwver', virtual size '$virtual_size'"
 
-case "$1" in
+case "$platform" in
     "msm7630_surf" | "msm7630_1x" | "msm7630_fusion")
         case "$soc_hwplatform" in
             "FFA" | "SVLTE_FFA")
@@ -165,6 +169,29 @@ case "$1" in
                 setprop ro.sf.lcd_density 480
                 ;;
         esac
+        ;;
+    "msm8916" | "msm8909")
+        if test -n "$virtual_size"
+        then
+            if [ $virtual_size -ge "1080" ]
+            then
+                if [ $soc_hwplatform == "SBC" ]
+                then
+                    setprop ro.sf.lcd_density 240
+                    setprop qemu.hw.mainkeys 0
+                else
+                    setprop ro.sf.lcd_density 480
+                fi
+            elif [ $virtual_size -ge "720" ]
+            then
+                setprop ro.sf.lcd_density 320
+            elif [ $virtual_size -ge "480" ]
+            then
+                setprop ro.sf.lcd_density 240
+            else
+                setprop ro.sf.lcd_density 320
+            fi
+        fi
         ;;
 esac
 
