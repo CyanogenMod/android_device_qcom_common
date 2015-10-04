@@ -176,14 +176,6 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         return HINT_HANDLED;
     }
 
-    if (hint == POWER_HINT_INTERACTION) {
-        int resources[] = { SCHED_BOOST_ON, 0x20D, 0x101, 0x3E01 };
-        int duration = 3000;
-
-        interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
-        return HINT_HANDLED;
-    }
-
     if (hint == POWER_HINT_LAUNCH_BOOST) {
         int duration = 2000;
         int resources[] = { SCHED_BOOST_ON, 0x20F, 0x101, 0x3E01 };
