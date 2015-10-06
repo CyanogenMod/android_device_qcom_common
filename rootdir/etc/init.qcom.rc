@@ -412,7 +412,7 @@ service dpmd /system/bin/dpmd
     socket dpmd stream 660 root system
 
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
-    class main
+    class core
     user root
     oneshot
 
