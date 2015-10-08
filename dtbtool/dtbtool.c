@@ -827,11 +827,11 @@ int main(int argc, char **argv)
     close(out_fd);
 
     if (expected != wrote) {
-        log_err("error writing output file, please rerun: size mismatch %d vs %d\n",
+        log_err("error writing output file, please rerun: size mismatch %zu vs %zu\n",
                 expected, wrote);
         rc = RC_ERROR;
     } else
-        log_dbg("Total wrote %u bytes\n", wrote);
+        log_dbg("Total wrote %zu bytes\n", wrote);
 
     if (rc != RC_SUCCESS)
         unlink(output_file);
