@@ -101,6 +101,52 @@ typedef int64_t hintdata;
 typedef int hintdata;
 #endif
 
+static int process_camera_preview_hint(void *metadata)
+{
+    char governor[80];
+    struct camera_preview_metadata_t camera_preview_metadata;
+
+    if (get_scaling_governor(governor, sizeof(governor)) == -1) {
+        ALOGE("Can't obtain scaling governor.");
+
+        return HINT_NONE;
+    }
+
+    /* Initialize encode metadata struct fields */
+    memset(&camera_preview_metadata, 0, sizeof(struct camera_preview_metadata_t));
+    camera_preview_metadata.state = -1;
+    camera_preview_metadata.hint_id = DEFAULT_CAMERA_PREVIEW_HINT_ID;
+
+    if (metadata) {
+        if (parse_camera_preview_metadata((char *)metadata, &camera_preview_metadata) ==
+            -1) {
+            ALOGE("Error occurred while parsing metadata.");
+            return HINT_NONE;
+        }
+    } else {
+        return HINT_NONE;
+    }
+
+    if (camera_preview_metadata.state == 1) {
+        if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
+            //set min_cpus to 0 for a57s only
+            int resource_values[] = {0x778};
+
+            perform_hint_action(camera_preview_metadata.hint_id,
+                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            return HINT_HANDLED;
+        }
+    } else if (camera_preview_metadata.state == 0) {
+        if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+                (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
+            undo_hint_action(camera_preview_metadata.hint_id);
+            return HINT_HANDLED;
+        }
+    }
+    return HINT_NONE;
+}
+
 static int process_video_encode_hint(void *metadata)
 {
     char governor[80];
@@ -201,6 +247,10 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
 
         return HINT_HANDLED;
+    }
+
+    if (hint == POWER_HINT_CAMERA_PREVIEW) {
+        return process_camera_preview_hint(data);
     }
 
     if (hint == POWER_HINT_VIDEO_ENCODE) {

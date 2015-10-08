@@ -28,6 +28,7 @@
  */
 
 /* Default use-case hint IDs */
+#define DEFAULT_CAMERA_PREVIEW_HINT_ID  (0x0900)
 #define DEFAULT_VIDEO_ENCODE_HINT_ID    (0x0A00)
 #define DEFAULT_VIDEO_DECODE_HINT_ID    (0x0B00)
 #define DISPLAY_STATE_HINT_ID           (0x0C00)

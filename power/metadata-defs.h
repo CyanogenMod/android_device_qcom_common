@@ -36,6 +36,11 @@
 
 #define MIN(x,y) (((x)>(y))?(y):(x))
 
+struct camera_preview_metadata_t {
+    int hint_id;
+    int state;
+};
+
 struct video_encode_metadata_t {
     int hint_id;
     int state;
@@ -54,6 +59,8 @@ struct audio_metadata_t {
 int parse_metadata(char *metadata, char **metadata_saveptr,
     char *attribute, int attribute_size, char *value,
     unsigned int value_size);
+int parse_camera_preview_metadata(char *metadata,
+    struct camera_preview_metadata_t *camera_preview_metadata);
 int parse_video_encode_metadata(char *metadata,
     struct video_encode_metadata_t *video_encode_metadata);
 int parse_video_decode_metadata(char *metadata,
