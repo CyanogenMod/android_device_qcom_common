@@ -1308,24 +1308,12 @@ case "$target" in
     "msm8996")
         # disable thermal bcl hotplug to switch governor
         echo 0 > /sys/module/msm_thermal/core_control/enabled
-        for mode in /sys/devices/soc/qcom,bcl.*/mode
-        do
-            echo -n disable > $mode
-        done
-        for hotplug_mask in /sys/devices/soc/qcom,bcl.*/hotplug_mask
-        do
-            bcl_hotplug_mask=`cat $hotplug_mask`
-            echo 0 > $hotplug_mask
-        done
-        for hotplug_soc_mask in /sys/devices/soc/qcom,bcl.*/hotplug_soc_mask
-        do
-            bcl_soc_hotplug_mask=`cat $hotplug_soc_mask`
-            echo 0 > $hotplug_soc_mask
-        done
-        for mode in /sys/devices/soc/qcom,bcl.*/mode
-        do
-            echo -n enable > $mode
-        done
+        echo -n disable > /sys/devices/soc/soc:qcom,bcl/mode
+        bcl_hotplug_mask=`cat /sys/devices/soc/soc:qcom,bcl/hotplug_mask`
+        echo 0 > /sys/devices/soc/soc:qcom,bcl/hotplug_mask
+        bcl_soc_hotplug_mask=`cat /sys/devices/soc/soc:qcom,bcl/hotplug_soc_mask`
+        echo 0 > /sys/devices/soc/soc:qcom,bcl/hotplug_soc_mask
+        echo -n enable > /sys/devices/soc/soc:qcom,bcl/mode
         # configure governor settings for little cluster
         echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
         echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
@@ -1358,22 +1346,10 @@ case "$target" in
         echo 1 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/ignore_hispeed_on_notif
         # re-enable thermal and BCL hotplug
         echo 1 > /sys/module/msm_thermal/core_control/enabled
-        for mode in /sys/devices/soc/qcom,bcl.*/mode
-        do
-            echo -n disable > $mode
-        done
-        for hotplug_mask in /sys/devices/soc/qcom,bcl.*/hotplug_mask
-        do
-            echo $bcl_hotplug_mask > $hotplug_mask
-        done
-        for hotplug_soc_mask in /sys/devices/soc/qcom,bcl.*/hotplug_soc_mask
-        do
-            echo $bcl_soc_hotplug_mask > $hotplug_soc_mask
-        done
-        for mode in /sys/devices/soc/qcom,bcl.*/mode
-        do
-            echo -n enable > $mode
-        done
+        echo -n disable > /sys/devices/soc/soc:qcom,bcl/mode
+        echo $bcl_hotplug_mask > /sys/devices/soc/soc:qcom,bcl/hotplug_mask
+        echo $bcl_soc_hotplug_mask > /sys/devices/soc/soc:qcom,bcl/hotplug_soc_mask
+        echo -n enable > /sys/devices/soc/soc:qcom,bcl/mode
         # input boost configuration
         echo "0:1344000 2:1344000" > /sys/module/cpu_boost/parameters/input_boost_freq
         echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
