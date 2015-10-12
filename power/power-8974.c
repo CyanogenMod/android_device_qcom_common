@@ -98,10 +98,13 @@ extern void interaction(int duration, int num_args, int opt_list[]);
 int power_hint_override(__attribute__((unused)) struct power_module *module,
         power_hint_t hint, void *data)
 {
+
+#if defined(POWER_HINT_SET_PROFILE)
     if (hint == POWER_HINT_SET_PROFILE) {
         set_power_profile((int)data);
         return HINT_HANDLED;
     }
+#endif
 
     if (hint == POWER_HINT_LOW_POWER) {
         if (current_power_profile == PROFILE_POWER_SAVE) {
@@ -116,6 +119,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         return HINT_HANDLED;
     }
 
+#if defined(POWER_HINT_SET_PROFILE)
     if (hint == POWER_HINT_LAUNCH_BOOST) {
         int duration = 2000;
         int resources[] = { CPUS_ONLINE_MIN_3,
@@ -126,7 +130,9 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
 
         return HINT_HANDLED;
     }
+#endif
 
+#if defined(POWER_HINT_CPU_BOOST)
     if (hint == POWER_HINT_CPU_BOOST) {
         int duration = (int)data / 1000;
         int resources[] = { CPUS_ONLINE_MIN_2, 0x20F, 0x30F };
@@ -136,6 +142,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
 
         return HINT_HANDLED;
     }
+#endif
 
     return HINT_NONE;
 }
