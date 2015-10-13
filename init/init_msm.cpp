@@ -27,6 +27,7 @@
    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -107,7 +108,7 @@ void setPerms(char *path, uint32_t mode)
     int fd = open(path, O_RDONLY | O_NOFOLLOW);
     if (fd >= 0) {
        if (fchmod(fd, mode) < 0)
-          ERROR("chmod failed for %s: errno = %d", path, errno);
+           ERROR(" chown failed for %s: errno = %d", path, errno);
        close(fd);
     }
 }
@@ -131,7 +132,7 @@ void setOwners(char *path, int owner, int group)
 
 void init_alarm_boot_properties()
 {
-    char *alarm_file = "/proc/sys/kernel/boot_reason";
+    char const *alarm_file = "/proc/sys/kernel/boot_reason";
     char buf[BUF_SIZE];
 
     if(read_file2(alarm_file, buf, sizeof(buf))) {
