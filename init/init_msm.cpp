@@ -107,7 +107,7 @@ void setPerms(char *path, uint32_t mode)
     int fd = open(path, O_RDONLY | O_NOFOLLOW);
     if (fd >= 0) {
        if (fchmod(fd, mode) < 0)
-          ERROR("chmod failed for %s: errno = %d", path, errno);
+          ERROR("chmod failed for %s", path);
        close(fd);
     }
 }
@@ -124,17 +124,16 @@ void setOwners(char *path, int owner, int group)
     int fd = open(path, O_RDONLY | O_NOFOLLOW);
     if (fd >= 0) {
        if (fchown(fd, owner, group) < 0)
-          ERROR(" chown failed for %s: errno = %d", path, errno);
+          ERROR(" chown failed for %s", path);
        close(fd);
     }
 }
 
 void init_alarm_boot_properties()
 {
-    char *alarm_file = "/proc/sys/kernel/boot_reason";
     char buf[BUF_SIZE];
 
-    if(read_file2(alarm_file, buf, sizeof(buf))) {
+    if(read_file2("/proc/sys/kernel/boot_reason", buf, sizeof(buf))) {
 
     /*
      * Setup ro.alarm_boot value to true when it is RTC triggered boot up
