@@ -859,7 +859,7 @@ PRODUCT_PACKAGE_OVERLAYS += device/qcom/common/product/overlay
 -include frameworks/base/data/videos/VideoPackage1.mk
 
 # dm-verity definitions
-PRODUCT_VERITY_PARTITION=/dev/block/bootdevice/by-name/system
+PRODUCT_SYSTEM_VERITY_PARTITION=/dev/block/bootdevice/by-name/system
 $(call inherit-product, build/target/product/verity.mk)
 
 #skip boot jars check
