@@ -63,11 +63,6 @@ static void set_power_profile(int profile) {
     if (profile == current_power_profile)
         return;
 
-    char buf[256];
-    sprintf(buf, "%i", profile);
-
-    property_set("sys.power.mode", buf);
-
     ALOGV("%s: profile=%d", __func__, profile);
 
     if (current_power_profile != PROFILE_BALANCED) {
