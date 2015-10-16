@@ -222,6 +222,27 @@ case "$target" in
     "msm8994" | "msm8992")
         start_msm_irqbalance
         ;;
+    "msm8996")
+        if [ -f /sys/devices/soc0/hw_platform ]; then
+             hw_platform=`cat /sys/devices/soc0/hw_platform`
+        fi
+        case "$hw_platform" in
+                "MTP" | "CDP")
+                #Loop through the sysfs nodes and determine the correct sysfs to change the permission and ownership.
+                        for count in 0 1 2 3 4 5 6 7 8 9 10
+                        do
+                                dir="/sys/devices/soc/75ba000.i2c/i2c-12/12-0020/input/input"$count
+                                if [ -d "$dir" ]; then
+                                     chmod 0660 $dir/secure_touch_enable
+                                     chmod 0440 $dir/secure_touch
+                                     chown system.drmrpc $dir/secure_touch_enable
+                                     chown system.drmrpc $dir/secure_touch
+                                     break
+                                fi
+                        done
+                        ;;
+        esac
+        ;;
     "msm8909")
         start_vm_bms
         ;;
