@@ -44,8 +44,8 @@ add_lunch_combo msm8909_512-userdebug
 add_lunch_combo msm8992-userdebug
 add_lunch_combo msm8952_64-userdebug
 add_lunch_combo msm8952_32-userdebug
-add_lunch_combo thorium_32-userdebug
-add_lunch_combo thorium_64-userdebug
+add_lunch_combo msm8937_32-userdebug
+add_lunch_combo msm8937_64-userdebug
 add_lunch_combo titanium_32-userdebug
 add_lunch_combo titanium_64-userdebug
 add_lunch_combo msmcobalt-userdebug
