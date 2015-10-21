@@ -52,7 +52,9 @@ static int display_hint_sent;
 enum {
     PROFILE_POWER_SAVE,
     PROFILE_BALANCED,
-    PROFILE_HIGH_PERFORMANCE
+    PROFILE_HIGH_PERFORMANCE,
+    PROFILE_BIAS_POWER,
+    PROFILE_BIAS_PERFORMANCE
 };
 
 static int current_power_profile = PROFILE_BALANCED;
@@ -71,7 +73,7 @@ static void set_power_profile(int profile) {
     }
 
     if (profile == PROFILE_POWER_SAVE) {
-        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_2,
+        int resource_values[] = { CPUS_ONLINE_MPD_OVERRIDE, 0x0A03,
             CPU0_MAX_FREQ_NONTURBO_MAX - 2, CPU1_MAX_FREQ_NONTURBO_MAX - 2,
             CPU2_MAX_FREQ_NONTURBO_MAX - 2, CPU3_MAX_FREQ_NONTURBO_MAX - 2,
             CPU4_MAX_FREQ_NONTURBO_MAX - 2, CPU5_MAX_FREQ_NONTURBO_MAX - 2,
@@ -88,6 +90,22 @@ static void set_power_profile(int profile) {
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         ALOGD("%s: set performance mode", __func__);
+    } else if (profile == PROFILE_BIAS_POWER) {
+        int resource_values[] = { 0x0A03,
+            CPU0_MAX_FREQ_NONTURBO_MAX - 2, CPU1_MAX_FREQ_NONTURBO_MAX - 2,
+            CPU1_MAX_FREQ_NONTURBO_MAX - 2, CPU2_MAX_FREQ_NONTURBO_MAX - 2,
+            CPU4_MAX_FREQ_NONTURBO_MAX, CPU5_MAX_FREQ_NONTURBO_MAX,
+            CPU6_MAX_FREQ_NONTURBO_MAX, CPU7_MAX_FREQ_NONTURBO_MAX };
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID,
+            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set bias power mode", __func__);
+    } else if (profile == PROFILE_BIAS_PERFORMANCE) {
+        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_MAX,
+            CPU4_MIN_FREQ_NONTURBO_MAX + 1, CPU5_MIN_FREQ_NONTURBO_MAX + 1,
+            CPU6_MIN_FREQ_NONTURBO_MAX + 1, CPU7_MIN_FREQ_NONTURBO_MAX + 1 };
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID,
+            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set bias perf mode", __func__);
     }
 
     current_power_profile = profile;
@@ -172,7 +190,8 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
     }
 
     // Skip other hints in custom power modes
-    if (current_power_profile != PROFILE_BALANCED) {
+    if (current_power_profile == PROFILE_POWER_SAVE ||
+            current_power_profile == PROFILE_HIGH_PERFORMANCE) {
         return HINT_HANDLED;
     }
 
