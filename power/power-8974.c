@@ -98,10 +98,10 @@ extern void interaction(int duration, int num_args, int opt_list[]);
 int power_hint_override(__attribute__((unused)) struct power_module *module,
         power_hint_t hint, void *data)
 {
-	if (hint == POWER_HINT_SET_PROFILE) {
-		set_power_profile((int)data);
-		return HINT_HANDLED;
-	}
+    if (hint == POWER_HINT_SET_PROFILE) {
+        set_power_profile((int)data);
+        return HINT_HANDLED;
+    }
 
     if (hint == POWER_HINT_LOW_POWER) {
         if (current_power_profile == PROFILE_POWER_SAVE) {
@@ -111,22 +111,33 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         }
     }
 
-	// Skip other hints in custom power modes
-	if (current_power_profile != PROFILE_BALANCED) {
-		return HINT_HANDLED;
-	}
+    // Skip other hints in custom power modes
+    if (current_power_profile != PROFILE_BALANCED) {
+        return HINT_HANDLED;
+    }
 
-	if (hint == POWER_HINT_CPU_BOOST) {
+    if (hint == POWER_HINT_LAUNCH_BOOST) {
+        int duration = 2000;
+        int resources[] = { CPUS_ONLINE_MIN_3,
+            CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
+            CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX };
+
+        interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+
+        return HINT_HANDLED;
+    }
+
+    if (hint == POWER_HINT_CPU_BOOST) {
         int duration = (int)data / 1000;
         int resources[] = { CPUS_ONLINE_MIN_2, 0x20F, 0x30F };
 
-        if (duration > 0)
+        if (duration)
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
 
         return HINT_HANDLED;
-	}
+    }
 
-	return HINT_NONE;
+    return HINT_NONE;
 }
 
 int set_interactive_override(struct power_module *module __unused, int on)
