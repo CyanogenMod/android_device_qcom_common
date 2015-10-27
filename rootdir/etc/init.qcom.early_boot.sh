@@ -224,6 +224,7 @@ dev_file=/dev/graphics/fb$fb_cnt
         set_perms $file/dyn_pu system.graphics 0664
         set_perms $file/modes system.graphics 0664
         set_perms $file/mode system.graphics 0664
+        set_perms $file/msm_cmd_autorefresh_en system.graphics 0664
     fi
   fi
 done
