@@ -67,6 +67,8 @@
 
 #define KEYMASTER_PARTITION_NAME "/dev/block/bootdevice/by-name/keymaster"
 
+#define QSEECOM_UP_CHECK_COUNT 10
+
 static int loaded_library = 0;
 static int (*qseecom_create_key)(int, void*);
 static int (*qseecom_update_key)(int, void*, void*);
@@ -118,11 +120,31 @@ static void wipe_userdata()
     android_reboot(ANDROID_RB_RESTART2, 0, "recovery");
 }
 
+static int is_qseecom_up()
+{
+    int i = 0;
+    char value[PROPERTY_VALUE_MAX] = {0};
+
+    for (; i<QSEECOM_UP_CHECK_COUNT; i++) {
+        property_get("sys.listeners.registered", value, "");
+        if (!strncmp(value, "true", PROPERTY_VALUE_MAX))
+            return 1;
+        usleep(100000);
+    }
+    return 0;
+}
+
+
 static int load_qseecom_library()
 {
     const char *error = NULL;
     if (loaded_library)
         return loaded_library;
+
+    if (!is_qseecom_up()) {
+        SLOGE("Timed out waiting for QSEECom listeners..aborting FDE key operation");
+        return 0;
+    }
 
     void * handle = dlopen(QSEECOM_LIBRARY_PATH, RTLD_NOW);
     if(handle) {
