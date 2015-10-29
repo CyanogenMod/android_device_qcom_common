@@ -87,7 +87,7 @@ static void set_power_profile(int profile) {
             resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         ALOGD("%s: set performance mode", __func__);
     } else if (profile == PROFILE_BIAS_POWER) {
-        int resource_values[] = { 0x0A03,
+        int resource_values[] = { 0x0A03, 0x0902,
             CPU0_MAX_FREQ_NONTURBO_MAX - 2, CPU1_MAX_FREQ_NONTURBO_MAX - 2,
             CPU1_MAX_FREQ_NONTURBO_MAX - 2, CPU2_MAX_FREQ_NONTURBO_MAX - 2,
             CPU4_MAX_FREQ_NONTURBO_MAX, CPU5_MAX_FREQ_NONTURBO_MAX,
