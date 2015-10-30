@@ -1018,8 +1018,30 @@ case "$target" in
         else
             soc_id=`cat /sys/devices/system/soc/soc0/id`
         fi
+
+        if [ -f /sys/devices/soc0/hw_platform ]; then
+            hw_platform=`cat /sys/devices/soc0/hw_platform`
+        else
+            hw_platform=`cat /sys/devices/system/soc/soc0/hw_platform`
+        fi
+
         case "$soc_id" in
+            "295")
+                case "$hw_platform" in
+                    "MTP" | "Surf" | "RCM" )
+                        # Enable Host based Touch processing
+                        start hbtp
+                        ;;
+                esac
+            ;;
             "294" )
+                case "$hw_platform" in
+                    "MTP" | "Surf" | "RCM" )
+                        # Enable Host based Touch processing
+                        start hbtp
+                        ;;
+                esac
+
                 # Apply Scheduler and Governor settings for 8937
 
                 # HMP scheduler settings
