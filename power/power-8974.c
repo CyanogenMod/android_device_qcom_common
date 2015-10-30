@@ -74,7 +74,7 @@ static void set_power_profile(int profile) {
     }
 
     if (profile == PROFILE_HIGH_PERFORMANCE) {
-        int resource_values[] = { CPUS_ONLINE_MIN_4,
+        int resource_values[] = { CPUS_ONLINE_MIN_4, 0x0901,
             CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
             CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
