@@ -100,9 +100,11 @@ static void set_power_profile(int profile) {
             resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         ALOGD("%s: set bias power mode", __func__);
     } else if (profile == PROFILE_BIAS_PERFORMANCE) {
-        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_MAX,
-            CPU4_MIN_FREQ_NONTURBO_MAX + 1, CPU5_MIN_FREQ_NONTURBO_MAX + 1,
-            CPU6_MIN_FREQ_NONTURBO_MAX + 1, CPU7_MIN_FREQ_NONTURBO_MAX + 1 };
+        int resource_values[] = { SCHED_BOOST_ON, CPUS_ONLINE_MIN_2, CPUS_ONLINE_MAX_LIMIT_2, 0x0901, 0x101,
+            CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
+            CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX,
+            CPU4_MIN_FREQ_TURBO_MAX, CPU5_MIN_FREQ_TURBO_MAX,
+            CPU6_MIN_FREQ_TURBO_MAX, CPU7_MIN_FREQ_TURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         ALOGD("%s: set bias perf mode", __func__);
