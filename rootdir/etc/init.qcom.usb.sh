@@ -259,3 +259,18 @@ diag_extra=`getprop persist.sys.usb.config.extra`
 if [ "$diag_extra" == "" ]; then
 	setprop persist.sys.usb.config.extra none
 fi
+
+# soc_ids for 8937
+if [ -f /sys/devices/soc0/soc_id ]; then
+	soc_id=`cat /sys/devices/soc0/soc_id`
+else
+	soc_id=`cat /sys/devices/system/soc/soc0/id`
+fi
+
+# enable rps cpus on msm8937 target
+setprop sys.usb.rps_mask 0
+case "$soc_id" in
+	"294" | "295")
+		setprop sys.usb.rps_mask 10
+	;;
+esac
