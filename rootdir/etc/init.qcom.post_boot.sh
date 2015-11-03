@@ -1556,9 +1556,10 @@ case "$target" in
             echo 1600 > $cpubw/bw_hwmon/idle_mbps
         done
 
-        for devfreq_gov in /sys/class/devfreq/*qcom,mincpubw*/governor
+        for memlat in /sys/class/devfreq/*qcom,memlat-cpu*
         do
-            echo "cpufreq" > $devfreq_gov
+            echo "mem_latency" > $memlat/governor
+            echo 10 > $memlat/polling_interval
         done
 
 	soc_revision=`cat /sys/devices/soc0/revision`
