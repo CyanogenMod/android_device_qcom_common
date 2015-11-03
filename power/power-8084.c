@@ -98,7 +98,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         power_hint_t hint, void *data)
 {
 	if (hint == POWER_HINT_SET_PROFILE) {
-		set_power_profile((int)data);
+		set_power_profile((intptr_t)data);
 		return HINT_HANDLED;
 	}
 
@@ -116,7 +116,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
 	}
 
 	if (hint == POWER_HINT_CPU_BOOST) {
-        int duration = (int)data / 1000;
+        int duration = (intptr_t)data / 1000;
         int resources[] = { CPUS_ONLINE_MIN_2, 0x20B, 0x30B, 0x1C00};
 
         if (duration > 0)

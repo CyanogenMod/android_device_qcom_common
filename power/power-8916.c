@@ -381,7 +381,7 @@ int  set_interactive_override(struct power_module *module __unused, int on)
 int power_hint_override(struct power_module *module __unused, power_hint_t hint, void *data)
 {
     if (hint == POWER_HINT_SET_PROFILE) {
-        set_power_profile((hintdata)data);
+        set_power_profile((intptr_t)data);
     }
 
     if (hint == POWER_HINT_LOW_POWER) {
@@ -407,7 +407,7 @@ int power_hint_override(struct power_module *module __unused, power_hint_t hint,
 	}
 
     if (hint == POWER_HINT_CPU_BOOST) {
-        int duration = (hintdata)data / 1000;
+        int duration = (intptr_t)data / 1000;
         int resources[] = { SCHED_BOOST_ON, 0x20D, 0x3E01, 0x101 };
 
         if (duration > 0)

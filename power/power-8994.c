@@ -174,7 +174,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         power_hint_t hint, void *data)
 {
     if (hint == POWER_HINT_SET_PROFILE && !low_power_mode) {
-        set_power_profile((hintdata)data);
+        set_power_profile((intptr_t)data);
         return HINT_HANDLED;
     }
 
@@ -213,7 +213,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
     }
 
     if (hint == POWER_HINT_CPU_BOOST) {
-        int duration = (hintdata)data / 1000;
+        int duration = (intptr_t)data / 1000;
         int resources[] = { SCHED_BOOST_ON };
 
         if (duration > 0)
