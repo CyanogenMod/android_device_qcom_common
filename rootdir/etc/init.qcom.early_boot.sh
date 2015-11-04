@@ -213,7 +213,7 @@ dev_file=/dev/graphics/fb$fb_cnt
         set_perms $file/pa system.graphics 0664
         set_perms $file/cec/wr_msg system.graphics 0600
         set_perms $file/hdcp/tp system.graphics 0664
-        set_perms $file/hdmi_audio_cb system.graphics 0664
+        set_perms $file/hdmi_audio_cb media.system 0600
         set_perms $file/hdcp2p2/min_level_change system.graphics 0664
         ln -s $dev_file /dev/graphics/hdmi
     esac
