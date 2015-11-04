@@ -16,7 +16,7 @@ QCOM_BOARD_PLATFORMS += msm8909_512
 QCOM_BOARD_PLATFORMS += msm8992
 QCOM_BOARD_PLATFORMS += msm8996
 QCOM_BOARD_PLATFORMS += msm8952
-QCOM_BOARD_PLATFORMS += thorium
+QCOM_BOARD_PLATFORMS += msm8937
 QCOM_BOARD_PLATFORMS += titanium
 QCOM_BOARD_PLATFORMS += msmcobalt
 
@@ -26,7 +26,7 @@ TARGET_USE_VENDOR_CAMERA_EXT := true
 ANDROID_COMPILE_WITH_JACK := false
 
 #List of targets that use video hw
-MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 msm8992 msm8996 msm8952 thorium titanium msmcobalt
+MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 msm8992 msm8996 msm8952 msm8937 titanium msmcobalt
 
 #List of targets that use master side content protection
 MASTER_SIDE_CP_TARGET_LIST := msm8996
@@ -341,7 +341,7 @@ LIBCAMERA += camera.msm8994
 LIBCAMERA += camera.msm8992
 LIBCAMERA += camera.msm8996
 LIBCAMERA += camera.msm8952
-LIBCAMERA += camera.thorium
+LIBCAMERA += camera.msm8937
 LIBCAMERA += libcamera
 LIBCAMERA += libmmcamera_interface
 LIBCAMERA += libmmcamera_interface2
@@ -372,7 +372,7 @@ LIBCOPYBIT += copybit.msm7627_6x
 LIBCOPYBIT += copybit.msm7627a
 LIBCOPYBIT += copybit.msm8996
 LIBCOPYBIT += copybit.msm8952
-LIBCOPYBIT += copybit.thorium
+LIBCOPYBIT += copybit.msm8937
 
 #LIBGESTURES
 LIBGESTURES := libgestures
@@ -399,7 +399,7 @@ LIBGRALLOC += gralloc.msm7627_6x
 LIBGRALLOC += gralloc.msm7627a
 LIBGRALLOC += gralloc.msm8996
 LIBGRALLOC += gralloc.msm8952
-LIBGRALLOC += gralloc.thorium
+LIBGRALLOC += gralloc.msm8937
 LIBGRALLOC += libmemalloc
 
 #memtrack
@@ -414,7 +414,7 @@ LIBMEMTRACK += memtrack.apq8084
 LIBMEMTRACK += memtrack.mpq8092
 LIBMEMTRACK += memtrack.msm8996
 LIBMEMTRACK += memtrack.msm8952
-LIBMEMTRACK += memtrack.thorium
+LIBMEMTRACK += memtrack.msm8937
 
 #LIBLIGHTS
 LIBLIGHTS := lights.msm8660
@@ -435,7 +435,7 @@ LIBLIGHTS += lights.msm8610
 LIBLIGHTS += lights.apq8084
 LIBLIGHTS += lights.msm8996
 LIBLIGHTS += lights.msm8952
-LIBLIGHTS += lights.thorium
+LIBLIGHTS += lights.msm8937
 
 #LIBHWCOMPOSER
 LIBHWCOMPOSER := hwcomposer.msm8660
@@ -457,7 +457,7 @@ LIBHWCOMPOSER += hwcomposer.msm7627_6x
 LIBHWCOMPOSER += hwcomposer.msm7627a
 LIBHWCOMPOSER += hwcomposer.msm8996
 LIBHWCOMPOSER += hwcomposer.msm8952
-LIBHWCOMPOSER += hwcomposer.thorium
+LIBHWCOMPOSER += hwcomposer.msm8937
 
 #LIBAUDIOPARAM -- Exposing AudioParameter as dynamic library for SRS TruMedia to work
 LIBAUDIOPARAM := libaudioparameter
