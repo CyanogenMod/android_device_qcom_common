@@ -107,7 +107,7 @@ char *dtc_path;
 char *dt_tag = QCDT_DT_TAG;
 int   verbose;
 int   page_size = PAGE_SIZE_DEF;
-int   output_version = 0;
+int   output_version = 1;
 
 void print_help()
 {
@@ -165,7 +165,7 @@ int parse_commandline(int argc, char *const argv[])
             break;
         case '2':
         case '3':
-            if (output_version != 0) {
+            if (output_version != 1) {
                 log_err("A version output argument may only be passed once\n");
                 return RC_ERROR;
             }
@@ -743,7 +743,7 @@ int main(int argc, char **argv)
     int dtb_count = 0, dtb_offset = 0, entry_size;
     size_t wrote = 0, expected = 0;
     struct stat st;
-    uint32_t version = 0;
+    uint32_t version = 1;
     int num;
     uint32_t dtb_size;
     int msmversion = 0;
@@ -889,7 +889,7 @@ int main(int argc, char **argv)
         goto cleanup;
     }
 
-    if (output_version != 0) {
+    if (output_version != 1) {
         version = output_version;
     }
 
