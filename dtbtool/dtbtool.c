@@ -907,9 +907,9 @@ int main(int argc, char **argv)
         version = output_version;
     }
 
-    if (output_version == 1) {
+    if (version == 1) {
         entry_size = 20;
-    } else if (output_version == 2) {
+    } else if (version == 2) {
         entry_size = 24;
     } else {
         entry_size = 40;
