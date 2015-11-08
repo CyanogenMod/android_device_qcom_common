@@ -907,9 +907,9 @@ int main(int argc, char **argv)
         version = output_version;
     }
 
-    if (output_version == 1) {
+    if (version == 1) {
         entry_size = 20;
-    } else if (output_version == 2) {
+    } else if (version == 2) {
         entry_size = 24;
     } else {
         entry_size = 40;
@@ -946,11 +946,11 @@ int main(int argc, char **argv)
     for (chip = chip_list; chip; chip = chip->next) {
         wrote += write(out_fd, &chip->chipset, sizeof(uint32_t));
         wrote += write(out_fd, &chip->platform, sizeof(uint32_t));
-        if (output_version >= 2) {
+        if (version >= 2) {
             wrote += write(out_fd, &chip->subtype, sizeof(uint32_t));
         }
         wrote += write(out_fd, &chip->revNum, sizeof(uint32_t));
-        if (output_version >= 3) {
+        if (version >= 3) {
             wrote += write(out_fd, &chip->pmic_model[0], sizeof(uint32_t));
             wrote += write(out_fd, &chip->pmic_model[1], sizeof(uint32_t));
             wrote += write(out_fd, &chip->pmic_model[2], sizeof(uint32_t));
