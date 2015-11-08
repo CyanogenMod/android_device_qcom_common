@@ -107,7 +107,7 @@ char *dtc_path;
 char *dt_tag = QCDT_DT_TAG;
 int   verbose;
 int   page_size = PAGE_SIZE_DEF;
-int   output_version = 0;
+int   version_override = 0;
 
 void print_help()
 {
@@ -165,11 +165,11 @@ int parse_commandline(int argc, char *const argv[])
             break;
         case '2':
         case '3':
-            if (output_version != 0) {
+            if (version_override != 0) {
                 log_err("A version output argument may only be passed once\n");
                 return RC_ERROR;
             }
-            output_version = c - '0';
+            version_override = c - '0';
             break;
         case 'v':
             verbose = 1;
@@ -889,13 +889,13 @@ int main(int argc, char **argv)
         goto cleanup;
     }
 
-    if (output_version != 0) {
-        version = output_version;
+    if (version_override != 0) {
+        version = version_override;
     }
 
-    if (output_version == 1) {
+    if (version == 1) {
         entry_size = 20;
-    } else if (output_version == 2) {
+    } else if (version == 2) {
         entry_size = 24;
     } else {
         entry_size = 40;
@@ -932,11 +932,11 @@ int main(int argc, char **argv)
     for (chip = chip_list; chip; chip = chip->next) {
         wrote += write(out_fd, &chip->chipset, sizeof(uint32_t));
         wrote += write(out_fd, &chip->platform, sizeof(uint32_t));
-        if (output_version >= 2) {
+        if (version >= 2) {
             wrote += write(out_fd, &chip->subtype, sizeof(uint32_t));
         }
         wrote += write(out_fd, &chip->revNum, sizeof(uint32_t));
-        if (output_version >= 3) {
+        if (version >= 3) {
             wrote += write(out_fd, &chip->pmic_model[0], sizeof(uint32_t));
             wrote += write(out_fd, &chip->pmic_model[1], sizeof(uint32_t));
             wrote += write(out_fd, &chip->pmic_model[2], sizeof(uint32_t));
