@@ -776,7 +776,19 @@ int main(int argc, char **argv)
        extract "qcom,msm-id" parameter
      */
     while ((dp = readdir(dir)) != NULL) {
-        if ((dp->d_type == DT_REG)) {
+        if (dp->d_type == DT_UNKNOWN) {
+            struct stat statbuf;
+            char name[PATH_MAX];
+            snprintf(name, sizeof(name), "%s%s%s",
+                     input_dir,
+                     (input_dir[strlen(input_dir) - 1] == '/' ? "" : "/"),
+                     dp->d_name);
+            if (!stat(name, &statbuf) && S_ISREG(statbuf.st_mode)) {
+                dp->d_type = DT_REG;
+            }
+        }
+
+        if (dp->d_type == DT_REG) {
             flen = strlen(dp->d_name);
             if ((flen > 4) &&
                 (strncmp(&dp->d_name[flen-4], ".dtb", 4) == 0)) {
