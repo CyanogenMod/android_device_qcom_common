@@ -39,6 +39,7 @@
 #include <getopt.h>
 #include <errno.h>
 #include <unistd.h>
+#include <limits.h>
 
 #define QCDT_MAGIC     "QCDT"  /* Master DTB magic */
 #define QCDT_VERSION   3       /* QCDT version */
