@@ -236,6 +236,7 @@ INIT += init.qcom.mdm_links.sh
 INIT += init.qcom.modem_links.sh
 INIT += init.qcom.sensor.sh
 INIT += init.target.rc
+INIT += init.qti.ims.sh
 INIT += init.qcom.bt.sh
 INIT += hsic.control.bt.sh
 INIT += init.qcom.coex.sh
