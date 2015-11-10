@@ -110,7 +110,10 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         power_hint_t hint, void *data)
 {
     if (hint == POWER_HINT_SET_PROFILE) {
-        set_power_profile(*(int32_t *)data);
+        if(!data)
+            set_power_profile(0);
+        else
+            set_power_profile(*(int32_t *)data);
         return HINT_HANDLED;
     }
 
