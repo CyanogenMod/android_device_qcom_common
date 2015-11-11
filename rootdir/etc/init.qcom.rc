@@ -979,3 +979,8 @@ service bugreport /system/bin/dumpstate -d -p -B \
     class main
     disabled
     oneshot
+
+service fidodaemon /system/vendor/bin/fidodaemon
+    class late_start
+    user system
+    group system
