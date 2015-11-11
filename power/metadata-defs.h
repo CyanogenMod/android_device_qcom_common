@@ -46,9 +46,16 @@ struct video_decode_metadata_t {
     int state;
 };
 
+struct cam_preview_metadata_t {
+    int hint_id;
+    int state;
+};
+
 int parse_metadata(char *metadata, char **metadata_saveptr,
     char *attribute, int attribute_size, char *value, int value_size);
 int parse_video_encode_metadata(char *metadata,
     struct video_encode_metadata_t *video_encode_metadata);
 int parse_video_decode_metadata(char *metadata,
     struct video_decode_metadata_t *video_decode_metadata);
+int parse_cam_preview_metadata(char *metadata,
+    struct cam_preview_metadata_t *video_decode_metadata);
