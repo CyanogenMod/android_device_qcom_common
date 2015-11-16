@@ -25,13 +25,25 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-# The script will check total_ram and enable zram for devices with total_ram
-# less or equals to 1GB
+# The script will check total_ram and modify PPR parameters for
+# 64 bit devices with total_ram greater than 1GB
+
+MemTotalStr=`cat /proc/meminfo | grep MemTotal`
+MemTotal=${MemTotalStr:16:8}
+ZRAM_THRESHOLD=1048576
+IsLargeMemory=0
+((IsLargeMemory=MemTotal>ZRAM_THRESHOLD?1:0))
 
 setprop ro.config.zram true
 #Set per_process_reclaim tuning parameters
 echo 1 > /sys/module/process_reclaim/parameters/enable_process_reclaim
-echo 50 > /sys/module/process_reclaim/parameters/pressure_min
+ProductName=`getprop ro.product.name`
+if [ "$ProductName" == "msm8916_64" ] && [ $IsLargeMemory -eq 1 ]; then
+    echo 10 > /sys/module/process_reclaim/parameters/pressure_min
+    echo 1024 > /sys/module/process_reclaim/parameters/per_swap_size
+else
+    echo 50 > /sys/module/process_reclaim/parameters/pressure_min
+    echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
+fi
 echo 70 > /sys/module/process_reclaim/parameters/pressure_max
-echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
 echo 30 > /sys/module/process_reclaim/parameters/swap_opt_eff
