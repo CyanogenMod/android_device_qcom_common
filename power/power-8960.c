@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2015, The CyanogenMod Project
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -48,6 +49,114 @@
 #include "power-common.h"
 
 static int display_hint_sent;
+
+static int current_power_profile = PROFILE_BALANCED;
+
+static int is_8064 = -1;
+
+int get_number_of_profiles() {
+    return 3;
+}
+
+static int is_target_8064() /* Returns value=8064 if target is 8064 else value 0 */
+{
+    int fd;
+    char buf[10] = {0};
+
+    if (is_8064 >= 0)
+        return is_8064;
+
+    fd = open("/sys/devices/system/soc/soc0/id", O_RDONLY);
+    if (fd >= 0) {
+        if (read(fd, buf, sizeof(buf) - 1) == -1) {
+            ALOGW("Unable to read soc_id");
+            is_8064 = 0;
+        } else {
+            int soc_id = atoi(buf);
+            if (soc_id == 153)  {
+                is_8064 = 8064;
+            }
+        }
+    }
+    close(fd);
+    return is_8064;
+}
+
+static int profile_high_performance_8960[3] = {
+    CPUS_ONLINE_MIN_2,
+    CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX
+};
+
+static int profile_high_performance_8064[5] = {
+    CPUS_ONLINE_MIN_4,
+    CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
+    CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX
+};
+
+static int profile_power_save_8960[2] = {
+    CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX
+};
+
+static int profile_power_save_8064[5] = {
+    CPUS_ONLINE_MAX_LIMIT_2,
+    CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
+    CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX
+};
+
+static void set_power_profile(int profile) {
+
+    if (profile == current_power_profile)
+        return;
+
+    ALOGV("%s: profile=%d", __func__, profile);
+
+    if (current_power_profile != PROFILE_BALANCED) {
+        undo_hint_action(DEFAULT_PROFILE_HINT_ID);
+        ALOGV("%s: hint undone", __func__);
+    }
+
+    if (profile == PROFILE_HIGH_PERFORMANCE) {
+        int *resource_values = is_target_8064() ?
+            profile_high_performance_8064 : profile_high_performance_8960;
+
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID,
+            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set performance mode", __func__);
+    } else if (profile == PROFILE_POWER_SAVE) {
+        int* resource_values = is_target_8064() ?
+            profile_power_save_8064 : profile_power_save_8960;
+
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID,
+            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set powersave", __func__);
+    }
+
+    current_power_profile = profile;
+}
+
+int power_hint_override(__attribute__((unused)) struct power_module *module,
+        power_hint_t hint, void *data)
+{
+    if (hint == POWER_HINT_SET_PROFILE) {
+        set_power_profile(*(int32_t *)data);
+        return HINT_HANDLED;
+    }
+
+    if (hint == POWER_HINT_LOW_POWER) {
+        if (current_power_profile == PROFILE_POWER_SAVE) {
+            set_power_profile(PROFILE_BALANCED);
+        } else {
+            set_power_profile(PROFILE_POWER_SAVE);
+        }
+    }
+
+    // Skip other hints in custom power modes
+    if (current_power_profile != PROFILE_BALANCED) {
+        return HINT_HANDLED;
+    }
+
+    return HINT_NONE;
+}
 
 int set_interactive_override(struct power_module *module, int on)
 {
