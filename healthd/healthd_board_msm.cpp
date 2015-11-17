@@ -232,7 +232,7 @@ void healthd_board_mode_charger_battery_update(
     color = soc_leds[i].color;
 
     if (old_color != color) {
-        if ((color & HVDCP_COLOR_MAP) && blink) {
+        if ((color == HVDCP_COLOR_MAP) && blink) {
             if (blink_for_hvdcp & RED_LED) {
                 rc = write_file_int(RED_LED_BLINK_PATH, HVDCP_BLINK_TYPE);
                 if (rc < 0) {
