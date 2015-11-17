@@ -343,11 +343,18 @@ case "$target" in
             soc_id=`cat /sys/devices/system/soc/soc0/id`
         fi
         case "$soc_id" in
-            "206" | "247" | "248" | "249" | "250")
+            "206")
 		echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 	        echo 1 > /sys/devices/system/cpu/cpu1/online
 		echo 1 > /sys/devices/system/cpu/cpu2/online
 	        echo 1 > /sys/devices/system/cpu/cpu3/online
+		echo 2 > /sys/class/net/rmnet0/queues/rx-0/rps_cpus
+	    ;;
+	    "247" | "248" | "249" | "250")
+                echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
+                echo 1 > /sys/devices/system/cpu/cpu1/online
+                echo 1 > /sys/devices/system/cpu/cpu2/online
+                echo 1 > /sys/devices/system/cpu/cpu3/online
 	    ;;
             "239" | "241" | "263")
                if [ -f /sys/devices/soc0/revision ]; then
