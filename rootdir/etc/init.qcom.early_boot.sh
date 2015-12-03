@@ -257,8 +257,9 @@ dev_file=/dev/graphics/fb$fb_cnt
   fi
 done
 
-reason_value=`cat /proc/sys/kernel/boot_reason`
-if [ "$reason_value" = "3" ]; then
+boot_reason=`cat /proc/sys/kernel/boot_reason`
+reboot_reason=`getprop ro.boot.alarmboot`
+if [ "$boot_reason" = "3" ] || [ "$reboot_reason" = "true" ]; then
     setprop ro.alarm_boot true
     setprop debug.sf.nobootanimation 1
 else
