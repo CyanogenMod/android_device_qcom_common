@@ -27,6 +27,51 @@
 #
 
 target=`getprop ro.board.platform`
+
+function configure_memory_parameters() {
+    # Set Memory paremeters.
+    #
+    # Set per_process_reclaim tuning parameters
+    # 2GB 64-bit will have aggressive settings when compared to 1GB 32-bit
+    # 1GB and less will use vmpressure range 50-70, 2GB will use 10-70
+    # 1GB and less will use 512 pages swap size, 2GB will use 1024
+    #
+    # Set Low memory killer minfree parameters
+    # 32 bit all memory configurations will use 15K series
+    # 64 bit up to 2GB with use 14K, and above 2GB will use 18K
+    #
+    # Set ALMK parameters (usually above the highest minfree values)
+    # 32 bit will have 53K & 64 bit will have 81K
+    arch_type=`uname -m`
+    MemTotalStr=`cat /proc/meminfo | grep MemTotal`
+    MemTotal=${MemTotalStr:16:8}
+    echo 1 > /sys/module/process_reclaim/parameters/enable_process_reclaim
+    echo 70 > /sys/module/process_reclaim/parameters/pressure_max
+    echo 30 > /sys/module/process_reclaim/parameters/swap_opt_eff
+    echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+    if [ "$arch_type" == "aarch64" ] && [ $MemTotal -gt 2097152 ]; then
+        echo 10 > /sys/module/process_reclaim/parameters/pressure_min
+        echo 1024 > /sys/module/process_reclaim/parameters/per_swap_size
+        echo "18432,23040,27648,32256,55296,80640" > /sys/module/lowmemorykiller/parameters/minfree
+        echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+    elif [ "$arch_type" == "aarch64" ] && [ $MemTotal -gt 1048576 ]; then
+        echo 10 > /sys/module/process_reclaim/parameters/pressure_min
+        echo 1024 > /sys/module/process_reclaim/parameters/per_swap_size
+        echo "14746,18432,22118,25805,40000,55000" > /sys/module/lowmemorykiller/parameters/minfree
+        echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+    elif [ "$arch_type" == "aarch64" ]; then
+        echo 50 > /sys/module/process_reclaim/parameters/pressure_min
+        echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
+        echo "14746,18432,22118,25805,40000,55000" > /sys/module/lowmemorykiller/parameters/minfree
+        echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+    else
+        echo 50 > /sys/module/process_reclaim/parameters/pressure_min
+        echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
+        echo "15360,19200,23040,26880,34415,43737" > /sys/module/lowmemorykiller/parameters/minfree
+        echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
+    fi
+}
+
 case "$target" in
     "msm7201a_ffa" | "msm7201a_surf" | "msm7627_ffa" | "msm7627_6x" | "msm7627a"  | "msm7627_surf" | \
     "qsd8250_surf" | "qsd8250_ffa" | "msm7630_surf" | "msm7630_1x" | "msm7630_fusion" | "qsd8650a_st1x")
@@ -1003,16 +1048,6 @@ esac
 case "$target" in
     "msm8937")
 
-        #Enable adaptive LMK and set vmpressure_file_min
-        ProductName=`getprop ro.product.name`
-        if [ "$ProductName" == "msm8937_32" ] || [ "$ProductName" == "msm8937_32_LMT" ]; then
-            echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
-            echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
-        elif [ "$ProductName" == "msm8937_64" ] || [ "$ProductName" == "msm8937_64_LMT" ]; then
-            echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
-            echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
-        fi
-
         if [ -f /sys/devices/soc0/soc_id ]; then
             soc_id=`cat /sys/devices/soc0/soc_id`
         else
@@ -1190,6 +1225,9 @@ case "$target" in
                 echo 1 > /sys/module/lpm_levels/lpm_workarounds/dynamic_clock_gating
                 # Enable timer migration to little cluster
                 echo 1 > /proc/sys/kernel/power_aware_timer_migration
+                # Set Memory parameters
+                configure_memory_parameters
+
             ;;
             *)
 
