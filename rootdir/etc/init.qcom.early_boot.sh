@@ -204,6 +204,10 @@ case "$platform" in
                 then
                     setprop media.msm8939hw 1
                 fi
+                if [ $soc_hwid -ge "268" ] && [ $soc_hwid -le "271" ]
+                then
+                    setprop media.msm8929hw 1
+                fi
                 ;;
             *)
                 setprop ro.opengles.version 196608
