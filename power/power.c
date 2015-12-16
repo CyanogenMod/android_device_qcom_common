@@ -229,6 +229,7 @@ static void power_hint(__attribute__((unused)) struct power_module *module, powe
         case POWER_HINT_VIDEO_DECODE:
             process_video_decode_hint(data);
         break;
+        default:
         break;
     }
 
@@ -289,7 +290,7 @@ void set_interactive(struct power_module *module, int on)
             }
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {THREAD_MIGRATION_SYNC_OFF};
+            int resource_values[] = {TR_MS_50, THREAD_MIGRATION_SYNC_OFF};
 
             if (!display_hint_sent) {
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
