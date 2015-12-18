@@ -140,22 +140,28 @@ static int process_video_encode_hint(void *metadata)
     if (video_encode_metadata.state == 1) {
         if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            /* sched and cpufreq params
-             * above_hispeed_delay for LVT - 40ms
-             * go hispeed load for LVT - 95
-             * hispeed freq for LVT - 556 MHz
-             * target load for LVT - 90
-             * above hispeed delay for sLVT - 40ms
-             * go hispeed load for sLVT - 95
-             * hispeed freq for sLVT - 556 MHz
-             * target load for sLVT - 90
-             * bus DCVS set to V2 config:
-             *  low power ceil mpbs - 2500
-             *  low power io percent - 50
+            /* 1. cpufreq params
+             *    -above_hispeed_delay for LVT - 40ms
+             *    -go hispeed load for LVT - 95
+             *    -hispeed freq for LVT - 556 MHz
+             *    -target load for LVT - 90
+             *    -above hispeed delay for sLVT - 40ms
+             *    -go hispeed load for sLVT - 95
+             *    -hispeed freq for sLVT - 806 MHz
+             *    -target load for sLVT - 90
+             * 2. bus DCVS set to V2 config:
+             *    -low power ceil mpbs - 2500
+             *    -low power io percent - 50
+             * 3. hysteresis optimization
+             *    -bus dcvs hysteresis tuning
+             *    -sample_ms of 10 ms
+             *    -disable ignore_hispeed_notif
+             *    -sLVT hispeed freq to 806MHz
              */
-            int resource_values[] = {0x41400000, 0x4, 0x41410000, 0x5F, 0x41414000, 0x22C,
-                0x41420000, 0x5A, 0x41400100, 0x4, 0x41410100, 0x5F, 0x41414100, 0x22C,
-                0x41420100, 0x5A, 0x41810000, 0x9C4, 0x41814000, 0x32};
+            int resource_values[] = {0x41400000, 0x4, 0x41410000, 0x5F, 0x41414000, 0x326,
+                0x41420000, 0x5A, 0x41400100, 0x4, 0x41410100, 0x5F, 0x41414100, 0x22C, 0x41420100, 0x5A,
+                0x41810000, 0x9C4, 0x41814000, 0x32, 0x4180C000, 0x0, 0x41820000, 0xA,
+                0x41438100, 0x0,  0x41438000, 0x0};
 
             perform_hint_action(video_encode_metadata.hint_id,
                     resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
