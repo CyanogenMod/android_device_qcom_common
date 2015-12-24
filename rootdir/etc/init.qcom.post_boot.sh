@@ -612,8 +612,6 @@ case "$target" in
 
                 # HMP Task packing settings for 8939, 8929
                 echo 20 > /proc/sys/kernel/sched_small_task
-                echo 30 > /proc/sys/kernel/sched_mostly_idle_load
-                echo 3 > /proc/sys/kernel/sched_mostly_idle_nr_run
 
 		for devfreq_gov in /sys/class/devfreq/qcom,mincpubw*/governor
 		do
@@ -690,6 +688,17 @@ case "$target" in
                 echo 30 > /sys/devices/system/cpu/cpu5/sched_mostly_idle_load
                 echo 30 > /sys/devices/system/cpu/cpu6/sched_mostly_idle_load
                 echo 30 > /sys/devices/system/cpu/cpu7/sched_mostly_idle_load
+
+                # cpu idle nr run threshold
+                echo 3 > /sys/devices/system/cpu/cpu0/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu1/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu2/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu3/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu4/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu5/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu6/sched_mostly_idle_nr_run
+                echo 3 > /sys/devices/system/cpu/cpu7/sched_mostly_idle_nr_run
+
             else
                 # Apply 3.0 specific Sched & Governor settings
                 # HMP scheduler settings for 8939 V3.0
