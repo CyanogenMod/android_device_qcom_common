@@ -760,6 +760,9 @@ PRODUCT_PACKAGES += tcmiface
 #intialise PRODUCT_PACKAGES_DEBUG list for debug modules
 PRODUCT_PACKAGES_DEBUG := init.qcom.testscripts.sh
 
+# ITE tech firmware
+PRODUCT_PACKAGES += it7260_cfg_62011E01.bin
+PRODUCT_PACKAGES += it7260_fw_050D0014.bin
 
 PRODUCT_COPY_FILES := \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
