@@ -48,8 +48,6 @@
 #include "performance.h"
 #include "power-common.h"
 
-static int display_hint_sent;
-
 static int current_power_profile = PROFILE_BALANCED;
 
 static int is_8064 = -1;
@@ -153,44 +151,6 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
     // Skip other hints in custom power modes
     if (current_power_profile != PROFILE_BALANCED) {
         return HINT_HANDLED;
-    }
-
-    return HINT_NONE;
-}
-
-int set_interactive_override(struct power_module *module, int on)
-{
-    char governor[80];
-
-    if (get_scaling_governor(governor, sizeof(governor)) == -1) {
-        ALOGE("Can't obtain scaling governor.");
-
-        return HINT_NONE;
-    }
-
-    if (!on) {
-        /* Display off. */
-        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
-                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
-            int resource_values[] = {MS_500, THREAD_MIGRATION_SYNC_OFF};
-
-            if (!display_hint_sent) {
-                perform_hint_action(DISPLAY_STATE_HINT_ID,
-                        resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
-                display_hint_sent = 1;
-            }
-
-            return HINT_HANDLED;
-        }
-    } else {
-        /* Display on */
-        if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
-                (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
-            undo_hint_action(DISPLAY_STATE_HINT_ID);
-            display_hint_sent = 0;
-
-            return HINT_HANDLED;
-        }
     }
 
     return HINT_NONE;
