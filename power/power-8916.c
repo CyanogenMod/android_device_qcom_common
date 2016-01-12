@@ -382,14 +382,6 @@ int power_hint_override(struct power_module *module __unused, power_hint_t hint,
         set_power_profile(*(int32_t *)data);
     }
 
-    if (hint == POWER_HINT_LOW_POWER) {
-        if (current_power_profile == PROFILE_POWER_SAVE) {
-            set_power_profile(PROFILE_BALANCED);
-        } else {
-            set_power_profile(PROFILE_POWER_SAVE);
-        }
-    }
-
     // Skip other hints in custom power modes
     if (current_power_profile != PROFILE_BALANCED) {
         return HINT_HANDLED;

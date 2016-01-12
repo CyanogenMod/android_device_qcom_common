@@ -54,7 +54,6 @@ int get_number_of_profiles() {
 }
 
 static int current_power_profile = PROFILE_BALANCED;
-static int low_power_mode = 0;
 
 static void set_power_profile(int profile) {
 
@@ -169,19 +168,8 @@ static int process_video_encode_hint(void *metadata)
 int power_hint_override(__attribute__((unused)) struct power_module *module,
         power_hint_t hint, void *data)
 {
-    if (hint == POWER_HINT_SET_PROFILE && !low_power_mode) {
+    if (hint == POWER_HINT_SET_PROFILE) {
         set_power_profile(*(int32_t *)data);
-        return HINT_HANDLED;
-    }
-
-    if (hint == POWER_HINT_LOW_POWER) {
-        if (low_power_mode) {
-            set_power_profile(PROFILE_BALANCED);
-            low_power_mode = 0;
-        } else {
-            set_power_profile(PROFILE_POWER_SAVE);
-            low_power_mode = 1;
-        }
         return HINT_HANDLED;
     }
 
