@@ -998,3 +998,11 @@ service fidodaemon /system/vendor/bin/fidodaemon
     class late_start
     user system
     group system
+
+#add poweroffhandler
+service poweroffhandler /system/bin/poweroffhandler
+    class core
+    user media
+    group graphics audio
+    disabled
+    oneshot
