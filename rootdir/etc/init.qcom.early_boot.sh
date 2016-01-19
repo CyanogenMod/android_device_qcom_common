@@ -213,7 +213,19 @@ case "$platform" in
                 setprop ro.opengles.version 196608
                 ;;
         esac
-        ;;
+
+	# auto firmware upgrade for ITE tecg touch screen
+        case $platform in
+            "msm8909" | "msm8909w")
+                case $soc_hwplatform in
+                    "MTP")
+                        echo 1 > /sys/bus/i2c/devices/5-0046/cfg_update
+                        echo 1 > /sys/bus/i2c/devices/5-0046/fw_update
+                        ;;
+                esac
+                ;;
+        esac
+	;;
 esac
 
 # Setup display nodes & permissions
