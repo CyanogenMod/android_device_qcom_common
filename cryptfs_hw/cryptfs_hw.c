@@ -74,6 +74,13 @@ static int (*qseecom_create_key)(int, void*);
 static int (*qseecom_update_key)(int, void*, void*);
 static int (*qseecom_wipe_key)(int);
 
+inline void* secure_memset(void* v, int c , size_t n) {
+    volatile unsigned char* p = (volatile unsigned char* )v;
+    while (n--) *p++ = c;
+    return v;
+}
+
+
 static int map_usage(int usage)
 {
     int storage_type = is_ice_enabled();
@@ -189,8 +196,10 @@ static int set_key(const char* currentpasswd, const char* passwd, const char* en
         unsigned char* tmp_currentpasswd = get_tmp_passwd(currentpasswd);
         if(tmp_passwd) {
             if (operation == UPDATE_HW_DISK_ENC_KEY) {
-                if (tmp_currentpasswd)
+                if (tmp_currentpasswd) {
                    err = qseecom_update_key(map_usage(QSEECOM_DISK_ENCRYPTION), tmp_currentpasswd, tmp_passwd);
+                   secure_memset(tmp_currentpasswd, 0, MAX_PASSWORD_LEN);
+                }
             } else if (operation == SET_HW_DISK_ENC_KEY) {
                 err = qseecom_create_key(map_usage(QSEECOM_DISK_ENCRYPTION), tmp_passwd);
             }
@@ -198,6 +207,7 @@ static int set_key(const char* currentpasswd, const char* passwd, const char* en
                 if(ERR_MAX_PASSWORD_ATTEMPTS == err)
                     wipe_userdata();
             }
+            secure_memset(tmp_passwd, 0, MAX_PASSWORD_LEN);
             free(tmp_passwd);
             free(tmp_currentpasswd);
         }
