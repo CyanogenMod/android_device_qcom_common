@@ -206,11 +206,10 @@ FM += libfmjni
 #GPS
 GPS_HARDWARE := gps.conf
 GPS_HARDWARE += gps.default
-GPS_HARDWARE += gps.mahimahi
-GPS_HARDWARE += libloc_adapter
 GPS_HARDWARE += libgps.utils
 GPS_HARDWARE += libloc_eng
 GPS_HARDWARE += libloc_api_v02
+GPS_HARDWARE += libloc_ds_api
 
 #HDMID
 HDMID := hdmid
