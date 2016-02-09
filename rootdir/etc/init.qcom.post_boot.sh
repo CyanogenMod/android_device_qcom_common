@@ -1620,6 +1620,11 @@ case "$target" in
 		echo 0 > /sys/module/lpm_levels/system/pwr/pwr-l2-gdhs/idle_enabled
 		echo 0 > /sys/module/lpm_levels/system/perf/perf-l2-gdhs/idle_enabled
 		echo N > /sys/module/lpm_levels/parameters/sleep_disabled
+		# Disable DEF-FPC mode
+		echo N > /sys/module/lpm_levels/system/pwr/cpu0/fpc-def/idle_enabled
+		echo N > /sys/module/lpm_levels/system/pwr/cpu1/fpc-def/idle_enabled
+		echo N > /sys/module/lpm_levels/system/perf/cpu2/fpc-def/idle_enabled
+		echo N > /sys/module/lpm_levels/system/perf/cpu3/fpc-def/idle_enabled
 	elif [ "$soc_revision" == "3.0" ]; then
 		# Enable all LPMs by default
 		# This will enable C4, D4, D3, E4 and M3 LPMs
