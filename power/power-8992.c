@@ -103,7 +103,20 @@ static int process_video_encode_hint(void *metadata)
 int power_hint_override(struct power_module *module, power_hint_t hint, void *data)
 {
     int ret_val = HINT_NONE;
+
     switch(hint) {
+        case POWER_HINT_LAUNCH_BOOST:
+            int duration = 2000;
+            int resources_launch_boost[] = {
+                SCHED_BOOST_ON,
+                0x20D,
+            };
+
+            interaction(duration, ARRAY_SIZE(resources_launch_boost),
+                    resources_launch_boost);
+
+            ret_val = HINT_HANDLED;
+            break;
         case POWER_HINT_VIDEO_ENCODE:
             ret_val = process_video_encode_hint(data);
             break;
