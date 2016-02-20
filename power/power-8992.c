@@ -103,15 +103,15 @@ static int process_video_encode_hint(void *metadata)
 int power_hint_override(struct power_module *module, power_hint_t hint, void *data)
 {
     int ret_val = HINT_NONE;
+    int duration;
+    int resources_launch_boost[] = {
+        SCHED_BOOST_ON,
+        0x20D,
+    };
 
     switch(hint) {
         case POWER_HINT_LAUNCH_BOOST:
-            int duration = 2000;
-            int resources_launch_boost[] = {
-                SCHED_BOOST_ON,
-                0x20D,
-            };
-
+            duration = 2000;
             interaction(duration, ARRAY_SIZE(resources_launch_boost),
                     resources_launch_boost);
 
