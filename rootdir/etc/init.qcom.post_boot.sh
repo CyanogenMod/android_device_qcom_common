@@ -1246,11 +1246,17 @@ case "$target" in
         # disable thermal core_control to update scaling_min_freq
         echo 0 > /sys/module/msm_thermal/core_control/enabled
         echo 1 > /sys/devices/system/cpu/cpu0/online
+        if [ "$ProductName" == "msm8909w" ]; then
+             echo 1 > /sys/devices/system/cpu/cpu1/online
+        fi
 
 	if [ "$ProductName" == "msm8909w" ]; then
 		echo "performance" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+		echo "performance" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
 		echo 800000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+		echo 800000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
 		echo 800000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+		echo 800000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
 		#Below entries are to set the GPU frequency and DCVS governor
 		echo 200000000 > /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
 		echo 200000000 > /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
@@ -1275,8 +1281,7 @@ case "$target" in
         echo 50000 > /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor
 
 	if [ "$ProductName" == "msm8909w" ]; then
-		# Post boot, have only cpu0 online. Make all other cores go offline
-		echo 0 > /sys/devices/system/cpu/cpu1/online
+		# Post boot, have cpu0 and cpu1 online. Make all other cores go offline
 		echo 0 > /sys/devices/system/cpu/cpu2/online
 		echo 0 > /sys/devices/system/cpu/cpu3/online
 	else
