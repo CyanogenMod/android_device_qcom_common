@@ -275,8 +275,6 @@ on post-fs-data
     mkdir /data/camera 0770 media camera
 
     #Create PERFD deamon related dirs
-    mkdir /data/misc/perfd 0755 root system
-    chmod 2755 /data/misc/perfd
     mkdir /data/system/perfd 0770 root system
     chmod 2770 /data/system/perfd
     mkdir /persist/drm 0770 system system
@@ -312,6 +310,12 @@ on post-fs-data
     write /data/misc/radio/db_check_done 0
     chown radio radio /data/misc/radio/db_check_done
     chmod 0660 /data/misc/radio/db_check_done
+
+service perfd /system/vendor/bin/perfd
+    class main
+    user root
+    disabled
+    socket perfd seqpacket 0666 root system
 
 service qcomsysd /system/bin/qcom-system-daemon
     class main
