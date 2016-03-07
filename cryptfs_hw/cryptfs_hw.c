@@ -125,7 +125,7 @@ static int is_qseecom_up()
     char value[PROPERTY_VALUE_MAX] = {0};
 
     for (; i<QSEECOM_UP_CHECK_COUNT; i++) {
-        property_get("sys.listeners.registered", value, "");
+        property_get("sys.keymaster.loaded", value, "");
         if (!strncmp(value, "true", PROPERTY_VALUE_MAX))
             return 1;
         usleep(100000);
