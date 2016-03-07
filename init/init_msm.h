@@ -41,4 +41,6 @@
 
 void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type);
 
+extern int read_file2(const char *fname, char *data, int max_size);
+
 #endif /* __INIT_MSM__H__ */
