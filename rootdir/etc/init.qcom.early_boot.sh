@@ -178,6 +178,10 @@ case "$target" in
                 setprop ro.sf.lcd_density 240
                 setprop qemu.hw.mainkeys 0
                 ;;
+            "SBC")
+                setprop ro.sf.lcd_density 240
+                setprop qemu.hw.mainkeys 0
+                ;;
             *)
                 setprop ro.sf.lcd_density 480
                 ;;
