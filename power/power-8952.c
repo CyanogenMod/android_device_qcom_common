@@ -109,7 +109,10 @@ static void set_power_profile(int profile) {
 int  power_hint_override(struct power_module *module, power_hint_t hint,
         void *data)
 {
-    int duration;
+    int duration, duration_hint;
+    unsigned long long previous_boost_time = 0, cur_boost_time;
+    struct timeval cur_boost_timeval = {0, 0};
+    double elapsed_time;
     int resources_launch_boost[] = {
         SCHED_BOOST_ON,
         0x20f,
@@ -125,6 +128,11 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
         0x3e01,
         0x101,
     };
+    int resources_interaction_boost[] = {
+        0x20d,
+        0x3d01,
+        0x101,
+    };
 
     if (hint == POWER_HINT_SET_PROFILE) {
         set_power_profile(*(int32_t *)data);
@@ -137,6 +145,37 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
     }
 
     switch (hint) {
+        case POWER_HINT_INTERACTION:
+            duration = 500;
+            duration_hint = 0;
+
+            if (data) {
+                duration_hint = *((int *)data);
+            }
+
+            duration = duration_hint > 0 ? duration_hint : 500;
+
+            gettimeofday(&cur_boost_timeval, NULL);
+            cur_boost_time = cur_boost_timeval.tv_sec * 1000000 + cur_boost_timeval.tv_usec;
+            elapsed_time = (double)(cur_boost_time - previous_boost_time);
+            if (elapsed_time > 750000)
+                elapsed_time = 750000;
+            // don't hint if it's been less than 250ms since last boost
+            // also detect if we're doing anything resembling a fling
+            // support additional boosting in case of flings
+            else if (elapsed_time < 250000 && duration <= 750)
+                return HINT_HANDLED;
+
+            previous_boost_time = cur_boost_time;
+
+            if (duration >= 1500) {
+                interaction(duration, ARRAY_SIZE(resources_cpu_boost),
+                        resources_cpu_boost);
+            } else {
+                interaction(duration, ARRAY_SIZE(resources_interaction_boost),
+                        resources_interaction_boost);
+            }
+            return HINT_HANDLED;
         case POWER_HINT_LAUNCH_BOOST:
             duration = 2000;
             interaction(duration, ARRAY_SIZE(resources_launch_boost),
