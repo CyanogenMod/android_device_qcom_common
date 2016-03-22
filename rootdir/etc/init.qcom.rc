@@ -331,6 +331,7 @@ service iop /system/bin/iop
     user root
     group root
     disabled
+    socket iop seqpacket 0666 root system
 
 service qcomsysd /system/bin/qcom-system-daemon
     class main
