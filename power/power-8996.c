@@ -48,6 +48,43 @@
 #include "power-common.h"
 
 static int display_hint_sent;
+static int current_power_profile = PROFILE_BALANCED;
+
+int get_number_of_profiles() {
+    return 3;
+}
+
+static void set_power_profile(int profile) {
+
+    if (profile == current_power_profile)
+        return;
+
+    ALOGV("%s: profile=%d", __func__, profile);
+
+    if (current_power_profile != PROFILE_BALANCED) {
+        undo_hint_action(DEFAULT_PROFILE_HINT_ID);
+        ALOGV("%s: hint undone", __func__);
+    }
+
+    if (profile == PROFILE_HIGH_PERFORMANCE) {
+        int *resource_values = { SCHED_BOOST_ON, CPUS_ONLINE_MIN_4,
+                CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
+                CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX };
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID, resource_values,
+                sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set performance mode", __func__);
+
+    } else if (profile == PROFILE_POWER_SAVE) {
+        int *resource_values = { CPUS_ONLINE_MAX_LIMIT_2,
+                CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
+                CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX };
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID, resource_values,
+                sizeof(resource_values)/sizeof(resource_values[0]));
+        ALOGD("%s: set powersave", __func__);
+    }
+
+    current_power_profile = profile;
+}
 
 static int process_cam_preview_hint(void *metadata)
 {
@@ -182,12 +219,22 @@ static int process_video_encode_hint(void *metadata)
 int power_hint_override(struct power_module *module, power_hint_t hint, void *data)
 {
     int ret_val = HINT_NONE;
+
+    // Skip other hints in custom power modes
+    if (current_power_profile != PROFILE_BALANCED) {
+        return HINT_HANDLED;
+    }
+
     switch(hint) {
         case POWER_HINT_CAM_PREVIEW:
             ret_val = process_cam_preview_hint(data);
             break;
         case POWER_HINT_VIDEO_ENCODE:
             ret_val = process_video_encode_hint(data);
+            break;
+        case POWER_HINT_SET_PROFILE:
+            set_power_profile(*(int32_t *)data);
+            ret_val = HINT_HANDLED;
             break;
         default:
             break;
