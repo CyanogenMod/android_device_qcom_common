@@ -228,6 +228,10 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         return process_video_encode_hint(data);
     }
 
+    if (hint == POWER_HINT_VIDEO_DECODE) {
+        return HINT_HANDLED;
+    }
+
     return HINT_NONE;
 }
 
