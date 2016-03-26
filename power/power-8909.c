@@ -98,6 +98,10 @@ int power_hint_override(struct power_module *module, power_hint_t hint, void *da
           process_video_encode_hint(data);
           return HINT_HANDLED;
         }
+        case POWER_HINT_VIDEO_DECODE:
+        {
+          return HINT_HANDLED;
+        }
         default:
         {
             break;
