@@ -125,6 +125,9 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         case POWER_HINT_VIDEO_ENCODE:
             ret_val = process_video_encode_hint(data);
             break;
+        case POWER_HINT_VIDEO_DECODE:
+            ret_val = HINT_HANDLED;
+            break;
         default:
             break;
     }
