@@ -29,6 +29,9 @@
 
 #ifndef __GPT_UTILS_H__
 #define __GPT_UTILS_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <unistd.h>
 #include <stdlib.h>
 /******************************************************************************
@@ -47,4 +50,7 @@ enum boot_update_stage {
  ******************************************************************************/
 int prepare_boot_update(enum boot_update_stage stage);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* __GPT_UTILS_H__ */

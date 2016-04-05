@@ -36,7 +36,7 @@
 
 Value* DecryptFn(const char* name, State* state, int argc, Expr* argv[]) {
     int rc = -1;
-    const char *src_file, *dst_file;
+    char *src_file, *dst_file;
 
     if (argc != 2)
         return ErrorAbort(state, "%s expects 2 args, got %d", name, argc);

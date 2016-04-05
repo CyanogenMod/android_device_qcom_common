@@ -144,7 +144,7 @@ ion_memalloc(struct ion_buf_handle *buf, uint32_t size, uint32_t heap)
         goto ioctl_fail;
     }
 
-    va = mmap(NULL, alloc_data.len, PROT_READ | PROT_WRITE,
+    va = (unsigned char*)mmap(NULL, alloc_data.len, PROT_READ | PROT_WRITE,
               MAP_SHARED, fd_data.fd, 0);
     if (va == MAP_FAILED) {
         fprintf(stderr, "ION memory map failed (%s)\n", strerror(errno));
