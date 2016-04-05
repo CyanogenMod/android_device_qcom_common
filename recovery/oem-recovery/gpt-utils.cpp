@@ -41,8 +41,13 @@
 #include <unistd.h>
 #include <linux/fs.h>
 #include "gpt-utils.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "sparse_crc32.h"
-
+#ifdef __cplusplus
+}
+#endif
 
 
 /******************************************************************************
