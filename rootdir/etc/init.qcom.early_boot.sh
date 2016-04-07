@@ -183,7 +183,7 @@ case "$target" in
                 setprop qemu.hw.mainkeys 0
                 ;;
             *)
-                setprop ro.sf.lcd_density 480
+                setprop ro.sf.lcd_density 560
                 ;;
         esac
         ;;
