@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2014-2015, The Linux Foundation. All rights reserved.
+# Copyright (c) 2014-2016, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -46,7 +46,6 @@ enable_stm_events()
     fi
 
     echo 1 > /sys/bus/coresight/devices/coresight-tmc-etr/curr_sink
-    echo 1 > /sys/bus/coresight/devices/coresight-stm/enable
     echo 1 > /sys/kernel/debug/tracing/tracing_on
     # schedular
     echo 1 > /sys/kernel/debug/tracing/events/sched/sched_cpu_hotplug/enable
