@@ -13,8 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ifeq ($(call my-dir),$(call project-path-for,qcom-common))
 ifneq (,$(filter $(QCOM_BOARD_PLATFORMS),$(TARGET_BOARD_PLATFORM)))
 
 include $(all-subdir-makefiles)
 
+endif
 endif
