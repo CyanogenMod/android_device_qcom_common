@@ -28,7 +28,6 @@
  */
 
 #include <stdlib.h>
-#include <fcntl.h>
 
 #include "vendor_init.h"
 #include "property_service.h"
@@ -38,47 +37,12 @@
 #include "init_msm.h"
 
 #define VIRTUAL_SIZE "/sys/class/graphics/fb0/virtual_size"
-#define VERSION "/sys/devices/soc.0/1d00000.qcom,vidc/version"
 #define BUF_SIZE 64
-
-int get_version(int *version)
-{
-    char buf[16];
-    int pos = 0, rv = 0, fd = -1;
-    long value = 0;
-    char *endptr = NULL;
-    int bytes_to_read = sizeof(buf);
-
-    fd = open(VERSION, O_RDONLY, 0660);
-    if (fd < 0) {
-        return -1;
-    }
-
-    do {
-        pos += rv;
-        if ((bytes_to_read - pos) <= 0)
-            break;
-        rv += read(fd, buf + pos, bytes_to_read - pos);
-    } while (rv > 0);
-
-    if (rv < 0) {
-        return -1;
-    }
-    buf[pos - 1] = '\0';
-    value = strtol(buf, &endptr, sizeof(long));
-    if (endptr == buf) {
-        return -1;
-    }
-    *version = (int)value;
-
-    return 1;
-}
 
 void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
 {
     char platform[PROP_VALUE_MAX];
     int rc;
-    int version = 0;
     unsigned long virtual_size = 0;
     char str[BUF_SIZE];
 
@@ -107,13 +71,4 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     } else
         property_set(PROP_LCDDENSITY, "320");
 
-    if (msm_id == 266 || msm_id == 278 || msm_id == 277 || msm_id == 274) {
-        property_set("media.msm8956hw", "1");
-        property_set("media.settings.xml", "/etc/media_profiles_8956.xml");
-        get_version(&version);
-        if (version == 1)
-            property_set("media.msm8956.version", "1");
-        else
-            property_set("media.msm8956.version", "0");
-    }
 }
