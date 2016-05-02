@@ -304,7 +304,7 @@ else
 fi
 
 cur_version_info=`cat /firmware/verinfo/ver_info.txt`
-if [ "$prev_version_info" != "$cur_version_info" ]; then
+if [ ! -f /firmware/verinfo/ver_info.txt -o "$prev_version_info" != "$cur_version_info" ]; then
     rm -rf /data/misc/radio/modem_config
     mkdir /data/misc/radio/modem_config
     chmod 770 /data/misc/radio/modem_config
