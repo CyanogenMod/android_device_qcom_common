@@ -196,10 +196,10 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         previous_boost_time = cur_boost_time;
 
         if (duration >= 1500) {
-            int resources[] = { SCHED_BOOST_ON, 0x20D, 0x101, 0x3E01 };
+            int resources[] = { SCHED_BOOST_ON, 0x20D };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         } else {
-            int resources[] = { 0x20D, 0x101, 0x3E01 };
+            int resources[] = { 0x20D };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         }
         return HINT_HANDLED;
@@ -207,7 +207,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
 
     if (hint == POWER_HINT_LAUNCH_BOOST) {
         int duration = 2000;
-        int resources[] = { SCHED_BOOST_ON, 0x20F, 0x101, 0x3E01 };
+        int resources[] = { SCHED_BOOST_ON, 0x20D };
 
         interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
 
@@ -245,7 +245,9 @@ int set_interactive_override(__attribute__((unused)) struct power_module *module
         /* Display off */
         if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
             (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {0x777}; /* 4+0 core config in display off */
+            // sched upmigrate = 99, sched downmigrate = 95
+            // keep the big cores around, but make them very hard to use
+            int resource_values[] = { 0x4E63, 0x4F5F };
             if (!display_hint_sent) {
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
                 resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
