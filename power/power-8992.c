@@ -166,8 +166,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
     }
 
     // Skip other hints in custom power modes
-    if (current_power_profile == PROFILE_POWER_SAVE ||
-            current_power_profile == PROFILE_HIGH_PERFORMANCE) {
+    if (current_power_profile == PROFILE_POWER_SAVE) {
         return HINT_HANDLED;
     }
 
@@ -206,9 +205,18 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
     }
 
     if (hint == POWER_HINT_LAUNCH_BOOST) {
+        launch_boost_info_t *info = (launch_boost_info_t *)data;
+        if (info == NULL) {
+            ALOGE("LAUNCH_BOOST: NULL");
+            return HINT_HANDLED;
+        }
+
+        ALOGD("LAUNCH_BOOST: %s (pid=%d)", info->packageName, info->pid);
+
         int duration = 2000;
         int resources[] = { SCHED_BOOST_ON, 0x20D };
 
+        start_prefetch(info->pid, info->packageName);
         interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
 
         return HINT_HANDLED;
