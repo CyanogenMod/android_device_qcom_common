@@ -43,3 +43,4 @@ void perform_hint_action(int hint_id, int resource_values[],
 void undo_hint_action(int hint_id);
 void undo_initial_hint_action();
 void set_profile(int profile);
+void start_prefetch(int pid, const char *packageName);
