@@ -158,7 +158,7 @@ static int process_video_encode_hint(void *metadata)
 }
 
 int power_hint_override(__attribute__((unused)) struct power_module *module,
-		power_hint_t hint, void *data)
+        power_hint_t hint, void *data)
 {
     if (hint == POWER_HINT_SET_PROFILE) {
         set_power_profile(*(int32_t *)data);
@@ -166,8 +166,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
     }
 
     // Skip other hints in custom power modes
-    if (current_power_profile == PROFILE_POWER_SAVE ||
-            current_power_profile == PROFILE_HIGH_PERFORMANCE) {
+    if (current_power_profile == PROFILE_POWER_SAVE) {
         return HINT_HANDLED;
     }
 
@@ -196,19 +195,28 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         previous_boost_time = cur_boost_time;
 
         if (duration >= 1500) {
-            int resources[] = { SCHED_BOOST_ON, 0x20D };
+            int resources[] = { SCHED_BOOST_ON, 0x20D, 0x101, 0x3E01 };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         } else {
-            int resources[] = { 0x20D };
+            int resources[] = { 0x20D, 0x101, 0x3E01 };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         }
         return HINT_HANDLED;
     }
 
     if (hint == POWER_HINT_LAUNCH_BOOST) {
+        launch_boost_info_t *info = (launch_boost_info_t *)data;
+        if (info == NULL) {
+            ALOGE("Invalid argument for launch boost");
+            return HINT_HANDLED;
+        }
+
+        ALOGV("LAUNCH_BOOST: %s (pid=%d)", info->packageName, info->pid);
+
         int duration = 2000;
         int resources[] = { SCHED_BOOST_ON, 0x20D };
 
+        start_prefetch(info->pid, info->packageName);
         interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
 
         return HINT_HANDLED;
