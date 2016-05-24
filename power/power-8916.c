@@ -48,22 +48,10 @@
 #include "performance.h"
 #include "power-common.h"
 
-#define MIN_FREQ_CPU0_DISP_OFF 400000
-#define MIN_FREQ_CPU0_DISP_ON  960000
-
-char scaling_min_freq[4][80] ={
-    "sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq",
-    "sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq",
-    "sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq",
-    "sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq"
-};
-
 static int is_8916 = -1;
 
 static int display_hint_sent;
 int display_boost;
-static int saved_interactive_mode = -1;
-static int slack_node_rw_failed = 0;
 
 int get_number_of_profiles() {
     return 3;
@@ -265,9 +253,7 @@ typedef int hintdata;
 int  set_interactive_override(struct power_module *module __unused, int on)
 {
     char governor[80];
-    char tmp_str[NODE_MAX];
     struct video_encode_metadata_t video_encode_metadata;
-    int rc;
 
     ALOGI("Got set_interactive hint");
     if (get_scaling_governor_check_cores(governor, sizeof(governor),CPU0) == -1) {
@@ -304,24 +290,13 @@ int  set_interactive_override(struct power_module *module __unused, int on)
             {
              if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-               int resource_values[] = {TR_MS_CPU0_50,TR_MS_CPU4_50, THREAD_MIGRATION_SYNC_OFF};
-
                /* Set CPU0 MIN FREQ to 400Mhz avoid extra peak power
                   impact in volume key press  */
-               snprintf(tmp_str, NODE_MAX, "%d", MIN_FREQ_CPU0_DISP_OFF);
-               if (sysfs_write(scaling_min_freq[0], tmp_str) != 0) {
-                   if (sysfs_write(scaling_min_freq[1], tmp_str) != 0) {
-                       if (sysfs_write(scaling_min_freq[2], tmp_str) != 0) {
-                           if (sysfs_write(scaling_min_freq[3], tmp_str) != 0) {
-                               if(!slack_node_rw_failed) {
-                                  ALOGE("Failed to write to %s",SCALING_MIN_FREQ );
-                               }
-                                rc = 1;
-                           }
-                       }
-                   }
-                }
-
+                int resource_values[] = {
+                    TR_MS_CPU0_50, TR_MS_CPU4_50,
+                    THREAD_MIGRATION_SYNC_OFF,
+                    CPU0_MIN_FREQ_400
+                };
                   if (!display_hint_sent) {
                       perform_hint_action(DISPLAY_STATE_HINT_ID,
                       resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
@@ -349,21 +324,6 @@ int  set_interactive_override(struct power_module *module __unused, int on)
 
           if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-
-              /* Recovering MIN_FREQ in display ON case */
-               snprintf(tmp_str, NODE_MAX, "%d", MIN_FREQ_CPU0_DISP_ON);
-               if (sysfs_write(scaling_min_freq[0], tmp_str) != 0) {
-                   if (sysfs_write(scaling_min_freq[1], tmp_str) != 0) {
-                       if (sysfs_write(scaling_min_freq[2], tmp_str) != 0) {
-                           if (sysfs_write(scaling_min_freq[3], tmp_str) != 0) {
-                               if(!slack_node_rw_failed) {
-                                  ALOGE("Failed to write to %s",SCALING_MIN_FREQ );
-                               }
-                                rc = 1;
-                           }
-                       }
-                   }
-                }
              undo_hint_action(DISPLAY_STATE_HINT_ID);
              display_hint_sent = 0;
           }
@@ -372,7 +332,6 @@ int  set_interactive_override(struct power_module *module __unused, int on)
          break ;
       } /* End of check condition during the DISPLAY ON case */
    }
-    saved_interactive_mode = !!on;
     return HINT_HANDLED;
 }
 
