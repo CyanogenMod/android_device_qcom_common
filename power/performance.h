@@ -61,6 +61,7 @@ enum PWR_CLSP_TYPE {
  * where x represents the CPU
  */
 enum CPU0_MIN_FREQ_LVL {
+    CPU0_MIN_FREQ_400 = 0x204,
     CPU0_MIN_FREQ_NONTURBO_MAX = 0x20A,
     CPU0_MIN_FREQ_TURBO_MAX = 0x2FE,
 };
