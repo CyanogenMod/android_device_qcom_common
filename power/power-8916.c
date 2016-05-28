@@ -413,17 +413,20 @@ int power_hint_override(struct power_module *module __unused, power_hint_t hint,
 
         if (duration >= 1500) {
             int resources[] = {
-                ALL_CPUS_PWR_CLPS_DIS,
                 SCHED_BOOST_ON,
+                SCHED_PREFER_IDLE_DIS,
+                0x20D
+            };
+            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+        } else if (duration_hint > 0) {
+            int resources[] = {
                 SCHED_PREFER_IDLE_DIS,
                 0x20D
             };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         } else {
             int resources[] = {
-                ALL_CPUS_PWR_CLPS_DIS,
-                SCHED_PREFER_IDLE_DIS,
-                0x20D
+                0x20B
             };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         }
@@ -451,10 +454,8 @@ int power_hint_override(struct power_module *module __unused, power_hint_t hint,
     if (hint == POWER_HINT_CPU_BOOST) {
         int duration = *(int32_t *)data / 1000;
         int resources[] = {
-            ALL_CPUS_PWR_CLPS_DIS,
             SCHED_BOOST_ON,
-            SCHED_PREFER_IDLE_DIS,
-            0x20D
+            0x20B
         };
 
         if (duration > 0)
