@@ -114,24 +114,24 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
     struct timeval cur_boost_timeval = {0, 0};
     double elapsed_time;
     int resources_launch_boost[] = {
+        ALL_CPUS_PWR_CLPS_DIS,
         SCHED_BOOST_ON,
+        SCHED_PREFER_IDLE_DIS,
         0x20f,
-        0x101,
-        0x3e01,
         0x4001,
         0x4101,
         0x4201,
     };
     int resources_cpu_boost[] = {
+        ALL_CPUS_PWR_CLPS_DIS,
         SCHED_BOOST_ON,
+        SCHED_PREFER_IDLE_DIS,
         0x20d,
-        0x3e01,
-        0x101,
     };
     int resources_interaction_boost[] = {
+        SCHED_PREFER_IDLE_DIS,
         0x20d,
         0x3d01,
-        0x101,
     };
 
     if (hint == POWER_HINT_SET_PROFILE) {

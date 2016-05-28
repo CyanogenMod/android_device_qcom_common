@@ -78,7 +78,8 @@ static void set_power_profile(int profile) {
             resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
         ALOGD("%s: set powersave", __func__);
     } else if (profile == PROFILE_HIGH_PERFORMANCE) {
-        int resource_values[] = { SCHED_BOOST_ON, CPUS_ONLINE_MAX, 0x0901, 0x101,
+        int resource_values[] = { SCHED_BOOST_ON, CPUS_ONLINE_MAX,
+            ALL_CPUS_PWR_CLPS_DIS, 0x0901,
             CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
             CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX,
             CPU4_MIN_FREQ_TURBO_MAX, CPU5_MIN_FREQ_TURBO_MAX };
@@ -195,10 +196,19 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         previous_boost_time = cur_boost_time;
 
         if (duration >= 1500) {
-            int resources[] = { SCHED_BOOST_ON, 0x20D, 0x101, 0x3E01 };
+            int resources[] = {
+                ALL_CPUS_PWR_CLPS_DIS,
+                SCHED_BOOST_ON,
+                SCHED_PREFER_IDLE_DIS,
+                0x20D
+            };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         } else {
-            int resources[] = { 0x20D, 0x101, 0x3E01 };
+            int resources[] = {
+                ALL_CPUS_PWR_CLPS_DIS,
+                SCHED_PREFER_IDLE_DIS,
+                0x20D
+            };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         }
         return HINT_HANDLED;
