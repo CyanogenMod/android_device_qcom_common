@@ -195,10 +195,19 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         previous_boost_time = cur_boost_time;
 
         if (duration >= 1500) {
-            int resources[] = { SCHED_BOOST_ON, 0x20D, 0x101, 0x3E01 };
+            int resources[] = {
+                ALL_CPUS_PWR_CLPS_DIS,
+                SCHED_BOOST_ON,
+                SCHED_PREFER_IDLE_DIS,
+                0x20D
+            };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         } else {
-            int resources[] = { 0x20D, 0x101, 0x3E01 };
+            int resources[] = {
+                ALL_CPUS_PWR_CLPS_DIS,
+                SCHED_PREFER_IDLE_DIS,
+                0x20D
+            };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         }
         return HINT_HANDLED;
