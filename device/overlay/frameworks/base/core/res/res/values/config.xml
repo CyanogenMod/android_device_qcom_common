@@ -34,6 +34,7 @@
          should be empty.  An example would be "softap.*" -->
     <string-array translatable="false" name="config_tether_wifi_regexs">
         <item>"wlan0"</item>
+        <item>"wigig0"</item>
     </string-array>
 
     <!-- Dhcp range (min, max) to use for tethering purposes -->
@@ -88,6 +89,7 @@
         <item>"mobile_ims,11,0,2,60000,true"</item>
         <item>"mobile_cbs,12,0,2,60000,true"</item>
         <item>"bluetooth,7,7,2,-1,true"</item>
+        <item>"mobile_emergency,15,0,5,-1,true"</item>
     </string-array>
 
     <!-- This string array should be overridden by the device to present a list of radio

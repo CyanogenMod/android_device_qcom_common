@@ -37,7 +37,7 @@
 #include <cutils/android_reboot.h>
 #include <healthd.h>
 #include "minui/minui.h"
-
+#include "healthd_msm.h"
 #define ARRAY_SIZE(x)           (sizeof(x)/sizeof(x[0]))
 
 #define HVDCP_CHARGER           "USB_HVDCP"
@@ -315,6 +315,7 @@ void healthd_board_mode_charger_init()
 void healthd_board_init(struct healthd_config*)
 {
     // use defaults
+    power_off_alarm_init();
 }
 
 int healthd_board_battery_update(struct android::BatteryProperties*)

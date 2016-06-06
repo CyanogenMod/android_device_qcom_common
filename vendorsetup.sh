@@ -49,3 +49,4 @@ add_lunch_combo msm8937_64-userdebug
 add_lunch_combo titanium_32-userdebug
 add_lunch_combo titanium_64-userdebug
 add_lunch_combo msmcobalt-userdebug
+add_lunch_combo apq8096media-userdebug

@@ -34,7 +34,7 @@
 /dev/kgsl-2d0             0666   root       root
 /dev/kgsl-2d1             0666   root       root
 /dev/ion                  0664   system     system
-/dev/rtc0                 0600   system     system
+/dev/rtc0                 0660   system     system
 /dev/smd0                 0660   system     system
 /dev/smd4                 0660   system     system
 /dev/smd_cxm_qmi          0640   radio      radio
@@ -212,7 +212,7 @@
 /dev/wcnss_wlan           0660   system     system
 /dev/wcnss_ctrl           0660   system     system
 /sys/devices/soc/600000.qcom,pcie/pci0000:00/0000:00:00.0/0000:01:00.0/net/wlan0/queues/rx-* rps_cpus 0660 system system
-/sys/devices/soc/600000.qcom,pcie/pci0000:00/0000:00:00.0/0000:01:00.0/net/p2p0/queues/rx-* rps_cpus 0660 system system
+/sys/devices/soc/600000.qcom,pcie/pci0000:00/0000:00:00.0/0000:01:00.0/net/p2p*/queues/rx-* rps_cpus 0660 system system
 
 #nfc permissions
 /dev/nfc-nci              0660    nfc         nfc
