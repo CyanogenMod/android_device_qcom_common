@@ -107,10 +107,9 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
         void *data)
 {
     int duration, duration_hint;
-    static unsigned long long previous_boost_time = 0;
-    unsigned long long cur_boost_time;
-    struct timeval cur_boost_timeval = {0, 0};
-    double elapsed_time;
+    static struct timespec s_previous_boost_timespec;
+    struct timespec cur_boost_timespec;
+    long long elapsed_time;
     int resources_launch_boost[] = {
         ALL_CPUS_PWR_CLPS_DIS,
         SCHED_BOOST_ON,
@@ -153,9 +152,8 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
 
             duration = duration_hint > 0 ? duration_hint : 500;
 
-            gettimeofday(&cur_boost_timeval, NULL);
-            cur_boost_time = cur_boost_timeval.tv_sec * 1000000 + cur_boost_timeval.tv_usec;
-            elapsed_time = (double)(cur_boost_time - previous_boost_time);
+            clock_gettime(CLOCK_MONOTONIC, &cur_boost_timespec);
+            elapsed_time = calc_timespan_us(s_previous_boost_timespec, cur_boost_timespec);
             if (elapsed_time > 750000)
                 elapsed_time = 750000;
             // don't hint if it's been less than 250ms since last boost
@@ -164,7 +162,7 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
             else if (elapsed_time < 250000 && duration <= 750)
                 return HINT_HANDLED;
 
-            previous_boost_time = cur_boost_time;
+            s_previous_boost_timespec = cur_boost_timespec;
 
             if (duration >= 1500) {
                 interaction(duration, ARRAY_SIZE(resources_cpu_boost),
