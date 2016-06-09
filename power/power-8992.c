@@ -199,15 +199,13 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
             int resources[] = {
                 ALL_CPUS_PWR_CLPS_DIS,
                 SCHED_BOOST_ON,
-                SCHED_PREFER_IDLE_DIS,
-                0x20D
+                SCHED_PREFER_IDLE_DIS
             };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         } else {
             int resources[] = {
                 ALL_CPUS_PWR_CLPS_DIS,
-                SCHED_PREFER_IDLE_DIS,
-                0x20D
+                SCHED_PREFER_IDLE_DIS
             };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         }
@@ -224,7 +222,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         ALOGV("LAUNCH_BOOST: %s (pid=%d)", info->packageName, info->pid);
 
         int duration = 2000;
-        int resources[] = { SCHED_BOOST_ON, 0x20D };
+        int resources[] = { SCHED_BOOST_ON, 0x20C };
 
         start_prefetch(info->pid, info->packageName);
         interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
