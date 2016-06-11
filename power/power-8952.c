@@ -254,7 +254,7 @@ static void process_video_encode_hint(void *metadata)
                             if (get_scaling_governor_check_cores(governor,
                                 sizeof(governor),CPU3) == -1) {
                                     ALOGE("Can't obtain scaling governor.");
-                                    return HINT_HANDLED;
+                                    return;
                             }
                     }
             }
