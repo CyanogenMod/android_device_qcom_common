@@ -175,8 +175,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
     }
 
     // Skip other hints in custom power modes
-    if (current_power_profile == PROFILE_POWER_SAVE ||
-            current_power_profile == PROFILE_HIGH_PERFORMANCE) {
+    if (current_power_profile == PROFILE_POWER_SAVE) {
         return HINT_HANDLED;
     }
 
@@ -208,15 +207,13 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
             int resources[] = {
                 ALL_CPUS_PWR_CLPS_DIS,
                 SCHED_BOOST_ON,
-                SCHED_PREFER_IDLE_DIS,
-                0x20D
+                SCHED_PREFER_IDLE_DIS
             };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         } else {
             int resources[] = {
                 ALL_CPUS_PWR_CLPS_DIS,
-                SCHED_PREFER_IDLE_DIS,
-                0x20D
+                SCHED_PREFER_IDLE_DIS
             };
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
         }
@@ -224,14 +221,18 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
     }
 
     if (hint == POWER_HINT_LAUNCH_BOOST) {
-        int duration = 2000;
-        int resources[] = {
-            ALL_CPUS_PWR_CLPS_DIS,
-            SCHED_BOOST_ON,
-            SCHED_PREFER_IDLE_DIS,
-            0x20F
-        };
+        launch_boost_info_t *info = (launch_boost_info_t *)data;
+        if (info == NULL) {
+            ALOGE("Invalid argument for launch boost");
+            return HINT_HANDLED;
+        }
 
+        ALOGV("LAUNCH_BOOST: %s (pid=%d)", info->packageName, info->pid);
+
+        int duration = 2000;
+        int resources[] = { SCHED_BOOST_ON, 0x20C };
+
+        start_prefetch(info->pid, info->packageName);
         interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
 
         return HINT_HANDLED;
@@ -268,7 +269,9 @@ int set_interactive_override(__attribute__((unused)) struct power_module *module
         /* Display off */
         if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
             (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {0x777}; /* 4+0 core config in display off */
+            // sched upmigrate = 99, sched downmigrate = 95
+            // keep the big cores around, but make them very hard to use
+            int resource_values[] = { 0x4E63, 0x4F5F };
             if (!display_hint_sent) {
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
                 resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
