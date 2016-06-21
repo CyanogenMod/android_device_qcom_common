@@ -110,7 +110,8 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
         void *data)
 {
     int duration, duration_hint;
-    unsigned long long previous_boost_time = 0, cur_boost_time;
+    static unsigned long long previous_boost_time = 0;
+    unsigned long long cur_boost_time;
     struct timeval cur_boost_timeval = {0, 0};
     double elapsed_time;
     int resources_launch_boost[] = {
