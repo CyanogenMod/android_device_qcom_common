@@ -76,28 +76,28 @@ static void set_power_profile(int profile) {
             CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
             CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set performance mode", __func__);
     } else if (profile == PROFILE_BIAS_PERFORMANCE) {
         int resource_values[] = {
             CPU0_MIN_FREQ_NONTURBO_MAX + 1, CPU1_MIN_FREQ_NONTURBO_MAX + 1,
             CPU2_MIN_FREQ_NONTURBO_MAX + 1, CPU2_MIN_FREQ_NONTURBO_MAX + 1 };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set bias perf mode", __func__);
     } else if (profile == PROFILE_BIAS_POWER) {
         int resource_values[] = { 0x0A03,
             CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
             CPU1_MAX_FREQ_NONTURBO_MAX, CPU2_MAX_FREQ_NONTURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set bias power mode", __func__);
     } else if (profile == PROFILE_POWER_SAVE) {
         int resource_values[] = { 0x0A03, CPUS_ONLINE_MAX_LIMIT_2,
             CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
             CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set powersave", __func__);
     }
 
@@ -126,7 +126,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
             CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
             CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX };
 
-        interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+        interaction(duration, ARRAY_SIZE(resources), resources);
 
         return HINT_HANDLED;
     }
@@ -137,7 +137,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
             0x20F, 0x30F, 0x40F, 0x50F };
 
         if (duration)
-            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+            interaction(duration, ARRAY_SIZE(resources), resources);
 
         return HINT_HANDLED;
     }
@@ -170,7 +170,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
             0x20F, 0x30F, 0x40F, 0x50F };
 
         if (duration)
-            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+            interaction(duration, ARRAY_SIZE(resources), resources);
 
         return HINT_HANDLED;
     }
@@ -213,7 +213,7 @@ int set_interactive_override(struct power_module *module __unused, int on)
 
             if (!display_hint_sent) {
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
-                        resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+                        resource_values, ARRAY_SIZE(resource_values));
                 display_hint_sent = 1;
             }
 
@@ -224,7 +224,7 @@ int set_interactive_override(struct power_module *module __unused, int on)
         if (display_boost && display_hint2_sent) {
             int resource_values2[] = {CPUS_ONLINE_MIN_2};
             perform_hint_action(DISPLAY_STATE_HINT_ID_2,
-                    resource_values2, sizeof(resource_values2)/sizeof(resource_values2[0]));
+                    resource_values2, ARRAY_SIZE(resource_values2));
             display_hint2_sent = 0;
         }
 
