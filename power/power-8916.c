@@ -58,9 +58,7 @@ char scaling_min_freq[4][80] ={
     "sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq"
 };
 
-static int display_hint_sent;
 int display_boost;
-static int saved_interactive_mode = -1;
 static int slack_node_rw_failed = 0;
 
 int get_number_of_profiles() {
@@ -283,13 +281,9 @@ int  set_interactive_override(struct power_module *module __unused, int on)
         if (is_target_8916()) {
             if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-               int resource_values[] = {TR_MS_50, THREAD_MIGRATION_SYNC_OFF};
-
-                  if (!display_hint_sent) {
-                      perform_hint_action(DISPLAY_STATE_HINT_ID,
-                      resource_values, ARRAY_SIZE(resource_values));
-                      display_hint_sent = 1;
-                  }
+                int resource_values[] = {TR_MS_50, THREAD_MIGRATION_SYNC_OFF};
+                perform_hint_action(DISPLAY_STATE_HINT_ID,
+                        resource_values, ARRAY_SIZE(resource_values));
             } /* Perf time rate set for 8916 target*/
         /* End of display hint for 8916 */
         } else {
@@ -313,11 +307,8 @@ int  set_interactive_override(struct power_module *module __unused, int on)
                    }
                 }
 
-                  if (!display_hint_sent) {
-                      perform_hint_action(DISPLAY_STATE_HINT_ID,
-                      resource_values, ARRAY_SIZE(resource_values));
-                      display_hint_sent = 1;
-                  }
+                perform_hint_action(DISPLAY_STATE_HINT_ID,
+                        resource_values, ARRAY_SIZE(resource_values));
              } /* Perf time rate set for CORE0,CORE4 8939 target*/
         /* End of display hint for 8939 */
         }
@@ -330,7 +321,6 @@ int  set_interactive_override(struct power_module *module __unused, int on)
           if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
-            display_hint_sent = 0;
          }
          }
          break ;
@@ -355,14 +345,12 @@ int  set_interactive_override(struct power_module *module __unused, int on)
                    }
                 }
              undo_hint_action(DISPLAY_STATE_HINT_ID);
-             display_hint_sent = 0;
           }
 
         }
          break ;
       } /* End of check condition during the DISPLAY ON case */
    }
-    saved_interactive_mode = !!on;
     return HINT_HANDLED;
 }
 
