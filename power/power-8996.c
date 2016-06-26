@@ -47,7 +47,6 @@
 #include "performance.h"
 #include "power-common.h"
 
-static int display_hint_sent;
 static int current_power_profile = PROFILE_BALANCED;
 
 extern void interaction(int duration, int num_args, int opt_list[]);
@@ -394,20 +393,16 @@ int set_interactive_override(__unused struct power_module *module, int on)
         if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
             (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             int resource_values[] = {}; /* dummy node */
-            if (!display_hint_sent) {
-                perform_hint_action(DISPLAY_STATE_HINT_ID,
-                resource_values, ARRAY_SIZE(resource_values));
-                display_hint_sent = 1;
-                ALOGI("Display Off hint start");
-                return HINT_HANDLED;
-            }
+            perform_hint_action(DISPLAY_STATE_HINT_ID,
+                    resource_values, ARRAY_SIZE(resource_values));
+            ALOGI("Display Off hint start");
+            return HINT_HANDLED;
         }
     } else {
         /* Display on */
         if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
             (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
-            display_hint_sent = 0;
             ALOGI("Display Off hint stop");
             return HINT_HANDLED;
         }
