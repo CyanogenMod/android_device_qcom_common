@@ -80,7 +80,7 @@ static void process_video_encode_hint(void *metadata)
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             int resource_values[] = {HS_FREQ_800, THREAD_MIGRATION_SYNC_OFF};
             perform_hint_action(video_encode_metadata.hint_id,
-                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+                    resource_values, ARRAY_SIZE(resource_values));
         }
     } else if (video_encode_metadata.state == 0) {
          if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&

@@ -48,8 +48,6 @@
 #include "performance.h"
 #include "power-common.h"
 
-#define ARRAY_SIZE(arr) (sizeof((arr)) / sizeof((arr)[0]))
-
 static int display_hint_sent;
 static int video_encode_hint_sent;
 static int current_power_profile = PROFILE_BALANCED;

@@ -47,8 +47,6 @@
 #include "performance.h"
 #include "power-common.h"
 
-#define ARRAY_SIZE(arr) (sizeof((arr)) / sizeof((arr)[0]))
-
 static int display_hint_sent;
 
 int get_number_of_profiles() {
@@ -75,7 +73,7 @@ static void set_power_profile(int profile) {
             CPU2_MAX_FREQ_NONTURBO_MAX - 2, CPU3_MAX_FREQ_NONTURBO_MAX - 2,
             CPU4_MAX_FREQ_NONTURBO_MAX - 2, CPU5_MAX_FREQ_NONTURBO_MAX - 2 };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set powersave", __func__);
     } else if (profile == PROFILE_HIGH_PERFORMANCE) {
         int resource_values[] = { SCHED_BOOST_ON, CPUS_ONLINE_MAX,
@@ -84,7 +82,7 @@ static void set_power_profile(int profile) {
             CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX,
             CPU4_MIN_FREQ_TURBO_MAX, CPU5_MIN_FREQ_TURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set performance mode", __func__);
     } else if (profile == PROFILE_BIAS_POWER) {
         int resource_values[] = { 0x0A03, 0x0902,
@@ -92,13 +90,13 @@ static void set_power_profile(int profile) {
             CPU1_MAX_FREQ_NONTURBO_MAX - 2, CPU2_MAX_FREQ_NONTURBO_MAX - 2,
             CPU4_MAX_FREQ_NONTURBO_MAX, CPU5_MAX_FREQ_NONTURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set bias power mode", __func__);
     } else if (profile == PROFILE_BIAS_PERFORMANCE) {
         int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_MAX,
             CPU4_MIN_FREQ_NONTURBO_MAX + 1, CPU5_MIN_FREQ_NONTURBO_MAX + 1 };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set bias perf mode", __func__);
     }
 
@@ -145,7 +143,7 @@ static int process_video_encode_hint(void *metadata)
             int resource_values[] = {0x2C07, 0x2F5A, 0x2704, 0x4032};
 
             perform_hint_action(video_encode_metadata.hint_id,
-                    resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+                    resource_values, ARRAY_SIZE(resource_values));
             return HINT_HANDLED;
         }
     } else if (video_encode_metadata.state == 0) {
@@ -201,13 +199,13 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
                 SCHED_BOOST_ON,
                 SCHED_PREFER_IDLE_DIS
             };
-            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+            interaction(duration, ARRAY_SIZE(resources), resources);
         } else {
             int resources[] = {
                 ALL_CPUS_PWR_CLPS_DIS,
                 SCHED_PREFER_IDLE_DIS
             };
-            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+            interaction(duration, ARRAY_SIZE(resources), resources);
         }
         return HINT_HANDLED;
     }
@@ -225,7 +223,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         int resources[] = { SCHED_BOOST_ON, 0x20C };
 
         start_prefetch(info->pid, info->packageName);
-        interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+        interaction(duration, ARRAY_SIZE(resources), resources);
 
         return HINT_HANDLED;
     }
@@ -235,7 +233,7 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         int resources[] = { SCHED_BOOST_ON };
 
         if (duration > 0)
-            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+            interaction(duration, ARRAY_SIZE(resources), resources);
 
         return HINT_HANDLED;
     }
@@ -266,7 +264,7 @@ int set_interactive_override(__attribute__((unused)) struct power_module *module
             int resource_values[] = { 0x4E63, 0x4F5F };
             if (!display_hint_sent) {
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
-                resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+                resource_values, ARRAY_SIZE(resource_values));
                 display_hint_sent = 1;
                 return HINT_HANDLED;
             }

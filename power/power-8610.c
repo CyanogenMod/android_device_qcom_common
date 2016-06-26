@@ -72,13 +72,13 @@ static void set_power_profile(int profile) {
         int resource_values[] = { CPUS_ONLINE_MIN_2,
             CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set performance mode", __func__);
     } else if (profile == PROFILE_POWER_SAVE) {
         int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_2,
             CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set powersave", __func__);
     }
 
@@ -105,13 +105,13 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         int resources[] = { CPUS_ONLINE_MIN_2, 0x20F, 0x30F};
 
         if (duration > 0)
-            interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+            interaction(duration, ARRAY_SIZE(resources), resources);
         return HINT_HANDLED;
     } else if (hint == POWER_HINT_INTERACTION) {
         int resources[] = {0x702, 0x20B, 0x30B};
         int duration = 3000;
 
-        interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
+        interaction(duration, ARRAY_SIZE(resources), resources);
         return HINT_HANDLED;
     }
 
