@@ -47,8 +47,6 @@
 #include "performance.h"
 #include "power-common.h"
 
-static int display_hint_sent;
-
 int get_number_of_profiles() {
     return 5;
 }
@@ -262,19 +260,15 @@ int set_interactive_override(__attribute__((unused)) struct power_module *module
             // sched upmigrate = 99, sched downmigrate = 95
             // keep the big cores around, but make them very hard to use
             int resource_values[] = { 0x4E63, 0x4F5F };
-            if (!display_hint_sent) {
-                perform_hint_action(DISPLAY_STATE_HINT_ID,
-                resource_values, ARRAY_SIZE(resource_values));
-                display_hint_sent = 1;
-                return HINT_HANDLED;
-            }
+            perform_hint_action(DISPLAY_STATE_HINT_ID,
+                    resource_values, ARRAY_SIZE(resource_values));
+            return HINT_HANDLED;
         }
     } else {
         /* Display on */
         if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
             (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
-            display_hint_sent = 0;
             return HINT_HANDLED;
         }
     }
