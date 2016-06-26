@@ -174,6 +174,9 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         return HINT_HANDLED;
     }
 
+    if (hint == POWER_HINT_VIDEO_ENCODE)
+        return process_video_encode_hint(data);
+
     // Skip other hints in custom power modes
     if (current_power_profile == PROFILE_POWER_SAVE) {
         return HINT_HANDLED;
@@ -246,10 +249,6 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
             interaction(duration, sizeof(resources)/sizeof(resources[0]), resources);
 
         return HINT_HANDLED;
-    }
-
-    if (hint == POWER_HINT_VIDEO_ENCODE) {
-        return process_video_encode_hint(data);
     }
 
     return HINT_NONE;
