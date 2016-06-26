@@ -58,9 +58,6 @@ char scaling_min_freq[4][80] ={
     "sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq"
 };
 
-static int is_8916 = -1;
-
-int display_boost;
 static int slack_node_rw_failed = 0;
 
 int get_number_of_profiles() {
@@ -69,27 +66,26 @@ int get_number_of_profiles() {
 
 static int current_power_profile = PROFILE_BALANCED;
 
-static int is_target_8916() /* Returns value=8916 if target is 8916 else value 0 */
+/**
+ * If target is 8916:
+ *     return 1
+ * else:
+ *     return 0
+ */
+static int is_target_8916(void)
 {
-    int fd;
-    char buf[10] = {0};
+    static int is_8916 = -1;
+    int soc_id;
 
     if (is_8916 >= 0)
         return is_8916;
 
-    fd = open("/sys/devices/soc0/soc_id", O_RDONLY);
-    if (fd >= 0) {
-        if (read(fd, buf, sizeof(buf) - 1) == -1) {
-            ALOGW("Unable to read soc_id");
-            is_8916 = 0;
-        } else {
-            int soc_id = atoi(buf);
-            if (soc_id == 206 || (soc_id >= 247 && soc_id <= 250))  {
-            is_8916 = 8916; /* Above SOCID for 8916 */
-            }
-        }
-    }
-    close(fd);
+    soc_id = get_soc_id();
+    if (soc_id == 206 || soc_id >= 247 && soc_id <= 250)
+        is_8916 = 1;
+    else
+        is_8916 = 0;
+
     return is_8916;
 }
 
@@ -281,21 +277,15 @@ int  set_interactive_override(struct power_module *module __unused, int on)
 
     if (!on) {
         /* Display off. */
-       switch(is_target_8916()) {
-
-          case 8916:
-           {
+        if (is_target_8916()) {
             if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
                 int resource_values[] = {TR_MS_50, THREAD_MIGRATION_SYNC_OFF};
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
                         resource_values, ARRAY_SIZE(resource_values));
             } /* Perf time rate set for 8916 target*/
-           } /* End of Switch case for 8916 */
-            break ;
-
-            default:
-            {
+        /* End of display hint for 8916 */
+        } else {
              if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
                int resource_values[] = {TR_MS_CPU0_50,TR_MS_CPU4_50, THREAD_MIGRATION_SYNC_OFF};
@@ -319,9 +309,8 @@ int  set_interactive_override(struct power_module *module __unused, int on)
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
                         resource_values, ARRAY_SIZE(resource_values));
              } /* Perf time rate set for CORE0,CORE4 8939 target*/
-           }/* End of Switch case for 8939 */
-           break ;
-          }
+        /* End of display hint for 8939 */
+        }
 
     } else {
         /* Display on. */
