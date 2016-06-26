@@ -40,7 +40,9 @@ enum SCREEN_DISPLAY_TYPE {
 };
 
 enum PWR_CLSP_TYPE {
+#ifdef MPCTLV3
     ALL_CPUS_PWR_CLPS_DIS_V3 = 0x40400000, /* v3 resource */
+#endif
     ALL_CPUS_PWR_CLPS_DIS = 0x101,
 };
 
@@ -98,8 +100,10 @@ enum CPU3_MAX_FREQ_LVL {
 };
 
 enum MIN_CPUS_ONLINE_LVL {
+#ifdef MPCTLV3
     CPUS_ONLINE_MIN_BIG = 0x41000000, /* v3 resource */
     CPUS_ONLINE_MIN_LITTLE = 0x41000100, /* v3 resource */
+#endif
     CPUS_ONLINE_MIN_2 = 0x702,
     CPUS_ONLINE_MIN_3 = 0x703,
     CPUS_ONLINE_MIN_4 = 0x704,
@@ -108,8 +112,10 @@ enum MIN_CPUS_ONLINE_LVL {
 };
 
 enum MAX_CPUS_ONLINE_LVL {
+#ifdef MPCTLV3
     CPUS_ONLINE_MAX_LIMIT_BIG = 0x41004000, /* v3 resource */
     CPUS_ONLINE_MAX_LIMIT_LITTLE = 0x41004100, /* v3 resource */
+#endif
     CPUS_ONLINE_MAX_LIMIT_1 = 0x8FE,
     CPUS_ONLINE_MAX_LIMIT_2 = 0x8FD,
     CPUS_ONLINE_MAX_LIMIT_3 = 0x8FC,
@@ -202,7 +208,9 @@ enum INTERACTIVE_IO_BUSY_LVL {
 };
 
 enum SCHED_BOOST_LVL {
+#ifdef MPCTLV3
     SCHED_BOOST_ON_V3 = 0x40C00000, /* v3 resource */
+#endif
     SCHED_BOOST_ON = 0x1E01,
 };
 
@@ -250,6 +258,7 @@ enum SCHED_MIGRATE_COST_CHNG {
     SCHED_MIGRATE_COST_SET = 0x3F01,
 };
 
+#ifdef MPCTLV3
 /**
  * MPCTL v3 opcodes
  */
@@ -300,6 +309,7 @@ enum SCHEDULER {
 enum STORAGE {
     STOR_CLK_SCALE_DIS          = 0x42C0C000,
 };
+#endif
 
 #ifdef __cplusplus
 }
