@@ -35,6 +35,9 @@
 #define MPDECISION_SLACK_MIN_NODE "/sys/module/msm_mpdecision/slack_time_min_us"
 #define SCALING_MIN_FREQ "/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq"
 
+#define SOC_ID_0 "/sys/devices/soc0/soc_id"
+#define SOC_ID_1 "/sys/devices/system/soc/soc0/id"
+
 #define ONDEMAND_GOVERNOR "ondemand"
 #define INTERACTIVE_GOVERNOR "interactive"
 #define MSMDCVS_GOVERNOR "msm-dcvs"

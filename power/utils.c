@@ -388,3 +388,24 @@ void start_prefetch(int pid, const char* packageName) {
     }
 }
 
+int get_soc_id(void)
+{
+    int fd;
+    int soc_id = -1;
+    char buf[10] = { 0 };
+
+    if (!access(SOC_ID_0, F_OK))
+        fd = open(SOC_ID_0, O_RDONLY);
+    else
+        fd = open(SOC_ID_1, O_RDONLY);
+
+    if (fd >= 0) {
+        if (read(fd, buf, sizeof(buf) - 1) == -1)
+            ALOGW("Unable to read soc_id");
+        else
+            soc_id = atoi(buf);
+    }
+
+    close(fd);
+    return soc_id;
+}
