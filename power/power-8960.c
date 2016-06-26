@@ -118,14 +118,14 @@ static void set_power_profile(int profile) {
             profile_high_performance_8064 : profile_high_performance_8960;
 
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set performance mode", __func__);
     } else if (profile == PROFILE_POWER_SAVE) {
         int* resource_values = is_target_8064() ?
             profile_power_save_8064 : profile_power_save_8960;
 
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
-            resource_values, sizeof(resource_values)/sizeof(resource_values[0]));
+            resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set powersave", __func__);
     }
 
