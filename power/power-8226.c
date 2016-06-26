@@ -48,8 +48,6 @@
 #include "performance.h"
 #include "power-common.h"
 
-static int display_hint_sent;
-
 int get_number_of_profiles() {
     return 3;
 }
