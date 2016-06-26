@@ -315,6 +315,12 @@ int power_hint_override(__unused struct power_module *module,
         return HINT_HANDLED;
     }
 
+    if (hint == POWER_HINT_CAM_PREVIEW)
+        return process_cam_preview_hint(data);
+
+    if (hint == POWER_HINT_VIDEO_ENCODE)
+        return process_video_encode_hint(data);
+
     /* Skip other hints in power save mode */
     if (current_power_profile == PROFILE_POWER_SAVE)
         return HINT_HANDLED;
@@ -372,12 +378,6 @@ int power_hint_override(__unused struct power_module *module,
             return HINT_HANDLED;
         }
     }
-
-    if (hint == POWER_HINT_CAM_PREVIEW)
-        return process_cam_preview_hint(data);
-
-    if (hint == POWER_HINT_VIDEO_ENCODE)
-        return process_video_encode_hint(data);
 
     return HINT_NONE;
 }
