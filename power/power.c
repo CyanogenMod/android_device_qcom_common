@@ -246,7 +246,7 @@ int __attribute__ ((weak)) set_interactive_override(
 
 int __attribute__ ((weak)) get_number_of_profiles()
 {
-    return 0;
+    return 1;
 }
 
 #ifdef SET_INTERACTIVE_EXT
