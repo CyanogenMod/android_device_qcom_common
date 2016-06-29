@@ -246,7 +246,7 @@ int __attribute__ ((weak)) set_interactive_override(
 
 int __attribute__ ((weak)) get_number_of_profiles()
 {
-    return 0;
+    return 1;
 }
 
 #ifdef SET_INTERACTIVE_EXT
@@ -399,11 +399,11 @@ void set_interactive(struct power_module *module, int on)
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
             display_hint_sent = 0;
-        } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
+        } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) && 
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
             display_hint_sent = 0;
-        } else if ((strncmp(governor, MSMDCVS_GOVERNOR, strlen(MSMDCVS_GOVERNOR)) == 0) && 
+        } else if ((strncmp(governor, MSMDCVS_GOVERNOR, strlen(MSMDCVS_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(MSMDCVS_GOVERNOR))) {
             if (saved_interactive_mode == -1 || saved_interactive_mode == 0) {
                 /* Display turned on. Restore if possible. */
