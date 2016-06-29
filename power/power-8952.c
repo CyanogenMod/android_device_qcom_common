@@ -141,7 +141,7 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
     }
 
     // Skip other hints in custom power modes
-    if (current_power_profile != PROFILE_BALANCED) {
+    if (current_power_profile == PROFILE_POWER_SAVE) {
         return HINT_HANDLED;
     }
 
