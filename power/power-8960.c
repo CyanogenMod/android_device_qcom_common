@@ -77,25 +77,20 @@ static int is_target_8064(void)
     return is_8064;
 }
 
-static int profile_high_performance_8960[3] = {
+static int profile_high_performance_8960[] = {
     CPUS_ONLINE_MIN_2,
-    CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX
 };
 
-static int profile_high_performance_8064[5] = {
+static int profile_high_performance_8064[] = {
     CPUS_ONLINE_MIN_4,
-    CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
-    CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX
 };
 
-static int profile_power_save_8960[2] = {
-    CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX
+static int profile_power_save_8960[] = {
+    /* Don't do anything for now */
 };
 
-static int profile_power_save_8064[5] = {
+static int profile_power_save_8064[] = {
     CPUS_ONLINE_MAX_LIMIT_2,
-    CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
-    CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX
 };
 
 static void set_power_profile(int profile) {
@@ -137,8 +132,8 @@ int power_hint_override(__attribute__((unused)) struct power_module *module,
         return HINT_HANDLED;
     }
 
-    // Skip other hints in custom power modes
-    if (current_power_profile != PROFILE_BALANCED) {
+    /* Skip other hints in power save mode */
+    if (current_power_profile == PROFILE_POWER_SAVE) {
         return HINT_HANDLED;
     }
 
