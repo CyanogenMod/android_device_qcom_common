@@ -303,7 +303,7 @@ int power_hint_override(__unused struct power_module *module,
         MIN_FREQ_BIG_CORE_0, 0x3E8,
         MIN_FREQ_LITTLE_CORE_0, 0x3E8,
         SCHED_BOOST_ON_V3, 0x1,
-        SCHED_GROUP_ON, 0x1,
+   //   SCHED_GROUP_ON, 0x1,
     };
 
     int resources_interaction_boost[] = {
