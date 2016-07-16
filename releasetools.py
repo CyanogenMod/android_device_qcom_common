@@ -23,7 +23,7 @@ import re
 bootImages = {}
 binImages = {}
 fwImages = {}
-
+imgImages = {}
 
 # Parse filesmap file containing firmware residing places
 def LoadFilesMap(zip, name="RADIO/filesmap"):
@@ -84,6 +84,7 @@ def SplitFwTypes(files):
   boot = {}
   bin = {}
   fw = {}
+  img = {}
 
   for f in files:
     extIdx = -1
@@ -97,9 +98,11 @@ def SplitFwTypes(files):
       boot[f] = files[f]
     elif dotSeparated[extIdx] == 'bin':
       bin[f] = files[f]
+    elif dotSeparated[extIdx] == 'img':
+      img[f] = files[f]
     else:
       fw[f] = files[f]
-  return boot, bin, fw
+  return boot, bin, fw, img
 
 
 # Prepare radio-update files and verify them
@@ -164,7 +167,8 @@ def OTA_VerifyEnd(info, api_version, target_zip, source_zip=None):
   global bootImages
   global binImages
   global fwImages
-  bootImages, binImages, fwImages = SplitFwTypes(update_list)
+  global imgImages
+  bootImages, binImages, fwImages, imgImages = SplitFwTypes(update_list)
 
   # If there are incremental patches verify them
   if largest_source_size != 0:
@@ -188,7 +192,6 @@ def OTA_VerifyEnd(info, api_version, target_zip, source_zip=None):
         continue
       info.script.PatchCheck("EMMC:%s:%d:%s:%d:%s" %
               (dest, sf.size, sf.sha1, tf.size, tf.sha1))
-
     last_mounted = ""
     for f in fwImages:
       dest, destBak, tf, sf = fwImages[f]
@@ -210,6 +213,14 @@ def OTA_VerifyEnd(info, api_version, target_zip, source_zip=None):
       else:
         dest = dest + "/" + f
       info.script.PatchCheck(dest, tf.sha1, sf.sha1)
+    for f in imgImages:
+      dest, tf, sf = imgImages[f]
+      # Not incremental
+      if sf is None:
+        continue
+      info.script.PatchCheck("EMMC:%s:%d:%s:%d:%s" %
+              (dest, sf.size, sf.sha1, tf.size, tf.sha1))
+    last_mounted = ""
 
     info.script.CacheFreeSpaceCheck(largest_source_size)
   return True
@@ -318,6 +329,13 @@ def InstallFwImages(script, files):
     script.AppendExtra('unmount("/firmware");')
   return
 
+# This function handles *.img images
+def InstallImgImages(script, files):
+  for f in files:
+    dest, _, tf, sf = files[f]
+    InstallRawImage(script, f, dest, tf, sf)
+  return
+
 
 def OTA_InstallEnd(info):
   print "Applying radio-update script modifications..."
@@ -330,6 +348,8 @@ def OTA_InstallEnd(info):
     InstallBinImages(info.script, binImages)
   if fwImages != {}:
     InstallFwImages(info.script, fwImages)
+  if imgImages != {}:
+    InstallImgImages(info.script, imgImages)
   return
 
 
