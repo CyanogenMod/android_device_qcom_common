@@ -95,27 +95,23 @@ static void set_power_profile(int profile) {
     }
 
     if (profile == PROFILE_POWER_SAVE) {
-        int *resource_values = profile_power_save;
-        perform_hint_action(DEFAULT_PROFILE_HINT_ID, resource_values,
-                ARRAY_SIZE(resource_values));
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID, profile_power_save,
+                ARRAY_SIZE(profile_power_save));
         ALOGD("%s: Set powersave mode", __func__);
 
     } else if (profile == PROFILE_HIGH_PERFORMANCE) {
-        int *resource_values = profile_high_performance;
-        perform_hint_action(DEFAULT_PROFILE_HINT_ID, resource_values,
-                ARRAY_SIZE(resource_values));
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID, profile_high_performance,
+                ARRAY_SIZE(profile_high_performance));
         ALOGD("%s: Set performance mode", __func__);
 
     } else if (profile == PROFILE_BIAS_POWER) {
-        int *resource_values = profile_bias_power;
-        perform_hint_action(DEFAULT_PROFILE_HINT_ID, resource_values,
-                ARRAY_SIZE(resource_values));
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID, profile_bias_power,
+                ARRAY_SIZE(profile_bias_power));
         ALOGD("%s: Set bias power mode", __func__);
 
     } else if (profile == PROFILE_BIAS_PERFORMANCE) {
-        int *resource_values = profile_bias_performance;
-        perform_hint_action(DEFAULT_PROFILE_HINT_ID, resource_values,
-                ARRAY_SIZE(resource_values));
+        perform_hint_action(DEFAULT_PROFILE_HINT_ID, profile_bias_performance,
+                ARRAY_SIZE(profile_bias_performance));
         ALOGD("%s: Set bias perf mode", __func__);
 
     }
