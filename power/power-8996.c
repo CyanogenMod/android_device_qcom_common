@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -162,7 +162,6 @@ static int process_video_encode_hint(void *metadata)
              * 3. hysteresis optimization
              *    -bus dcvs hysteresis tuning
              *    -sample_ms of 10 ms
-             *    -disable ignore_hispeed_notif
              */
             int resource_values[] = {
                 ABOVE_HISPEED_DELAY_BIG, 0x4,
@@ -177,8 +176,6 @@ static int process_video_encode_hint(void *metadata)
                 LOW_POWER_IO_PERCENT, 0x32,
                 CPUBW_HWMON_V1, 0x0,
                 CPUBW_HWMON_SAMPLE_MS, 0xA,
-                IGNORE_HISPEED_NOTIF_LITTLE, 0x0,
-                IGNORE_HISPEED_NOTIF_BIG, 0x0,
             };
 
             perform_hint_action(video_encode_metadata.hint_id,
