@@ -48,7 +48,6 @@
 #include "power-common.h"
 
 static int first_display_off_hint;
-extern int display_boost;
 
 int get_number_of_profiles() {
     return 3;
@@ -132,14 +131,12 @@ int set_interactive_override(struct power_module *module, int on)
          * We need to be able to identify the first display off hint
          * and release the current lock holder
          */
-        if (display_boost) {
-            if (!first_display_off_hint) {
-                undo_initial_hint_action();
-                first_display_off_hint = 1;
-            }
-            /* used for all subsequent toggles to the display */
-            undo_hint_action(DISPLAY_STATE_HINT_ID_2);
+        if (!first_display_off_hint) {
+            undo_initial_hint_action();
+            first_display_off_hint = 1;
         }
+        /* Used for all subsequent toggles to the display */
+        undo_hint_action(DISPLAY_STATE_HINT_ID_2);
 
         if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
@@ -152,11 +149,9 @@ int set_interactive_override(struct power_module *module, int on)
         }
     } else {
         /* Display on */
-        if (display_boost) {
-            int resource_values2[] = {CPUS_ONLINE_MIN_2};
-            perform_hint_action(DISPLAY_STATE_HINT_ID_2,
-                    resource_values2, ARRAY_SIZE(resource_values2));
-        }
+        int resource_values2[] = { CPUS_ONLINE_MIN_2 };
+        perform_hint_action(DISPLAY_STATE_HINT_ID_2,
+                resource_values2, ARRAY_SIZE(resource_values2));
 
         if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
