@@ -57,7 +57,6 @@ static int saved_mpdecision_slack_max = -1;
 static int saved_mpdecision_slack_min = -1;
 static int slack_node_rw_failed = 0;
 static int display_hint_sent;
-int display_boost;
 
 static struct hw_module_methods_t power_module_methods = {
     .open = NULL,
@@ -67,14 +66,7 @@ static pthread_mutex_t hint_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 static void power_init(__attribute__((unused))struct power_module *module)
 {
-    int soc_id;
-
     ALOGI("QCOM power HAL initing.");
-
-    soc_id = get_soc_id();
-    if (soc_id == 178 || soc_id == 194 ||
-            (soc_id >= 208 && soc_id <= 218))
-        display_boost = 1;
 }
 
 static void process_video_decode_hint(void *metadata)
