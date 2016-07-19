@@ -42,6 +42,9 @@
 #define LOG_TAG "QCOM PowerHAL"
 #include <utils/Log.h>
 
+#define SOC_ID_0 "/sys/devices/soc0/soc_id"
+#define SOC_ID_1 "/sys/devices/system/soc/soc0/id"
+
 char scaling_gov_path[4][80] ={
     "sys/devices/system/cpu/cpu0/cpufreq/scaling_governor",
     "sys/devices/system/cpu/cpu1/cpufreq/scaling_governor",
@@ -388,3 +391,24 @@ void start_prefetch(int pid, const char* packageName) {
     }
 }
 
+int get_soc_id(void)
+{
+    int fd;
+    int soc_id = -1;
+    char buf[10] = { 0 };
+
+    if (!access(SOC_ID_0, F_OK))
+        fd = open(SOC_ID_0, O_RDONLY);
+    else
+        fd = open(SOC_ID_1, O_RDONLY);
+
+    if (fd >= 0) {
+        if (read(fd, buf, sizeof(buf) - 1) == -1)
+            ALOGW("Unable to read soc_id");
+        else
+            soc_id = atoi(buf);
+    }
+
+    close(fd);
+    return soc_id;
+}
