@@ -68,23 +68,14 @@ static pthread_mutex_t hint_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 static void power_init(__attribute__((unused))struct power_module *module)
 {
+    int soc_id;
+
     ALOGI("QCOM power HAL initing.");
 
-    int fd;
-    char buf[10] = {0};
-
-    fd = open("/sys/devices/soc0/soc_id", O_RDONLY);
-    if (fd >= 0) {
-        if (read(fd, buf, sizeof(buf) - 1) == -1) {
-            ALOGW("Unable to read soc_id");
-        } else {
-            int soc_id = atoi(buf);
-            if (soc_id == 194 || (soc_id >= 208 && soc_id <= 218) || soc_id == 178) {
-                display_boost = 1;
-            }
-        }
-        close(fd);
-    }
+    soc_id = get_soc_id();
+    if (soc_id == 178 || soc_id == 194 ||
+            (soc_id >= 208 && soc_id <= 218))
+        display_boost = 1;
 }
 
 static void process_video_decode_hint(void *metadata)
