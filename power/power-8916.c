@@ -58,7 +58,6 @@ char scaling_min_freq[4][80] ={
     "sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq"
 };
 
-int display_boost;
 static int slack_node_rw_failed = 0;
 
 int get_number_of_profiles() {
