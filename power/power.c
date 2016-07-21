@@ -466,7 +466,7 @@ out:
     pthread_mutex_unlock(&hint_mutex);
 }
 
-void set_feature(struct power_module *module, feature_t feature, int state)
+void __attribute__ ((weak)) set_feature(struct power_module *module, feature_t feature, int state)
 {
 #ifdef TAP_TO_WAKE_NODE
     char tmp_str[NODE_MAX];
