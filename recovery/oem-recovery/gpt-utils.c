@@ -52,7 +52,7 @@
 #define UFS_DEV_DIR     "/dev/block/sda"
 #define BOOT_DEV_DIR    "/dev/block/bootdevice/by-name"
 /* list the names of the backed-up partitions to be swapped */
-#define PTN_SWAP_LIST       "sbl1", "rpm", "tz", "aboot", "hyp", "lksecapp", "keymaster", "cmnlib", "cmnlib64", "pmic"
+#define PTN_SWAP_LIST       "sbl1", "rpm", "tz", "aboot", "hyp", "lksecapp", "keymaster", "cmnlib", "cmnlib64", "pmic", "devcfg"
 /* extension used for the backup partitions - tzbak, abootbak, etc. */
 #define BAK_PTN_NAME_EXT    "bak"
 
