@@ -114,7 +114,7 @@ static void process_video_decode_hint(void *metadata)
             int resource_values[] = {THREAD_MIGRATION_SYNC_OFF};
 
             perform_hint_action(video_decode_metadata.hint_id,
-                    resource_values, ARRAY_SIZE(resource_values));
+                resource_values, ARRAY_SIZE(resource_values));
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             int resource_values[] = {TR_MS_30, HISPEED_LOAD_90, HS_FREQ_1026, THREAD_MIGRATION_SYNC_OFF};
@@ -125,6 +125,7 @@ static void process_video_decode_hint(void *metadata)
     } else if (video_decode_metadata.state == 0) {
         if ((strncmp(governor, ONDEMAND_GOVERNOR, strlen(ONDEMAND_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(ONDEMAND_GOVERNOR))) {
+            undo_hint_action(video_decode_metadata.hint_id);
         } else if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(video_decode_metadata.hint_id);
@@ -141,6 +142,10 @@ static void process_video_encode_hint(void *metadata)
         ALOGE("Can't obtain scaling governor.");
 
         return;
+    }
+
+    if (metadata) {
+        ALOGI("Processing video decode hint. Metadata: %s", (char *)metadata);
     }
 
     /* Initialize encode metadata struct fields. */
