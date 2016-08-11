@@ -315,17 +315,12 @@ int  set_interactive_override(struct power_module *module __unused, int on)
 
     } else {
         /* Display on. */
-      switch(is_target_8916()){
-         case 8916:
-         {
+      if (is_target_8916()) {
           if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
             undo_hint_action(DISPLAY_STATE_HINT_ID);
          }
-         }
-         break ;
-         default :
-         {
+      } else {
 
           if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
@@ -347,8 +342,6 @@ int  set_interactive_override(struct power_module *module __unused, int on)
              undo_hint_action(DISPLAY_STATE_HINT_ID);
           }
 
-        }
-         break ;
       } /* End of check condition during the DISPLAY ON case */
    }
     return HINT_HANDLED;
