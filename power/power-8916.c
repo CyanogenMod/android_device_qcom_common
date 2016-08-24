@@ -383,19 +383,23 @@ int power_hint_override(struct power_module *module __unused, power_hint_t hint,
         previous_boost_time = cur_boost_time;
 
         if (duration >= 1500) {
+            //int resources[] = { SCHED_BOOST_ON, 0x20D, 0x101, 0x3E01 };
             int resources[] = {
-                ALL_CPUS_PWR_CLPS_DIS,
                 SCHED_BOOST_ON,
-                SCHED_PREFER_IDLE_DIS,
-                0x20D
+                0x20D,
+                ALL_CPUS_PWR_CLPS_DIS,
+                SCHED_PREFER_IDLE_DIS
             };
+
             interaction(duration, ARRAY_SIZE(resources), resources);
         } else {
+            //int resources[] = { 0x20D, 0x101, 0x3E01 };
             int resources[] = {
+                0x20D,
                 ALL_CPUS_PWR_CLPS_DIS,
-                SCHED_PREFER_IDLE_DIS,
-                0x20D
+                SCHED_PREFER_IDLE_DIS
             };
+
             interaction(duration, ARRAY_SIZE(resources), resources);
         }
         return HINT_HANDLED;
@@ -403,12 +407,13 @@ int power_hint_override(struct power_module *module __unused, power_hint_t hint,
 
     if (hint == POWER_HINT_LAUNCH_BOOST) {
         int duration = 2000;
+        //int resources[] = { SCHED_BOOST_ON, 0x20F, 0x101, 0x1C00, 0x3E01, 0x4001, 0x4101, 0x4201 };
         int resources[] = {
-            ALL_CPUS_PWR_CLPS_DIS,
             SCHED_BOOST_ON,
-            SCHED_PREFER_IDLE_DIS,
             0x20F,
+            ALL_CPUS_PWR_CLPS_DIS,
             0x1C00,
+            SCHED_PREFER_IDLE_DIS,
             0x4001,
             0x4101,
             0x4201
@@ -421,11 +426,12 @@ int power_hint_override(struct power_module *module __unused, power_hint_t hint,
 
     if (hint == POWER_HINT_CPU_BOOST) {
         int duration = *(int32_t *)data / 1000;
+        //int resources[] = { SCHED_BOOST_ON, 0x20D, 0x3E01, 0x101 };
         int resources[] = {
-            ALL_CPUS_PWR_CLPS_DIS,
             SCHED_BOOST_ON,
+            0x20D,
             SCHED_PREFER_IDLE_DIS,
-            0x20D
+            ALL_CPUS_PWR_CLPS_DIS
         };
 
         if (duration > 0)
