@@ -1,0 +1,2 @@
+# Listen
+vendor/lib/hw/sound_trigger.primary.msm8996.so
