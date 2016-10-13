@@ -60,25 +60,20 @@ static int profile_high_performance[] = {
     SCHED_BOOST_ON_V3, 0x1,
     ALL_CPUS_PWR_CLPS_DIS_V3, 0x1,
     CPUS_ONLINE_MIN_BIG, 0x2,
-    CPUS_ONLINE_MIN_LITTLE, 0x2,
     MIN_FREQ_BIG_CORE_0, 0xFFF,
-    MIN_FREQ_LITTLE_CORE_0, 0xFFF,
 };
 
 static int profile_power_save[] = {
     CPUS_ONLINE_MAX_LIMIT_BIG, 0x1,
     MAX_FREQ_BIG_CORE_0, 0x3bf,
-    MAX_FREQ_LITTLE_CORE_0, 0x300,
 };
 
 static int profile_bias_power[] = {
     MAX_FREQ_BIG_CORE_0, 0x4B0,
-    MAX_FREQ_LITTLE_CORE_0, 0x300,
 };
 
 static int profile_bias_performance[] = {
     CPUS_ONLINE_MAX_LIMIT_BIG, 0x2,
-    CPUS_ONLINE_MAX_LIMIT_LITTLE, 0x2,
     MIN_FREQ_BIG_CORE_0, 0x540,
 };
 
@@ -131,9 +126,7 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
     int resources_launch_boost[] = {
         SCHED_BOOST_ON_V3, 0x1,
         MAX_FREQ_BIG_CORE_0, 0xFFF,
-        MAX_FREQ_LITTLE_CORE_0, 0xFFF,
         MIN_FREQ_BIG_CORE_0, 0xFFF,
-        MIN_FREQ_LITTLE_CORE_0, 0xFFF,
         ALL_CPUS_PWR_CLPS_DIS_V3, 0x1,
         STOR_CLK_SCALE_DIS, 0x1,
     };
@@ -145,7 +138,6 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
 
     int resources_interaction_fling_boost[] = {
         MIN_FREQ_BIG_CORE_0, 0x3BF,
-        MIN_FREQ_LITTLE_CORE_0, 0x300,
         SCHED_BOOST_ON_V3, 0x1,
     };
 

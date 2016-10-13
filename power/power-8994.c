@@ -67,36 +67,25 @@ static void set_power_profile(int profile) {
 
     if (profile == PROFILE_POWER_SAVE) {
         int resource_values[] = { CPUS_ONLINE_MPD_OVERRIDE, 0x0A03,
-            CPU0_MAX_FREQ_NONTURBO_MAX - 2, CPU1_MAX_FREQ_NONTURBO_MAX - 2,
-            CPU2_MAX_FREQ_NONTURBO_MAX - 2, CPU3_MAX_FREQ_NONTURBO_MAX - 2,
-            CPU4_MAX_FREQ_NONTURBO_MAX - 2, CPU5_MAX_FREQ_NONTURBO_MAX - 2,
-            CPU6_MAX_FREQ_NONTURBO_MAX - 2, CPU7_MAX_FREQ_NONTURBO_MAX - 2 };
+            CPU0_MAX_FREQ_NONTURBO_MAX - 2, CPU4_MAX_FREQ_NONTURBO_MAX - 2 };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set powersave", __func__);
     } else if (profile == PROFILE_HIGH_PERFORMANCE) {
         int resource_values[] = { SCHED_BOOST_ON, CPUS_ONLINE_MAX,
             ALL_CPUS_PWR_CLPS_DIS, 0x0901,
-            CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
-            CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX,
-            CPU4_MIN_FREQ_TURBO_MAX, CPU5_MIN_FREQ_TURBO_MAX,
-            CPU6_MIN_FREQ_TURBO_MAX, CPU7_MIN_FREQ_TURBO_MAX };
+            CPU0_MIN_FREQ_TURBO_MAX, CPU4_MIN_FREQ_TURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set performance mode", __func__);
     } else if (profile == PROFILE_BIAS_POWER) {
         int resource_values[] = { 0x0A03, 0x0902,
-            CPU0_MAX_FREQ_NONTURBO_MAX - 2, CPU1_MAX_FREQ_NONTURBO_MAX - 2,
-            CPU1_MAX_FREQ_NONTURBO_MAX - 2, CPU2_MAX_FREQ_NONTURBO_MAX - 2,
-            CPU4_MAX_FREQ_NONTURBO_MAX, CPU5_MAX_FREQ_NONTURBO_MAX,
-            CPU6_MAX_FREQ_NONTURBO_MAX, CPU7_MAX_FREQ_NONTURBO_MAX };
+            CPU0_MAX_FREQ_NONTURBO_MAX - 2, CPU4_MAX_FREQ_NONTURBO_MAX };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set bias power mode", __func__);
     } else if (profile == PROFILE_BIAS_PERFORMANCE) {
-        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_MAX,
-            CPU4_MIN_FREQ_NONTURBO_MAX + 1, CPU5_MIN_FREQ_NONTURBO_MAX + 1,
-            CPU6_MIN_FREQ_NONTURBO_MAX + 1, CPU7_MIN_FREQ_NONTURBO_MAX + 1 };
+        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_MAX, CPU4_MIN_FREQ_NONTURBO_MAX + 1 };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set bias perf mode", __func__);

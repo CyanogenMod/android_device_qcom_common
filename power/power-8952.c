@@ -55,20 +55,16 @@ static void process_video_encode_hint(void *metadata);
 
 extern void interaction(int duration, int num_args, int opt_list[]);
 
-static int profile_high_performance_8952[11] = {
+static int profile_high_performance_8952[] = {
     SCHED_BOOST_ON,
     0x704, 0x4d04, /* Enable all CPUs */
-    CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
-    CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX,
-    CPU4_MIN_FREQ_TURBO_MAX, CPU5_MIN_FREQ_TURBO_MAX,
-    CPU6_MIN_FREQ_TURBO_MAX, CPU7_MIN_FREQ_TURBO_MAX,
+    CPU0_MIN_FREQ_TURBO_MAX, CPU4_MIN_FREQ_TURBO_MAX
 };
 
 static int profile_power_save_8952[] = {
     0x8fe, 0x3dfd, /* 1 big core, 2 little cores*/
     CPUS_ONLINE_MAX_LIMIT_2,
-    CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
-    CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX,
+    CPU0_MAX_FREQ_NONTURBO_MAX
 };
 
 int get_number_of_profiles() {

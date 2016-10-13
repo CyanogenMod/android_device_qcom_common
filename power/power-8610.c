@@ -67,14 +67,18 @@ static void set_power_profile(int profile) {
     }
 
     if (profile == PROFILE_HIGH_PERFORMANCE) {
-        int resource_values[] = { CPUS_ONLINE_MIN_2,
-            CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX };
+        int resource_values[] = {
+            CPUS_ONLINE_MIN_2,
+            CPU0_MIN_FREQ_TURBO_MAX
+        };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set performance mode", __func__);
     } else if (profile == PROFILE_POWER_SAVE) {
-        int resource_values[] = { CPUS_ONLINE_MAX_LIMIT_2,
-            CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX };
+        int resource_values[] = {
+            CPUS_ONLINE_MAX_LIMIT_2,
+            CPU0_MAX_FREQ_NONTURBO_MAX
+        };
         perform_hint_action(DEFAULT_PROFILE_HINT_ID,
             resource_values, ARRAY_SIZE(resource_values));
         ALOGD("%s: set powersave", __func__);

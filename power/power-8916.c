@@ -93,22 +93,18 @@ static int profile_high_performance_8916[3] = {
     0x1C00, 0x0901, CPU0_MIN_FREQ_TURBO_MAX,
 };
 
-static int profile_high_performance_8939[11] = {
+static int profile_high_performance_8939[] = {
     SCHED_BOOST_ON, 0x1C00, 0x0901,
-    CPU0_MIN_FREQ_TURBO_MAX, CPU1_MIN_FREQ_TURBO_MAX,
-    CPU2_MIN_FREQ_TURBO_MAX, CPU3_MIN_FREQ_TURBO_MAX,
-    CPU4_MIN_FREQ_TURBO_MAX, CPU5_MIN_FREQ_TURBO_MAX,
-    CPU6_MIN_FREQ_TURBO_MAX, CPU7_MIN_FREQ_TURBO_MAX,
+    CPU0_MIN_FREQ_TURBO_MAX, CPU4_MIN_FREQ_TURBO_MAX
 };
 
 static int profile_power_save_8916[1] = {
     CPU0_MAX_FREQ_NONTURBO_MAX,
 };
 
-static int profile_power_save_8939[5] = {
+static int profile_power_save_8939[] = {
     CPUS_ONLINE_MAX_LIMIT_2,
-    CPU0_MAX_FREQ_NONTURBO_MAX, CPU1_MAX_FREQ_NONTURBO_MAX,
-    CPU2_MAX_FREQ_NONTURBO_MAX, CPU3_MAX_FREQ_NONTURBO_MAX,
+    CPU0_MAX_FREQ_NONTURBO_MAX
 };
 
 static void set_power_profile(int profile) {
