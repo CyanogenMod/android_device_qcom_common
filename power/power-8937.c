@@ -58,10 +58,14 @@ extern void interaction(int duration, int num_args, int opt_list[]);
 static int profile_high_performance[] = {
     SCHED_BOOST_ON_V3, 0x1,
     ALL_CPUS_PWR_CLPS_DIS_V3, 0x1,
-    CPUS_ONLINE_MIN_BIG, 0x2,
-    CPUS_ONLINE_MIN_LITTLE, 0x2,
+    CPUS_ONLINE_MIN_BIG, 0x4,
     MIN_FREQ_BIG_CORE_0, 0xFFF,
     MIN_FREQ_LITTLE_CORE_0, 0xFFF,
+    GPU_MIN_PWRLVL_BOOST, 0x1,
+    SCHED_PREFER_IDLE_DIS_V3, 0x1,
+    SCHED_SMALL_TASK_DIS, 0x1,
+    SCHED_IDLE_NR_RUN_DIS, 0x1,
+    SCHED_IDLE_LOAD_DIS, 0x1,
 };
 
 static int profile_power_save[] = {
@@ -76,8 +80,7 @@ static int profile_bias_power[] = {
 };
 
 static int profile_bias_performance[] = {
-    CPUS_ONLINE_MAX_LIMIT_BIG, 0x2,
-    CPUS_ONLINE_MAX_LIMIT_LITTLE, 0x2,
+    CPUS_ONLINE_MAX_LIMIT_BIG, 0x4,
     MIN_FREQ_BIG_CORE_0, 0x540,
 };
 
@@ -129,27 +132,24 @@ int power_hint_override(__unused struct power_module *module, power_hint_t hint,
     long long elapsed_time;
     int resources_launch_boost[] = {
         SCHED_BOOST_ON_V3, 0x1,
-        MAX_FREQ_BIG_CORE_0, 0xFFF,
-        MAX_FREQ_LITTLE_CORE_0, 0xFFF,
-        MIN_FREQ_BIG_CORE_0, 0xFFF,
-        MIN_FREQ_LITTLE_CORE_0, 0xFFF,
+        MIN_FREQ_BIG_CORE_0, 0x5DC,
         ALL_CPUS_PWR_CLPS_DIS_V3, 0x1,
-        STOR_CLK_SCALE_DIS, 0x1,
+        CPUS_ONLINE_MIN_BIG, 0x4,
+        GPU_MIN_PWRLVL_BOOST, 0x1,
+        SCHED_PREFER_IDLE_DIS_V3, 0x1,
+        SCHED_SMALL_TASK_DIS, 0x1,
+        SCHED_IDLE_NR_RUN_DIS, 0x1,
+        SCHED_IDLE_LOAD_DIS, 0x1,
     };
 
     int resources_cpu_boost[] = {
         SCHED_BOOST_ON_V3, 0x1,
-        MIN_FREQ_BIG_CORE_0, 0x3BF,
+        MIN_FREQ_BIG_CORE_0, 0x44C,
     };
 
     int resources_interaction_fling_boost[] = {
-        MIN_FREQ_BIG_CORE_0, 0x3BF,
-        MIN_FREQ_LITTLE_CORE_0, 0x300,
+        MIN_FREQ_BIG_CORE_0, 0x514,
         SCHED_BOOST_ON_V3, 0x1,
-    };
-
-    int resources_interaction_boost[] = {
-        MIN_FREQ_BIG_CORE_0, 0x300,
     };
 
     if (hint == POWER_HINT_SET_PROFILE) {
@@ -157,8 +157,8 @@ int power_hint_override(__unused struct power_module *module, power_hint_t hint,
         return HINT_HANDLED;
     }
 
-    // Skip other hints in custom power modes
-    if (current_power_profile != PROFILE_BALANCED) {
+    // Skip other hints in power save mode
+    if (current_power_profile == PROFILE_POWER_SAVE) {
         return HINT_HANDLED;
     }
 
@@ -188,9 +188,6 @@ int power_hint_override(__unused struct power_module *module, power_hint_t hint,
             if (duration >= 1500) {
                 interaction(duration, ARRAY_SIZE(resources_interaction_fling_boost),
                         resources_interaction_fling_boost);
-            } else {
-                interaction(duration, ARRAY_SIZE(resources_interaction_boost),
-                        resources_interaction_boost);
             }
             return HINT_HANDLED;
         case POWER_HINT_LAUNCH_BOOST:
@@ -235,7 +232,11 @@ int set_interactive_override(__unused struct power_module *module, int on)
         /* Display off. */
              if ((strncmp(governor, INTERACTIVE_GOVERNOR, strlen(INTERACTIVE_GOVERNOR)) == 0) &&
                 (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-               int resource_values[] = {TR_MS_CPU0_50, TR_MS_CPU4_50};
+               int resource_values[] = {
+                   TIMER_RATE_BIG, 0x32,
+                   TIMER_RATE_LITTLE, 0x32,
+                   THREAD_MIGRATION_SYNC_ON_V3, 0x0,
+               };
 
                 perform_hint_action(DISPLAY_STATE_HINT_ID,
                         resource_values, ARRAY_SIZE(resource_values));
@@ -294,7 +295,14 @@ static void process_video_encode_hint(void *metadata)
         if ((strncmp(governor, INTERACTIVE_GOVERNOR,
             strlen(INTERACTIVE_GOVERNOR)) == 0) &&
             (strlen(governor) == strlen(INTERACTIVE_GOVERNOR))) {
-            int resource_values[] = {TR_MS_CPU0_30, TR_MS_CPU4_30};
+            int resource_values[] = {
+                USE_SCHED_LOAD_BIG, 0x1,
+                USE_SCHED_LOAD_LITTLE, 0x1,
+                USE_MIGRATION_NOTIF_BIG, 0x1,
+                USE_MIGRATION_NOTIF_LITTLE, 0x1,
+                TIMER_RATE_BIG, 0x28,
+                TIMER_RATE_LITTLE, 0x28,
+            };
             if (!video_encode_hint_sent) {
                 perform_hint_action(video_encode_metadata.hint_id,
                 resource_values,
