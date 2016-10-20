@@ -251,6 +251,9 @@ enum CPU7_MAX_FREQ_LVL {
 };
 
 enum SCHED_PREFER_IDLE {
+#ifdef MPCTLV3
+    SCHED_PREFER_IDLE_DIS_V3 = 0x40C04000,
+#endif
     SCHED_PREFER_IDLE_DIS = 0x3E01,
 };
 
@@ -283,6 +286,9 @@ enum INTERACTIVE_CLUSTER_BIG {
     GO_HISPEED_LOAD_BIG         = 0x41410000,
     HISPEED_FREQ_BIG            = 0x41414000,
     TARGET_LOADS_BIG            = 0x41420000,
+    TIMER_RATE_BIG              = 0x41424000,
+    USE_SCHED_LOAD_BIG          = 0x41430000,
+    USE_MIGRATION_NOTIF_BIG     = 0x41434000,
     IGNORE_HISPEED_NOTIF_BIG    = 0x41438000,
 };
 
@@ -303,11 +309,19 @@ enum CPUBW_HWMON {
 };
 
 enum SCHEDULER {
+    SCHED_SMALL_TASK_DIS        = 0x40C0C000,
+    SCHED_IDLE_LOAD_DIS         = 0x40C10000,
+    SCHED_IDLE_NR_RUN_DIS       = 0x40C14000,
     SCHED_GROUP_ON              = 0x40C28000,
 };
 
 enum STORAGE {
+    SWAP_RATIO                  = 0x42C0C000,
     STOR_CLK_SCALE_DIS          = 0x42C10000,
+};
+
+enum GPU {
+    GPU_MIN_PWRLVL_BOOST        = 0x42804000,
 };
 #endif
 
