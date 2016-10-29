@@ -59,6 +59,25 @@ printf '\n%s\n' "endif" >> "$PRODUCTMK"
 # We are done!
 write_footers
 
+PLATFORM=msm8960
+SUBSYSTEM=graphics
+
+# Initialize the helper
+setup_vendor "$DEVICE/$PLATFORM/$SUBSYSTEM" "$VENDOR" "$CM_ROOT" true true $SUBSYSTEM
+
+# Copyright headers and guards
+write_headers $PLATFORM TARGET_BOARD_PLATFORM
+
+# Qualcomm BSP blobs - we put a conditional around here
+# in case the BSP is actually being built
+printf '\n%s\n' "ifeq (\$(QCPATH),)" >> "$PRODUCTMK"
+
+write_makefiles "$MY_DIR"/"$SUBSYSTEM-$PLATFORM".txt
+
+echo "endif" >> "$PRODUCTMK"
+
+# We are done!
+write_footers
 
 PLATFORM=msm8974
 SUBSYSTEM=graphics
