@@ -121,7 +121,7 @@ static void set_power_profile(int profile) {
     current_power_profile = profile;
 }
 
-int  power_hint_override(struct power_module *module, power_hint_t hint,
+int power_hint_override(__unused struct power_module *module, power_hint_t hint,
         void *data)
 {
     int duration, duration_hint;
@@ -209,11 +209,13 @@ int  power_hint_override(struct power_module *module, power_hint_t hint,
         case POWER_HINT_VIDEO_ENCODE:
             process_video_encode_hint(data);
             return HINT_HANDLED;
+        default:
+            break;
     }
     return HINT_NONE;
 }
 
-int  set_interactive_override(struct power_module *module, int on)
+int set_interactive_override(__unused struct power_module *module, int on)
 {
     char governor[80];
 
