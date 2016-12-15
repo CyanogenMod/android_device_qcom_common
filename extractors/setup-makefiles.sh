@@ -50,7 +50,7 @@ echo "ifeq (\$(QCPATH),)" >> "$PRODUCTMK"
 
 write_makefiles "$MY_DIR"/"$SUBSYSTEM-$PLATFORM"-32.txt
 
-printf '\n%s\n' "ifneq (\$(TARGET_ARCH), arm)" >> "$PRODUCTMK"
+printf '\n%s\n' "ifeq (\$(TARGET_ARCH), arm64)" >> "$PRODUCTMK"
 write_makefiles "$MY_DIR"/"$SUBSYSTEM-$PLATFORM"-64.txt
 echo "endif" >> "$PRODUCTMK"
 
