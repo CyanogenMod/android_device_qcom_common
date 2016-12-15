@@ -40,8 +40,15 @@ PLATFORM=$2
 SUBSYSTEM=$3
 
 # Initialize the helper for common device
-setup_vendor "$DEVICE/$PLATFORM/$SUBSYSTEM" "$VENDOR" "$CM_ROOT" true true $SUBSYSTEM
+if [ -f "$MY_DIR"/"$SUBSYSTEM"-"$PLATFORM"-32.txt -a -f "$MY_DIR"/"$SUBSYSTEM"-"$PLATFORM"-64.txt ]; then
+    setup_vendor "$DEVICE/${PLATFORM}-32/$SUBSYSTEM" "$VENDOR" "$CM_ROOT" true true $SUBSYSTEM
+    extract "$MY_DIR"/"$SUBSYSTEM"-"$PLATFORM"-32.txt "$SRC"
 
-extract "$MY_DIR"/"$SUBSYSTEM"-"$PLATFORM".txt "$SRC"
+    setup_vendor "$DEVICE/${PLATFORM}-64/$SUBSYSTEM" "$VENDOR" "$CM_ROOT" true true $SUBSYSTEM
+    extract "$MY_DIR"/"$SUBSYSTEM"-"$PLATFORM"-64.txt "$SRC"
+else
+    setup_vendor "$DEVICE/$PLATFORM/$SUBSYSTEM" "$VENDOR" "$CM_ROOT" true true $SUBSYSTEM
+    extract "$MY_DIR"/"$SUBSYSTEM"-"$PLATFORM".txt "$SRC"
+fi
 
 "$MY_DIR"/setup-makefiles.sh

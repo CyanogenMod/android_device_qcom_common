@@ -39,7 +39,7 @@ PLATFORM=msm8916
 SUBSYSTEM=graphics
 
 # Initialize the helper
-setup_vendor "$DEVICE/$PLATFORM/$SUBSYSTEM" "$VENDOR" "$CM_ROOT" true true $SUBSYSTEM
+setup_vendor "$DEVICE/${PLATFORM}-32/$SUBSYSTEM" "$VENDOR" "$CM_ROOT" true true $SUBSYSTEM
 
 # Copyright headers and guards
 write_headers $PLATFORM TARGET_BOARD_PLATFORM
@@ -50,11 +50,24 @@ echo "ifeq (\$(QCPATH),)" >> "$PRODUCTMK"
 
 write_makefiles "$MY_DIR"/"$SUBSYSTEM-$PLATFORM"-32.txt
 
-printf '\n%s\n' "ifneq (\$(TARGET_ARCH), arm)" >> "$PRODUCTMK"
-write_makefiles "$MY_DIR"/"$SUBSYSTEM-$PLATFORM"-64.txt
-echo "endif" >> "$PRODUCTMK"
+printf "endif" >> "$PRODUCTMK"
 
-printf '\n%s\n' "endif" >> "$PRODUCTMK"
+# We are done!
+write_footers
+
+# Initialize the helper
+setup_vendor "$DEVICE/${PLATFORM}-64/$SUBSYSTEM" "$VENDOR" "$CM_ROOT" true true $SUBSYSTEM
+
+# Copyright headers and guards
+write_headers $PLATFORM TARGET_BOARD_PLATFORM
+
+# Qualcomm BSP blobs - we put a conditional around here
+# in case the BSP is actually being built
+echo "ifeq (\$(QCPATH),)" >> "$PRODUCTMK"
+
+write_makefiles "$MY_DIR"/"$SUBSYSTEM-$PLATFORM"-64.txt
+
+printf "endif" >> "$PRODUCTMK"
 
 # We are done!
 write_footers
